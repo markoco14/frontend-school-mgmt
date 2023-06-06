@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { useState } from "react"
+import { FormEvent, useState } from "react"
 
 export default function AddStudent() {
 
@@ -7,7 +7,7 @@ export default function AddStudent() {
 	const [lastName, setLastName] = useState<string>('')
 	const [age, setAge] = useState<number>(0)
 
-	async function handleAddStudent(e) {
+	async function handleAddStudent(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();	
 		if (!firstName || !lastName || !age) {
 			return
