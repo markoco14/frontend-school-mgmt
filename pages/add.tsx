@@ -1,14 +1,23 @@
 import Link from "next/link"
+import { useState } from "react"
 
 export default function AddStudent() {
 
-	async function handleAddStudent() {		
+	const [firstName, setFirstName] = useState<string>('')
+	const [lastName, setLastName] = useState<string>('')
+	const [age, setAge] = useState<number>(0)
+
+	async function handleAddStudent(e) {
+		e.preventDefault();	
+		if (!firstName || !lastName || !age) {
+			return
+		}	
 		const response = await fetch('http://127.0.0.1:8000/add-student/', { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ first_name: "Java", last_name: "Script", age: 8 }) 
+			body: JSON.stringify({ first_name: firstName, last_name: lastName, age: age }) 
 		})
 
 		return response.json()
@@ -16,14 +25,29 @@ export default function AddStudent() {
 
 	return (
 		<main
-      className='flex min-h-screen flex-col items-center p-24'
+      className='min-h-screen p-24 max-w-[600px] mx-auto'
     >
 			<nav className='flex gap-2'>
         <Link href="/">Home</Link>
         <Link href="/add">Add</Link>
+        <Link href="/delete">Delete</Link>
       </nav>
 			<h1>Add student</h1>
-			<button onClick={handleAddStudent}>Add</button>
+			<form onSubmit={(e) => handleAddStudent(e)}>
+				<div className="flex flex-col">
+					<label>First Name</label>
+					<input className='px-1 py-2 rounded shadow'required type="text" onChange={(e) => setFirstName(e.target.value)}/>
+				</div>
+				<div className="flex flex-col">
+					<label>Last Name</label>
+					<input className='px-1 py-2 rounded shadow'required type="text" onChange={(e) => setLastName(e.target.value)}/>
+				</div>
+				<div className="flex flex-col">
+					<label>Age</label>
+					<input className='px-1 py-2 rounded shadow'required type="number" onChange={(e) => setAge(Number(e.target.value))}/>
+				</div>
+				<button>Add</button>
+			</form>
 		</main>
 	)
 }
