@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps<{
 export default function Home({students}: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
 	async function handleDeleteStudent(id: number) {
-		const response = fetch(`http://localhost:8000/delete-student/${id}/`,{
+		const response = fetch(`http://54.95.13.158/8000/delete-student/${id}/`,{
 			method: 'DELETE'
 		})
 		return response;

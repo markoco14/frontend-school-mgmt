@@ -10,7 +10,7 @@ type Student = {
 export const getServerSideProps: GetServerSideProps<{
   students: Student[];
 }> = async () => {
-  const res = await fetch('http://127.0.0.1:8000/get-students/');
+  const res = await fetch('http://54.95.13.158:8000/get-students/');
   const students = await res.json();
   return { props: { students } };
 };
