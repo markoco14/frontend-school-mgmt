@@ -12,7 +12,7 @@ export default function AddStudent() {
 		if (!firstName || !lastName || !age) {
 			return
 		}	
-		const response = await fetch('http://54.95.13.158/add-student/', { 
+		const response = await fetch('http://api.cramschoolcloud.com/add-student/', { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
