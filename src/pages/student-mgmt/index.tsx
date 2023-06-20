@@ -22,13 +22,15 @@ export default function Home({students}: InferGetServerSidePropsType<typeof getS
     >
       <nav className='flex gap-2'>
         <Link href="/">Home</Link>
-        <Link href="/school-mgmt">School</Link>
-        <Link href="/student-mgmt">Student</Link>
+        <Link href="/student-mgmt/add">Add</Link>
+        <Link href="/student-mgmt/delete">Delete</Link>
       </nav>
-      <h1>Easy Cram School Management In The Cloud.</h1>
-      <section>
-        <h2>Sign up your school to get started.</h2>
-      </section>
+      <h1>Testing the Django Api and Frontend</h1>
+      <ul>
+        {students?.map((student: Student, index) => (
+          <li key={index}>{student.first_name} {student.last_name} {student.age}</li>
+        ))}
+      </ul>
     </main>
   )
 }
