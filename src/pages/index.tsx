@@ -1,36 +1,50 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 
-type Student = {
+type User = {
+  id: number;
   first_name: string;
   last_name: string;
-  age: number;
 };
 
 export const getServerSideProps: GetServerSideProps<{
-  students: Student[];
+  users: User[];
 }> = async () => {
-  const res = await fetch('https://api.cramschoolcloud.com/get-students/');
-  const students = await res.json();
-  return { props: { students } };
+  const res = await fetch('http://localhost:8000/get-users/');
+  // const res = await fetch('https://api.cramschoolcloud.com/get-users/');
+  const users = await res.json();
+  return { props: { users } };
 };
 
-export default function Home({students}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Home({users}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
-  const [ownerName, setOwnerName] = useState<string>('');
+  const [ownerFirstName, setOwnerFirstName] = useState<string>('');
+  const [ownerLastName, setOwnerLastName] = useState<string>('');
 
-  const ownerNameRef = useRef<HTMLInputElement>(null);
+  const ownerFirstNameRef = useRef<HTMLInputElement>(null);
+  const ownerLastNameRef = useRef<HTMLInputElement>(null);
 
   async function handleSubmit() {
-    if (ownerName === '' || ownerName === undefined || ownerName === null) {
-              alert('You need to choose your name')
-              return;
-            }
-            console.log("Name saved in the DB")
-            setOwnerName('')
-            ownerNameRef.current ? ownerNameRef.current.value = '' : null;
-            alert('Name saved successfully')
+    if (!ownerFirstName || !ownerLastName) {
+      alert('You need to choose your full name');
+      return;
+    }
+    setOwnerFirstName('');
+    ownerFirstNameRef.current ? ownerFirstNameRef.current.value = '' : null;
+    setOwnerLastName('');
+    ownerLastNameRef.current ? ownerLastNameRef.current.value = '' : null;
+
+    const response = await fetch('http://localhost:8000/add-user/', { 
+			method: 'POST', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ first_name: ownerFirstName, last_name: ownerLastName }) 
+		});
+    alert('User saved successfully');
+
+		return response.json();
   }
 
   return (
@@ -48,24 +62,32 @@ export default function Home({students}: InferGetServerSidePropsType<typeof getS
           <button onClick={() => setIsSignUp(false)}>Log In</button>
         </div>
         {isSignUp ? (
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-            }}>
-            <div>
-              <label>Name</label>
-              <input ref={ownerNameRef} type="text" onChange={(e) => setOwnerName(e.target.value)}/>
+          <form 
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const newUser = await handleSubmit();
+              newUser ? users.push(newUser.data) : null;
+            }}
+          >
+            <div className='flex flex-col'>
+              <label>First Name</label>
+              <input ref={ownerFirstNameRef} type="text" onChange={(e) => setOwnerFirstName(e.target.value)}/>
+            </div>
+            <div className='flex flex-col'>
+              <label>Last Name</label>
+              <input ref={ownerLastNameRef} type="text" onChange={(e) => setOwnerLastName(e.target.value)}/>
             </div>
             <button>Save</button>
           </form>
         ) : (
           <ul>
-            <li>Owner A</li>
-            <li>Owner B</li>
-            <li>Owner C</li>
-            <li>Owner D</li>
-            <li>Owner E</li>
-            <li>Owner F</li>
+            {users?.map((user, index) => (
+              <li key={index}>
+                <Link href={`/${user.id}`}>
+                  {user.first_name} {user.last_name}
+                </Link>
+              </li>
+            ))}
           </ul>
         )}
       </section>
