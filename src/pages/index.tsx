@@ -1,6 +1,8 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useContext, useRef, useState } from 'react';
+import { UserContext } from '../context';
+
 
 type User = {
   id: number;
@@ -18,6 +20,10 @@ export const getServerSideProps: GetServerSideProps<{
 };
 
 export default function Home({users}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { name, id } = useContext(UserContext);
+  console.log(name)
+  console.log(id)
+  
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
   const [ownerFirstName, setOwnerFirstName] = useState<string>('');
   const [ownerLastName, setOwnerLastName] = useState<string>('');
