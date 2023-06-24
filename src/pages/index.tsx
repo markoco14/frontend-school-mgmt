@@ -20,10 +20,7 @@ export const getServerSideProps: GetServerSideProps<{
 };
 
 export default function Home({users}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { name, id } = useContext(UserContext);
-  console.log(name)
-  console.log(id)
-  
+  const context = useContext(UserContext);
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
   const [ownerFirstName, setOwnerFirstName] = useState<string>('');
   const [ownerLastName, setOwnerLastName] = useState<string>('');
@@ -53,6 +50,8 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
 		return response.json();
   }
 
+ 
+
   return (
     <main
       className='min-h-screen p-24 max-w-[600px] mx-auto'
@@ -61,12 +60,23 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
         <Link href="/">Home</Link>
       </nav>
       <h1>Easy Cram School Management In The Cloud.</h1>
-      <section>
+      {context.user ? (
+         <section>
+        <p>Welcome back, {context.user.name}!</p>
+        <p>Register your school to get started</p>
+        <div>
+          <button onClick={() => context.setUser()}>Log Out</button>
+        </div>
+      </section>
+      ) : (
+        <section>
         <h2>Sign up your school to get started.</h2>
         <div>
           <button onClick={() => setIsSignUp(true)}>Sign Up</button>
           <button onClick={() => setIsSignUp(false)}>Log In</button>
         </div>
+
+
         {isSignUp ? (
           <form 
             onSubmit={async (e) => {
@@ -89,14 +99,18 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
           <ul>
             {users?.map((user, index) => (
               <li key={index}>
-                <Link href={`/${user.id}`}>
-                  {user.first_name} {user.last_name}
-                </Link>
+                <button
+                  onClick={() => {
+                    console.log(user.first_name)
+                    context.setUser({name: user.first_name, id: user.id})
+                  }} 
+                >{user.first_name} {user.last_name}</button>
               </li>
             ))}
           </ul>
         )}
       </section>
+      )}
     </main>
   )
 }
