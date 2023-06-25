@@ -62,54 +62,57 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
       <h1>Easy Cram School Management In The Cloud.</h1>
       {context.user ? (
          <section>
-        <p>Welcome back, {context.user.name}!</p>
-        <p>Register your school to get started</p>
-        <div>
-          <button onClick={() => context.setUser()}>Log Out</button>
-        </div>
-      </section>
+          <p>Welcome back, {context.user.name}!</p>
+          <p>Register your school to get started</p>
+          <div>
+            <button onClick={() => context.setUser()}>Log Out</button>
+          </div>
+          <div>
+            <Link href='/school-mgmt'>Schools</Link>
+          </div>
+        </section>
       ) : (
         <section>
-        <h2>Sign up your school to get started.</h2>
-        <div>
-          <button onClick={() => setIsSignUp(true)}>Sign Up</button>
-          <button onClick={() => setIsSignUp(false)}>Log In</button>
-        </div>
+          <h2>Sign up to get started.</h2>
+          <div>
+            <button onClick={() => setIsSignUp(true)}>Sign Up</button>
+            <button onClick={() => setIsSignUp(false)}>Log In</button>
+          </div>
 
 
-        {isSignUp ? (
-          <form 
-            onSubmit={async (e) => {
-              e.preventDefault();
-              const newUser = await handleSubmit();
-              newUser ? users.push(newUser.data) : null;
-            }}
-          >
-            <div className='flex flex-col'>
-              <label>First Name</label>
-              <input ref={ownerFirstNameRef} type="text" onChange={(e) => setOwnerFirstName(e.target.value)}/>
-            </div>
-            <div className='flex flex-col'>
-              <label>Last Name</label>
-              <input ref={ownerLastNameRef} type="text" onChange={(e) => setOwnerLastName(e.target.value)}/>
-            </div>
-            <button>Save</button>
-          </form>
-        ) : (
-          <ul>
-            {users?.map((user, index) => (
-              <li key={index}>
-                <button
-                  onClick={() => {
-                    console.log(user.first_name)
-                    context.setUser({name: user.first_name, id: user.id})
-                  }} 
-                >{user.first_name} {user.last_name}</button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+          {isSignUp ? (
+            <form 
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const newUser = await handleSubmit();
+                newUser ? users.push(newUser.data) : null;
+              }}
+            >
+              <div className='flex flex-col'>
+                <label>First Name</label>
+                <input ref={ownerFirstNameRef} type="text" onChange={(e) => setOwnerFirstName(e.target.value)}/>
+              </div>
+              <div className='flex flex-col'>
+                <label>Last Name</label>
+                <input ref={ownerLastNameRef} type="text" onChange={(e) => setOwnerLastName(e.target.value)}/>
+              </div>
+              <button>Save</button>
+            </form>
+          ) : (
+            <ul>
+              {users?.map((user, index) => (
+                <li key={index}>
+                  <button
+                    onClick={() => {
+                      console.log(user.first_name)
+                      context.setUser({name: user.first_name, id: user.id})
+                    }} 
+                  >{user.first_name} {user.last_name}</button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
       )}
     </main>
   )
