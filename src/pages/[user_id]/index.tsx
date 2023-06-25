@@ -18,7 +18,8 @@ export default function User() {
     }
     console.log({ name: schoolName, owner: Number(router.query.user_id) })
 
-    const response = await fetch('http://localhost:8000/add-school/', { 
+    // const response = await fetch('http://localhost:8000/add-school/', { 
+    const response = await fetch('https://api.cramschoolcloud.com/add-school/', { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",

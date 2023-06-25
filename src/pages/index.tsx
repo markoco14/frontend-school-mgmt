@@ -13,8 +13,8 @@ type User = {
 export const getServerSideProps: GetServerSideProps<{
   users: User[];
 }> = async () => {
-  const res = await fetch('http://localhost:8000/get-users/');
-  // const res = await fetch('https://api.cramschoolcloud.com/get-users/');
+  // const res = await fetch('http://localhost:8000/get-users/');
+  const res = await fetch('https://api.cramschoolcloud.com/get-users/');
   const users = await res.json();
   return { props: { users } };
 };
@@ -38,7 +38,8 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
     setOwnerLastName('');
     ownerLastNameRef.current ? ownerLastNameRef.current.value = '' : null;
 
-    const response = await fetch('http://localhost:8000/add-user/', { 
+    // const response = await fetch('http://localhost:8000/add-user/', { 
+    const response = await fetch('https://api.cramschoolcloud.com/add-user/', { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
@@ -58,6 +59,7 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
     >
       <nav className='flex gap-2'>
         <Link href="/">Home</Link>
+        {context.user ? <Link href='/school-mgmt'>Schools</Link> : null}
       </nav>
       <h1>Easy Cram School Management In The Cloud.</h1>
       {context.user ? (
@@ -66,9 +68,6 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
           <p>Register your school to get started</p>
           <div>
             <button onClick={() => context.setUser()}>Log Out</button>
-          </div>
-          <div>
-            <Link href='/school-mgmt'>Schools</Link>
           </div>
         </section>
       ) : (
