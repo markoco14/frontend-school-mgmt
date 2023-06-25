@@ -58,6 +58,7 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
     >
       <nav className='flex gap-2'>
         <Link href="/">Home</Link>
+        {context.user ? <Link href='/school-mgmt'>Schools</Link> : null}
       </nav>
       <h1>Easy Cram School Management In The Cloud.</h1>
       {context.user ? (
@@ -66,9 +67,6 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
           <p>Register your school to get started</p>
           <div>
             <button onClick={() => context.setUser()}>Log Out</button>
-          </div>
-          <div>
-            <Link href='/school-mgmt'>Schools</Link>
           </div>
         </section>
       ) : (
