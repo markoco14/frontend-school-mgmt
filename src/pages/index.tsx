@@ -2,19 +2,14 @@ import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { FormEvent, useContext, useRef, useState } from 'react';
 import { UserContext } from '../context';
-
-
-type User = {
-  id: number;
-  first_name: string;
-  last_name: string;
-};
+import { userAdapter } from '../modules/user-mgmt/infrastructure/adapters/userAdapter';
+import { User } from '../modules/user-mgmt/domain/entities/User';
 
 export const getServerSideProps: GetServerSideProps<{
   users: User[];
 }> = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-users/`);
-  const users = await res.json();
+  const users = await userAdapter.getUsers();
+
   return { props: { users } };
 };
 
