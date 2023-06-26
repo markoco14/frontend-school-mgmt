@@ -11,7 +11,7 @@ type Student = {
 export const getServerSideProps: GetServerSideProps<{
   students: Student[];
 }> = async () => {
-  const res = await fetch('https://api.cramschoolcloud.com/get-students/');
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students/`);
   const students = await res.json();
   return { props: { students } };
 };
@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps<{
 export default function Home({students}: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
 	async function handleDeleteStudent(id: number) {
-		const response = fetch(`https://api.cramschoolcloud.com/delete-student/${id}/`,{
+		const response = fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-student/${id}/`,{
 			method: 'DELETE'
 		})
 		return response;

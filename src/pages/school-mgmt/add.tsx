@@ -13,8 +13,7 @@ export default function Home() {
       try {
         console.log(schoolNameRef.current.value)
         console.log(context.user.id)
-        // const response = await fetch('http://localhost:8000/add-school/', { 
-        const response = await fetch('https://api.cramschoolcloud.com/add-school/', { 
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-school/`, { 
           method: 'POST', 
           headers: {
             "Content-Type": "application/json",

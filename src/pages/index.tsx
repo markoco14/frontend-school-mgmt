@@ -13,8 +13,7 @@ type User = {
 export const getServerSideProps: GetServerSideProps<{
   users: User[];
 }> = async () => {
-  // const res = await fetch('http://localhost:8000/get-users/');
-  const res = await fetch('https://api.cramschoolcloud.com/get-users/');
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-users/`);
   const users = await res.json();
   return { props: { users } };
 };
@@ -39,7 +38,7 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
     ownerLastNameRef.current ? ownerLastNameRef.current.value = '' : null;
 
     // const response = await fetch('http://localhost:8000/add-user/', { 
-    const response = await fetch('https://api.cramschoolcloud.com/add-user/', { 
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-user/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
