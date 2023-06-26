@@ -2,19 +2,14 @@ import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { FormEvent, useContext, useRef, useState } from 'react';
 import { UserContext } from '../context';
-
-
-type User = {
-  id: number;
-  first_name: string;
-  last_name: string;
-};
+import { userAdapter } from '../modules/user-mgmt/infrastructure/adapters/userAdapter';
+import { User } from '../modules/user-mgmt/domain/entities/User';
 
 export const getServerSideProps: GetServerSideProps<{
   users: User[];
 }> = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-users/`);
-  const users = await res.json();
+  const users = await userAdapter.getUsers();
+
   return { props: { users } };
 };
 
@@ -37,17 +32,10 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
     setOwnerLastName('');
     ownerLastNameRef.current ? ownerLastNameRef.current.value = '' : null;
 
-    // const response = await fetch('http://localhost:8000/add-user/', { 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-user/`, { 
-			method: 'POST', 
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ first_name: ownerFirstName, last_name: ownerLastName }) 
-		});
+    const newUser: User = await userAdapter.addUser({firstName: ownerFirstName, lastName: ownerLastName})
     alert('User saved successfully');
 
-		return response.json();
+		return newUser;
   }
 
  
@@ -83,7 +71,7 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
               onSubmit={async (e) => {
                 e.preventDefault();
                 const newUser = await handleSubmit();
-                newUser ? users.push(newUser.data) : null;
+                newUser ? users.push(newUser) : null;
               }}
             >
               <div className='flex flex-col'>
