@@ -5,14 +5,16 @@ import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapte
 
 
 export const getServerSideProps: GetServerSideProps<{
-  students: Student[];
-}> = async () => {
-  const students = await studentAdapter.getStudents();
-  
-  return { props: { students } };
+  student: Student;
+}> = async (context) => {
+	const id = Number(context.query.student_id)
+  const student = await studentAdapter.getStudentById({id: id});
+
+  return { props: { student } };
 };
 
-export default function Home({students}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Home({student}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  
   return (
     <main
       className='min-h-screen p-24 max-w-[600px] mx-auto'
@@ -25,16 +27,11 @@ export default function Home({students}: InferGetServerSidePropsType<typeof getS
       <h1>Testing the Django Api and Frontend</h1>
       <Link href="/student-mgmt/add">Add</Link>
       <Link href="/student-mgmt/delete">Delete</Link>
-      <ul>
-        {students?.map((student: Student, index) => (
-          <li key={index}>
-            {student.first_name} 
-            {student.last_name} 
-            {student.age}
-            <Link href={`/student-mgmt/${student.id}`}>Profile</Link>
-            </li>
-        ))}
-      </ul>
+			<article>
+				<h2>Student Profile</h2>
+				<p>{student.first_name} {student.last_name}</p>
+				<p>{student.age}</p>
+			</article>
     </main>
   )
 }
