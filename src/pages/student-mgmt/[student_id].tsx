@@ -14,15 +14,15 @@ export const getServerSideProps: GetServerSideProps<{
 };
 
 export default function Home({student}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  
+
   return (
     <main
       className='min-h-screen p-24 max-w-[600px] mx-auto'
     >
       <nav className='flex gap-2'>
         <Link href="/">Home</Link>
-        <Link href="/school-mgmt">Schools</Link>
-        <Link href="/student-mgmt">Students</Link>
+        <Link href="/school-mgmt/">Schools</Link>
+        <Link href="/student-mgmt/">Students</Link>
       </nav>
       <h1>Testing the Django Api and Frontend</h1>
       <Link href="/student-mgmt/add">Add</Link>

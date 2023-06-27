@@ -35,8 +35,8 @@ export default function Home({students}: InferGetServerSidePropsType<typeof getS
     >
       <nav className='flex gap-2'>
         <Link href="/">Home</Link>
-        <Link href="/school-mgmt">Schools</Link>
-        <Link href="/student-mgmt">Students</Link>
+        <Link href="/school-mgmt/">Schools</Link>
+        <Link href="/student-mgmt/">Students</Link>
       </nav>
       <h1>Testing the Django Api and Frontend</h1>
       <Link href="/student-mgmt/add">Add</Link>

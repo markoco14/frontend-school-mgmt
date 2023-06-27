@@ -33,6 +33,7 @@ export default function Home() {
       <nav className='flex gap-2'>
         <Link href="/">Home</Link>
         <Link href="/school-mgmt/">Schools</Link>
+        <Link href="/student-mgmt/">Students</Link>
       </nav>
       <h1>The School Management Page</h1>
             <form 
