@@ -17,9 +17,17 @@ class StudentAdapter {
 			},
 			body: JSON.stringify({ first_name: firstName, last_name: lastName, age: age }) 
 		})
-
 		const student: Student = await response.json();
+
 		return student;
+	}
+
+	public async deleteStudentById({id}: {id: number}) {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-student/${id}/`,{
+			method: 'DELETE'
+		})
+
+		return response;
 	}
  
 }
