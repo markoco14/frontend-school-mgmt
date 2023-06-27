@@ -1,17 +1,14 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { Student } from '@/src/modules/student-mgmt/domain/entities/Student';
+import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter';
 
-type Student = {
-  first_name: string;
-  last_name: string;
-  age: number;
-};
 
 export const getServerSideProps: GetServerSideProps<{
   students: Student[];
 }> = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students/`);
-  const students = await res.json();
+  const students = await studentAdapter.getStudents();
+  
   return { props: { students } };
 };
 
