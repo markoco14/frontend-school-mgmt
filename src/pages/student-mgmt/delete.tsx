@@ -1,5 +1,7 @@
+import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter';
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { useState } from 'react';
 
 type Student = {
 	id: number;
@@ -17,12 +19,14 @@ export const getServerSideProps: GetServerSideProps<{
 };
 
 export default function Home({students}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [filteredStudents, setFilteredStudents] = useState<Student[]>(students);
 
 	async function handleDeleteStudent(id: number) {
-		const response = fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-student/${id}/`,{
-			method: 'DELETE'
-		})
-		return response;
+    const response = await studentAdapter.deleteStudentById({id: id});
+    const newFilteredStudents = filteredStudents.filter(student => student.id !== id);
+    setFilteredStudents(newFilteredStudents);
+
+    return response.json()
 	}
 
   return (
@@ -31,12 +35,14 @@ export default function Home({students}: InferGetServerSidePropsType<typeof getS
     >
       <nav className='flex gap-2'>
         <Link href="/">Home</Link>
-        <Link href="/add">Add</Link>
-        <Link href="/delete">Delete</Link>
+        <Link href="/school-mgmt">Schools</Link>
+        <Link href="/student-mgmt">Students</Link>
       </nav>
       <h1>Testing the Django Api and Frontend</h1>
+      <Link href="/student-mgmt/add">Add</Link>
+      <Link href="/student-mgmt/delete">Delete</Link>
       <ul>
-        {students?.map((student: Student, index) => (
+        {filteredStudents?.map((student: Student, index) => (
           <li key={index} className='flex justify-between gap-4'>
 						<span>{student.first_name} {student.last_name} {student.age}</span>
 						<button onClick={() => handleDeleteStudent(student.id)}>Delete</button>

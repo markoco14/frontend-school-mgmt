@@ -1,3 +1,5 @@
+import { Student } from "@/src/modules/student-mgmt/domain/entities/Student"
+import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter"
 import Link from "next/link"
 import { FormEvent, useState } from "react"
 
@@ -12,15 +14,10 @@ export default function AddStudent() {
 		if (!firstName || !lastName || !age) {
 			return
 		}	
-		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-student/`, { 
-			method: 'POST', 
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ first_name: firstName, last_name: lastName, age: age }) 
-		})
 
-		return response.json()
+		const student: Student = await studentAdapter.addStudent({firstName: firstName, lastName: lastName, age: age})
+		
+		return student;
 	}
 
 	return (
@@ -29,10 +26,12 @@ export default function AddStudent() {
     >
 			<nav className='flex gap-2'>
         <Link href="/">Home</Link>
-        <Link href="/add">Add</Link>
-        <Link href="/delete">Delete</Link>
+        <Link href="/school-mgmt">Schools</Link>
+        <Link href="/student-mgmt">Students</Link>
       </nav>
 			<h1>Add student</h1>
+			<Link href="/student-mgmt/add">Add</Link>
+			<Link href="/student-mgmt/delete">Delete</Link>
 			<form onSubmit={(e) => handleAddStudent(e)}>
 				<div className="flex flex-col">
 					<label>First Name</label>

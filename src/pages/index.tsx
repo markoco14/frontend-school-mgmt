@@ -90,7 +90,6 @@ export default function Home({users}: InferGetServerSidePropsType<typeof getServ
                 <li key={index}>
                   <button
                     onClick={() => {
-                      console.log(user.first_name)
                       context.setUser({name: user.first_name, id: user.id})
                     }} 
                   >{user.first_name} {user.last_name}</button>
