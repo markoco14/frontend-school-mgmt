@@ -26,10 +26,12 @@ export default function AddStudent() {
     >
 			<nav className='flex gap-2'>
         <Link href="/">Home</Link>
-        <Link href="/add">Add</Link>
-        <Link href="/delete">Delete</Link>
+        <Link href="/school-mgmt">Schools</Link>
+        <Link href="/student-mgmt">Students</Link>
       </nav>
 			<h1>Add student</h1>
+			<Link href="/student-mgmt/add">Add</Link>
+			<Link href="/student-mgmt/delete">Delete</Link>
 			<form onSubmit={(e) => handleAddStudent(e)}>
 				<div className="flex flex-col">
 					<label>First Name</label>
