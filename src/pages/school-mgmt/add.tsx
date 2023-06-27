@@ -4,15 +4,12 @@ import { useContext, useRef } from 'react';
 
 export default function Home() {
   const context = useContext(UserContext);
-  console.log(context)
   const schoolNameRef = useRef<HTMLInputElement>(null);
 
   async function handleAddSchool() {
 
     if (context.user?.id && schoolNameRef.current?.value) {
       try {
-        console.log(schoolNameRef.current.value)
-        console.log(context.user.id)
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-school/`, { 
           method: 'POST', 
           headers: {
@@ -23,7 +20,7 @@ export default function Home() {
         schoolNameRef.current.value = '';
         return response.json()
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     }
 
@@ -42,8 +39,6 @@ export default function Home() {
         className='bg-blue-500 p-2'
         onSubmit={(e) => {
           e.preventDefault();
-          // console.log('You just made a school!');
-          // console.log(context)
           
           handleAddSchool();
         }

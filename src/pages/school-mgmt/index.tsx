@@ -26,7 +26,7 @@ export default function Home() {
       try {
         getSchoolsByOwnerId(context.user?.id);
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     }
   }, [context])
