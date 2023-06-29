@@ -51,10 +51,13 @@ export default function Home() {
             </div>
             {mySchools?.map((school: School, index) => (
               <p key={index}>School: {school.name} Owner: {school.owner} Id: {school.id}</p>
-            ))}
+              ))}
           </>
         ) : (
-          <p>You have no schools</p>
+          <>
+            <p>You have no schools</p>
+            <Link href="/school-mgmt/add">Add School</Link>
+          </>
         )}
         
       </section>
