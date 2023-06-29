@@ -1,6 +1,7 @@
 import { UserContext } from '@/src/context';
 import { schoolAdapter } from '@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useContext, useEffect, useRef, useState } from 'react';
 
 type School = {
@@ -11,6 +12,7 @@ type School = {
 
 export default function Home() {
   const context = useContext(UserContext);
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   
   const [mySchools, setMySchools] = useState<School[]>([]);
@@ -39,10 +41,16 @@ export default function Home() {
     <main
       className='min-h-screen max-w-[600px] mx-auto'
     >
-      <nav className='flex gap-2'>
-        <Link href="/">Home</Link>
-        <Link href="/school-mgmt/">Schools</Link>
-        <Link href="/student-mgmt/">Students</Link>
+      <nav className='flex justify-between'>
+        <div className='flex gap-2'>
+          <Link href="/">Home</Link>
+          <Link href="/school-mgmt/">Schools</Link>
+          <Link href="/student-mgmt/">Students</Link>
+        </div>
+        <button onClick={() => {
+          context.setUser()
+          router.push('/')
+        }}>Log Out</button>
       </nav>
       <h1 className='mb-8'>Manage all your schools from here!</h1>
       {loading ? (
