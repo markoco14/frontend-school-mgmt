@@ -11,56 +11,72 @@ type School = {
 
 export default function Home() {
   const context = useContext(UserContext);
+  const [loading, setLoading] = useState<boolean>(false);
   
   const [mySchools, setMySchools] = useState<School[]>([]);
 
   useEffect(() => {
     async function getSchoolsByOwnerId(id: number) {
+      setLoading(true);
       await schoolAdapter.getSchoolsByOwnerId({id: id})
       .then((res) => {
         setMySchools(res)
+        setLoading(false);
       })
     }
-
+    
     if (context.user?.id) {
       try {
         getSchoolsByOwnerId(context.user?.id);
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     }
+
   }, [context])
 
   return (
     <main
-      className='min-h-screen p-24 max-w-[600px] mx-auto'
+      className='min-h-screen max-w-[600px] mx-auto'
     >
       <nav className='flex gap-2'>
         <Link href="/">Home</Link>
         <Link href="/school-mgmt/">Schools</Link>
         <Link href="/student-mgmt/">Students</Link>
       </nav>
-      <h1>Manage all your schools from here!</h1>
-      
-      <section>
-        {mySchools.length > 0 ? (
-          <>
-            <div className="flex justify-between">
-              <p>Your schools</p>
-              <Link href="/school-mgmt/add">Add School</Link>
-            </div>
-            {mySchools?.map((school: School, index) => (
-              <p key={index}>School: {school.name} Owner: {school.owner} Id: {school.id}</p>
-              ))}
-          </>
-        ) : (
-          <>
-            <p>You have no schools</p>
-            <Link href="/school-mgmt/add">Add School</Link>
-          </>
-        )}
-        
-      </section>
+      <h1 className='mb-8'>Manage all your schools from here!</h1>
+      {loading ? (
+        <p className='flex justify-center bg-white p-4 rounded-lg'>loading...</p>
+      ) : (
+        <section className='bg-white p-4 rounded-lg'>
+          {mySchools.length > 0 ? (
+            <>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className='text-3xl'>Your schools</h2>
+                <Link href="/school-mgmt/add" className='bg-blue-500 px-2 py-2 rounded'>+ school</Link>
+              </div>
+              <ul className='flex flex-col gap-2'>
+                {mySchools?.map((school: School, index) => (
+                  <li key={index} className='p-2 rounded-md hover:bg-gray-200 flex justify-between'>
+                    <span>{school.name}</span>
+                    <div className='flex gap-2'>
+                      {/* TODO: EDIT TRIGGERS MODEL TO UPDATE INFO OR DELETE */}
+                      <button>Edit</button>
+                    </div>
+                  </li>
+                  ))}
+              </ul>
+            </>
+          ) : (
+              <>
+                <p>You have no schools</p>
+                <Link href="/school-mgmt/add">Add School</Link>
+              </>
+
+          )}
+          
+        </section>
+      )}
 
 
     </main>
