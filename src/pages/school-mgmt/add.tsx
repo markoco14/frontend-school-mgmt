@@ -2,6 +2,8 @@ import { UserContext } from "@/src/context";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
+import { toast } from "react-hot-toast";
+
 
 export default function Add() {
   const context = useContext(UserContext);
@@ -11,6 +13,10 @@ export default function Add() {
   const [newSchoolName, setNewSchoolName] = useState<string>('');
 
   async function handleAddSchool() {
+    if (!newSchoolName) {
+      toast("You forgot to add your school's name!")
+    }
+
     if (context.user?.id && newSchoolName) {
       try {
         setLoading(true)
@@ -29,11 +35,13 @@ export default function Add() {
         );
         setNewSchoolName('')
         setLoading(false)
+        toast.success('School added.')
         return response.json();
       } catch (error) {
         console.error(error);
+        toast.error('Something went wrong. Please try again or contact customer support.')
       }
-    }
+    } 
   }
 
   return (
