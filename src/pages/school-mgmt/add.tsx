@@ -1,16 +1,19 @@
 import { UserContext } from "@/src/context";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useRef } from "react";
+import { useContext, useState } from "react";
 
-export default function Home() {
+export default function Add() {
   const context = useContext(UserContext);
   const router = useRouter();
-  const schoolNameRef = useRef<HTMLInputElement>(null);
+  
+  const [loading, setLoading] = useState<boolean>(false);
+  const [newSchoolName, setNewSchoolName] = useState<string>('');
 
   async function handleAddSchool() {
-    if (context.user?.id && schoolNameRef.current?.value) {
+    if (context.user?.id && newSchoolName) {
       try {
+        setLoading(true)
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/add-school/`,
           {
@@ -19,12 +22,13 @@ export default function Home() {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              name: schoolNameRef.current?.value,
+              name: newSchoolName,
               owner: context.user.id,
             }),
           }
         );
-        schoolNameRef.current.value = "";
+        setNewSchoolName('')
+        setLoading(false)
         return response.json();
       } catch (error) {
         console.error(error);
@@ -61,26 +65,32 @@ export default function Home() {
             </div>
             <p>Add basic information for your school.</p>
           </div>
-          <form
-            className=""
-            onSubmit={(e) => {
-              e.preventDefault();
+          {!loading ? (
+            <form
+              className=""
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleAddSchool();
+              }}
+            >
+              <div className="flex flex-col mb-4">
+                <label className="mb-2">School Name</label>
+                <input
+                  onChange={(e) => {
+                    setNewSchoolName(e.target.value)
+                  }}
+                  type="text"
+                  className="shadow-md border p-2 rounded"
+                />
+              </div>
+              <button
+                className='bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded'
+              >Save</button>
+            </form>
 
-              handleAddSchool();
-            }}
-          >
-            <div className="flex flex-col mb-4">
-              <label className="mb-2">School Name</label>
-              <input
-                ref={schoolNameRef}
-                type="text"
-                className="shadow-md border p-2 rounded"
-              />
-            </div>
-            <button
-              className='bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded'
-            >Save</button>
-          </form>
+          ) : (
+            <p>loading...</p>
+          )}
         </section>
       </div>
     </main>
