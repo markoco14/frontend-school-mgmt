@@ -1,4 +1,5 @@
 import { UserContext } from "@/src/context";
+import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -36,22 +37,7 @@ export default function Home() {
   }, [context]);
 
   return (
-    <main className="min-h-screen max-w-[600px] mx-auto">
-      <nav className="h-[48px] flex justify-between items-center px-4">
-        <div className="flex gap-2">
-          <Link href="/">Home</Link>
-          <Link href="/school-mgmt/">Schools</Link>
-          <Link href="/student-mgmt/">Students</Link>
-        </div>
-        <button
-          onClick={() => {
-            context.setUser();
-            router.push("/");
-          }}
-        >
-          Log Out
-        </button>
-      </nav>
+    <Layout>
       <div>
         <h1 className="mb-4 p-4">
           Manage all your schools from here!
@@ -64,7 +50,7 @@ export default function Home() {
           <section className="bg-white p-4 rounded-lg">
             {mySchools.length > 0 ? (
               <>
-                <div className="flex justify-between items-baseline  mb-4">
+                <div className="flex justify-between items-baseline mb-4">
                   <h2 className="text-3xl">Your schools</h2>
                   <Link href="/school-mgmt/add">+ school</Link>
                 </div>
@@ -83,14 +69,14 @@ export default function Home() {
                 </ul>
               </>
             ) : (
-              <>
-                <p>You have no schools</p>
-                <Link href="/school-mgmt/add">Add School</Link>
-              </>
+              <div className="flex justify-between items-baseline mb-4">
+                <h2 className="text-3xl">You have no schools.</h2>
+                <Link href="/school-mgmt/add">+ school</Link>
+              </div>
             )}
           </section>
         )}
       </div>
-    </main>
+    </Layout>
   );
 }

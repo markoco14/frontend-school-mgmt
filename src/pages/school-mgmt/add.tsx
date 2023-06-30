@@ -1,25 +1,25 @@
 import { UserContext } from "@/src/context";
+import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 
-
 export default function Add() {
   const context = useContext(UserContext);
   const router = useRouter();
-  
+
   const [loading, setLoading] = useState<boolean>(false);
-  const [newSchoolName, setNewSchoolName] = useState<string>('');
+  const [newSchoolName, setNewSchoolName] = useState<string>("");
 
   async function handleAddSchool() {
     if (!newSchoolName) {
-      toast("You forgot to add your school's name!")
+      toast("You forgot to add your school's name!");
     }
 
     if (context.user?.id && newSchoolName) {
       try {
-        setLoading(true)
+        setLoading(true);
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/add-school/`,
           {
@@ -33,38 +33,23 @@ export default function Add() {
             }),
           }
         );
-        setNewSchoolName('')
-        setLoading(false)
-        toast.success('School added.')
+        setNewSchoolName("");
+        setLoading(false);
+        toast.success("School added.");
         return response.json();
       } catch (error) {
         console.error(error);
-        toast.error('Something went wrong. Please try again or contact customer support.')
+        toast.error(
+          "Something went wrong. Please try again or contact customer support."
+        );
       }
-    } 
+    }
   }
 
   return (
-    <main className="min-h-screen max-w-[600px] mx-auto">
-      <nav className="h-[48px] flex justify-between items-center px-4">
-        <div className="flex gap-2">
-          <Link href="/">Home</Link>
-          <Link href="/school-mgmt/">Schools</Link>
-          <Link href="/student-mgmt/">Students</Link>
-        </div>
-        <button
-          onClick={() => {
-            context.setUser();
-            router.push("/");
-          }}
-        >
-          Log Out
-        </button>
-      </nav>
+    <Layout>
       <div>
-        <h1 className="mb-4 p-4">
-          Add all of your school locations here.
-        </h1>
+        <h1 className="mb-4 p-4">Add all of your school locations here.</h1>
         <section className="bg-white p-4 rounded-lg">
           <div className="mb-4">
             <div className="flex justify-between items-baseline mb-4">
@@ -85,22 +70,21 @@ export default function Add() {
                 <label className="mb-2">School Name</label>
                 <input
                   onChange={(e) => {
-                    setNewSchoolName(e.target.value)
+                    setNewSchoolName(e.target.value);
                   }}
                   type="text"
                   className="shadow-md border p-2 rounded"
                 />
               </div>
-              <button
-                className='bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded'
-              >Save</button>
+              <button className="bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded">
+                Save
+              </button>
             </form>
-
           ) : (
             <p>loading...</p>
           )}
         </section>
       </div>
-    </main>
+    </Layout>
   );
 }

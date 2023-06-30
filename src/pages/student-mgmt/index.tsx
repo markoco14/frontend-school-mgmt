@@ -2,7 +2,10 @@ import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { Student } from '@/src/modules/student-mgmt/domain/entities/Student';
 import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter';
-
+import { useContext } from 'react';
+import { UserContext } from '@/src/context';
+import { useRouter } from 'next/router';
+import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
 
 export const getServerSideProps: GetServerSideProps<{
   students: Student[];
@@ -13,28 +16,32 @@ export const getServerSideProps: GetServerSideProps<{
 };
 
 export default function Home({students}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  
   return (
-    <main
-      className='min-h-screen p-24 max-w-[600px] mx-auto'
-    >
-      <nav className='flex gap-2'>
-        <Link href="/">Home</Link>
-        <Link href="/school-mgmt/">Schools</Link>
-        <Link href="/student-mgmt/">Students</Link>
-      </nav>
-      <h1>Testing the Django Api and Frontend</h1>
-      <Link href="/student-mgmt/add">Add</Link>
-      <Link href="/student-mgmt/delete">Delete</Link>
-      <ul>
-        {students?.map((student: Student, index) => (
-          <li key={index}>
-            {student.first_name} 
-            {student.last_name} 
-            {student.age}
-            <Link href={`/student-mgmt/${student.id}`}>Profile</Link>
-            </li>
-        ))}
-      </ul>
-    </main>
+    <Layout>
+      <div>
+        <h1 className="mb-4 p-4">Sign up your students and manage their info.</h1>
+        <section className="bg-white p-4 rounded-lg">
+          <div className='mb-4'>
+            <h2 className='text-3xl mb-4'>Students</h2>
+            <p>Add students and edit their information here.</p>
+          </div>
+          <article className='grid grid-cols-2 gap-4'>
+            <Link 
+              href="/student-mgmt/add"
+              className='col-span-1 text-center hover:bg-blue-300 p-4 rounded'
+            >
+              Add Students
+            </Link>
+            <Link 
+              href="/student-mgmt/delete"
+              className='col-span-1 text-center hover:bg-blue-300 p-4 rounded'
+            >
+              Edit Profiles
+            </Link>
+          </article>
+        </section>
+      </div>
+    </Layout>
   )
 }
