@@ -69,7 +69,7 @@ export default function Add() {
           <div className="mb-4">
             <div className="flex justify-between items-baseline mb-4">
               <h2 className="text-3xl">New School Information</h2>
-              <Link href="/school-mgmt/">Cancel</Link>
+              <Link href="/school-mgmt/">Back</Link>
             </div>
             <p>Add basic information for your school.</p>
           </div>
