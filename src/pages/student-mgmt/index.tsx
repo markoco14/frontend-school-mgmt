@@ -5,6 +5,7 @@ import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapte
 import { useContext } from 'react';
 import { UserContext } from '@/src/context';
 import { useRouter } from 'next/router';
+import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
 
 export const getServerSideProps: GetServerSideProps<{
   students: Student[];
@@ -15,26 +16,9 @@ export const getServerSideProps: GetServerSideProps<{
 };
 
 export default function Home({students}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const context = useContext(UserContext);
-  const router = useRouter();
   
   return (
-    <main className="min-h-screen max-w-[600px] mx-auto">
-      <nav className="h-[48px] flex justify-between items-center px-4">
-        <div className="flex gap-2">
-          <Link href="/">Home</Link>
-          <Link href="/school-mgmt/">Schools</Link>
-          <Link href="/student-mgmt/">Students</Link>
-        </div>
-        <button
-          onClick={() => {
-            context.setUser();
-            router.push("/");
-          }}
-        >
-          Log Out
-        </button>
-      </nav>
+    <Layout>
       <div>
         <h1 className="mb-4 p-4">Sign up your students and manage their info.</h1>
         <section className="bg-white p-4 rounded-lg">
@@ -43,7 +27,6 @@ export default function Home({students}: InferGetServerSidePropsType<typeof getS
             <p>Add students and edit their information here.</p>
           </div>
           <article className='grid grid-cols-2 gap-4'>
-            
             <Link 
               href="/student-mgmt/add"
               className='col-span-1 text-center hover:bg-blue-300 p-4 rounded'
@@ -59,6 +42,6 @@ export default function Home({students}: InferGetServerSidePropsType<typeof getS
           </article>
         </section>
       </div>
-    </main>
+    </Layout>
   )
 }

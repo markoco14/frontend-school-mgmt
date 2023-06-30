@@ -1,3 +1,4 @@
+import Layout from "@/src/modules/core/infrastructure/ui/components/Layout"
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student"
 import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter"
 import Link from "next/link"
@@ -21,14 +22,7 @@ export default function AddStudent() {
 	}
 
 	return (
-		<main
-      className='min-h-screen p-24 max-w-[600px] mx-auto'
-    >
-			<nav className='flex gap-2'>
-        <Link href="/">Home</Link>
-        <Link href="/school-mgmt/">Schools</Link>
-        <Link href="/student-mgmt/">Students</Link>
-      </nav>
+		<Layout>
 			<h1>Add student</h1>
 			<Link href="/student-mgmt/add">Add</Link>
 			<Link href="/student-mgmt/delete">Delete</Link>
@@ -47,6 +41,6 @@ export default function AddStudent() {
 				</div>
 				<button>Add</button>
 			</form>
-		</main>
+		</Layout>
 	)
 }

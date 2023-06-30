@@ -1,4 +1,5 @@
 import { UserContext } from "@/src/context";
+import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
@@ -46,22 +47,7 @@ export default function Add() {
   }
 
   return (
-    <main className="min-h-screen max-w-[600px] mx-auto">
-      <nav className="h-[48px] flex justify-between items-center px-4">
-        <div className="flex gap-2">
-          <Link href="/">Home</Link>
-          <Link href="/school-mgmt/">Schools</Link>
-          <Link href="/student-mgmt/">Students</Link>
-        </div>
-        <button
-          onClick={() => {
-            context.setUser();
-            router.push("/");
-          }}
-        >
-          Log Out
-        </button>
-      </nav>
+    <Layout>
       <div>
         <h1 className="mb-4 p-4">Add all of your school locations here.</h1>
         <section className="bg-white p-4 rounded-lg">
@@ -99,6 +85,6 @@ export default function Add() {
           )}
         </section>
       </div>
-    </main>
+    </Layout>
   );
 }

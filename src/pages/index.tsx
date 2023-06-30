@@ -5,6 +5,7 @@ import { UserContext } from "../context";
 import { userAdapter } from "../modules/user-mgmt/infrastructure/adapters/userAdapter";
 import { User } from "../modules/user-mgmt/domain/entities/User";
 import { useRouter } from "next/router";
+import Layout from "../modules/core/infrastructure/ui/components/Layout";
 
 export const getServerSideProps: GetServerSideProps<{
   users: User[];
@@ -46,22 +47,7 @@ export default function Home({
   }
 
   return (
-    <main className="min-h-screen max-w-[600px] mx-auto">
-      <nav className="h-[48px] flex justify-between items-center px-4">
-        <div className="flex gap-2">
-          <Link href="/">Home</Link>
-          {context.user ? <Link href="/school-mgmt/">Schools</Link> : null}
-          {context.user ? <Link href="/student-mgmt/">Students</Link> : null}
-        </div>
-        <button
-          onClick={() => {
-            context.setUser();
-            router.push("/");
-          }}
-        >
-          Log Out
-        </button>
-      </nav>
+    <Layout>
       <div>
         <h1 className="mb-4 p-4">Easy Cram School Management In The Cloud.</h1>
         {context.user ? (
@@ -168,6 +154,6 @@ export default function Home({
           </section>
         )}
       </div>
-    </main>
+    </Layout>
   );
 }

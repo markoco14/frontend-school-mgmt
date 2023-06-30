@@ -1,3 +1,4 @@
+import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
 import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter';
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 import Link from 'next/link';
@@ -30,14 +31,7 @@ export default function Home({students}: InferGetServerSidePropsType<typeof getS
 	}
 
   return (
-    <main
-      className='min-h-screen p-24 max-w-[600px] mx-auto'
-    >
-      <nav className='flex gap-2'>
-        <Link href="/">Home</Link>
-        <Link href="/school-mgmt/">Schools</Link>
-        <Link href="/student-mgmt/">Students</Link>
-      </nav>
+    <Layout>
       <h1>Testing the Django Api and Frontend</h1>
       <Link href="/student-mgmt/add">Add</Link>
       <Link href="/student-mgmt/delete">Delete</Link>
@@ -49,6 +43,6 @@ export default function Home({students}: InferGetServerSidePropsType<typeof getS
 					</li>
         ))}
       </ul>
-    </main>
+    </Layout>
   )
 }
