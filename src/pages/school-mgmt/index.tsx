@@ -69,10 +69,10 @@ export default function Home() {
                 </ul>
               </>
             ) : (
-              <>
-                <p>You have no schools</p>
-                <Link href="/school-mgmt/add">Add School</Link>
-              </>
+              <div className="flex justify-between items-baseline mb-4">
+                <h2 className="text-3xl">You have no schools.</h2>
+                <Link href="/school-mgmt/add">+ school</Link>
+              </div>
             )}
           </section>
         )}
