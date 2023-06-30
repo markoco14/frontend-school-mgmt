@@ -64,7 +64,7 @@ export default function Home() {
           <section className="bg-white p-4 rounded-lg">
             {mySchools.length > 0 ? (
               <>
-                <div className="flex justify-between items-baseline  mb-4">
+                <div className="flex justify-between items-baseline mb-4">
                   <h2 className="text-3xl">Your schools</h2>
                   <Link href="/school-mgmt/add">+ school</Link>
                 </div>
