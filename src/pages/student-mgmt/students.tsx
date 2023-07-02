@@ -48,9 +48,7 @@ export default function ListStudents({
               <span>
                 {student.first_name} {student.last_name} {student.age}
               </span>
-              <button onClick={() => handleDeleteStudent(student.id)}>
-                Delete
-              </button>
+              <Link href={`/student-mgmt/${student.id}`}>Profile</Link>
             </li>
           ))}
         </ul>
