@@ -51,14 +51,21 @@ export default function AddStudent() {
       toast('You need to fill out all the student information');
       return;
     }
-    const student: Student = await studentAdapter.addStudent({
-      firstName: firstName,
-      lastName: lastName,
-      age: age,
-      school: selectedSchool
-    });
 
-    return student;
+    try {
+      setLoading(true);
+      const student: Student = await studentAdapter.addStudent({
+        firstName: firstName,
+        lastName: lastName,
+        age: age,
+        school: selectedSchool
+      });
+      setLoading(false);
+      toast.success('Student added!')
+      return student;
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -69,54 +76,58 @@ export default function AddStudent() {
           <h2 className="text-3xl">Enter your new student information</h2>
           <Link href="/student-mgmt/">Back</Link>
         </div>
-        <form onSubmit={(e) => handleAddStudent(e)}>
-          {/* SCHOOL SELECTOR COMPONENT */}
-          <div className="flex flex-col mb-4">
-            <label className='mb-2'>School</label>
-            <select
-              onChange={(e) => setSelectedSchool(Number(e.target.value))}
-              required
-              className="py-2 rounded bg-white shadow"
-            >
-              <option value="">Choose a school</option>
-              {mySchools?.map((school: School, index: number) => (
-                <option key={index} value={school.id} className="p-4">
-                  {school.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex flex-col mb-4">
-            <label className='mb-2'>First Name</label>
-            <input
-              className="px-1 py-2 rounded shadow"
-              required
-              type="text"
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col mb-4">
-            <label className='mb-2'>Last Name</label>
-            <input
-              className="px-1 py-2 rounded shadow"
-              required
-              type="text"
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col mb-4">
-            <label className='mb-2'>Age</label>
-            <input
-              className="px-1 py-2 rounded shadow"
-              required
-              type="number"
-              onChange={(e) => setAge(Number(e.target.value))}
-            />
-          </div>
-          <button className="bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded">
-            Add
-          </button>
-        </form>
+        {loading ? (
+          <p>loading...</p>
+        ) : (
+          <form onSubmit={(e) => handleAddStudent(e)}>
+            {/* SCHOOL SELECTOR COMPONENT */}
+            <div className="flex flex-col mb-4">
+              <label className='mb-2'>School</label>
+              <select
+                onChange={(e) => setSelectedSchool(Number(e.target.value))}
+                required
+                className="py-2 rounded bg-white shadow"
+              >
+                <option value="">Choose a school</option>
+                {mySchools?.map((school: School, index: number) => (
+                  <option key={index} value={school.id} className="p-4">
+                    {school.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col mb-4">
+              <label className='mb-2'>First Name</label>
+              <input
+                className="px-1 py-2 rounded shadow"
+                required
+                type="text"
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col mb-4">
+              <label className='mb-2'>Last Name</label>
+              <input
+                className="px-1 py-2 rounded shadow"
+                required
+                type="text"
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col mb-4">
+              <label className='mb-2'>Age</label>
+              <input
+                className="px-1 py-2 rounded shadow"
+                required
+                type="number"
+                onChange={(e) => setAge(Number(e.target.value))}
+              />
+            </div>
+            <button className="bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded">
+              Add
+            </button>
+          </form>
+        )}
       </section>
     </Layout>
   );
