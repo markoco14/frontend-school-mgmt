@@ -113,7 +113,7 @@ export default function AddStudent() {
               <input
                 className="px-1 py-2 rounded shadow"
                 type="text"
-                {...register("lastName", { required: true, minLength: 3, maxLength: 50 })}
+                {...register("lastName", { required: true, minLength: 1, maxLength: 50 })}
               />
               {errors.lastName?.type === "required" && (
                 <p 
