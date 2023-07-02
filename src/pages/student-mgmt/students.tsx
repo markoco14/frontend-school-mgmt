@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps<{
   return { props: { students } };
 };
 
-export default function Home({
+export default function ListStudents({
   students,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [filteredStudents, setFilteredStudents] = useState<Student[]>(students);

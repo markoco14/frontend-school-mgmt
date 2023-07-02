@@ -20,7 +20,7 @@ export default function Home({student}: InferGetServerSidePropsType<typeof getSe
     <Layout>
       <h1>Testing the Django Api and Frontend</h1>
       <Link href="/student-mgmt/add">Add</Link>
-      <Link href="/student-mgmt/delete">Delete</Link>
+      <Link href="/student-mgmt/students">Delete</Link>
 			<article>
 				<h2>Student Profile</h2>
 				<p>{student.first_name} {student.last_name}</p>
