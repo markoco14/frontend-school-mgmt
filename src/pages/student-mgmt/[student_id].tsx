@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Student } from '@/src/modules/student-mgmt/domain/entities/Student';
 import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter';
 import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
 
 
 export const getServerSideProps: GetServerSideProps<{
@@ -15,17 +17,48 @@ export const getServerSideProps: GetServerSideProps<{
 };
 
 export default function Home({student}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
+
+  async function handleDeleteStudent(id: number) {
+    try {
+      setLoading(true);
+      const response = await studentAdapter.deleteStudentById({ id: id });
+      toast.success('Student deleted.')
+      setLoading(false);
+      setIsDeleted(true);
+      return response.json();
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <Layout>
-      <h1>Testing the Django Api and Frontend</h1>
-      <Link href="/student-mgmt/add">Add</Link>
-      <Link href="/student-mgmt/students">Delete</Link>
-			<article>
-				<h2>Student Profile</h2>
-				<p>{student.first_name} {student.last_name}</p>
-				<p>{student.age}</p>
-			</article>
+      <div>
+        <h1 className="mb-4 p-4">Edit and delete student profiles.</h1>
+        <section className="bg-white p-4 rounded-lg">
+          {!isDeleted ? (
+            <>
+              <div className='flex justify-between items-baseline mb-4'>
+                <h2 className='text-3xl'>{student.first_name} {student.last_name}</h2>
+                <Link href="/student-mgmt/students">Back</Link>
+              </div>
+              <article>
+                <p>Age: {student.age}</p>
+                <button onClick={() => {handleDeleteStudent(student.id)}}>Delete</button>
+              </article>
+            </>
+          ) : (
+            <>
+              <div className='flex justify-between items-baseline mb-4'>
+                <h2 className='text-3xl'>Student deleted.</h2>
+                <Link href="/student-mgmt/students">Back</Link>
+              </div>
+            </>
+          )}
+        </section>
+      </div>
     </Layout>
   )
 }
