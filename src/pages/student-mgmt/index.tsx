@@ -1,22 +1,7 @@
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { Student } from '@/src/modules/student-mgmt/domain/entities/Student';
-import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter';
-import { useContext } from 'react';
-import { UserContext } from '@/src/context';
-import { useRouter } from 'next/router';
 import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
 
-export const getServerSideProps: GetServerSideProps<{
-  students: Student[];
-}> = async () => {
-  const students = await studentAdapter.getStudents();
-  
-  return { props: { students } };
-};
-
-export default function Home({students}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  
+export default function StudentsHome() {
   return (
     <Layout>
       <div>
@@ -34,7 +19,7 @@ export default function Home({students}: InferGetServerSidePropsType<typeof getS
               Add Students
             </Link>
             <Link 
-              href="/student-mgmt/delete"
+              href="/student-mgmt/students"
               className='col-span-1 text-center hover:bg-blue-300 p-4 rounded'
             >
               Edit Profiles
