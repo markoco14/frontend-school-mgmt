@@ -6,6 +6,7 @@ import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import Link from "next/link";
+import { resolve } from "node:path/win32";
 import { useContext, useEffect, useState } from "react";
 
 // TODO: this can't be get all students...
@@ -13,34 +14,30 @@ import { useContext, useEffect, useState } from "react";
 // pass owner id, get his school ids, and use those ids to get all the students
 // and return that. but we won't be able to do that server side for now...
 
-export const getServerSideProps: GetServerSideProps<{
-  students: Student[];
-}> = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students/`);
-  const students = await res.json();
-  return { props: { students } };
-};
 
-export default function ListStudents({
-  students,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+
+export default function ListStudents() {
   const context = useContext(UserContext);
   const [loading, setLoading] = useState<boolean>(false);
-  const [filteredStudents, setFilteredStudents] = useState<Student[]>(students);
+  const [filteredStudents, setFilteredStudents] = useState<Student[]>();
   const [userSchools, setUserSchools] = useState<School[]>();
 
   useEffect(() => {
-    async function getSchoolsByOwnerId(id: number) {
+    async function getData(id: number) {  
       setLoading(true);
       await schoolAdapter.getSchoolsByOwnerId({ id: id }).then((res) => {
         setUserSchools(res);
-        setLoading(false);
       });
-    }
 
+      await studentAdapter.getStudentsByOwnerId({ id: id }).then((res) => {
+        setFilteredStudents(res);
+      });
+      setLoading(false);
+    }
+  
     if (context.user?.id) {
       try {
-        getSchoolsByOwnerId(context.user?.id);
+        getData(context.user?.id);
       } catch (error) {
         console.error(error);
       }
@@ -48,16 +45,17 @@ export default function ListStudents({
   }, [context]);
 
   async function handleChangeSelectedSchool(id: number) {
-    if (id === 0) {
-      console.log("showing all students with pagination");
-      setFilteredStudents(students);
+    if (id === 0 && context.user?.id) {
+      await studentAdapter.getStudentsByOwnerId({ id: context.user.id }).then((res) => {
+        setFilteredStudents(res);
+      });
       return;
     }
-    console.log("you changed the school to school:", id);
-    const filteredStudents = await studentAdapter.getStudentsBySchoolId({
-      id: id,
+
+    await studentAdapter.getStudentsBySchoolId({id: id }).then((res) => {
+      setFilteredStudents(res);
+      return
     });
-    setFilteredStudents(filteredStudents);
   }
 
   return (
