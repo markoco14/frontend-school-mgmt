@@ -10,6 +10,7 @@ type Inputs = {
 };
 
 export default function Login() {
+  const {user, setUser} = useContext(UserContext);
   const {
     reset,
     register,
@@ -20,7 +21,9 @@ export default function Login() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data);
     toast("logging in!");
+    setUser({name: 'Mark', email: data.email});
     reset();
+    
     return;
   };
 
