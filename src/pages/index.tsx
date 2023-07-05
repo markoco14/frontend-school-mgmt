@@ -1,11 +1,20 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import Link from "next/link";
-import { FormEvent, useContext, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { UserContext } from "../context";
 import { userAdapter } from "../modules/user-mgmt/infrastructure/adapters/userAdapter";
 import { User } from "../modules/user-mgmt/domain/entities/User";
 import { useRouter } from "next/router";
 import Layout from "../modules/core/infrastructure/ui/components/Layout";
+import { useForm, SubmitHandler } from "react-hook-form";
+import toast from "react-hot-toast";
+
+type Inputs = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
 
 export const getServerSideProps: GetServerSideProps<{
   users: User[];
@@ -24,40 +33,25 @@ export default function Home({
   const context = useContext(UserContext);
   const router = useRouter();
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
-  const [ownerFirstName, setOwnerFirstName] = useState<string>("");
-  const [ownerLastName, setOwnerLastName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
 
-  const ownerFirstNameRef = useRef<HTMLInputElement>(null);
-  const ownerLastNameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
 
-  async function handleSubmit() {
-    if (!ownerFirstName || !ownerLastName || !email || !password) {
-      alert("You need to choose your full name");
-      return;
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      const user: User = await userAdapter.addUser({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password
+      });
+      toast.success('User added.');
+      reset();
+      console.log(user)
+      users.push(user)
+    } catch (error) {
+      console.error(error)
     }
-    setOwnerFirstName("");
-    ownerFirstNameRef.current ? (ownerFirstNameRef.current.value = "") : null;
-    setOwnerLastName("");
-    ownerLastNameRef.current ? (ownerLastNameRef.current.value = "") : null;
-    setEmail("");
-    emailRef.current ? (emailRef.current.value = "") : null;
-    setPassword("");
-    passwordRef.current ? (passwordRef.current.value = "") : null;
-
-    const newUser: User = await userAdapter.addUser({
-      firstName: ownerFirstName,
-      lastName: ownerLastName,
-      email: email,
-      password: password
-    });
-    alert("User saved successfully");
-
-    return newUser;
-  }
+  };
 
   return (
     <Layout>
@@ -111,49 +105,37 @@ export default function Home({
               <>
                 <h2 className="mb-4">Sign up to get started.</h2>
                 <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    const newUser = await handleSubmit();
-                    newUser ? users.push(newUser) : null;
-                  }}
+                  onSubmit={handleSubmit(onSubmit)}
                 >
                   <div className="flex flex-col mb-4">
                       <label className="mb-2">First Name</label>
                     <input
-                      ref={ownerFirstNameRef}
                       type="text"
-                      name="firstName"
-                      onChange={(e) => setOwnerFirstName(e.target.value)}
+                      {...register("firstName", { required: true, minLength: 2, maxLength: 50 })}
                       className="shadow-md border p-2 rounded"
                     />
                   </div>
                   <div className="flex flex-col mb-4">
                     <label className="mb-2">Last Name</label>
                     <input
-                      ref={ownerLastNameRef}
                       type="text"
-                      name="lastName"
-                      onChange={(e) => setOwnerLastName(e.target.value)}
+                      {...register("lastName", { required: true, minLength: 2, maxLength: 50 })}
                       className="shadow-md border p-2 rounded"
                     />
                   </div>
                   <div className="flex flex-col mb-4">
                     <label className="mb-2">Email</label>
                     <input
-                      ref={emailRef}
                       type="email"
-                      name="email"
-                      onChange={(e) => setEmail(e.target.value)}
+                      {...register("email", { required: true, minLength: 3, maxLength: 50 })}
                       className="shadow-md border p-2 rounded"
                     />
                   </div>
                   <div className="flex flex-col mb-4">
                     <label className="mb-2">Password</label>
                     <input
-                      ref={passwordRef}
                       type="password"
-                      name="password"
-                      onChange={(e) => setPassword(e.target.value)}
+                      {...register("password", { required: true, minLength: 2, maxLength: 50 })}
                       className="shadow-md border p-2 rounded"
                     />
                   </div>
@@ -180,7 +162,7 @@ export default function Home({
                           });
                         }}
                       >
-                        {user.first_name} {user.last_name}
+                        {user.first_name} {user.last_name} {user.email}
                       </button>
                     </li>
                   ))}
