@@ -1,11 +1,22 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import Link from "next/link";
-import { FormEvent, useContext, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { UserContext } from "../context";
 import { userAdapter } from "../modules/user-mgmt/infrastructure/adapters/userAdapter";
 import { User } from "../modules/user-mgmt/domain/entities/User";
 import { useRouter } from "next/router";
 import Layout from "../modules/core/infrastructure/ui/components/Layout";
+import { useForm, SubmitHandler } from "react-hook-form";
+import toast from "react-hot-toast";
+import Login from "../modules/user-mgmt/infrastructure/ui/Login";
+import Signup from "../modules/user-mgmt/infrastructure/ui/Signup";
+
+type Inputs = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
 
 export const getServerSideProps: GetServerSideProps<{
   users: User[];
@@ -18,33 +29,9 @@ export const getServerSideProps: GetServerSideProps<{
 export default function Home({
   users,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+
   const context = useContext(UserContext);
-  const router = useRouter();
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
-  const [ownerFirstName, setOwnerFirstName] = useState<string>("");
-  const [ownerLastName, setOwnerLastName] = useState<string>("");
-
-  const ownerFirstNameRef = useRef<HTMLInputElement>(null);
-  const ownerLastNameRef = useRef<HTMLInputElement>(null);
-
-  async function handleSubmit() {
-    if (!ownerFirstName || !ownerLastName) {
-      alert("You need to choose your full name");
-      return;
-    }
-    setOwnerFirstName("");
-    ownerFirstNameRef.current ? (ownerFirstNameRef.current.value = "") : null;
-    setOwnerLastName("");
-    ownerLastNameRef.current ? (ownerLastNameRef.current.value = "") : null;
-
-    const newUser: User = await userAdapter.addUser({
-      firstName: ownerFirstName,
-      lastName: ownerLastName,
-    });
-    alert("User saved successfully");
-
-    return newUser;
-  }
 
   return (
     <Layout>
@@ -95,61 +82,9 @@ export default function Home({
             </div>
 
             {isSignUp ? (
-              <>
-                <h2 className="mb-4">Sign up to get started.</h2>
-                <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    const newUser = await handleSubmit();
-                    newUser ? users.push(newUser) : null;
-                  }}
-                >
-                  <div className="flex flex-col mb-4">
-                      <label className="mb-2">First Name</label>
-                    <input
-                      ref={ownerFirstNameRef}
-                      type="text"
-                      onChange={(e) => setOwnerFirstName(e.target.value)}
-                      className="shadow-md border p-2 rounded"
-                    />
-                  </div>
-                  <div className="flex flex-col mb-4">
-                    <label className="mb-2">Last Name</label>
-                    <input
-                      ref={ownerLastNameRef}
-                      type="text"
-                      onChange={(e) => setOwnerLastName(e.target.value)}
-                      className="shadow-md border p-2 rounded"
-                    />
-                  </div>
-                  <button className="bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded">
-                    Save
-                  </button>
-                </form>
-              </>
+              <Signup />
             ) : (
-              <>
-                <h2 className="mb-4">Log In to manage your schools.</h2>
-                <ul className="flex flex-col gap-2">
-                  {users?.map((user, index) => (
-                    <li 
-                      key={index}
-                      className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
-                    >
-                      <button
-                        onClick={() => {
-                          context.setUser({
-                            name: user.first_name,
-                            id: user.id,
-                          });
-                        }}
-                      >
-                        {user.first_name} {user.last_name}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </>
+              <Login />
             )}
           </section>
         )}

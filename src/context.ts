@@ -3,6 +3,7 @@
   type IUserContext = {
     user: {
       name: string | null;
+      email: string | null;
       id: number | null;
     } | null;
     setUser: Function;
