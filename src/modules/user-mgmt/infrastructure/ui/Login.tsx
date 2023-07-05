@@ -7,39 +7,38 @@ import toast from "react-hot-toast";
 type Inputs = {
   email: string;
   password: string;
-}
+};
 
 export default function Login() {
+  const {
+    reset,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
 
-  const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
-
-   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data)
-    toast('logging in!')
-    reset()
-    return
-    try {
-
-    } catch (error) {
-
-    }
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log(data);
+    toast("logging in!");
+    reset();
+    return;
   };
 
   return (
     <>
       <h2 className="mb-4">Log In to manage your schools.</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='flex flex-col mb-4'>
+        <div className="flex flex-col mb-4">
           <label className="mb-2">Email</label>
-          <input 
+          <input
             type="email"
             className="p-2 rounded shadow"
             {...register("email", { required: true })}
           />
         </div>
-        <div className='flex flex-col mb-4'>
+        <div className="flex flex-col mb-4">
           <label className="mb-2">Password</label>
-          <input 
+          <input
             type="password"
             className="p-2 rounded shadow"
             {...register("password", { required: true })}
