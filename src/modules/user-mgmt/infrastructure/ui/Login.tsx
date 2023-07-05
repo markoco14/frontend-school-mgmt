@@ -1,3 +1,4 @@
+import AuthContext from "@/src/AuthContext";
 import { UserContext } from "@/src/context";
 import { useRouter } from "next/router";
 import { useContext } from "react";
@@ -10,7 +11,10 @@ type Inputs = {
 };
 
 export default function Login() {
-  const {user, setUser} = useContext(UserContext);
+  // const {user, setUser} = useContext(UserContext);
+
+  const { user, loginUser } = useContext(AuthContext);
+  console.log('logging user', user)
   const {
     reset,
     register,
@@ -19,9 +23,10 @@ export default function Login() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
+    // console.log(data);
     toast("logging in!");
-    setUser({name: 'Mark', email: data.email});
+    // setUser({name: 'Mark', email: data.email});
+    loginUser(data)
     reset();
     
     return;
