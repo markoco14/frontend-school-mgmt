@@ -27,13 +27,15 @@ export default function Home({
   const [ownerFirstName, setOwnerFirstName] = useState<string>("");
   const [ownerLastName, setOwnerLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const ownerFirstNameRef = useRef<HTMLInputElement>(null);
   const ownerLastNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   async function handleSubmit() {
-    if (!ownerFirstName || !ownerLastName || !email) {
+    if (!ownerFirstName || !ownerLastName || !email || !password) {
       alert("You need to choose your full name");
       return;
     }
@@ -43,12 +45,14 @@ export default function Home({
     ownerLastNameRef.current ? (ownerLastNameRef.current.value = "") : null;
     setEmail("");
     emailRef.current ? (emailRef.current.value = "") : null;
+    setPassword("");
+    passwordRef.current ? (passwordRef.current.value = "") : null;
 
     const newUser: User = await userAdapter.addUser({
       firstName: ownerFirstName,
       lastName: ownerLastName,
       email: email,
-      password: 'password123'
+      password: password
     });
     alert("User saved successfully");
 
@@ -140,6 +144,16 @@ export default function Home({
                       type="email"
                       name="email"
                       onChange={(e) => setEmail(e.target.value)}
+                      className="shadow-md border p-2 rounded"
+                    />
+                  </div>
+                  <div className="flex flex-col mb-4">
+                    <label className="mb-2">Password</label>
+                    <input
+                      ref={passwordRef}
+                      type="password"
+                      name="password"
+                      onChange={(e) => setPassword(e.target.value)}
                       className="shadow-md border p-2 rounded"
                     />
                   </div>
