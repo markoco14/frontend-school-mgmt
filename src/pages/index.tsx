@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import Layout from "../modules/core/infrastructure/ui/components/Layout";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
+import Login from "../modules/user-mgmt/infrastructure/ui/Login";
 
 type Inputs = {
   firstName: string;
@@ -145,29 +146,7 @@ export default function Home({
                 </form>
               </>
             ) : (
-              <>
-                <h2 className="mb-4">Log In to manage your schools.</h2>
-                <ul className="flex flex-col gap-2">
-                  {users?.map((user, index) => (
-                    <li 
-                      key={index}
-                      className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
-                    >
-                      <button
-                        onClick={() => {
-                          context.setUser({
-                            name: user.first_name,
-                            email: user.email,
-                            id: user.id,
-                          });
-                        }}
-                      >
-                        {user.first_name} {user.last_name} {user.email}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </>
+              <Login />
             )}
           </section>
         )}
