@@ -28,7 +28,6 @@ export default function Signup() {
       });
       toast.success('User added.');
       reset();
-      console.log(user)
     } catch (error) {
       console.error(error)
     }
