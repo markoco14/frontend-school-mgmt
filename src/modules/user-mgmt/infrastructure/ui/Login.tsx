@@ -1,8 +1,6 @@
-import { UserContext } from "@/src/context";
-import { useRouter } from "next/router";
+import AuthContext from "@/src/AuthContext";
 import { useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import toast from "react-hot-toast";
 
 type Inputs = {
   email: string;
@@ -10,7 +8,7 @@ type Inputs = {
 };
 
 export default function Login() {
-  const {user, setUser} = useContext(UserContext);
+  const { user, loginUser } = useContext(AuthContext);
   const {
     reset,
     register,
@@ -19,9 +17,7 @@ export default function Login() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
-    toast("logging in!");
-    setUser({name: 'Mark', email: data.email});
+    loginUser(data)
     reset();
     
     return;

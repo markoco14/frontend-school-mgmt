@@ -4,6 +4,8 @@ import { UserContext } from '@/src/context'
 import { ReactElement, ReactNode, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { NextPage } from 'next'
+import {AuthProvider} from '../AuthContext'
+
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -19,10 +21,14 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return getLayout(
-    <UserContext.Provider value={{user, setUser}}>
+    <AuthProvider>
       <Component {...pageProps} />
       <Toaster />
-    </UserContext.Provider>
+    </AuthProvider>
+    // <UserContext.Provider value={{user, setUser}}>
+    //   <Component {...pageProps} />
+    //   <Toaster />
+    // </UserContext.Provider>
   )
 }
 

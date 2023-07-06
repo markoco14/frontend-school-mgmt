@@ -10,6 +10,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import Login from "../modules/user-mgmt/infrastructure/ui/Login";
 import Signup from "../modules/user-mgmt/infrastructure/ui/Signup";
+import AuthContext from "../AuthContext";
 
 type Inputs = {
   firstName: string;
@@ -31,15 +32,16 @@ export default function Home({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   const context = useContext(UserContext);
+  const { user } = useContext(AuthContext);
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
 
   return (
     <Layout>
       <div>
         <h1 className="mb-4 p-4">Easy Cram School Management In The Cloud.</h1>
-        {context.user ? (
+        {user ? (
           <section className="bg-white p-4 rounded-lg">
-            <h2 className="text-3xl mb-4">Welcome back, {context.user.name}!</h2>
+            <h2 className="text-3xl mb-4">Welcome back, {user.name}!</h2>
             <p className='mb-4'><strong>Managing</strong> your school and student <strong>data</strong> has never been <strong>easier</strong>.</p>
             <div className="grid grid-cols-2 gap-4">
               <Link 
