@@ -14,6 +14,7 @@ export default function Navbar() {
         <Link href="/">Home</Link>
         {user ? <Link href="/school-mgmt/">Schools</Link> : null}
         {user ? <Link href="/student-mgmt/">Students</Link> : null}
+        {user ? <Link href="/report-mgmt/">Reports</Link> : null}
       </div>
       {user ? (
         <button
