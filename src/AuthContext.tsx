@@ -75,8 +75,13 @@ export const AuthProvider = ({children}: any) => {
 		}
 		const fourMinutes = 1000 * 60 * 4;
 		if (!user || !authTokens) {
-			setAuthTokens(() => localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null);
-			setUser(() => localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null)
+			const tokens = localStorage.getItem('authTokens');
+
+			if (typeof tokens === 'string') {
+				setAuthTokens(() => JSON.parse(tokens))
+				setUser(() => jwt_decode(tokens))
+			}
+
 		} else {
 			const interval = setInterval(() => {
 				if (authTokens) {
@@ -85,8 +90,6 @@ export const AuthProvider = ({children}: any) => {
 			}, fourMinutes)
 			return () => clearInterval(interval);
 		}
-
-		
 	}, [authTokens, user])
 
 	let contextData = {
