@@ -1,38 +1,31 @@
 import {createContext, useState, useEffect} from 'react';
 import { toast } from 'react-hot-toast';
 import jwt_decode from 'jwt-decode';
-import { useRouter } from 'next/router';
 
 type AuthUser = {
 	name: string;
 }
 
 type IAuthContext = {
-	user: AuthUser;
-	logout: Function;
-	loginUser: Function;
+	user: AuthUser | null;
+	logout: any;
+	loginUser: any;
 }
 
-const AuthContext = createContext({
+const AuthContext = createContext<IAuthContext>({
 	user: null,
-	logout: () => console.log('function'),
-	loginUser: () => console.log('function'),
+	logout: null,
+	loginUser: null,
 });
 
 export default AuthContext;
 
 export const AuthProvider = ({children}: any) => {
 
-	const router = useRouter();
-
 	let [authTokens, setAuthTokens] = useState<any>(null);
 	let [user, setUser] = useState<any>(null);
-	const [loading, setLoading] = useState<boolean>(false);
-
-	
 
 	let loginUser = async ( formData: any ) => {
-		console.log('logging data in auth context', formData);
 
 		let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/token/`, {
 			method: 'POST',
@@ -41,13 +34,10 @@ export const AuthProvider = ({children}: any) => {
 			},
 			body: JSON.stringify({'email': formData.email, 'password': formData.password})
 		})
-		console.log(response);
 
 		let data = await response.json();
-		console.log(data);
 
 		if (response.status === 200) {
-			toast.success('Heck yes!');
 			setAuthTokens(data);
 			setUser(jwt_decode(data.access));
 			localStorage.setItem('authTokens', JSON.stringify(data));
@@ -62,11 +52,8 @@ export const AuthProvider = ({children}: any) => {
 		localStorage.removeItem('authTokens');
 	}
 
-	
-
 	useEffect(() => {
 		let updateToken = async () => {
-			console.log('updating token')
 			let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/token/refresh/`, {
 				method: 'POST',
 				headers: {
@@ -78,25 +65,29 @@ export const AuthProvider = ({children}: any) => {
 			let data = await response.json();
 
 			if (response.status === 200) {
-				toast.success('Heck yes!');
 				setAuthTokens(data);
 				setUser(jwt_decode(data.access));
 				localStorage.setItem('authTokens', JSON.stringify(data));
-				console.log('updated token')
 			} else {
 				toast.error('Something went wrong. Sorry.');
 				logout();
 			}
 		}
-		setAuthTokens(() => localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null);
-		setUser(() => localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null)
+		const fourMinutes = 1000 * 60 * 4;
+		if (!user || !authTokens) {
+			setAuthTokens(() => localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null);
+			setUser(() => localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null)
+		} else {
+			const interval = setInterval(() => {
+				if (authTokens) {
+					updateToken();
+				}
+			}, fourMinutes)
+			return () => clearInterval(interval);
+		}
 
-		setInterval(() => {
-			if (authTokens) {
-				updateToken();
-			}
-		}, 5000)
-	}, [authTokens, loading])
+		
+	}, [authTokens, user])
 
 	let contextData = {
 		user:user,
