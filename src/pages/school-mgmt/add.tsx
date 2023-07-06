@@ -19,23 +19,11 @@ export default function Add() {
     if (user && newSchoolName) {
       try {
         setLoading(true);
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/add-school/`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              name: newSchoolName,
-              owner: user.user_id,
-            }),
-          }
-        );
+        const response = await schoolAdapter.addSchool({schoolName: newSchoolName, id: user.user_id})
         setNewSchoolName("");
         setLoading(false);
         toast.success("School added.");
-        return response.json();
+        return response;
       } catch (error) {
         console.error(error);
         toast.error(
