@@ -1,4 +1,4 @@
-import { UserContext } from "@/src/context";
+import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import { School } from "@/src/modules/school-mgmt/domain/entities/School";
 import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
@@ -17,7 +17,7 @@ type Inputs = {
 }
 
 export default function AddStudent() {
-  const context = useContext(UserContext);
+  const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [userSchools, setUserSchools] = useState<School[]>([]);
@@ -34,7 +34,6 @@ export default function AddStudent() {
       });
       toast.success('Student added.');
       reset();
-      console.log(student)
     } catch (error) {
       console.error(error)
     }
@@ -49,14 +48,14 @@ export default function AddStudent() {
       });
     }
 
-    if (context.user?.id) {
+    if (user) {
       try {
-        getSchoolsByOwnerId(context.user?.id);
+        getSchoolsByOwnerId(user.user_id);
       } catch (error) {
         console.error(error);
       }
     }
-  }, [context]);
+  }, [user]);
 
   return (
     <Layout>

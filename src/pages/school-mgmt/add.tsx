@@ -1,13 +1,12 @@
-import { UserContext } from "@/src/context";
+import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 
 export default function Add() {
-  const context = useContext(UserContext);
-  const router = useRouter();
+  const { user } = useContext(AuthContext);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [newSchoolName, setNewSchoolName] = useState<string>("");
@@ -17,26 +16,14 @@ export default function Add() {
       toast("You forgot to add your school's name!");
     }
 
-    if (context.user?.id && newSchoolName) {
+    if (user && newSchoolName) {
       try {
         setLoading(true);
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/add-school/`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              name: newSchoolName,
-              owner: context.user.id,
-            }),
-          }
-        );
+        const response = await schoolAdapter.addSchool({schoolName: newSchoolName, id: user.user_id})
         setNewSchoolName("");
         setLoading(false);
         toast.success("School added.");
-        return response.json();
+        return response;
       } catch (error) {
         console.error(error);
         toast.error(

@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode';
 
 type AuthUser = {
 	name: string;
+	user_id: number;
 }
 
 type IAuthContext = {
