@@ -1,19 +1,12 @@
-import { UserContext } from "@/src/context";
+import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import { School } from "@/src/modules/school-mgmt/domain/entities/School";
 import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useContext, useEffect, useRef, useState } from "react";
-
-type School = {
-  name: string;
-  owner: number;
-  id: number;
-};
+import { useContext, useEffect, useState } from "react";
 
 export default function Home() {
-  const context = useContext(UserContext);
-  const router = useRouter();
+  const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [mySchools, setMySchools] = useState<School[]>([]);
@@ -27,21 +20,19 @@ export default function Home() {
       });
     }
 
-    if (context.user?.id) {
+    if (user) {
       try {
-        getSchoolsByOwnerId(context.user?.id);
+        getSchoolsByOwnerId(user.user_id);
       } catch (error) {
         console.error(error);
       }
     }
-  }, [context]);
+  }, [user]);
 
   return (
     <Layout>
       <div>
-        <h1 className="mb-4 p-4">
-          Manage all your schools from here!
-        </h1>
+        <h1 className="mb-4 p-4">Manage all your schools from here!</h1>
         {loading ? (
           <p className="flex justify-center bg-white p-4 rounded-lg">
             loading...
@@ -62,7 +53,7 @@ export default function Home() {
                     >
                       <span>{school.name}</span>
                       <div className="flex gap-2">
-                        {/* TODO: EDIT TRIGGERS MODEL TO UPDATE INFO OR DELETE */}
+                        {/* TODO: EDIT TRIGGERS MODAL TO UPDATE INFO OR DELETE */}
                       </div>
                     </li>
                   ))}
