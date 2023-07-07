@@ -44,7 +44,9 @@ export default function ReportsHome({
 					<button 
 						onClick={() => createReportsForAllStudents(students)}
 						className="bg-blue-300 px-4 py-2 rounded mb-4"
-					>Create Reports for School</button>
+					>
+            Create Reports for School
+          </button>
           <ul className="flex flex-col gap-2">
             {students?.map((student: Student, index: number) => (
               <>
@@ -67,7 +69,8 @@ export default function ReportsHome({
           <ReportModal
             isOpen={isOpen}
             setIsOpen={setIsOpen}
-						student={selectedStudent}						
+            student={selectedStudent}			
+            setSelectedStudent={setSelectedStudent}			
           />
         </section>
       </div>
