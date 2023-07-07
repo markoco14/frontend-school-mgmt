@@ -5,6 +5,7 @@ import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapte
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
 import Link from "next/link";
 import ReportModal from "@/src/modules/report-mgmt/infrastructure/ui/ReportModal";
+import { reportAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportAdapter";
 
 export const getServerSideProps: GetServerSideProps<{
   students: Student[];
@@ -17,6 +18,13 @@ export const getServerSideProps: GetServerSideProps<{
   return { props: { students } };
 };
 
+async function createReportsForAllStudents(students: Student[]) {
+  students.forEach(async (student) => {
+    const report = await reportAdapter.createReportForStudent({student_id: student.id})
+    console.log(report)
+  })
+  
+}
 export default function ReportsHome({
   students,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -34,20 +42,24 @@ export default function ReportsHome({
             <Link href="/report-mgmt/">Back</Link>
           </div>
 					<button 
-						onClick={() => console.log('creating reports')}
+						onClick={() => createReportsForAllStudents(students)}
 						className="bg-blue-300 px-4 py-2 rounded mb-4"
-					>Create Reports for Class</button>
-          <ul>
+					>Create Reports for School</button>
+          <ul className="flex flex-col gap-2">
             {students?.map((student: Student, index: number) => (
               <>
                 <li
                   key={index}
-                  onClick={() => {
-                    setIsOpen(true);
-										setSelectedStudent(student);
-                  }}
                 >
-                  {student.first_name} {student.last_name}
+                  <button 
+                    className='bg-gray-300 px-2 py-1 rounded'
+                    onClick={() => {
+                      setIsOpen(true);
+                      setSelectedStudent(student);
+                    }}
+                  >
+                    {student.first_name} {student.last_name}
+                  </button>
                 </li>
               </>
             ))}
