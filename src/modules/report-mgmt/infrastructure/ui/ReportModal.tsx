@@ -1,19 +1,47 @@
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
 import { Dialog, Transition } from "@headlessui/react"
-import { Fragment,  } from "react"
+import { Fragment, useEffect, useState,  } from "react"
+import { reportAdapter } from "../adapters/reportAdapter";
+import { Report } from "../../domain/entities/Report";
+import { toast } from "react-hot-toast";
 
 type Props = {
 	isOpen: boolean;
 	setIsOpen: Function;
 	student: Student | undefined;
+  setSelectedStudent: Function;
 }
 
 export default function ReportModal(props: Props) {
-	console.log(props)
-	
+  const [todayReport, setTodayReport] = useState<Report>();
+
+  async function getData(student_id: number) {
+    await reportAdapter.getTodayReportByStudentId({student_id: student_id}).then((res) => {
+      setTodayReport(res[0])
+    });
+  }
+
+  function handleSave() {
+    toast.success('saved!')
+  }
+  
+  function handleCloseModalWithReset() {
+    setTodayReport(undefined);
+    props.setSelectedStudent(undefined);
+    props.setIsOpen(false)
+  }
+
+  useEffect(() => {
+    if (props.student) {
+      getData(props.student.id);
+    }
+  }, [props.student])
+
 	return (
 		<Transition appear show={props.isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => props.setIsOpen(false)}>
+        <Dialog as="div" className="relative z-10" onClose={() => {
+          handleCloseModalWithReset();
+        }}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -45,24 +73,31 @@ export default function ReportModal(props: Props) {
                   >
                     {props.student?.first_name} {props.student?.last_name}
                   </Dialog.Title>
-                  <form>
-										<div className="flex flex-col">
-											<label>Content</label>
-											<textarea />
-										</div>
-									</form>
+                  {todayReport ? (
+                    <article className="flex flex-col">
+                      <textarea
+                        defaultValue={todayReport.content}
+                        className="shadow rounded"
+                      />
+                      <p>{todayReport.is_complete ? "Complete" : "Incomplete"}</p>
+                    </article>
+                  ) : null}
                   <div className="mt-4">
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={() => props.setIsOpen(false)}
+                      onClick={() => {
+                        handleSave();
+                      }}
                     >
                       Save
                     </button>
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={() => props.setIsOpen(false)}
+                      onClick={() => {
+                        handleCloseModalWithReset();
+                      }}
                     >
                       Save and Close
                     </button>
