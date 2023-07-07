@@ -20,6 +20,13 @@ class ReportAdapter {
 
 		return report;
 	}
+
+	public async getTodayReportByStudentId({student_id}: {student_id: number}) : Promise<Report[]> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-today-report-by-student-id/${student_id}`);
+		const report: Report[] = await res.json();
+
+		return report
+	}
 }
 
 export const reportAdapter = new ReportAdapter();
