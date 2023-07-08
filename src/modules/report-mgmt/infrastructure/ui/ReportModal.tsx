@@ -17,15 +17,25 @@ export default function ReportModal(props: Props) {
 
   async function getData(student_id: number) {
     await reportAdapter.getTodayReportByStudentId({student_id: student_id}).then((res) => {
-      setTodayReport(res[0])
+      const data = res[0]
+      setTodayReport({id: data.id, content: data.content, is_complete: data.is_complete, student_id: data.student_id})
     });
   }
 
-  function handleSave() {
+  async function handleSave(report: Report) {
     toast.success('saved!')
+    console.log('logging report before attempt', report)
+    try {
+      await reportAdapter.updateReportById({report: report}).then((res) => {
+        console.log('logging response of successful attempt', res)
+      })
+    } catch (error) {
+      console.error(error)
+    }
+    // await reportAdapter.updateReportById(report).then((res) => console.log(res));
   }
   
-  function handleCloseModalWithReset() {
+  function handleSaveAndClose() {
     setTodayReport(undefined);
     props.setSelectedStudent(undefined);
     props.setIsOpen(false)
@@ -40,7 +50,7 @@ export default function ReportModal(props: Props) {
 	return (
 		<Transition appear show={props.isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={() => {
-          handleCloseModalWithReset();
+          handleSaveAndClose();
         }}>
           <Transition.Child
             as={Fragment}
@@ -78,6 +88,11 @@ export default function ReportModal(props: Props) {
                       <textarea
                         defaultValue={todayReport.content}
                         className="shadow rounded"
+                        onChange={(e) => {
+                          console.log(todayReport)
+                          console.log(e.target.value)
+                          setTodayReport(prev => ({ ...prev, content: e.target.value }))
+                        }}
                       />
                       <p>{todayReport.is_complete ? "Complete" : "Incomplete"}</p>
                     </article>
@@ -87,7 +102,7 @@ export default function ReportModal(props: Props) {
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={() => {
-                        handleSave();
+                        todayReport ? handleSave(todayReport) : null;
                       }}
                     >
                       Save
@@ -96,7 +111,7 @@ export default function ReportModal(props: Props) {
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={() => {
-                        handleCloseModalWithReset();
+                        handleSaveAndClose();
                       }}
                     >
                       Save and Close

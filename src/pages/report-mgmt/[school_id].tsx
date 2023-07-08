@@ -42,14 +42,14 @@ export default function ReportsHome({
             <Link href="/report-mgmt/">Back</Link>
           </div>
 					<button 
+            // disabled
 						onClick={() => createReportsForAllStudents(students)}
-						className="bg-blue-300 px-4 py-2 rounded mb-4"
+						className="bg-blue-300 px-4 py-2 rounded mb-4 disabled:cursor-not-allowed"
 					>
             Create Reports for School
           </button>
           <ul className="flex flex-col gap-2">
             {students?.map((student: Student, index: number) => (
-              <>
                 <li
                   key={index}
                 >
@@ -63,7 +63,7 @@ export default function ReportsHome({
                     {student.first_name} {student.last_name}
                   </button>
                 </li>
-              </>
+              
             ))}
           </ul>
           <ReportModal
