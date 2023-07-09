@@ -9,12 +9,17 @@ class ClassAdapter {
 	}
 
 	public async addClass({className, schoolId}: {className: string, schoolId: number}): Promise<Class> {
-		console.log('hitting endpoint but backend is not set up')
-		return 
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-class/`);
-		const newClass: Class[] = await res.json();
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-class/`, { 
+			method: 'POST', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ name: className, school_id: schoolId }) 
+		});
+		const newClass: Class = await res.json();
 
 		return newClass
+
 	}
 }
 
