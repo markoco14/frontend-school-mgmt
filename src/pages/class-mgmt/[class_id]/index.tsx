@@ -1,8 +1,23 @@
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
+import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 
+export const getServerSideProps: GetServerSideProps<{
+  students: Student[];
+}> = async (context) => {
+  const id = context?.query?.class_id;
+  const students = await studentAdapter.listStudentsByClassId({
+    id: Number(id),
+  });
 
-export default function ClassList() {
+  return { props: { students } };
+};
+
+export default function ClassList({
+  students,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <Layout>
       <div>
