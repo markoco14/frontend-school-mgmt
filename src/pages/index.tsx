@@ -56,6 +56,12 @@ export default function Home({
               >
                   Students
                 </Link>
+              <Link 
+                href="/class-mgmt/" 
+                className='col-span-1 flex justify-center hover:bg-blue-300 p-4 rounded'
+              >
+                  Classes
+                </Link>
             </div>
           </section>
         ) : (
