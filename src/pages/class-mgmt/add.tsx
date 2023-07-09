@@ -4,6 +4,7 @@ import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/c
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import { School } from "@/src/modules/school-mgmt/domain/entities/School";
 import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
+import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -26,7 +27,7 @@ export default function AddClass() {
         className: data.className,
         schoolId: Number(data.schoolId)
       });
-      toast.success('Student added.');
+      toast.success('New class added.');
       reset();
     } catch (error) {
       console.error(error)
@@ -56,8 +57,10 @@ export default function AddClass() {
       <div>
         <h1 className="mb-4 p-4">Create classes here</h1>
         <section className="bg-white p-4 rounded-lg">
-          <h2>Add your classes here!</h2>
-          <p>do itttt</p>
+          <div className="flex justify-between items-baseline mb-4">
+            <h2 className='text-3xl'>Add Class</h2>
+            <Link href="/class-mgmt">Back</Link>
+          </div>
 					<form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col mb-4">
               <label className='mb-2'>School</label>
