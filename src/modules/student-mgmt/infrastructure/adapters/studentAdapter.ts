@@ -29,13 +29,13 @@ class StudentAdapter {
 		return students;
 	}
 
-	public async addStudent({firstName, lastName, age, school}: {firstName: string, lastName: string, age: number, school: number}): Promise<Student> {
+	public async addStudent({firstName, lastName, age, schoolId}: {firstName: string, lastName: string, age: number, schoolId: number}): Promise<Student> {
 		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-student/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ first_name: firstName, last_name: lastName, age: age, school: school }) 
+			body: JSON.stringify({ first_name: firstName, last_name: lastName, age: age, school_id: schoolId }) 
 		})
 		const student: Student = await response.json();
 
