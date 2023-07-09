@@ -13,7 +13,7 @@ type Inputs = {
   firstName: string
   lastName: string
   age: number
-  school: number
+  schoolId: number
 }
 
 export default function AddStudent() {
@@ -30,7 +30,7 @@ export default function AddStudent() {
         firstName: data.firstName,
         lastName: data.lastName,
         age: Number(data.age),
-        school: Number(data.school)
+        schoolId: Number(data.schoolId)
       });
       toast.success('Student added.');
       reset();
@@ -73,7 +73,7 @@ export default function AddStudent() {
               <label className='mb-2'>School</label>
               <select
                 className="py-2 rounded bg-white shadow"
-                {...register("school", { required: true })}
+                {...register("schoolId", { required: true })}
               >
                 <option value="">Choose a school</option>
                 {userSchools?.map((school: School, index: number) => (
@@ -82,7 +82,7 @@ export default function AddStudent() {
                   </option>
                 ))}
               </select>
-              {errors.school?.type === "required" && (
+              {errors.schoolId?.type === "required" && (
                 <p 
                   role="alert"
                   className='text-red-500 mt-2'
