@@ -12,12 +12,15 @@ type Props = {
   setSelectedStudent: Function;
 }
 
+
+
 export default function ReportModal(props: Props) {
   const [todayReport, setTodayReport] = useState<Report>();
 
   async function getData(student_id: number) {
     await reportAdapter.getTodayReportByStudentId({student_id: student_id}).then((res) => {
       const data = res[0]
+      
       setTodayReport({id: data.id, content: data.content, is_complete: data.is_complete, student_id: data.student_id})
     });
   }
@@ -91,6 +94,8 @@ export default function ReportModal(props: Props) {
                         onChange={(e) => {
                           console.log(todayReport)
                           console.log(e.target.value)
+                          // @ts-ignore
+                          // TODO: find TS solution for this
                           setTodayReport(prev => ({ ...prev, content: e.target.value }))
                         }}
                       />
