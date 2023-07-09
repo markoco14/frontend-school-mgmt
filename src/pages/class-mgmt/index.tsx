@@ -27,9 +27,14 @@ export default function ClassHome() {
             <h2 className='text-3xl'>Class time!</h2>
             <Link href="class-mgmt/add">Add</Link>
           </div>
-          <ul>
-            {classes?.map((classes: Class, index: number) => (
-              <li key={index}>{classes.name}</li>
+          <ul className="flex flex-col gap-2">
+            {classes?.map((currentClass: Class, index: number) => (
+              <li 
+                key={index}
+                className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
+              >
+                <Link href={`/class-mgmt/${currentClass.id}`}>{currentClass.name}</Link>
+                </li>
             ))}
           </ul>
         </section>
