@@ -6,12 +6,12 @@ class SchoolAdapter {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-schools/${id}/`);
 		const schools = await res.json();
 		
-		const schoolList: School[] = schools.data
+		const schoolList: School[] = schools
 
 		return schoolList;
 	}
 
-	public async addSchool({ schoolName, id }: { schoolName: string, id: number }): Promise<School> {
+	public async addSchool({ schoolName, ownerId }: { schoolName: string, ownerId: number }): Promise<School> {
 		const response = await fetch(
 				`${process.env.NEXT_PUBLIC_API_URL}/add-school/`,
 				{
@@ -21,12 +21,12 @@ class SchoolAdapter {
 					},
 					body: JSON.stringify({
 						name: schoolName,
-						owner: id,
+						owner_id: ownerId,
 					}),
 				}
 			);
 		const data = await response.json();
-		const school: School = data.data
+		const school: School = data
 
 		return school
 	}
