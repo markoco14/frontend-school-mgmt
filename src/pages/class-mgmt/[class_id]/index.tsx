@@ -18,6 +18,7 @@ export const getServerSideProps: GetServerSideProps<{
 export default function ClassList({
   students,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  
   return (
     <Layout>
       <div>
@@ -27,7 +28,11 @@ export default function ClassList({
             <h2 className='text-3xl'>Class time!</h2>
             <Link href="/class-mgmt">Back</Link>
           </div>
-          <p>Student list goes here</p>
+          <ul>
+            {students?.map((student: Student, index: number) => (
+              <li key={index}>{student.first_name} {student.last_name}</li>
+            ))}
+          </ul>
         </section>
       </div>
     </Layout>

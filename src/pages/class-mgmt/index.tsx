@@ -10,7 +10,6 @@ export default function ClassHome() {
   useEffect(() => {
     async function getData() {
       await classAdapter.getClasses().then((res) => {
-        console.log(res)
         setClasses(res);
       });
     }
