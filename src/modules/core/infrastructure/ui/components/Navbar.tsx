@@ -15,7 +15,7 @@ export default function Navbar() {
         {user ? <Link href="/school-mgmt/">Schools</Link> : null}
         {user ? <Link href="/class-mgmt/">Classes</Link> : null}
         {user ? <Link href="/student-mgmt/">Students</Link> : null}
-        {/* {user ? <Link href="/report-mgmt/">Reports</Link> : null} */}
+        {user ? <Link href="/report-mgmt/">Reports</Link> : null}
       </div>
       {user ? (
         <button
