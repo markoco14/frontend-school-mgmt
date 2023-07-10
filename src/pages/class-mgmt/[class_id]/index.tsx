@@ -20,19 +20,19 @@ export const getServerSideProps: GetServerSideProps<{
   return { props: { students } };
 };
 
-type Props = {
+type AllStudentListProps = {
+  classId: number;
   classList: Student[];
   setClassList: Function;
 }
 
-const AllStudentList = (props: Props) => {
+const AllStudentList = (props: AllStudentListProps) => {
   const router = useRouter();
-  const classId = Number(router.query.class_id);
   const [allStudents, setAllStudents] = useState<Student[]>();
 
   async function addStudentToClassList(student: Student) {
     await classListAdapter.addStudentToClassList({
-      class_id: classId,
+      class_id: props.classId,
       student_id: student.id,
     }).then(res => {
       toast.success(`Student added to class!`)
@@ -67,6 +67,15 @@ export default function ClassList({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isAddingStudent, setIsAddingStudent] = useState<boolean>(false);
   const [classList, setClassList] = useState<Student[]>(students);
+  const router = useRouter();
+  const classId = Number(router.query.class_id);
+
+  async function removeStudentFromClassList(classId: number, studentId: number) {
+    console.log('removing', classId, studentId)
+    await classListAdapter.removeStudentFromClassList({class_id: classId, student_id: studentId}).then((res) => {
+      toast.success("student removed from class")
+    })
+  }
 
   return (
     <Layout>
@@ -89,10 +98,21 @@ export default function ClassList({
           </div>
           {isAddingStudent ? (
             <article>
-              <AllStudentList classList={classList} setClassList={setClassList}/>
+              <AllStudentList classId={classId} classList={classList} setClassList={setClassList}/>
             </article>
           ) : (
-            <StudentList students={classList} />
+            <ul className="flex flex-col gap-2">
+              {students?.map((student: Student, index: number) => (
+                <li 
+                  key={index}
+                  className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
+                >
+                  {student.first_name} {student.last_name} <button onClick={() => {
+                    removeStudentFromClassList(classId, student.id)
+                  }}>Remove</button>
+                </li>
+              ))}
+            </ul>
           )}
         </section>
       </div>
