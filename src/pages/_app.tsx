@@ -1,6 +1,5 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import { UserContext } from '@/src/context'
 import { ReactElement, ReactNode, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { NextPage } from 'next'
@@ -25,10 +24,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <Component {...pageProps} />
       <Toaster />
     </AuthProvider>
-    // <UserContext.Provider value={{user, setUser}}>
-    //   <Component {...pageProps} />
-    //   <Toaster />
-    // </UserContext.Provider>
   )
 }
 
