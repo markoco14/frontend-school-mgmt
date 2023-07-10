@@ -1,23 +1,13 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import Link from "next/link";
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../context";
 import { userAdapter } from "../modules/user-mgmt/infrastructure/adapters/userAdapter";
 import { User } from "../modules/user-mgmt/domain/entities/User";
-import { useRouter } from "next/router";
 import Layout from "../modules/core/infrastructure/ui/components/Layout";
-import { useForm, SubmitHandler } from "react-hook-form";
-import toast from "react-hot-toast";
 import Login from "../modules/user-mgmt/infrastructure/ui/Login";
 import Signup from "../modules/user-mgmt/infrastructure/ui/Signup";
 import AuthContext from "../AuthContext";
-
-type Inputs = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
 
 export const getServerSideProps: GetServerSideProps<{
   users: User[];

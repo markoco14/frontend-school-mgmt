@@ -4,7 +4,6 @@ import { classListAdapter } from "@/src/modules/class-mgmt/infrastructure/adapte
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
-import StudentList from "@/src/modules/student-mgmt/infrastructure/ui/StudentList";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";

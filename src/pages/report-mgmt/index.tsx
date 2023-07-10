@@ -44,14 +44,6 @@ export default function ReportsHome({
     }
   }, [user])
 
-  // function createReportsForSchool(school: School) {
-  //   console.log('logging school id', school.id)
-  //   const students = filteredStudents?.filter((student: Student) => {
-  //     return student.school === school.id
-  //   })
-  //   console.log(students);
-  // }
-
   return (
     <Layout>
       <div>
@@ -66,27 +58,6 @@ export default function ReportsHome({
               </li>
             ))}
           </ul>
-          {/* <div className='flex gap-2 justify-end'>
-            <button className='bg-gray-300 rounded px-2 py-1'>Save all</button>
-            <button className='bg-blue-300 rounded px-2 py-1'>Save all and complete</button>
-          </div> */}
-          {/* {filteredStudents?.map((student: Student, index: number) => (
-            <div key={index}
-              className='flex flex-col mb-4'
-            >
-              <div className='flex justify-between'>
-                <span>{student.first_name}</span>
-                <div className='flex gap-2'>
-                  <button>Create</button>
-                  <button>Save</button>
-                  <button>Save and Complete</button>
-                </div>
-              </div>
-              <textarea 
-                className='shadow rounded'
-              />
-            </div>
-          ))} */}
         </section>
       </div>
     </Layout>
