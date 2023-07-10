@@ -12,7 +12,15 @@ class ClassListAdapter {
 		const newClassList: ClassList = await res.json();
 
 		return newClassList
+	}
 
+	public async removeStudentFromClassList({class_id, student_id}: {class_id: number, student_id: number}): Promise<ClassList> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/remove-student-from-class/${class_id}/${student_id}/`, { 
+			method: 'DELETE', 
+		});
+		const newClassList: ClassList = await res.json();
+
+		return newClassList
 	}
 }
 
