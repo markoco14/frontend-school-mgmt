@@ -40,6 +40,18 @@ export default function ReportsHome({
 
   }, [day, dates])
 
+  async function createReports(thisClass: Class, date: string) {
+    await reportAdapter.createReportForClassAndDate({class_id: thisClass.id, date: date}).then((res) => {
+      // console.log(res)
+      // return res
+      setTimeout(() => {
+        router.push(`report-mgmt/${thisClass.id}/${date}/`)
+      }, 2000)
+    });
+    // console.log(report)
+
+  }
+
   return (
     <Layout>
       <div>
@@ -68,14 +80,13 @@ export default function ReportsHome({
                 <button
                   className='bg-blue-300 py-1 px-2 rounded'
                   onClick={() => {
-                    console.log(`creating reports for class ${thisClass.id} on date ${date}, taking you to page soon.`)
+                    // console.log(`creating reports for class ${thisClass.id} on date ${date}, taking you to page soon.`)
                     // make report get response
                     // make report details get response
                     // go to page
                     // setLoading while wait
-                    setTimeout(() => {
-                      router.push(`report-mgmt/${thisClass.id}/${date}/`)
-                    }, 2000)
+                    createReports(thisClass, date)
+                    
                   }}
                 >Write reports</button>
               </li>
