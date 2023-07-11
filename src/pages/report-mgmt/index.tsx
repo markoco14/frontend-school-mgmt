@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { classAdapter } from '@/src/modules/class-mgmt/infrastructure/adapters/classAdapter';
 import { Class } from '@/src/modules/class-mgmt/domain/entities/Class';
 import { format } from 'date-fns';
+import { useRouter } from 'next/router';
 
 export const getServerSideProps: GetServerSideProps<{
   reports: Report[];
@@ -19,6 +20,7 @@ export const getServerSideProps: GetServerSideProps<{
 export default function ReportsHome({
   reports,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
   const [day, setDay] = useState<string>('');
   const [date, setDate] = useState<string>('');
   const [dates, setDates] = useState<string[]>(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
@@ -63,6 +65,19 @@ export default function ReportsHome({
                 <Link href={`/report-mgmt/${thisClass.id}/${date}`}>
                   {thisClass.name}
                 </Link>
+                <button
+                  className='bg-blue-300 py-1 px-2 rounded'
+                  onClick={() => {
+                    console.log(`creating reports for class ${thisClass.id} on date ${date}, taking you to page soon.`)
+                    // make report get response
+                    // make report details get response
+                    // go to page
+                    // setLoading while wait
+                    setTimeout(() => {
+                      router.push(`report-mgmt/${thisClass.id}/${date}/`)
+                    }, 2000)
+                  }}
+                >Write reports</button>
               </li>
             ))}
           </ul>
