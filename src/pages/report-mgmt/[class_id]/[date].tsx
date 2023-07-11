@@ -15,6 +15,7 @@ async function createReportsForAllStudents() {
   // });
 }
 
+// @ts-ignore
 export const getServerSideProps: GetServerSideProps<{
   report: Report;
 }> = async (context) => {
@@ -48,11 +49,11 @@ export default function ReportDate({
             <h2 className="text-3xl">Class Report for Today</h2>
             <Link href="/report-mgmt/">Back</Link>
           </div>
+          {/* @ts-ignore */}
           {report?.id ? (
           <p>Reports</p>
           ) : (
           <button
-            // disabled
             onClick={() => createReportsForAllStudents()}
             className="bg-blue-300 px-4 py-2 rounded mb-4 disabled:cursor-not-allowed"
           >
