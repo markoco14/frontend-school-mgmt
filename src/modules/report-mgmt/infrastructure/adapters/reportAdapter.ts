@@ -8,6 +8,13 @@ class ReportAdapter {
 		return reports
 	}
 
+	public async getReportByClassAndDate({class_id, date}: {class_id: number, date: string}): Promise<Report> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-report-by-date/${class_id}/${date}/`);
+		const report: Report = await res.json();
+		
+		return report
+	}
+
 	public async createReportForStudent({student_id}: {student_id: number}): Promise<Report> {
 		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-report/`, { 
 			method: 'POST', 

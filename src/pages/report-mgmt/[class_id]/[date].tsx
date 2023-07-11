@@ -9,15 +9,40 @@ import { reportAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters
 
 async function createReportsForAllStudents(students: Student[]) {
   students.forEach(async (student) => {
-    const report = await reportAdapter.createReportForStudent({student_id: student.id})
-    console.log(report)
-  })
-  
+    const report = await reportAdapter.createReportForStudent({
+      student_id: student.id,
+    });
+    console.log(report);
+  });
 }
-export default function ReportsHome() {
+
+export const getServerSideProps: GetServerSideProps<{
+  report: Report;
+}> = async (context) => {
+  if (context.query.class_id && context.query.date) {
+    const class_id = Number(context.query.class_id);
+    const date = context.query.date.toString();
+
+    const report = await reportAdapter.getReportByClassAndDate({
+      class_id: class_id,
+      date: date,
+    });
+
+    return { props: { report } };
+  }
+
+  return { props: {} };
+};
+
+export default function ReportDate({
+  report,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(report);
   const [loading, setLoading] = useState<boolean>(false);
   let [isOpen, setIsOpen] = useState(false);
-	const [selectedStudent, setSelectedStudent] = useState<Student | undefined>(undefined);
+  const [selectedStudent, setSelectedStudent] = useState<Student | undefined>(
+    undefined
+  );
 
   return (
     <Layout>
@@ -28,13 +53,18 @@ export default function ReportsHome() {
             <h2 className="text-3xl">Students at school X</h2>
             <Link href="/report-mgmt/">Back</Link>
           </div>
-					<button 
+          {report.id ? (
+          <p>Reports</p>
+          ) : (
+          <button
             // disabled
-						// onClick={() => createReportsForAllStudents(students)}
-						className="bg-blue-300 px-4 py-2 rounded mb-4 disabled:cursor-not-allowed"
-					>
+            // onClick={() => createReportsForAllStudents(students)}
+            className="bg-blue-300 px-4 py-2 rounded mb-4 disabled:cursor-not-allowed"
+          >
             Create Reports for School
           </button>
+          )}
+          
           <ul className="flex flex-col gap-2">
             {/* {students?.map((student: Student, index: number) => (
                 <li
@@ -56,8 +86,8 @@ export default function ReportsHome() {
           <ReportModal
             isOpen={isOpen}
             setIsOpen={setIsOpen}
-            student={selectedStudent}			
-            setSelectedStudent={setSelectedStudent}			
+            student={selectedStudent}
+            setSelectedStudent={setSelectedStudent}
           />
         </section>
       </div>
