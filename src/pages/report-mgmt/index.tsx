@@ -2,13 +2,11 @@ import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import { reportAdapter } from '@/src/modules/report-mgmt/infrastructure/adapters/reportAdapter';
 import { Report } from '@/src/modules/report-mgmt/domain/entities/Report';
-import { useContext, useEffect, useState } from 'react';
-import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter';
-import AuthContext from '@/src/AuthContext';
-import { schoolAdapter } from '@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter';
-import { Student } from '@/src/modules/student-mgmt/domain/entities/Student';
-import { School } from '@/src/modules/school-mgmt/domain/entities/School';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { classAdapter } from '@/src/modules/class-mgmt/infrastructure/adapters/classAdapter';
+import { Class } from '@/src/modules/class-mgmt/domain/entities/Class';
+import { format } from 'date-fns';
 
 export const getServerSideProps: GetServerSideProps<{
   reports: Report[];
@@ -21,39 +19,49 @@ export const getServerSideProps: GetServerSideProps<{
 export default function ReportsHome({
   reports,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { user } = useContext(AuthContext);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [filteredStudents, setFilteredStudents] = useState<Student[]>();
-  const [userSchools, setUserSchools] = useState<School[]>();
-
+  const [day, setDay] = useState<string>('');
+  const [date, setDate] = useState<string>('');
+  const [dates, setDates] = useState<string[]>(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
+  const [classes, setClasses] = useState<Class[]>();
   useEffect(() => {
-    async function getData(id: number) {  
-      setLoading(true);
-      await schoolAdapter.getSchoolsByOwnerId({ id: id }).then((res) => {
-        setUserSchools(res);
-      });
-      setLoading(false);
+    async function getData() {
+      await classAdapter.getClasses().then((res) => setClasses(res))
     }
 
-    if (user) {
-      try {
-        getData(user.user_id);
-      } catch (error) {
-        console.error(error);
-      }
+    if (!day) {
+      const date = new Date();
+      setDay(dates[date.getDay()]);
+      setDate(format(date, 'yyyy-MM-dd'))
     }
-  }, [user])
+    
+    getData();
+
+  }, [day, dates])
 
   return (
     <Layout>
       <div>
         <h1 className="mb-4 p-4">Write daily reports here.</h1>
         <section className="bg-white p-4 rounded-lg">
-          <ul>
-            {userSchools?.map((school: School, index: number) => (
-              <li key={index}>
-                <Link href={`/report-mgmt/${school.id}`}>
-                  {school.name}
+          <h2 className='flex justify-between gap-4 items-baseline text-3xl mb-4'>Classes for {day} <span><input 
+              type="date"
+              className='mb-4 text-xl text-right'
+              defaultValue={format(new Date, 'yyyy-MM-dd')}
+              onChange={(e) => {
+                const dateObject = new Date(e.target.value);
+                const newDay = dates[dateObject.getDay()]
+                setDay(newDay)
+                setDate(format(dateObject, 'yyyy-MM-dd'))
+              }}
+            /></span></h2>
+          <ul className="flex flex-col gap-2">
+            {classes?.map((thisClass: Class, index: number) => (
+              <li 
+                key={index}
+                className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
+              >
+                <Link href={`/report-mgmt/${thisClass.id}/${date}`}>
+                  {thisClass.name}
                 </Link>
               </li>
             ))}
