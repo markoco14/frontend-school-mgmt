@@ -7,17 +7,6 @@ import Link from "next/link";
 import ReportModal from "@/src/modules/report-mgmt/infrastructure/ui/ReportModal";
 import { reportAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportAdapter";
 
-export const getServerSideProps: GetServerSideProps<{
-  students: Student[];
-}> = async (context) => {
-  const id = context?.query?.school_id;
-  const students = await studentAdapter.getStudentsBySchoolId({
-    id: Number(context.query.school_id),
-  });
-
-  return { props: { students } };
-};
-
 async function createReportsForAllStudents(students: Student[]) {
   students.forEach(async (student) => {
     const report = await reportAdapter.createReportForStudent({student_id: student.id})
@@ -25,9 +14,7 @@ async function createReportsForAllStudents(students: Student[]) {
   })
   
 }
-export default function ReportsHome({
-  students,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function ReportsHome() {
   const [loading, setLoading] = useState<boolean>(false);
   let [isOpen, setIsOpen] = useState(false);
 	const [selectedStudent, setSelectedStudent] = useState<Student | undefined>(undefined);
@@ -43,13 +30,13 @@ export default function ReportsHome({
           </div>
 					<button 
             // disabled
-						onClick={() => createReportsForAllStudents(students)}
+						// onClick={() => createReportsForAllStudents(students)}
 						className="bg-blue-300 px-4 py-2 rounded mb-4 disabled:cursor-not-allowed"
 					>
             Create Reports for School
           </button>
           <ul className="flex flex-col gap-2">
-            {students?.map((student: Student, index: number) => (
+            {/* {students?.map((student: Student, index: number) => (
                 <li
                   key={index}
                 >
@@ -64,7 +51,7 @@ export default function ReportsHome({
                   </button>
                 </li>
               
-            ))}
+            ))} */}
           </ul>
           <ReportModal
             isOpen={isOpen}
