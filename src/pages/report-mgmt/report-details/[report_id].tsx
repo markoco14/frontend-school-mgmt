@@ -19,17 +19,7 @@ async function createReportsForAllStudents() {
 export const getServerSideProps: GetServerSideProps<{
   report: Report;
 }> = async (context) => {
-  if (context.query.class_id && context.query.date) {
-    const class_id = Number(context.query.class_id);
-    const date = context.query.date.toString();
-
-    const report = await reportAdapter.getReportByClassAndDate({
-      class_id: class_id,
-      date: date,
-    });
-
-    return { props: { report } };
-  }
+  console.log(context)
 
   return { props: {} };
 };
@@ -37,7 +27,7 @@ export const getServerSideProps: GetServerSideProps<{
 export default function ReportDate({
   report,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(report);
+  // console.log(report);
   const [loading, setLoading] = useState<boolean>(false);
  
   return (
