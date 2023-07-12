@@ -52,7 +52,7 @@ export default function ReportsHome({
       if (res.id) {
         console.log('report exists, going now')
         console.log(res)
-        router.push(`report-mgmt/${res.id}/${date}/`)
+        router.push(`report-mgmt/report-details/${res.id}/`)
       } 
       // IF NO REPORTS, CREATE AND GO
       else {
@@ -60,7 +60,7 @@ export default function ReportsHome({
         reportAdapter.createReportForClassAndDate({class_id: thisClass.id, date: date}).then((res) => {
           console.log('report created, going now')
           console.log(res)
-          router.push(`report-mgmt/${res.id}/${date}/`)
+          router.push(`report-mgmt/report-details/${res.id}/`)
         });
       }
     })
