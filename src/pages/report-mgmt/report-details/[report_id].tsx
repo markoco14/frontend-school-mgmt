@@ -1,34 +1,24 @@
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
-import { useState } from "react";
 import Link from "next/link";
-import { reportAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportAdapter";
+import { reportDetailAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportDetailAdapter";
+import { ReportDetail } from "@/src/modules/report-mgmt/domain/entities/ReportDetail";
+import { report } from "process";
 
-async function createReportsForAllStudents() {
-  console.log('making reports');
-  return
-  // students.forEach(async (student) => {
-  //   const report = await reportAdapter.createReportForStudent({
-  //     student_id: student.id,
-  //   });
-  //   console.log(report);
-  // });
-}
 
 // @ts-ignore
 export const getServerSideProps: GetServerSideProps<{
-  report: Report;
+  reportDetails: ReportDetail[];
 }> = async (context) => {
+  const reportDetails = await reportDetailAdapter.getReportDetailsByReportId({id: Number(context.query.report_id)})
   console.log(context)
 
-  return { props: {} };
+return { props: {reportDetails} };
 };
 
 export default function ReportDate({
-  report,
+  reportDetails,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  // console.log(report);
-  const [loading, setLoading] = useState<boolean>(false);
  
   return (
     <Layout>
@@ -36,19 +26,22 @@ export default function ReportDate({
         <h1 className="mb-4 p-4">Write daily reports here.</h1>
         <section className="bg-white p-4 rounded-lg">
           <div className="flex justify-between items-baseline mb-4">
-            <h2 className="text-3xl">Class Report for Today</h2>
+            <h2 className="text-3xl">Report Details for Today</h2>
             <Link href="/report-mgmt/">Back</Link>
           </div>
-          {/* @ts-ignore */}
-          {report?.id ? (
-          <p>Reports</p>
+          {reportDetails ? (
+            reportDetails.map((reportDetail, index) => (
+              <article key={index} className="mb-2">
+                <p>{reportDetail.student_id.first_name} {reportDetail.student_id.last_name}</p>
+                <div className="flex flex-col">
+                  <label>Comment</label>
+                  <textarea className='rounded shadow p-2' defaultValue={reportDetail.content}/>
+                </div>
+                <p>{reportDetail.is_complete ? "Complete" : "Incomplete"}</p>
+              </article>
+            ))
           ) : (
-          <button
-            onClick={() => createReportsForAllStudents()}
-            className="bg-blue-300 px-4 py-2 rounded mb-4 disabled:cursor-not-allowed"
-          >
-            Create Reports for School
-          </button>
+            <p>There are no report details for this report. You may need to register your students first.</p>
           )}
         </section>
       </div>
