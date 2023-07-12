@@ -6,5 +6,6 @@ export class ReportDetail {
 		public report_id: number,
 		public content: string,
 		public student_id: Student,
+		public is_complete: boolean,
 	) {}
 }
