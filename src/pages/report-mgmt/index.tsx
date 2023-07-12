@@ -45,7 +45,7 @@ export default function ReportsHome({
 
   }, [day, dates])
 
-  async function createReports(thisClass: Class, date: string) {
+  async function checkOrCreateReports(thisClass: Class, date: string) {
     // CHECK IF REPORT EXISTS
     const report = await reportAdapter.getReportByClassAndDate({class_id: thisClass.id, date: date}).then((res) => {
       // IF EXISTS, GO THERE
@@ -62,7 +62,6 @@ export default function ReportsHome({
           console.log(res)
           router.push(`report-mgmt/${thisClass.id}/${date}/`)
         });
-
       }
     })
   }
@@ -95,7 +94,7 @@ export default function ReportsHome({
                 <button
                   className='bg-blue-300 py-1 px-2 rounded'
                   onClick={() => {
-                    createReports(thisClass, date);
+                    checkOrCreateReports(thisClass, date);
                   }}
                 >Write reports</button>
               </li>
