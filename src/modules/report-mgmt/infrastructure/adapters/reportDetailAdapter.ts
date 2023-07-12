@@ -8,17 +8,18 @@ class ReportDetailAdapter {
 		return reportDetails
 	}
 
-	public async updateReportDetailById({id, content, is_complete}: {id: number, content: string, is_complete: number}): Promise<ReportDetail> {
-		console.log('hitting endpoint')		
-		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/update-report-detail-by-report-id/${id}/`, { 
+	public async updateReportDetailById({id, content, report_id, student_id}: {id: number, content: string, report_id: number, student_id: number}): Promise<ReportDetail> {
+		console.log('hitting endpoint')
+		console.log(id, content, report_id, student_id)		
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/update-report-detail-by-detail-id/${id}/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ id: id, content: content, is_complete: is_complete }) 
+			body: JSON.stringify({ id: id, content: content, report_id: report_id, student_id: student_id }) 
 		})
 		const updatedReport: ReportDetail = await response.json();
-
+		console.log('made it to end')
 		return updatedReport;
 	}
 }
