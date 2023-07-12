@@ -12,6 +12,11 @@ import { useRouter } from 'next/router';
 export const getServerSideProps: GetServerSideProps<{
   reports: Report[];
 }> = async () => {
+  // TODO: CHANGE THIS TO 
+  // GET REPORTS AND THEIR ACCOMPANYING CLASS NAMES
+  // THIS WAY GET THE REPORT STATUS
+  // AND CAN RENDER DIFFERENT BUTTONS
+  // BUT ALSO HAVE THE CLASS NAMES
   const reports = await reportAdapter.getReportsAll();
 
   return { props: { reports } };
@@ -41,15 +46,25 @@ export default function ReportsHome({
   }, [day, dates])
 
   async function createReports(thisClass: Class, date: string) {
-    await reportAdapter.createReportForClassAndDate({class_id: thisClass.id, date: date}).then((res) => {
-      // console.log(res)
-      // return res
-      setTimeout(() => {
+    // CHECK IF REPORT EXISTS
+    const report = await reportAdapter.getReportByClassAndDate({class_id: thisClass.id, date: date}).then((res) => {
+      // IF EXISTS, GO THERE
+      if (res.id) {
+        console.log('report exists, going now')
+        console.log(res)
         router.push(`report-mgmt/${thisClass.id}/${date}/`)
-      }, 2000)
-    });
-    // console.log(report)
+      } 
+      // IF NO REPORTS, CREATE AND GO
+      else {
+        console.log('report does not exist, creating now')
+        reportAdapter.createReportForClassAndDate({class_id: thisClass.id, date: date}).then((res) => {
+          console.log('report created, going now')
+          console.log(res)
+          router.push(`report-mgmt/${thisClass.id}/${date}/`)
+        });
 
+      }
+    })
   }
 
   return (
@@ -80,13 +95,7 @@ export default function ReportsHome({
                 <button
                   className='bg-blue-300 py-1 px-2 rounded'
                   onClick={() => {
-                    // console.log(`creating reports for class ${thisClass.id} on date ${date}, taking you to page soon.`)
-                    // make report get response
-                    // make report details get response
-                    // go to page
-                    // setLoading while wait
-                    createReports(thisClass, date)
-                    
+                    createReports(thisClass, date);
                   }}
                 >Write reports</button>
               </li>
