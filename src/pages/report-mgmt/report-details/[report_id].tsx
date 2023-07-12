@@ -20,6 +20,22 @@ export default function ReportDate({
   reportDetails,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
  
+  async function updateReportDetailById(reportDetail: ReportDetail) {
+
+    const isComplete = reportDetail.is_complete ? 1 : 0;
+    const data = {
+      id: reportDetail.id,
+      content: reportDetail.content,
+      is_complete: isComplete,
+    }
+    console.log('logging report object:', reportDetail)
+    console.log('logging data to send:', data)
+    await reportDetailAdapter.updateReportDetailById({id: reportDetail.id, content: reportDetail.content, is_complete: isComplete})
+    .then((res) => {
+      console.log(res)
+    });
+  }
+
   return (
     <Layout>
       <div>
@@ -33,11 +49,20 @@ export default function ReportDate({
             reportDetails.map((reportDetail, index) => (
               <article key={index} className="mb-2">
                 <p>{reportDetail.student_id.first_name} {reportDetail.student_id.last_name}</p>
-                <div className="flex flex-col">
-                  <label>Comment</label>
-                  <textarea className='rounded shadow p-2' defaultValue={reportDetail.content}/>
-                </div>
-                <p>{reportDetail.is_complete ? "Complete" : "Incomplete"}</p>
+                <form onSubmit={(e) => {
+                  e.preventDefault();
+                  console.log('submitting form')
+                  console.log('report detail for selected form', reportDetail)
+                }}>
+                  <div className="flex flex-col">
+                    <label>Comment</label>
+                    <textarea name={`content-${reportDetail.id}`} className='rounded shadow p-2' defaultValue={reportDetail.content}/>
+                  </div>
+                  <button>Save</button>
+                </form>
+                {/* <button
+                  onClick={() => updateReportDetailById(reportDetail)}
+                >Save</button> */}
               </article>
             ))
           ) : (
