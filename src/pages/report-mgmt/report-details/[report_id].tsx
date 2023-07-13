@@ -4,6 +4,7 @@ import Link from "next/link";
 import { reportDetailAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportDetailAdapter";
 import { ReportDetail } from "@/src/modules/report-mgmt/domain/entities/ReportDetail";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useState } from "react";
 
 export const getServerSideProps: GetServerSideProps<{
   reportDetails: ReportDetail[];
@@ -11,7 +12,6 @@ export const getServerSideProps: GetServerSideProps<{
   const reportDetails = await reportDetailAdapter.getReportDetailsByReportId({
     id: Number(context.query.report_id),
   });
-  console.log(context);
 
   return { props: { reportDetails } };
 };
@@ -37,14 +37,15 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
       <p>
-        {reportDetail.student_id.first_name} {reportDetail.student_id.last_name}
+        {reportDetail.student_info.first_name}{" "}
+        {reportDetail.student_info.last_name}
       </p>
       <div className="flex flex-col">
         <label>Content</label>
         <input
           type="text"
           defaultValue={`${reportDetail.content}`}
-          {...register(`content`, { required: true })}
+          {...register(`content`, { required: false })}
         />
         {errors.content?.type === "required" && (
           <p role="alert" className="text-red-500 mt-2">
@@ -60,6 +61,9 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
 export default function ReportDate({
   reportDetails,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [reportLength, setReportLength] = useState<number>(
+    reportDetails.length
+  );
   return (
     <Layout>
       <div>
@@ -69,9 +73,15 @@ export default function ReportDate({
             <h2 className="text-3xl">Report Details for Today</h2>
             <Link href="/report-mgmt/">Back</Link>
           </div>
-          {reportDetails?.map((reportDetail, index) => (
-            <ReportDetailForm key={index} reportDetail={reportDetail} />
-          ))}
+          {reportLength > 0 ? (
+            reportDetails.map((reportDetail, index) => (
+              <ReportDetailForm key={index} reportDetail={reportDetail} />
+            ))
+          ) : (
+            <p>
+              there are no report details ready for the students in the class
+            </p>
+          )}
         </section>
       </div>
     </Layout>
