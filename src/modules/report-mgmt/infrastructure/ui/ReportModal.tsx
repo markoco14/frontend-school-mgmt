@@ -20,7 +20,7 @@ export default function ReportModal(props: Props) {
   async function getData(student_id: number) {
     await reportAdapter.getTodayReportByStudentId({student_id: student_id}).then((res) => {
       const data = res[0]
-      
+      // @ts-ignore
       setTodayReport({id: data.id, content: data.content, is_complete: data.is_complete, student_id: data.student_id})
     });
   }
@@ -89,6 +89,7 @@ export default function ReportModal(props: Props) {
                   {todayReport ? (
                     <article className="flex flex-col">
                       <textarea
+                        // @ts-ignore
                         defaultValue={todayReport.content}
                         className="shadow rounded"
                         onChange={(e) => {
