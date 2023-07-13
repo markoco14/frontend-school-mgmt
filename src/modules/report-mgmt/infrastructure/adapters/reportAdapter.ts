@@ -8,13 +8,23 @@ class ReportAdapter {
 		return reports
 	}
 
-	public async createReportForStudent({student_id}: {student_id: number}): Promise<Report> {
+	public async getReportByClassAndDate({class_id, date}: {class_id: number, date: string}): Promise<Report> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-report-by-date/${class_id}/${date}/`);
+		const report: Report = await res.json();
+		
+		return report
+	}
+
+	public async createReportForClassAndDate({class_id, date}: {class_id: number, date: string}): Promise<Report> {
 		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-report/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ student_id: student_id }) 
+			body: JSON.stringify({ 
+				class_id: class_id,
+				date: date 
+			}) 
 		})
 		const report: Report = await response.json();
 
@@ -34,7 +44,7 @@ class ReportAdapter {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ id: report.id, content: report.content, is_complete: report.is_complete, student_id: report.student_id }) 
+			body: JSON.stringify({ id: report.id, is_complete: report.is_complete}) 
 		})
 		const updatedReport: Report = await response.json();
 
