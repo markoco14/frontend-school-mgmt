@@ -21,7 +21,6 @@ export default function AddClass() {
 	const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
-		console.log('submitting data:', data)
     try {
       const newClass: Class = await classAdapter.addClass({
         className: data.className,

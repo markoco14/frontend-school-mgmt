@@ -76,7 +76,6 @@ export default function ClassList({
   const classId = Number(router.query.class_id);
 
   async function removeStudentFromClassList(classId: number, studentId: number) {
-    console.log('removing', classId, studentId)
     await classListAdapter.removeStudentFromClassList({class_id: classId, student_id: studentId}).then((res) => {
       toast.success("student removed from class")
     })

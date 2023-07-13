@@ -31,7 +31,6 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await reportDetailAdapter
       .updateReportDetailById({ id: reportDetail.id, content: data.content })
-      .then((res) => console.log(res));
   };
 
   return (

@@ -42,7 +42,6 @@ export default function ReportsHome({
     async function getData() {
       await classAdapter.getClasses().then((res) => {
         setClasses(res);
-        console.log(res);
       });
     }
 
@@ -62,22 +61,13 @@ export default function ReportsHome({
       .then((res) => {
         // IF EXISTS, GO THERE
         if (res.id) {
-          console.log("report exists, going now");
-          console.log(res);
           router.push(`report-mgmt/report-details/${res.id}/`);
         }
         // IF NO REPORTS, CREATE AND GO
         else {
-          // return;
-          console.log("report does not exist, creating now");
           reportAdapter
             .createReportForClassAndDate({ class_id: thisClass.id, date: date })
             .then((res) => {
-              console.log("report created, going now");
-              console.log(res);
-              // thisClass.class_list.forEach((student, index) => {
-              //   reportDetailAdapter.createReportDetails({student_id: student.id, report_id: res.id})
-              // })
               router.push(`report-mgmt/report-details/${res.id}/`);
             });
         }
