@@ -10,11 +10,19 @@ class ReportDetailAdapter {
 	}
 
 	public async createReportDetails({student_id, report_id}: {student_id: number, report_id: number}): Promise<ReportDetail> {
-		console.log(`creating report detail for report ${report_id} student ${student_id}`)
-		// const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-report-details-by-report-id/${id}/`);
-		// const reportDetails: ReportDetail = await res.json();
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-report-detail`, { 
+			method: 'POST', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ 
+				student_id: student_id,
+				report_id: report_id 
+			}) 
+		});
+		const reportDetail: ReportDetail = await res.json();
 		
-		// return reportDetails
+		return reportDetail
 	}
 
 	public async updateReportDetailById({id, content}: {id: number, content: string}): Promise<ReportDetail> {
