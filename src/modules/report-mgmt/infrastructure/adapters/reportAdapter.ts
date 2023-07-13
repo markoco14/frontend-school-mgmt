@@ -44,7 +44,7 @@ class ReportAdapter {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ id: report.id, content: report.content, is_complete: report.is_complete, student_id: report.student_id }) 
+			body: JSON.stringify({ id: report.id, is_complete: report.is_complete}) 
 		})
 		const updatedReport: Report = await response.json();
 
