@@ -8,9 +8,6 @@ import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/c
 import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
-import toast from "react-hot-toast";
-import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
-import { reportDetailAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportDetailAdapter";
 
 export const getServerSideProps: GetServerSideProps<{
   reports: Report[];
@@ -78,9 +75,9 @@ export default function ReportsHome({
             .then((res) => {
               console.log("report created, going now");
               console.log(res);
-              thisClass.class_list.forEach((student, index) => {
-                reportDetailAdapter.createReportDetails({student_id: student.id, report_id: res.id})
-              })
+              // thisClass.class_list.forEach((student, index) => {
+              //   reportDetailAdapter.createReportDetails({student_id: student.id, report_id: res.id})
+              // })
               router.push(`report-mgmt/report-details/${res.id}/`);
             });
         }
