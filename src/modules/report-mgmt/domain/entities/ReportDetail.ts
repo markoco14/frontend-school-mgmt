@@ -5,6 +5,7 @@ export class ReportDetail {
 		public id: number,
 		public report_id: number,
 		public content: string,
-		public student_id: Student,
+		public student_id: number,
+		public student_info: Student,
 	) {}
 }
