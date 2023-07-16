@@ -157,6 +157,14 @@ export default function AddClass() {
                 </label>
                 <input type="checkbox" {...register("daysOfWeek", { required: true })} value={5} />
               </div>
+              {errors.daysOfWeek?.type === "required" && (
+                <p 
+                  role="alert"
+                  className='text-red-500 mt-2 col-span-5'
+                >
+                  Days are required
+                </p>
+              )}
             </div>
             <button className="bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded">
               Add
