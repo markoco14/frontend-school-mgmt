@@ -1,7 +1,13 @@
 import { Class } from "../../domain/entities/Class";
+import { Level } from "../../domain/entities/Level";
 
 class ClassAdapter {
+	public async getLevels(): Promise<Level[]> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-levels/`);
+		const levels: Level[] = await res.json();
 
+		return levels
+	}
 	public async getClasses(): Promise<Class[]> {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-classes/`);
 		const classes: Class[] = await res.json();
