@@ -1,5 +1,6 @@
 import AuthContext from "@/src/AuthContext";
 import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
+import { Level } from "@/src/modules/class-mgmt/domain/entities/Level";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import { School } from "@/src/modules/school-mgmt/domain/entities/School";
@@ -20,6 +21,7 @@ export default function AddClass() {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
   const [userSchools, setUserSchools] = useState<School[]>([]);
+  const [levels, setLevels] = useState<Level[]>([]);
   const {
     reset,
     register,
@@ -54,9 +56,19 @@ export default function AddClass() {
       });
     }
 
+    async function getLevels() {
+      setLoading(true);
+      await classAdapter.getLevels().then((res) => {
+        console.log(res)
+        setLevels(res);
+        setLoading(false);
+      });
+    }
+
     if (user) {
       try {
         getSchoolsByOwnerId(user.user_id);
+        getLevels();
       } catch (error) {
         console.error(error);
       }
@@ -109,7 +121,7 @@ export default function AddClass() {
                 </p>
               )}
             </div>
-            <div className="flex flex-col mb-4">
+            {/* <div className="flex flex-col mb-4">
               <label className="mb-2">Level</label>
               <input
                 className="px-1 py-2 rounded shadow"
@@ -119,6 +131,25 @@ export default function AddClass() {
               {errors.level?.type === "required" && (
                 <p role="alert" className="text-red-500 mt-2">
                   Class level is required
+                </p>
+              )}
+            </div> */}
+            <div className="flex flex-col mb-4">
+              <label className="mb-2">Level</label>
+              <select
+                className="py-2 rounded bg-white shadow"
+                {...register("level", { required: true })}
+              >
+                <option value="">Choose a level</option>
+                {levels?.map((level: Level, index: number) => (
+                  <option key={index} value={level.id} className="p-4">
+                    {level.name}
+                  </option>
+                ))}
+              </select>
+              {errors.level?.type === "required" && (
+                <p role="alert" className="text-red-500 mt-2">
+                  Level is required
                 </p>
               )}
             </div>
