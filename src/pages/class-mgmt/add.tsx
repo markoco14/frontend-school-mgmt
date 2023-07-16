@@ -13,6 +13,7 @@ type Inputs = {
 	className: string;
 	schoolId: number;
   level: number;
+  daysOfWeek: string[];
 }
 
 export default function AddClass() {  
@@ -22,11 +23,15 @@ export default function AddClass() {
 	const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const days: number[] = [];
+    data.daysOfWeek.forEach((day) => days.push(Number(day)))
+
     try {
       const newClass: Class = await classAdapter.addClass({
         name: data.className,
         school_id: Number(data.schoolId),
-        level: Number(data.level)
+        level: Number(data.level),
+        day: days
       });
       toast.success('New class added.');
       reset();
@@ -117,9 +122,41 @@ export default function AddClass() {
                   role="alert"
                   className='text-red-500 mt-2'
                 >
-                  Class name is required
+                  Class level is required
                 </p>
               )}
+            </div>
+            <div className="grid grid-cols-5 mb-4">
+              <div className="flex flex-col">
+                <label className="text-center">
+                  Monday
+                </label>
+                <input type="checkbox" {...register("daysOfWeek", { required: true })} value={1} />
+              </div>
+              <div className="flex flex-col">
+                <label className="text-center">
+                  Tuesday
+                </label>
+                <input type="checkbox" {...register("daysOfWeek", { required: true })} value={2} />
+              </div>
+              <div className="flex flex-col">
+                <label className="text-center">
+                  Wednesday
+                </label>
+                <input type="checkbox" {...register("daysOfWeek", { required: true })} value={3} />
+              </div>
+              <div className="flex flex-col">
+                <label className="text-center">
+                  Thursday
+                </label>
+                <input type="checkbox" {...register("daysOfWeek", { required: true })} value={4} />
+              </div>
+              <div className="flex flex-col">
+                <label className="text-center">
+                  Friday
+                </label>
+                <input type="checkbox" {...register("daysOfWeek", { required: true })} value={5} />
+              </div>
             </div>
             <button className="bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded">
               Add
