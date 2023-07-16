@@ -91,7 +91,6 @@ export default function ClassList({
             <Link href="/class-mgmt">Back</Link>
           </div>
           <article>
-            <button>Update</button>
             <button onClick={async () => await classAdapter.deleteClassById({id: thisClass.id})}>Delete</button>
           </article>
           <div className="flex items-baseline gap-4 mb-4">
