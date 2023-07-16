@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 type Inputs = {
 	className: string;
 	schoolId: number;
+  level: number;
 }
 
 export default function AddClass() {  
@@ -23,8 +24,9 @@ export default function AddClass() {
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const newClass: Class = await classAdapter.addClass({
-        className: data.className,
-        schoolId: Number(data.schoolId)
+        name: data.className,
+        school_id: Number(data.schoolId),
+        level: Number(data.level)
       });
       toast.success('New class added.');
       reset();
@@ -93,6 +95,24 @@ export default function AddClass() {
                 {...register("className", { required: true, minLength: 2, maxLength: 50 })}
               />
               {errors.className?.type === "required" && (
+                <p 
+                  role="alert"
+                  className='text-red-500 mt-2'
+                >
+                  Class name is required
+                </p>
+              )}
+            </div>
+            <div className="flex flex-col mb-4">
+              <label className='mb-2'>
+								Level
+							</label>
+              <input
+                className="px-1 py-2 rounded shadow"
+                type="text"
+                {...register("level", { required: true })}
+              />
+              {errors.level?.type === "required" && (
                 <p 
                   role="alert"
                   className='text-red-500 mt-2'

@@ -15,19 +15,28 @@ class ClassAdapter {
 		return thisClass
 	}
 
-	public async addClass({className, schoolId}: {className: string, schoolId: number}): Promise<Class> {
+	public async addClass({name, school_id, level}: {name: string, school_id: number, level: number}): Promise<Class> {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-class/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ name: className, school_id: schoolId }) 
+			body: JSON.stringify({ name: name, school_id: school_id, level: level }) 
 		});
 		const newClass: Class = await res.json();
 
 		return newClass
 
 	}
+
+	public async deleteClassById({id}: {id: number}) {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-class/${id}/`,{
+			method: 'DELETE'
+		})
+
+		return response;
+	}
+ 
 }
 
 export const classAdapter = new ClassAdapter();
