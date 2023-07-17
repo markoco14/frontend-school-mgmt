@@ -11,12 +11,16 @@ type IAuthContext = {
 	user: AuthUser | null;
 	logout: any;
 	loginUser: any;
+	selectedSchool: any;
+	setSelectedSchool: any;
 }
 
 const AuthContext = createContext<IAuthContext>({
 	user: null,
 	logout: null,
 	loginUser: null,
+	selectedSchool: null,
+	setSelectedSchool: null,
 });
 
 export default AuthContext;
@@ -25,6 +29,7 @@ export const AuthProvider = ({children}: any) => {
 
 	let [authTokens, setAuthTokens] = useState<any>(null);
 	let [user, setUser] = useState<any>(null);
+	let [selectedSchool, setSelectedSchool] = useState<any>(null);
 
 	let loginUser = async ( formData: any ) => {
 
@@ -97,6 +102,8 @@ export const AuthProvider = ({children}: any) => {
 		user:user,
 		loginUser:loginUser,
 		logout:logout,
+		selectedSchool:selectedSchool,
+		setSelectedSchool:setSelectedSchool
 	}
 
 	return (
