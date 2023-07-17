@@ -11,23 +11,23 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export const getServerSideProps: GetServerSideProps<{
+  selectedClass: Class;
   students: Student[];
-  thisClass: Class;
 }> = async (context) => {
-  const id = context?.query?.class_id;
-  const thisClass = await classAdapter.getClassById({id: Number(id)})
-  const students = await studentAdapter.listStudentsByClassId({
-    id: Number(id),
-  });
-
-  return { props: { students, thisClass } };
+  const selectedClass = await classAdapter.getClassById({id: Number(context.query.class_id)});
+  const students = await studentAdapter.getStudentsByClassId({id: Number(context.query.class_id)});
+  return {
+    props: {
+      selectedClass,
+      students
+    },
+  };
 };
 
 type AllStudentListProps = {
-  classId: number;
   classList: Student[];
   setClassList: Function;
-  thisClass: Class;
+  selectedClass: Class;
 }
 
 const AllStudentList = (props: AllStudentListProps) => {
@@ -36,7 +36,7 @@ const AllStudentList = (props: AllStudentListProps) => {
 
   async function addStudentToClassList(student: Student) {
     await classListAdapter.addStudentToClassList({
-      class_id: props.classId,
+      class_id: props.selectedClass.id,
       student_id: student.id,
     }).then(res => {
       toast.success(`Student added to class!`)
@@ -47,13 +47,13 @@ const AllStudentList = (props: AllStudentListProps) => {
 
   useEffect(() => {
     async function getData() {
-      const allStudents = await studentAdapter.getStudentsBySchoolId({id: props.thisClass.school_id}).then((res) => {
+      const allStudents = await studentAdapter.getStudentsBySchoolId({id: props.selectedClass.school_id}).then((res) => {
         setAllStudents(res);
       });
     }
 
     getData();
-  }, [props.thisClass]);
+  }, [props.selectedClass]);
   return (
     <ul>
       {allStudents?.map((student, index) => (
@@ -67,13 +67,12 @@ const AllStudentList = (props: AllStudentListProps) => {
 };
 
 export default function ClassList({
-  students,
-  thisClass,
+  selectedClass,
+  students
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isAddingStudent, setIsAddingStudent] = useState<boolean>(false);
   const [classList, setClassList] = useState<Student[]>(students);
   const router = useRouter();
-  const classId = Number(router.query.class_id);
 
   async function removeStudentFromClassList(classId: number, studentId: number) {
     await classListAdapter.removeStudentFromClassList({class_id: classId, student_id: studentId}).then((res) => {
@@ -87,11 +86,11 @@ export default function ClassList({
         <h1 className="mb-4 p-4">Create classes here</h1>
         <section className="bg-white p-4 rounded-lg">
           <div className="flex justify-between items-baseline mb-4">
-            <h2 className="text-3xl">{thisClass.name}</h2>
+            <h2 className="text-3xl">{selectedClass?.name}</h2>
             <Link href="/class-mgmt">Back</Link>
           </div>
           <article>
-            <button onClick={async () => await classAdapter.deleteClassById({id: thisClass.id})}>Delete</button>
+            <button onClick={async () => await classAdapter.deleteClassById({id: selectedClass.id})}>Delete</button>
           </article>
           <div className="flex items-baseline gap-4 mb-4">
             <p className="text-xl">Student List</p>
@@ -105,17 +104,17 @@ export default function ClassList({
           </div>
           {isAddingStudent ? (
             <article>
-              <AllStudentList classId={classId} classList={classList} setClassList={setClassList} thisClass={thisClass}/>
+              <AllStudentList classList={classList} setClassList={setClassList} selectedClass={selectedClass}/>
             </article>
           ) : (
             <ul className="flex flex-col gap-2">
               {students?.map((student: Student, index: number) => (
-                <li 
+                <li
                   key={index}
                   className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
                 >
                   {student.first_name} {student.last_name} <button onClick={() => {
-                    removeStudentFromClassList(classId, student.id)
+                    removeStudentFromClassList(selectedClass?.id, student.id)
                   }}>Remove</button>
                 </li>
               ))}
