@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 
 export default function Home() {
 
-  const { user, setSchool } = useContext(AuthContext);
+  const { user, selectedSchool, setSelectedSchool } = useContext(AuthContext);
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
   const [schools, setSchools] = useState<School[]>([]);
   const router = useRouter();
@@ -42,8 +42,8 @@ export default function Home() {
             <ul>
               {schools?.map((school: School, index: number) => (
                 <li key={index}><button onClick={() => {
-                  if (!school) {
-                    setSchool(school)
+                  if (!selectedSchool) {
+                    setSelectedSchool(school)
                   }
                   router.push(`/${school.id}`)
                 }}>{school.name}</button></li>
