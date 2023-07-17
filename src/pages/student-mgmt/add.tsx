@@ -14,11 +14,10 @@ type Inputs = {
   firstName: string
   lastName: string
   age: number
-  schoolId: number
 }
 
 export default function AddStudent() {
-  const { user } = useContext(AuthContext);
+  const { user, selectedSchool } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [userSchools, setUserSchools] = useState<School[]>([]);
@@ -31,7 +30,7 @@ export default function AddStudent() {
         firstName: data.firstName,
         lastName: data.lastName,
         age: Number(data.age),
-        schoolId: Number(data.schoolId)
+        schoolId: Number(selectedSchool.id)
       });
       toast.success('Student added.');
       reset();
@@ -71,28 +70,6 @@ export default function AddStudent() {
           <p>loading...</p>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col mb-4">
-              <label className='mb-2'>School</label>
-              <select
-                className="py-2 rounded bg-white shadow"
-                {...register("schoolId", { required: true })}
-              >
-                <option value="">Choose a school</option>
-                {userSchools?.map((school: School, index: number) => (
-                  <option key={index} value={school.id} className="p-4">
-                    {school.name}
-                  </option>
-                ))}
-              </select>
-              {errors.schoolId?.type === "required" && (
-                <p 
-                  role="alert"
-                  className='text-red-500 mt-2'
-                >
-                  School is required
-                </p>
-              )}
-            </div>
             <div className="flex flex-col mb-4">
               <label className='mb-2'>First Name</label>
               <input
