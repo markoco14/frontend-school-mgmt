@@ -32,7 +32,7 @@ export default function Home() {
         <h1 className="mb-4 p-4">Easy Cram School Management In The Cloud.</h1>
         {user ? (
           <section className="bg-white p-4 rounded-lg">
-            <h2 className="text-3xl mb-4">Welcome back, {user.name}!</h2>
+            <h2 className="text-3xl mb-4">Welcome back!</h2>
             <p className='mb-4'><strong>Managing</strong> your school and student <strong>data</strong> has never been <strong>easier</strong>.</p>
             {/* <ul>
               {schools?.map((school: School, index: number) => (

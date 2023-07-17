@@ -1,5 +1,6 @@
 import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import { School } from "@/src/modules/school-mgmt/domain/entities/School";
 import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
@@ -61,6 +62,7 @@ export default function AddStudent() {
     <Layout>
       <h1 className="mb-4 p-4">Sign up your students and manage their info.</h1>
       <section className="bg-white p-4 rounded-lg">
+        <SchoolHeader />
         <div className="flex justify-between items-baseline mb-4">
           <h2 className="text-3xl">Enter your new student information</h2>
           <Link href="/student-mgmt/">Back</Link>

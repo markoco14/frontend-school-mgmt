@@ -5,6 +5,7 @@ import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapte
 import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
+import SchoolHeader from '@/src/modules/core/infrastructure/ui/components/SchoolHeader';
 
 
 export const getServerSideProps: GetServerSideProps<{
@@ -38,6 +39,7 @@ export default function Home({student}: InferGetServerSidePropsType<typeof getSe
       <div>
         <h1 className="mb-4 p-4">Edit and delete student profiles.</h1>
         <section className="bg-white p-4 rounded-lg">
+          <SchoolHeader />
           {!isDeleted ? (
             <>
               <div className='flex justify-between items-baseline mb-4'>
