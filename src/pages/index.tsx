@@ -1,29 +1,30 @@
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
-import Link from "next/link";
-import { useContext, useState } from "react";
-import { UserContext } from "../context";
-import { userAdapter } from "../modules/user-mgmt/infrastructure/adapters/userAdapter";
-import { User } from "../modules/user-mgmt/domain/entities/User";
+import { useContext, useEffect, useState } from "react";
 import Layout from "../modules/core/infrastructure/ui/components/Layout";
 import Login from "../modules/user-mgmt/infrastructure/ui/Login";
 import Signup from "../modules/user-mgmt/infrastructure/ui/Signup";
 import AuthContext from "../AuthContext";
+import { schoolAdapter } from "../modules/school-mgmt/infrastructure/adapters/schoolAdapter";
+import { School } from "../modules/school-mgmt/domain/entities/School";
+import { useRouter } from "next/router";
 
-export const getServerSideProps: GetServerSideProps<{
-  users: User[];
-}> = async () => {
-  const users = await userAdapter.getUsers();
+export default function Home() {
 
-  return { props: { users } };
-};
-
-export default function Home({
-  users,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-
-  const context = useContext(UserContext);
-  const { user } = useContext(AuthContext);
+  const { user, setSchool } = useContext(AuthContext);
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
+  const [schools, setSchools] = useState<School[]>([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    async function getData() {
+      if (user) {
+        await schoolAdapter.getSchoolsByOwnerId({id: user?.user_id})
+          .then((res) => {
+            setSchools(res);
+          })
+      }
+    }
+    getData();
+  }, [user])
 
   return (
     <Layout>
@@ -33,32 +34,21 @@ export default function Home({
           <section className="bg-white p-4 rounded-lg">
             <h2 className="text-3xl mb-4">Welcome back, {user.name}!</h2>
             <p className='mb-4'><strong>Managing</strong> your school and student <strong>data</strong> has never been <strong>easier</strong>.</p>
-            <div className="grid grid-cols-2 gap-4">
-              <Link 
-                href="/school-mgmt/" 
-                className='col-span-1 flex justify-center hover:bg-blue-300 p-4 rounded'
-              >
-                  Schools
-                </Link>
-              <Link 
-                href="/student-mgmt/" 
-                className='col-span-1 flex justify-center hover:bg-blue-300 p-4 rounded'
-              >
-                  Students
-                </Link>
-              <Link 
-                href="/class-mgmt/" 
-                className='col-span-1 flex justify-center hover:bg-blue-300 p-4 rounded'
-              >
-                  Classes
-                </Link>
-              <Link 
-                href="/report-mgmt/" 
-                className='col-span-1 flex justify-center hover:bg-blue-300 p-4 rounded'
-              >
-                  Reports
-                </Link>
-            </div>
+            {/* <ul>
+              {schools?.map((school: School, index: number) => (
+                <li key={index}><Link href={`/${school.id}`}>{school.name}</Link></li>
+              ))}
+            </ul> */}
+            <ul>
+              {schools?.map((school: School, index: number) => (
+                <li key={index}><button onClick={() => {
+                  if (!school) {
+                    setSchool(school)
+                  }
+                  router.push(`/${school.id}`)
+                }}>{school.name}</button></li>
+              ))}
+            </ul>
           </section>
         ) : (
           <section className="bg-white p-4 rounded-lg">
