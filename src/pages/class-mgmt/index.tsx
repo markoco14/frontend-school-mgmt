@@ -22,6 +22,22 @@ export default function ClassHome() {
     getData();
   }, [selectedSchool])
 
+  if (!selectedSchool) {
+    return (
+      <Layout>
+        <div>
+          <h1 className="mb-4 p-4">Create classes here</h1>
+          <section className="bg-white p-4 rounded-lg">
+            <SchoolHeader />
+            <div className="flex justify-between items-baseline mb-4">
+              <Link href='/'>Click here to choose a school</Link>
+            </div>
+          </section>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <div>
