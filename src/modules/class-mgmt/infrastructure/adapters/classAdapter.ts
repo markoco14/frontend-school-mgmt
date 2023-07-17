@@ -1,6 +1,13 @@
 import { Class } from "../../domain/entities/Class";
+import { Level } from "../../domain/entities/Level";
 
 class ClassAdapter {
+	public async getLevels(): Promise<Level[]> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-levels/`);
+		const levels: Level[] = await res.json();
+
+		return levels
+	}
 	public async getClasses(): Promise<Class[]> {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-classes/`);
 		const classes: Class[] = await res.json();
@@ -15,19 +22,29 @@ class ClassAdapter {
 		return thisClass
 	}
 
-	public async addClass({className, schoolId}: {className: string, schoolId: number}): Promise<Class> {
+	public async addClass({name, school_id, level, day}: {name: string, school_id: number, level: number, day: number[]}): Promise<Class> {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-class/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ name: className, school_id: schoolId }) 
+			body: JSON.stringify({ name: name, school_id: school_id, level: level, day: day }) 
 		});
 		const newClass: Class = await res.json();
 
 		return newClass
 
 	}
+
+
+	public async deleteClassById({id}: {id: number}) {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-class/${id}/`,{
+			method: 'DELETE'
+		})
+
+		return response;
+	}
+ 
 }
 
 export const classAdapter = new ClassAdapter();
