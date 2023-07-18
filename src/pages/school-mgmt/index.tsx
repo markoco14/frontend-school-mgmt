@@ -9,6 +9,7 @@ export default function Home() {
   const { selectedSchool } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
   const [levels, setLevels] = useState<Level[]>([]);
+  const [levelName, setLevelName] = useState<string>('');
 
   useEffect(() => {
     async function getLevelsBySchoolId(id: number) {
@@ -41,19 +42,41 @@ export default function Home() {
         ) : (
           <section className="bg-white p-4 rounded-lg">
             <SchoolHeader />
-            <article>
-              <h2>Levels</h2>
-              <ul>
+            <article className="grid grid-cols-3">
+              <div className="col-span-2">
 
-                {levels?.map((level, index) => (
-                  <li key={index}>
-                    <span>{level.name}</span>
-                    <button onClick={async() => {
-                      await classAdapter.deleteLevel({id: level.id}).then((res) => console.log(res))
-                    }}>delete</button>
-                  </li>
-                ))}
-              </ul>
+                <h2 className="text-2xl">Levels</h2>
+                <ul>
+
+                  {levels?.map((level, index) => (
+                    <li key={index}>
+                      <span>{level.name}</span>
+                      <button onClick={async() => {
+                        await classAdapter.deleteLevel({id: level.id}).then((res) => console.log(res))
+                      }}>delete</button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="col-span-1">
+              <h2 className="text-2xl">Add new level</h2>
+              <form 
+              onSubmit={async (e) => {
+                e.preventDefault();
+                console.log(levelName)
+                console.log(selectedSchool?.id)
+                await classAdapter.addLevel({name: levelName, school: selectedSchool.id})
+              }}>
+                <div className="flex flex-col">
+
+                  <label>Level Name</label>
+                  <input 
+                    className="shadow p-2"
+                  type="text" onChange={(e) => setLevelName(e.target.value)}/>
+                </div>
+                <button>Submit</button>
+              </form>
+              </div>
               
             </article>
           </section>
