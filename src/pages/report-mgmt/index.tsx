@@ -8,6 +8,7 @@ import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/c
 import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
+import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 
 export const getServerSideProps: GetServerSideProps<{
   reports: Report[];
@@ -79,6 +80,7 @@ export default function ReportsHome({
       <div>
         <h1 className="mb-4 p-4">Write daily reports here.</h1>
         <section className="bg-white p-4 rounded-lg">
+          <SchoolHeader />
           <h2 className="flex justify-between gap-4 items-baseline text-3xl mb-4">
             Reports for {day}{" "}
             <span>
