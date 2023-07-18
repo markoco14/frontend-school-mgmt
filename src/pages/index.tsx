@@ -68,9 +68,14 @@ export default function Home() {
           <section className="bg-white p-4 rounded-lg">
             <h2 className="text-3xl mb-4">Welcome back!</h2>
             <p className='mb-4'><strong>Managing</strong> your school and student <strong>data</strong> has never been <strong>easier</strong>.</p>
-            <ul>
+            <ul className="flex flex-col gap-2">
               {schools?.map((school: School, index: number) => (
-                <li key={index}><button onClick={() => {
+                <li 
+                  key={index}
+                  className="p-2 rounded hover:bg-blue-300"
+                >
+                  <button 
+                  onClick={() => {
                   if (!selectedSchool) {
                     setSelectedSchool(school)
                   }
