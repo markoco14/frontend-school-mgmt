@@ -6,7 +6,6 @@ import { useContext } from "react";
 export default function SchoolHeader() {
   const { selectedSchool, setSelectedSchool } = useContext(AuthContext);
   const router = useRouter();
-  console.log(router.pathname)
   return (
     <p className=" text-gray-500 mb-4 flex justify-between items-baseline">
       {selectedSchool ? (
