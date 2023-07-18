@@ -8,6 +8,12 @@ class ClassAdapter {
 
 		return levels
 	}
+	public async getLevelsBySchoolId({id}: {id: number}): Promise<Level[]> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-levels-by-school-id/${id}/`);
+		const levels: Level[] = await res.json();
+
+		return levels
+	}
 	public async getClasses(): Promise<Class[]> {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-classes/`);
 		const classes: Class[] = await res.json();
