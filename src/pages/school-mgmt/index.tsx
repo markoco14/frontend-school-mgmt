@@ -1,70 +1,56 @@
 import AuthContext from "@/src/AuthContext";
+import { Level } from "@/src/modules/class-mgmt/domain/entities/Level";
+import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import { School } from "@/src/modules/school-mgmt/domain/entities/School";
-import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
-import Link from "next/link";
+import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import { useContext, useEffect, useState } from "react";
 
 export default function Home() {
-  const { user } = useContext(AuthContext);
+  const { selectedSchool } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
-
-  const [mySchools, setMySchools] = useState<School[]>([]);
+  const [levels, setLevels] = useState<Level[]>([]);
 
   useEffect(() => {
-    async function getSchoolsByOwnerId(id: number) {
+    async function getLevelsBySchoolId(id: number) {
       setLoading(true);
-      await schoolAdapter.getSchoolsByOwnerId({ id: id }).then((res) => {
-        setMySchools(res);
+      await classAdapter.getLevelsBySchoolId({id: id}).then((res) => {
+        console.log(res);
+        setLevels(res)
         setLoading(false);
       });
+      
     }
 
-    if (user) {
+    if (selectedSchool) {
       try {
-        getSchoolsByOwnerId(user.user_id);
+        getLevelsBySchoolId(selectedSchool.id);
       } catch (error) {
         console.error(error);
       }
     }
-  }, [user]);
+  }, [selectedSchool]);
 
   return (
     <Layout>
       <div>
-        <h1 className="mb-4 p-4">Manage all your schools from here!</h1>
+        <h1 className="mb-4 p-4">Manage all your school information here!</h1>
         {loading ? (
           <p className="flex justify-center bg-white p-4 rounded-lg">
             loading...
           </p>
         ) : (
           <section className="bg-white p-4 rounded-lg">
-            {mySchools.length > 0 ? (
-              <>
-                <div className="flex justify-between items-baseline mb-4">
-                  <h2 className="text-3xl">Your schools</h2>
-                  <Link href="/school-mgmt/add">+ school</Link>
-                </div>
-                <ul className="flex flex-col gap-2">
-                  {mySchools?.map((school: School, index) => (
-                    <li
-                      key={index}
-                      className="p-2 rounded-md hover:bg-blue-200 hover:cursor-not-allowed flex justify-between"
-                    >
-                      <span>{school.name}</span>
-                      <div className="flex gap-2">
-                        {/* TODO: EDIT TRIGGERS MODAL TO UPDATE INFO OR DELETE */}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ) : (
-              <div className="flex justify-between items-baseline mb-4">
-                <h2 className="text-3xl">You have no schools.</h2>
-                <Link href="/school-mgmt/add">+ school</Link>
-              </div>
-            )}
+            <SchoolHeader />
+            <article>
+              <h2>Levels</h2>
+              <ul>
+
+                {levels?.map((level, index) => (
+                  <li key={index}>{level.name}</li>
+                ))}
+              </ul>
+              
+            </article>
           </section>
         )}
       </div>
