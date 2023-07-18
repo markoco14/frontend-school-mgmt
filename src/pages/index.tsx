@@ -111,6 +111,12 @@ export default function Home() {
               >
                   Reports
                 </Link>
+              <Link 
+                href="/school-mgmt/" 
+                className='col-span-1 flex justify-center hover:bg-blue-300 p-4 rounded'
+              >
+                  Admin
+                </Link>
             </div>
         </section>
         )}
