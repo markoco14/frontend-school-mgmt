@@ -46,7 +46,12 @@ export default function Home() {
               <ul>
 
                 {levels?.map((level, index) => (
-                  <li key={index}>{level.name}</li>
+                  <li key={index}>
+                    <span>{level.name}</span>
+                    <button onClick={async() => {
+                      await classAdapter.deleteLevel({id: level.id}).then((res) => console.log(res))
+                    }}>delete</button>
+                  </li>
                 ))}
               </ul>
               
