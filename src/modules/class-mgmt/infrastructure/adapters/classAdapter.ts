@@ -14,6 +14,15 @@ class ClassAdapter {
 
 		return levels
 	}
+
+	public async deleteLevel({id}: {id:number}): Promise<any> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-level/${id}/`,{
+			method: 'DELETE'
+		});
+
+		return res
+	}
+
 	public async getClasses(): Promise<Class[]> {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-classes/`);
 		const classes: Class[] = await res.json();
