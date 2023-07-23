@@ -68,7 +68,7 @@ export default function Home() {
           <section className="bg-white p-4 rounded-lg">
             <h2 className="text-3xl mb-4">Welcome back!</h2>
             <p className='mb-4'><strong>Managing</strong> your school and student <strong>data</strong> has never been <strong>easier</strong>.</p>
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-2 mb-4 shadow-inner rounded bg-gray-100">
               {schools?.map((school: School, index: number) => (
                 <li 
                   key={index}
@@ -86,6 +86,7 @@ export default function Home() {
                 }}>{school.name}</button></li>
               ))}
             </ul>
+            <Link href="/school-mgmt/add" className="bg-blue-300 rounded-lg p-2 hover:bg-blue-500">Add School</Link>
           </section>
         )}
 
