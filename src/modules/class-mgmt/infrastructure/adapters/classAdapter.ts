@@ -45,6 +45,13 @@ class ClassAdapter {
 		return classes
 	}
 
+	public async getClassesByDate({id}: {id: number}): Promise<Class[]> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-classes-by-date/${id}/`);
+		const classes: Class[] = await res.json();
+
+		return classes
+	}
+
 	public async getClassesBySchoolId({id}: {id: number}): Promise<Class[]> {
 		console.log(id)
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-classes-by-school-id/${id}/`);
