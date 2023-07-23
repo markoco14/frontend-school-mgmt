@@ -78,6 +78,7 @@ export default function ClassList({
     await classListAdapter.removeStudentFromClassList({class_id: classId, student_id: studentId}).then((res) => {
       toast.success("student removed from class")
     })
+    setClassList(prevClassList => prevClassList.filter(student => student.id !== studentId));
   }
 
   return (
@@ -98,7 +99,7 @@ export default function ClassList({
                 setIsAddingStudent(!isAddingStudent);
               }}
             >
-              {isAddingStudent ? <span>Cancel</span> : <span>+ Student</span>}
+              {isAddingStudent ? <span>Done</span> : <span>+ Student</span>}
             </button>
           </div>
           {isAddingStudent ? (
@@ -107,7 +108,7 @@ export default function ClassList({
             </article>
           ) : (
             <ul className="flex flex-col gap-2">
-              {students?.map((student: Student, index: number) => (
+              {classList?.map((student: Student, index: number) => (
                 <li
                   key={index}
                   className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
