@@ -15,7 +15,6 @@ export default function Home() {
     async function getLevelsBySchoolId(id: number) {
       setLoading(true);
       await classAdapter.getLevelsBySchoolId({id: id}).then((res) => {
-        console.log(res);
         setLevels(res)
         setLoading(false);
       });
@@ -63,8 +62,6 @@ export default function Home() {
               <form 
               onSubmit={async (e) => {
                 e.preventDefault();
-                console.log(levelName)
-                console.log(selectedSchool?.id)
                 await classAdapter.addLevel({name: levelName, school: selectedSchool.id})
               }}>
                 <div className="flex flex-col">
