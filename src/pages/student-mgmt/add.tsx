@@ -59,7 +59,6 @@ export default function AddStudent() {
 
   return (
     <Layout>
-      <h1 className="mb-4 p-4">Sign up your students and manage their info.</h1>
       <section className="bg-white p-4 rounded-lg">
         <SchoolHeader />
         <div className="flex justify-between items-baseline mb-4">

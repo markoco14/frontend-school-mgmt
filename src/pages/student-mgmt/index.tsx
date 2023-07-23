@@ -6,7 +6,6 @@ export default function StudentsHome() {
   return (
     <Layout>
       <div>
-        <h1 className="mb-4 p-4">Sign up your students and manage their info.</h1>
         <section className="bg-white p-4 rounded-lg">
           <SchoolHeader />
           <div className='mb-4'>

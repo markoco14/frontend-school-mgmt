@@ -33,7 +33,6 @@ export default function Home() {
   return (
     <Layout>
       <div>
-        <h1 className="mb-4 p-4">Manage all your school information here!</h1>
         {loading ? (
           <p className="flex justify-center bg-white p-4 rounded-lg">
             loading...

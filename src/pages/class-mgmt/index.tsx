@@ -26,7 +26,6 @@ export default function ClassHome() {
     return (
       <Layout>
         <div>
-          <h1 className="mb-4 p-4">Create classes here</h1>
           <section className="bg-white p-4 rounded-lg">
             <SchoolHeader />
             <div className="flex justify-between items-baseline mb-4">
@@ -41,7 +40,6 @@ export default function ClassHome() {
   return (
     <Layout>
       <div>
-        <h1 className="mb-4 p-4">Create classes here</h1>
         <section className="bg-white p-4 rounded-lg">
           <SchoolHeader />
           <div className="flex justify-between items-baseline mb-4">

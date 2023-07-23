@@ -66,7 +66,6 @@ export default function ReportDate({
   return (
     <Layout>
       <div>
-        <h1 className="mb-4 p-4">Write daily reports here.</h1>
         <section className="bg-white p-4 rounded-lg">
           <div className="flex justify-between items-baseline mb-4">
             <h2 className="text-3xl">Report Details for Today</h2>

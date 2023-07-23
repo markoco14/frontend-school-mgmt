@@ -30,7 +30,6 @@ export default function Home() {
   return (
     <Layout>
       <div>
-        <h1 className="mb-4 p-4">Easy Cram School Management In The Cloud.</h1>
         {!user && (
           <section className="bg-white p-4 rounded-lg">
             <div className="flex gap-4 mb-8">
@@ -88,8 +87,8 @@ export default function Home() {
 
         {user && selectedSchool && (
           <section className="bg-white p-4 rounded-lg">
-          <SchoolHeader />
-        </section>
+            <SchoolHeader />
+          </section>
         )}
       </div>
     </Layout>
