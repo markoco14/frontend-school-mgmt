@@ -51,7 +51,7 @@ export default function ListStudents() {
             {filteredStudents?.map((student: Student, index) => (
               <li key={index} className="flex justify-between gap-4">
                 <Link
-                  href={`/student-mgmt/${student.id}`}
+                  href={`/student-mgmt/students/${student.id}`}
                   className="hover:bg-blue-300 p-2 rounded"
                 >
                   {student.first_name} {student.last_name}
