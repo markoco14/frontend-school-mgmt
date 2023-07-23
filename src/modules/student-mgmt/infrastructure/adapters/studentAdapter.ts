@@ -15,6 +15,13 @@ class StudentAdapter {
 		return student;
 	}
 
+
+	public async getStudentsBySchool({id}: {id: number}): Promise<Student[]> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students-by-school/${id}/`);
+		const students: Student[] = await res.json();
+		
+		return students
+	}
 	public async getStudentsByClassId({id}: {id: number}): Promise<Student[]> {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students-by-class/${id}/`);
 		const students: Student[] = await res.json();
