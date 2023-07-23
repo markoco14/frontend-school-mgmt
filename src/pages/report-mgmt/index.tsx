@@ -48,7 +48,7 @@ export default function ReportsHome({
       });
     }
     
-    if (!nameOfDay) {
+    if (!nameOfDay && selectedSchool) {
       const date = new Date();
       const numberOfDay = date.getDay();
       setNameOfDay(dates[numberOfDay]);
@@ -80,7 +80,7 @@ export default function ReportsHome({
   return (
     <Layout>
       <div>
-        <section className="bg-white p-4 rounded-lg">
+        <section>
           <SchoolHeader />
           <h2 className="flex justify-between gap-4 items-baseline text-3xl mb-4">
             Reports for {nameOfDay}{" "}
@@ -92,11 +92,13 @@ export default function ReportsHome({
                 onChange={async (e) => {
                   const dateObject = new Date(e.target.value);
                   const selectedDay = dateObject.getDay();
-                  await classAdapter
-                    .getClassesBySchoolAndDate({ school_id: selectedSchool?.id, date: Number(selectedDay) })
-                    .then((res) => {
-                      setClasses(res);
-                    });
+                  if (selectedSchool) {
+                    await classAdapter
+                      .getClassesBySchoolAndDate({ school_id: selectedSchool?.id, date: Number(selectedDay) })
+                      .then((res) => {
+                        setClasses(res);
+                      });
+                  }
                   setNameOfDay(dates[selectedDay]);
                   setDate(format(dateObject, "yyyy-MM-dd"));
                 }}
