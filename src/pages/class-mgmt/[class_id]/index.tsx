@@ -40,6 +40,7 @@ const AllStudentList = (props: AllStudentListProps) => {
       student_id: student.id,
     }).then(res => {
       toast.success(`Student added to class!`)
+      setAllStudents(prevAllStudents => prevAllStudents?.filter(thisStudent => thisStudent.id !== student.id));
       props.setClassList([...props.classList, student])
     });
     return;
@@ -47,13 +48,12 @@ const AllStudentList = (props: AllStudentListProps) => {
 
   useEffect(() => {
     async function getData() {
-      const allStudents = await studentAdapter.getStudentsBySchoolId({id: props.selectedClass.school_id}).then((res) => {
-        setAllStudents(res);
+      await studentAdapter.getStudentsBySchoolId({id: props.selectedClass.school_id}).then((res) => {
+        setAllStudents(res.filter(allStudent => !props.classList.some(classStudent => classStudent.id === allStudent.id)));
       });
     }
-
     getData();
-  }, [props.selectedClass]);
+  }, [props.selectedClass, props.classList]);
   return (
     <ul>
       {allStudents?.map((student, index) => (
@@ -72,7 +72,6 @@ export default function ClassList({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isAddingStudent, setIsAddingStudent] = useState<boolean>(false);
   const [classList, setClassList] = useState<Student[]>(students);
-  const router = useRouter();
 
   async function removeStudentFromClassList(classId: number, studentId: number) {
     await classListAdapter.removeStudentFromClassList({class_id: classId, student_id: studentId}).then((res) => {
