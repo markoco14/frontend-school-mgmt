@@ -62,8 +62,7 @@ export default function AddClass() {
   return (
     <Layout>
       <div>
-        <h1 className="mb-4 p-4">Create classes here</h1>
-        <section className="bg-white p-4 rounded-lg">
+        <section>
           <SchoolHeader />
           <div className="flex justify-between items-baseline mb-4">
             <h2 className="text-3xl">Add Class</h2>

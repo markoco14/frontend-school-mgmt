@@ -37,8 +37,7 @@ export default function Home({student}: InferGetServerSidePropsType<typeof getSe
   return (
     <Layout>
       <div>
-        <h1 className="mb-4 p-4">Edit and delete student profiles.</h1>
-        <section className="bg-white p-4 rounded-lg">
+        <section>
           <SchoolHeader />
           {!isDeleted ? (
             <>

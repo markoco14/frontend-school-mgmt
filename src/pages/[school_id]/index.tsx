@@ -8,8 +8,7 @@ export default function SchoolHome() {
   return (
     <Layout>
       <div>
-        <h1 className="mb-4 p-4">Easy Cram School Management In The Cloud.</h1>
-        <section className="bg-white p-4 rounded-lg">
+        <section>
           <SchoolHeader />
           <div className="grid grid-cols-2 gap-4">
               <Link 
