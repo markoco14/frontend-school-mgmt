@@ -91,6 +91,9 @@ export default function ClassList({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isAddingStudent, setIsAddingStudent] = useState<boolean>(false);
   const [classList, setClassList] = useState<Student[]>(students);
+  const [currentClass, setCurrentClass] = useState<Class | undefined>(
+    selectedClass
+  );
 
   async function removeStudentFromClassList(
     classId: number,
@@ -106,59 +109,78 @@ export default function ClassList({
     );
   }
 
+  async function handleDeleteClass() {
+    setCurrentClass(undefined);
+    toast.success('Class deleted!')
+  }
+
   return (
     <Layout>
       <div>
         <section>
-          <div className="flex justify-between items-baseline mb-4">
-            <h2 className="text-3xl">{selectedClass?.name}</h2>
-            <Link href="/class-mgmt">Back</Link>
-          </div>
-          <article>
-            <button
-              onClick={async () =>
-                await classAdapter.deleteClassById({ id: selectedClass.id })
-              }
-            >
-              Delete
-            </button>
-          </article>
-          <div className="flex items-baseline gap-4 mb-4">
-            <p className="text-xl">Student List</p>
-            <button
-              onClick={() => {
-                setIsAddingStudent(!isAddingStudent);
-              }}
-            >
-              {isAddingStudent ? <span>Done</span> : <span>+ Student</span>}
-            </button>
-          </div>
-          {isAddingStudent ? (
-            <article>
-              <AllStudentList
-                classList={classList}
-                setClassList={setClassList}
-                selectedClass={selectedClass}
-              />
-            </article>
-          ) : (
-            <ul className="flex flex-col gap-2">
-              {classList?.map((student: Student, index: number) => (
-                <li
-                  key={index}
-                  className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
+          {currentClass ? (
+            <>
+              <div className="flex justify-between items-baseline mb-4">
+                <h2 className="text-3xl">{selectedClass?.name}</h2>
+                <Link href="/class-mgmt">Back</Link>
+              </div>
+
+              <div className="flex items-baseline gap-4 mb-4">
+                <p className="text-xl">Student List</p>
+                <button
+                  onClick={() => {
+                    setIsAddingStudent(!isAddingStudent);
+                  }}
                 >
-                  {student.first_name} {student.last_name}{" "}
-                  <button
-                    onClick={() => {
-                      removeStudentFromClassList(selectedClass?.id, student.id);
-                    }}
-                  >
-                    Remove
-                  </button>
-                </li>
-              ))}
-            </ul>
+                  {isAddingStudent ? <span>Done</span> : <span>+ Student</span>}
+                </button>
+              </div>
+              {isAddingStudent ? (
+                <article>
+                  <AllStudentList
+                    classList={classList}
+                    setClassList={setClassList}
+                    selectedClass={selectedClass}
+                  />
+                </article>
+              ) : (
+                <ul className="flex flex-col gap-2 mb-4">
+                  {classList?.map((student: Student, index: number) => (
+                    <li
+                      key={index}
+                      className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
+                    >
+                      {student.first_name} {student.last_name}{" "}
+                      <button
+                        onClick={() => {
+                          removeStudentFromClassList(
+                            selectedClass?.id,
+                            student.id
+                          );
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <button
+                className="rounded underline underline-offset-2 text-red-500 p-2 hover:bg-red-300 hover:text-red-900"
+                onClick={async () =>
+                  await classAdapter
+                    .deleteClassById({ id: selectedClass.id })
+                    .then(handleDeleteClass)
+                }
+              >
+                Delete Class
+              </button>
+            </>
+          ) : (
+            <div className="flex justify-between items-baseline mb-4">
+              <h2 className="text-3xl">This class was deleted.</h2>
+              <Link href="/class-mgmt">Back</Link>
+            </div>
           )}
         </section>
       </div>
