@@ -44,18 +44,22 @@ export default function ListStudents() {
           <h2 className="text-3xl">Click student to see profile</h2>
           <Link href="/student-mgmt/">Back</Link>
         </div>
-        <ul>
-          {filteredStudents?.map((student: Student, index) => (
-            <li key={index} className="flex justify-between gap-4">
-              <Link
-                href={`/student-mgmt/${student.id}`}
-                className="hover:bg-blue-300 p-2 rounded"
-              >
-                {student.first_name} {student.last_name}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {loading ? (
+          <p>loading...</p>
+        ) : (
+          <ul>
+            {filteredStudents?.map((student: Student, index) => (
+              <li key={index} className="flex justify-between gap-4">
+                <Link
+                  href={`/student-mgmt/${student.id}`}
+                  className="hover:bg-blue-300 p-2 rounded"
+                >
+                  {student.first_name} {student.last_name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </Layout>
   );
