@@ -9,10 +9,10 @@ type LayoutProps = {
 export default function Layout({ children }: LayoutProps) {
   return (
     <>
-      <main className="min-h-screen bg-gradient-to-t from-white to-blue-200">
-        <div className="max-w-[600px] mx-auto">
+      <main className="min-h-screen bg-white xs:bg-gradient-to-t xs:from-white xs:to-blue-200">
+        <div className="xs:max-w-[600px] mx-auto">
           <Navbar />
-          <div className="bg-white p-4 rounded-lg drop-shadow-2xl">
+          <div className="bg-white p-4 xs:rounded-lg xs:drop-shadow-2xl">
             {children}
           </div>
         </div>
