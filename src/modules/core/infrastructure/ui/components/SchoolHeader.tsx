@@ -10,7 +10,7 @@ export default function SchoolHeader() {
     <p className=" text-gray-500 mb-4 flex justify-between items-baseline">
       {selectedSchool ? (
         <>
-          <span className="text-2xl">{selectedSchool.name}</span>
+          <Link href="/" className="text-2xl">{selectedSchool.name}</Link>
           <button
             onClick={() => {
               handleDeselectSchool();
