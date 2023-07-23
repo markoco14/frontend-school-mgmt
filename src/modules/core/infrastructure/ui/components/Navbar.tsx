@@ -15,6 +15,7 @@ export default function Navbar() {
         {user && selectedSchool ? <Link href="/class-mgmt/">Classes</Link> : null}
         {user && selectedSchool ? <Link href="/student-mgmt/">Students</Link> : null}
         {user && selectedSchool ? <Link href="/report-mgmt/">Reports</Link> : null}
+        {user && selectedSchool ? <Link href="/school-mgmt/">Admin</Link> : null}
       </div>
       {user ? (
         <button

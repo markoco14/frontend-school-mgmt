@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export default function Home() {
 
-  const { user, selectedSchool, setSelectedSchool } = useContext(AuthContext);
+  const { user, selectedSchool, handleSelectSchool } = useContext(AuthContext);
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
   const [schools, setSchools] = useState<School[]>([]);
   const router = useRouter();
@@ -68,7 +68,7 @@ export default function Home() {
           <section className="bg-white p-4 rounded-lg">
             <h2 className="text-3xl mb-4">Welcome back!</h2>
             <p className='mb-4'><strong>Managing</strong> your school and student <strong>data</strong> has never been <strong>easier</strong>.</p>
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-2 mb-4 shadow-inner rounded bg-gray-100">
               {schools?.map((school: School, index: number) => (
                 <li 
                   key={index}
@@ -77,47 +77,18 @@ export default function Home() {
                   <button 
                   onClick={() => {
                   if (!selectedSchool) {
-                    setSelectedSchool(school)
+                    handleSelectSchool(school);
                   }
-                  if (selectedSchool?.id !== school.id) {
-                    setSelectedSchool(school)
-                  }
-                  // router.push(`/${school.id}`)
                 }}>{school.name}</button></li>
               ))}
             </ul>
+            <Link href="/school-mgmt/add" className="bg-blue-300 rounded-lg p-2 hover:bg-blue-500">Add School</Link>
           </section>
         )}
 
         {user && selectedSchool && (
           <section className="bg-white p-4 rounded-lg">
           <SchoolHeader />
-          <div className="grid grid-cols-2 gap-4">
-              <Link 
-                href="/student-mgmt/" 
-                className='col-span-1 flex justify-center hover:bg-blue-300 p-4 rounded'
-              >
-                  Students
-                </Link>
-              <Link 
-                href="/class-mgmt/" 
-                className='col-span-1 flex justify-center hover:bg-blue-300 p-4 rounded'
-              >
-                  Classes
-                </Link>
-              <Link 
-                href="/report-mgmt/" 
-                className='col-span-1 flex justify-center hover:bg-blue-300 p-4 rounded'
-              >
-                  Reports
-                </Link>
-              <Link 
-                href="/school-mgmt/" 
-                className='col-span-1 flex justify-center hover:bg-blue-300 p-4 rounded'
-              >
-                  Admin
-                </Link>
-            </div>
         </section>
         )}
       </div>

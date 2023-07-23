@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 
 export default function SchoolHeader() {
-  const { selectedSchool, setSelectedSchool } = useContext(AuthContext);
+  const { selectedSchool, setSelectedSchool, handleDeselectSchool } = useContext(AuthContext);
   const router = useRouter();
   return (
     <p className=" text-gray-500 mb-4 flex justify-between items-baseline">
@@ -13,7 +13,7 @@ export default function SchoolHeader() {
           <span className="text-2xl">{selectedSchool.name}</span>
           <button
             onClick={() => {
-              setSelectedSchool(null);
+              handleDeselectSchool();
               if (router.pathname !== '/') {
                 router.push('/')
               }

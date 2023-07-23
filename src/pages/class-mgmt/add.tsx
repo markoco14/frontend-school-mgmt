@@ -46,7 +46,6 @@ export default function AddClass() {
   useEffect(() => {
     async function getLevels() {
       await classAdapter.getLevels().then((res) => {
-        console.log(res)
         setLevels(res);
       });
     }

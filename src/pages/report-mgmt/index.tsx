@@ -2,13 +2,14 @@ import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import { reportAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportAdapter";
 import { Report } from "@/src/modules/report-mgmt/domain/entities/Report";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
+import AuthContext from "@/src/AuthContext";
 
 export const getServerSideProps: GetServerSideProps<{
   reports: Report[];
@@ -27,7 +28,8 @@ export default function ReportsHome({
   reports,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const [day, setDay] = useState<string>("");
+  const { selectedSchool } = useContext(AuthContext);
+  const [nameOfDay, setNameOfDay] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [dates, setDates] = useState<string[]>([
     "Sunday",
@@ -40,20 +42,20 @@ export default function ReportsHome({
   ]);
   const [classes, setClasses] = useState<Class[]>();
   useEffect(() => {
-    async function getData() {
-      await classAdapter.getClasses().then((res) => {
-        setClasses(res);
+    async function getData(numberOfDay: number) {
+      await classAdapter.getClassesBySchoolAndDate({ school_id: selectedSchool?.id, date: numberOfDay }).then((res) => {
+        setClasses(() => res);
       });
     }
-
-    if (!day) {
+    
+    if (!nameOfDay) {
       const date = new Date();
-      setDay(dates[date.getDay()]);
+      const numberOfDay = date.getDay();
+      setNameOfDay(dates[numberOfDay]);
       setDate(format(date, "yyyy-MM-dd"));
+      getData(numberOfDay);
     }
-
-    getData();
-  }, [day, dates]);
+  }, [selectedSchool, nameOfDay, dates]);
 
   async function checkOrCreateReports(thisClass: Class, date: string) {
     // CHECK IF REPORT EXISTS
@@ -82,49 +84,61 @@ export default function ReportsHome({
         <section className="bg-white p-4 rounded-lg">
           <SchoolHeader />
           <h2 className="flex justify-between gap-4 items-baseline text-3xl mb-4">
-            Reports for {day}{" "}
+            Reports for {nameOfDay}{" "}
             <span>
               <input
                 type="date"
                 className="mb-4 text-xl text-right"
                 defaultValue={format(new Date(), "yyyy-MM-dd")}
-                onChange={(e) => {
+                onChange={async (e) => {
                   const dateObject = new Date(e.target.value);
-                  const newDay = dates[dateObject.getDay()];
-                  setDay(newDay);
+                  const selectedDay = dateObject.getDay();
+                  await classAdapter
+                    .getClassesBySchoolAndDate({ school_id: selectedSchool?.id, date: Number(selectedDay) })
+                    .then((res) => {
+                      setClasses(res);
+                    });
+                  setNameOfDay(dates[selectedDay]);
                   setDate(format(dateObject, "yyyy-MM-dd"));
                 }}
               />
             </span>
           </h2>
           <ul className="flex flex-col gap-2">
-            {classes?.map((thisClass: Class, index: number) => (
-              <li
-                key={index}
-                className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
-              >
-                <Link href={`/report-mgmt/${thisClass.id}/${date}`}>
-                  {thisClass.name} {thisClass.class_list.length}/8
-                </Link>
-                <div className="flex gap-4">
-                  {thisClass.class_list.length === 0 ? (
-                    <Link href={`/class-mgmt/${thisClass.id}`}
-                      className="bg-gray-300 py-1 px-2 rounded disabled:cursor-not-allowed"
-                    >Add Students</Link>
-                  ) : (
-                    <button
-                      disabled={thisClass.class_list.length === 0}
-                      className="bg-blue-300 py-1 px-2 rounded disabled:cursor-not-allowed"
-                      onClick={() => {
-                        checkOrCreateReports(thisClass, date);
-                      }}
-                    >
-                      Write reports
-                    </button>
-                  )}
-                </div>
-              </li>
-            ))}
+            {classes?.length === 0 ? (
+              <p>There are no classes today</p>
+            ) : (
+              classes?.map((thisClass: Class, index: number) => (
+                <li
+                  key={index}
+                  className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
+                >
+                  <Link href={`/report-mgmt/${thisClass.id}/${date}`}>
+                    {thisClass.name} {thisClass.class_list.length}/8
+                  </Link>
+                  <div className="flex gap-4">
+                    {thisClass.class_list.length === 0 ? (
+                      <Link
+                        href={`/class-mgmt/${thisClass.id}`}
+                        className="bg-gray-300 py-1 px-2 rounded disabled:cursor-not-allowed"
+                      >
+                        Add Students
+                      </Link>
+                    ) : (
+                      <button
+                        disabled={thisClass.class_list.length === 0}
+                        className="bg-blue-300 py-1 px-2 rounded disabled:cursor-not-allowed"
+                        onClick={() => {
+                          checkOrCreateReports(thisClass, date);
+                        }}
+                      >
+                        Write reports
+                      </button>
+                    )}
+                  </div>
+                </li>
+              ))
+            )}
           </ul>
         </section>
       </div>
