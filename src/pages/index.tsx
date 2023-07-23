@@ -93,7 +93,7 @@ export default function Home() {
         {user && selectedSchool && (
           <section className="bg-white p-4 rounded-lg">
           <SchoolHeader />
-          <div className="grid grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-2 gap-4">
               <Link 
                 href="/student-mgmt/" 
                 className='col-span-1 flex justify-center hover:bg-blue-300 p-4 rounded'
@@ -118,7 +118,7 @@ export default function Home() {
               >
                   Admin
                 </Link>
-            </div>
+            </div> */}
         </section>
         )}
       </div>
