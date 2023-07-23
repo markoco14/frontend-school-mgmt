@@ -8,7 +8,7 @@ export default function SchoolHome() {
   return (
     <Layout>
       <div>
-        <section className="bg-white p-4 rounded-lg">
+        <section>
           <SchoolHeader />
           <div className="grid grid-cols-2 gap-4">
               <Link 

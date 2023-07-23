@@ -38,7 +38,7 @@ export default function Home() {
             loading...
           </p>
         ) : (
-          <section className="bg-white p-4 rounded-lg">
+          <section>
             <SchoolHeader />
             <article className="grid grid-cols-3">
               <div className="col-span-2">

@@ -29,9 +29,9 @@ export default function Home() {
 
   return (
     <Layout>
-      <div>
+      
         {!user && (
-          <section className="bg-white p-4 rounded-lg">
+          <section>
             <div className="flex gap-4 mb-8">
               <button
                 onClick={() => setIsSignUp(true)}
@@ -64,10 +64,10 @@ export default function Home() {
         )}
 
         {user && !selectedSchool && (
-          <section className="bg-white p-4 rounded-lg">
+          <section>
             <h2 className="text-3xl mb-4">Welcome back!</h2>
             <p className='mb-4'><strong>Managing</strong> your school and student <strong>data</strong> has never been <strong>easier</strong>.</p>
-            <ul className="flex flex-col gap-2 mb-4 shadow-inner rounded bg-gray-100">
+            <ul className="flex flex-col gap-2 mb-4">
               {schools?.map((school: School, index: number) => (
                 <li 
                   key={index}
@@ -86,11 +86,11 @@ export default function Home() {
         )}
 
         {user && selectedSchool && (
-          <section className="bg-white p-4 rounded-lg">
+          <section>
             <SchoolHeader />
           </section>
         )}
-      </div>
+      
     </Layout>
   );
 }
