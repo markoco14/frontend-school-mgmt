@@ -2,13 +2,14 @@ import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import { reportAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportAdapter";
 import { Report } from "@/src/modules/report-mgmt/domain/entities/Report";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
+import AuthContext from "@/src/AuthContext";
 
 export const getServerSideProps: GetServerSideProps<{
   reports: Report[];
@@ -27,6 +28,7 @@ export default function ReportsHome({
   reports,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
+  const { selectedSchool } = useContext(AuthContext);
   const [nameOfDay, setNameOfDay] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [dates, setDates] = useState<string[]>([
@@ -41,7 +43,7 @@ export default function ReportsHome({
   const [classes, setClasses] = useState<Class[]>();
   useEffect(() => {
     async function getData(numberOfDay: number) {
-      await classAdapter.getClassesByDate({ id: numberOfDay }).then((res) => {
+      await classAdapter.getClassesBySchoolAndDate({ school_id: selectedSchool?.id, date: numberOfDay }).then((res) => {
         setClasses(() => res);
       });
     }
@@ -53,7 +55,7 @@ export default function ReportsHome({
       setDate(format(date, "yyyy-MM-dd"));
       getData(numberOfDay);
     }
-  }, [nameOfDay, dates]);
+  }, [selectedSchool, nameOfDay, dates]);
 
   async function checkOrCreateReports(thisClass: Class, date: string) {
     // CHECK IF REPORT EXISTS
@@ -91,9 +93,8 @@ export default function ReportsHome({
                 onChange={async (e) => {
                   const dateObject = new Date(e.target.value);
                   const selectedDay = dateObject.getDay();
-                  console.log("the selected day:", selectedDay);
                   await classAdapter
-                    .getClassesByDate({ id: Number(selectedDay) })
+                    .getClassesBySchoolAndDate({ school_id: selectedSchool?.id, date: Number(selectedDay) })
                     .then((res) => {
                       setClasses(res);
                     });
