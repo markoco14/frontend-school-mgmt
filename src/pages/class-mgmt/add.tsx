@@ -57,7 +57,7 @@ export default function AddClass() {
         console.error(error);
       }
     }
-  }, [user]);
+  }, [user, selectedSchool]);
 
   return (
     <Layout>
