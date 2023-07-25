@@ -54,9 +54,8 @@ export default function Home() {
         ) : (
           <section>
             <SchoolHeader />
-            <article className="grid grid-cols-3">
-              <div className="col-span-2">
-
+            <article className="relative xs:grid xs:grid-cols-3">
+              <div className="mb-4 xs:mb-0 xs:col-span-2">
                 <h2 className="text-2xl">Levels</h2>
                 <ul>
 
@@ -70,25 +69,27 @@ export default function Home() {
                   ))}
                 </ul>
               </div>
-              <div className="col-span-1">
-              <h2 className="text-2xl">Add new level</h2>
-              <form 
-              onSubmit={async (e) => {
-                e.preventDefault();
-                handleAddLevel(levelName, selectedSchool.id)
-              }}>
-                <div className="flex flex-col mb-4">
-                  <label>Name</label>
-                  <input 
-                    className="shadow p-2"
-                    type="text" 
-                    onChange={(e) => setLevelName(e.target.value)}
-                  />
-                </div>
-                <button className="bg-blue-300 px-2 py-1 rounded text-blue-900">Submit</button>
-              </form>
+              <div className="xs:col-span-1">
+                <h2 className="text-2xl">Add new level</h2>
+                <form 
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    handleAddLevel(levelName, selectedSchool.id);
+                  }}
+                >
+                  <div className="flex flex-col mb-4">
+                    <label>Name</label>
+                    <input 
+                      className="shadow p-2"
+                      type="text" 
+                      onChange={(e) => setLevelName(e.target.value)}
+                    />
+                  </div>
+                  <button className="bg-blue-300 px-2 py-1 rounded text-blue-900">
+                    Submit
+                  </button>
+                </form>
               </div>
-              
             </article>
           </section>
         )}
