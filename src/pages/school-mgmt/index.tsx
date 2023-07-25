@@ -38,6 +38,12 @@ export default function Home() {
     })
   }
 
+  async function handleAddLevel(levelName: string, selectedSchoolId: number){
+    await classAdapter.addLevel({name: levelName, school: selectedSchoolId}).then((res) => {
+      setLevels(prevLevels => [...prevLevels, res])
+    })
+  }
+
   return (
     <Layout>
       <div>
@@ -69,16 +75,17 @@ export default function Home() {
               <form 
               onSubmit={async (e) => {
                 e.preventDefault();
-                await classAdapter.addLevel({name: levelName, school: selectedSchool.id})
+                handleAddLevel(levelName, selectedSchool.id)
               }}>
-                <div className="flex flex-col">
-
-                  <label>Level Name</label>
+                <div className="flex flex-col mb-4">
+                  <label>Name</label>
                   <input 
                     className="shadow p-2"
-                  type="text" onChange={(e) => setLevelName(e.target.value)}/>
+                    type="text" 
+                    onChange={(e) => setLevelName(e.target.value)}
+                  />
                 </div>
-                <button>Submit</button>
+                <button className="bg-blue-300 px-2 py-1 rounded text-blue-900">Submit</button>
               </form>
               </div>
               
