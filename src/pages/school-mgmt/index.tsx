@@ -4,12 +4,30 @@ import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/c
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import { useContext, useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+
+type Inputs = {
+  levelName: string;
+}
 
 export default function Home() {
   const { selectedSchool } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
   const [levels, setLevels] = useState<Level[]>([]);
-  const [levelName, setLevelName] = useState<string>('');
+  const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      await classAdapter.addLevel({name: data.levelName, school: selectedSchool.id}).then((res) => {
+        setLevels(prevLevels => [...prevLevels, res])
+        toast.success('Level added.');
+      });
+      reset();
+    } catch (error) {
+      console.error(error)
+    }
+  };
 
   useEffect(() => {
     async function getLevelsBySchoolId(id: number) {
@@ -18,7 +36,6 @@ export default function Home() {
         setLevels(res)
         setLoading(false);
       });
-      
     }
 
     if (selectedSchool) {
@@ -31,16 +48,9 @@ export default function Home() {
   }, [selectedSchool]);
 
   async function handleDeleteLevel(levelId: number) {
-    console.log(`deleting that level with id: ${levelId}`);
     await classAdapter.deleteLevel({id: levelId}).then((res) => {
-      console.log(res);
       setLevels(prevLevels => prevLevels.filter((level) => level.id !== levelId))
-    })
-  }
-
-  async function handleAddLevel(levelName: string, selectedSchoolId: number){
-    await classAdapter.addLevel({name: levelName, school: selectedSchoolId}).then((res) => {
-      setLevels(prevLevels => [...prevLevels, res])
+      toast.success('Level added.');
     })
   }
 
@@ -54,17 +64,23 @@ export default function Home() {
         ) : (
           <section>
             <SchoolHeader />
-            <article className="relative xs:grid xs:grid-cols-3">
+            <article className="relative xs:grid xs:grid-cols-3 xs:gap-6">
               <div className="mb-4 xs:mb-0 xs:col-span-2">
                 <h2 className="text-2xl">Levels</h2>
                 <ul>
-
                   {levels?.map((level, index) => (
-                    <li key={index}>
+                    <li 
+                      key={index}
+                      className='flex justify-between'
+                    >
                       <span>{level.name}</span>
-                      <button onClick={async() => {
-                        handleDeleteLevel(level.id);
-                      }}>delete</button>
+                      <button 
+                        onClick={async() => {
+                          handleDeleteLevel(level.id);
+                        }}
+                      >
+                        delete
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -72,18 +88,23 @@ export default function Home() {
               <div className="xs:col-span-1">
                 <h2 className="text-2xl">Add new level</h2>
                 <form 
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    handleAddLevel(levelName, selectedSchool.id);
-                  }}
+                  onSubmit={handleSubmit(onSubmit)}
                 >
                   <div className="flex flex-col mb-4">
                     <label>Name</label>
                     <input 
                       className="shadow p-2"
                       type="text" 
-                      onChange={(e) => setLevelName(e.target.value)}
+                      {...register("levelName", {required: true, minLength: 1, maxLength: 50})}
                     />
+                    {errors.levelName?.type === "required" && (
+                      <p 
+                        role="alert"
+                        className='text-red-500 mt-2'
+                      >
+                        Level name is required
+                      </p>
+                    )}
                   </div>
                   <button className="bg-blue-300 px-2 py-1 rounded text-blue-900">
                     Submit
