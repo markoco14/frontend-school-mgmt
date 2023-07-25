@@ -30,6 +30,14 @@ export default function Home() {
     }
   }, [selectedSchool]);
 
+  async function handleDeleteLevel(levelId: number) {
+    console.log(`deleting that level with id: ${levelId}`);
+    await classAdapter.deleteLevel({id: levelId}).then((res) => {
+      console.log(res);
+      setLevels(prevLevels => prevLevels.filter((level) => level.id !== levelId))
+    })
+  }
+
   return (
     <Layout>
       <div>
@@ -50,7 +58,7 @@ export default function Home() {
                     <li key={index}>
                       <span>{level.name}</span>
                       <button onClick={async() => {
-                        await classAdapter.deleteLevel({id: level.id}).then((res) => console.log(res))
+                        handleDeleteLevel(level.id);
                       }}>delete</button>
                     </li>
                   ))}
