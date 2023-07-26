@@ -57,14 +57,14 @@ export const ReportList = () => {
 
   return (
     <>
-      <h2 className="flex flex-col xs:flex-row justify-between gap-4 items-baseline text-3xl mb-4">
+      <h2 className="flex flex-col xs:flex-row xs:justify-between xs:gap-2 items-baseline text-3xl mb-4 xs:mb-0">
 				<span>
 					Reports for {nameOfDay}{" "}
 				</span>
 				<span>
 					<input
 						type="date"
-						className="mb-4 text-xl text-left xs:text-right rounded"
+						className="xs:mb-4 text-xl text-left xs:text-right rounded"
 						defaultValue={format(new Date(), "yyyy-MM-dd")}
 						onChange={async (e) => {
 							const dateObject = new Date(e.target.value);
@@ -82,7 +82,8 @@ export const ReportList = () => {
 					/>
 				</span>
 			</h2>
-			<ul className="flex flex-col gap-2">
+			<hr className='mb-2'></hr>
+			<ul className="flex flex-col gap-2 divide-y">
 				{classes?.length === 0 ? (
 					<p>There are no classes today</p>
 				) : (
