@@ -43,19 +43,27 @@ export default function ClassHome() {
         <section>
           <SchoolHeader />
           <div className="flex justify-between items-baseline mb-4">
-            <h2 className='text-3xl'>Class time!</h2>
-            <Link href="class-mgmt/add">Add</Link>
+            <h2 className='text-3xl'>Your Classes</h2>
           </div>
-          <ul className="flex flex-col gap-2">
+          {/* <hr className='mb-2'></hr> */}
+          <ul className="flex flex-col gap-2 divide-y mb-8 bg-gray-100 shadow-inner">
             {classes?.map((currentClass: Class, index: number) => (
               <li 
                 key={index}
                 className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
               >
-                <Link href={`/class-mgmt/${currentClass.id}`}>{currentClass.name}</Link>
-                </li>
+                <Link href={`/class-mgmt/${currentClass.id}`}>
+                  {currentClass.name}
+                </Link>
+              </li>
             ))}
           </ul>
+          <Link 
+            href="class-mgmt/add"
+            className="bg-blue-300 p-2 rounded"
+          >
+            New Class
+          </Link>
         </section>
       </div>
     </Layout>
