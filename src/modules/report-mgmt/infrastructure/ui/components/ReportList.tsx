@@ -90,9 +90,17 @@ export const ReportList = () => {
 					/>
 				</span>
 			</h2>
-			<div className='flex justify-between xs:justify-center mb-2'>
-				<button className='w-full' onClick={decrementDate}>Previous</button>
-				<button className='w-full' onClick={incrementDate}>Next</button>
+			<div className='flex justify-between xs:justify-center gap-4 mb-2'>
+				<button className='w-full flex items-center justify-center' onClick={decrementDate}>
+					<span className="material-symbols-outlined">
+						navigate_before
+					</span>
+				</button>
+				<button className='w-full flex items-center justify-center' onClick={incrementDate}>
+					<span className="material-symbols-outlined">
+						navigate_next
+					</span>
+				</button>
 			</div>
 			<hr className='mb-2'></hr>
 			<ul className="flex flex-col gap-2 divide-y">
@@ -104,9 +112,9 @@ export const ReportList = () => {
 							key={index}
 							className="p-2 rounded-md hover:bg-blue-200 flex justify-between items-baseline"
 						>
-							<Link href={`/report-mgmt/${thisClass.id}/${date}`}>
+							<span>
 								{thisClass.name}
-							</Link>
+							</span>
 							<div className="flex gap-4">
 								{thisClass.class_list.length === 0 ? (
 									<Link
