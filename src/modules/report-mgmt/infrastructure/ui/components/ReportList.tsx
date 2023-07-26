@@ -10,9 +10,10 @@ import Link from 'next/link';
 export const ReportList = () => {
 	const router = useRouter();
   const { selectedSchool } = useContext(AuthContext);
-  const [nameOfDay, setNameOfDay] = useState<string>("");
-  const [date, setDate] = useState<string>("");
-  const [dates, setDates] = useState<string[]>([
+	const [classes, setClasses] = useState<Class[]>();
+	const [date, setDate] = useState<Date>(new Date())
+
+  const dates = [
     "Sunday",
     "Monday",
     "Tuesday",
@@ -20,23 +21,18 @@ export const ReportList = () => {
     "Thursday",
     "Friday",
     "Saturday",
-  ]);
-  const [classes, setClasses] = useState<Class[]>();
+  ];
+
   useEffect(() => {
-    async function getData(numberOfDay: number) {
-      await classAdapter.getClassesBySchoolAndDate({ school_id: selectedSchool?.id, date: numberOfDay }).then((res) => {
+    async function getData() {
+      await classAdapter.getClassesBySchoolAndDate({ school_id: selectedSchool?.id, date: date.getDay() }).then((res) => {
         setClasses(() => res);
       });
     }
-    
-    if (!nameOfDay && selectedSchool) {
-      const date = new Date();
-      const numberOfDay = date.getDay();
-      setNameOfDay(dates[numberOfDay]);
-      setDate(format(date, "yyyy-MM-dd"));
-      getData(numberOfDay);
-    }
-  }, [selectedSchool, nameOfDay, dates]);
+    if (selectedSchool) {
+			getData();
+		}
+  }, [date, selectedSchool]);
 
   async function checkOrCreateReports(thisClass: Class, date: string) {
     await reportAdapter
@@ -55,33 +51,49 @@ export const ReportList = () => {
       });
   }
 
+	const incrementDate = () => {
+    const currentDate = new Date(date);
+    currentDate.setDate(currentDate.getDate() + 1);
+    setDate(currentDate);
+  };
+
+	const decrementDate = () => {
+    const currentDate = new Date(date);
+    currentDate.setDate(currentDate.getDate() - 1);
+    setDate(currentDate);
+  };
+
   return (
     <>
       <h2 className="flex flex-col xs:flex-row xs:justify-between xs:gap-2 items-baseline text-3xl mb-4 xs:mb-0">
 				<span>
-					Reports for {nameOfDay}{" "}
+					Reports for {dates[date.getDay()]}{" "}
 				</span>
 				<span>
 					<input
 						type="date"
 						className="xs:mb-4 text-xl text-left xs:text-right rounded"
-						defaultValue={format(new Date(), "yyyy-MM-dd")}
+						value={format(date, "yyyy-MM-dd")}
 						onChange={async (e) => {
-							const dateObject = new Date(e.target.value);
-							const selectedDay = dateObject.getDay();
+							const newDate = new Date(e.target.value);
+
 							if (selectedSchool) {
 								await classAdapter
-									.getClassesBySchoolAndDate({ school_id: selectedSchool?.id, date: Number(selectedDay) })
+									.getClassesBySchoolAndDate({ school_id: selectedSchool?.id, date: newDate.getDay() })
 									.then((res) => {
 										setClasses(res);
 									});
-							}
-							setNameOfDay(dates[selectedDay]);
-							setDate(format(dateObject, "yyyy-MM-dd"));
+							}					
+
+							setDate(newDate)
 						}}
 					/>
 				</span>
 			</h2>
+			<div className='flex justify-between xs:justify-center mb-2'>
+				<button className='w-full' onClick={decrementDate}>Previous</button>
+				<button className='w-full' onClick={incrementDate}>Next</button>
+			</div>
 			<hr className='mb-2'></hr>
 			<ul className="flex flex-col gap-2 divide-y">
 				{classes?.length === 0 ? (
@@ -108,7 +120,7 @@ export const ReportList = () => {
 										disabled={thisClass.class_list.length === 0}
 										className="bg-blue-300 py-1 px-2 rounded disabled:cursor-not-allowed"
 										onClick={() => {
-											checkOrCreateReports(thisClass, date);
+											checkOrCreateReports(thisClass, format(date, "yyyy-MM-dd"));
 										}}
 									>
 										Write reports
