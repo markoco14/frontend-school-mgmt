@@ -2,7 +2,6 @@ import AuthContext from '@/src/AuthContext';
 import { Class } from '@/src/modules/class-mgmt/domain/entities/Class';
 import { classAdapter } from '@/src/modules/class-mgmt/infrastructure/adapters/classAdapter';
 import { format } from 'date-fns';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { reportAdapter } from '../../adapters/reportAdapter';
@@ -40,15 +39,12 @@ export const ReportList = () => {
   }, [selectedSchool, nameOfDay, dates]);
 
   async function checkOrCreateReports(thisClass: Class, date: string) {
-    // CHECK IF REPORT EXISTS
-    const report = await reportAdapter
+    await reportAdapter
       .getReportByClassAndDate({ class_id: thisClass.id, date: date })
       .then((res) => {
-        // IF EXISTS, GO THERE
         if (res.id) {
           router.push(`report-mgmt/report-details/${res.id}/`);
         }
-        // IF NO REPORTS, CREATE AND GO
         else {
           reportAdapter
             .createReportForClassAndDate({ class_id: thisClass.id, date: date })
@@ -60,15 +56,7 @@ export const ReportList = () => {
   }
 
   return (
-    <div>
-      {/* <Head>
-        <title>Hao Hao Sound</title>
-        <meta
-          name="description"
-          content="Play the perfect sound for every moment."
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head> */}
+    <>
       <h2 className="flex justify-between gap-4 items-baseline text-3xl mb-4">
 				Reports for {nameOfDay}{" "}
 				<span>
@@ -128,6 +116,6 @@ export const ReportList = () => {
 					))
 				)}
 			</ul>
-    </div>
+    </>
   );
 };
