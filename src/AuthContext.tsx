@@ -70,7 +70,9 @@ export const AuthProvider = ({children}: any) => {
 	let logout = () => {
 		setUser(null);
 		setAuthTokens(null);
+		setSelectedSchool(null);
 		localStorage.removeItem('authTokens');
+		localStorage.removeItem('selectedSchool');
 	}
 
 	useEffect(() => {
