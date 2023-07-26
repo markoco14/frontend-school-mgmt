@@ -8,6 +8,7 @@ import { School } from "../modules/school-mgmt/domain/entities/School";
 import { useRouter } from "next/router";
 import SchoolHeader from "../modules/core/infrastructure/ui/components/SchoolHeader";
 import Link from "next/link";
+import { ReportList } from "../modules/report-mgmt/infrastructure/ui/components/ReportList";
 
 export default function Home() {
 
@@ -88,6 +89,7 @@ export default function Home() {
         {user && selectedSchool && (
           <section>
             <SchoolHeader />
+            <ReportList />
           </section>
         )}
       
