@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { format } from "date-fns";
+import TextareaAutosize from 'react-textarea-autosize';
 
 export const getServerSideProps: GetServerSideProps<{
   reportDetails: ReportDetail[];
@@ -44,9 +45,9 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
       </p>
       <div className="flex flex-col mb-2">
         <label className="mb-1">Comment</label>
-        <textarea
-        
-        className="border rounded shadow-inner min-h-[72px] p-2"
+        <TextareaAutosize
+          minRows={2}
+          className="border brounded shadow-inner p-2"
           defaultValue={`${reportDetail.content}`}
           {...register(`content`, { required: false })}
         />
