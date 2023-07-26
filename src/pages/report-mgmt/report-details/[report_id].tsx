@@ -5,6 +5,9 @@ import { reportDetailAdapter } from "@/src/modules/report-mgmt/infrastructure/ad
 import { ReportDetail } from "@/src/modules/report-mgmt/domain/entities/ReportDetail";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { format } from "date-fns";
+import TextareaAutosize from 'react-textarea-autosize';
 
 export const getServerSideProps: GetServerSideProps<{
   reportDetails: ReportDetail[];
@@ -31,18 +34,20 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await reportDetailAdapter
       .updateReportDetailById({ id: reportDetail.id, content: data.content })
+      .then(res => toast.success(`${reportDetail.student_info.first_name}'s report updated.`))
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
-      <p>
+      <p className="mb-2">
         {reportDetail.student_info.first_name}{" "}
         {reportDetail.student_info.last_name}
       </p>
-      <div className="flex flex-col">
-        <label>Content</label>
-        <input
-          type="text"
+      <div className="flex flex-col mb-2">
+        <label className="mb-1">Comment</label>
+        <TextareaAutosize
+          minRows={2}
+          className="border brounded shadow-inner p-2"
           defaultValue={`${reportDetail.content}`}
           {...register(`content`, { required: false })}
         />
@@ -52,7 +57,7 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
           </p>
         )}
       </div>
-      <button>Save</button>
+      <button className="bg-blue-300 p-1 rounded">Save</button>
     </form>
   );
 };
@@ -63,13 +68,20 @@ export default function ReportDate({
   const [reportLength, setReportLength] = useState<number>(
     reportDetails.length
   );
+  const date = format(new Date(), 'yyyy-MM-dd')
   return (
     <Layout>
       <div>
-        <section>
+        <section className="pb-[48px] xs:pb-0">
           <div className="flex justify-between items-baseline mb-4">
-            <h2 className="text-3xl">Report Details for Today</h2>
-            <Link href="/report-mgmt/">Back</Link>
+            <h2 >
+              <span className="text-lg text-gray-500">Report Details</span> <br></br> 
+              <span className="text-3xl">{date}</span>
+            </h2>
+            <Link 
+            href="/report-mgmt/"
+            className='hover:underline hover:underline-offset-2 hover:text-blue-700'
+            >Reports</Link>
           </div>
           {reportLength > 0 ? (
             reportDetails.map((reportDetail, index) => (
