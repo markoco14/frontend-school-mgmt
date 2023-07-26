@@ -57,12 +57,14 @@ export const ReportList = () => {
 
   return (
     <>
-      <h2 className="flex justify-between gap-4 items-baseline text-3xl mb-4">
-				Reports for {nameOfDay}{" "}
+      <h2 className="flex flex-col xs:flex-row justify-between gap-4 items-baseline text-3xl mb-4">
+				<span>
+					Reports for {nameOfDay}{" "}
+				</span>
 				<span>
 					<input
 						type="date"
-						className="mb-4 text-xl text-right"
+						className="mb-4 text-xl text-left xs:text-right rounded"
 						defaultValue={format(new Date(), "yyyy-MM-dd")}
 						onChange={async (e) => {
 							const dateObject = new Date(e.target.value);
@@ -87,10 +89,10 @@ export const ReportList = () => {
 					classes?.map((thisClass: Class, index: number) => (
 						<li
 							key={index}
-							className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
+							className="p-2 rounded-md hover:bg-blue-200 flex justify-between items-baseline"
 						>
 							<Link href={`/report-mgmt/${thisClass.id}/${date}`}>
-								{thisClass.name} {thisClass.class_list.length}/8
+								{thisClass.name}
 							</Link>
 							<div className="flex gap-4">
 								{thisClass.class_list.length === 0 ? (
