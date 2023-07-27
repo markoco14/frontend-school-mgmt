@@ -1,8 +1,9 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
-import { User } from "@/src/modules/user-mgmt/domain/entities/User";
 import { userAdapter } from "../adapters/userAdapter";
 import { Teacher } from "../../domain/entities/Teacher";
+import { useContext } from "react";
+import AuthContext from "@/src/AuthContext";
 
 
 type Inputs = {
@@ -11,21 +12,23 @@ type Inputs = {
 }
 
 export default function TeacherSignup() {
+	const { selectedSchool } = useContext(AuthContext);
 
 	const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      const teacher: Teacher = await userAdapter.addTeacher({
-        email: data.email,
-        password: data.password
-      });
-			console.log(teacher)
+			const teacher: Teacher = await userAdapter.addTeacher({
+				email: data.email,
+				password: data.password,
+				school_id: selectedSchool.id
+			});
+		
 			// @ts-ignore
 			if (teacher === 'Teacher already exists') {
 				toast.success('Teacher already exists')
 			} else {
-				toast.success(`User added: ${teacher.email} ${teacher.password}`);
+				toast.success(`User added: ${teacher.email}`);
 			}
       reset();
     } catch (error) {
