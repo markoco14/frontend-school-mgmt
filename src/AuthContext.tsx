@@ -6,6 +6,7 @@ import { School } from './modules/school-mgmt/domain/entities/School';
 type AuthUser = {
 	name: string;
 	user_id: number;
+	role: string;
 }
 
 type IAuthContext = {
