@@ -14,7 +14,19 @@ export default function Navbar() {
     <nav className="xs:relative h-[48px] bg-blue-900 text-white xs:bg-transparent xs:text-black flex justify-between items-center px-2 ">
       {/* desktop nav */}
       <div className="w-full hidden xs:flex xs:justify-end gap-2">
-        {user && selectedSchool && (
+        {user && user.role === "TEACHER" && (
+          <Link
+            href="/"
+            className={`${
+              router.pathname === "/"
+                ? "underline underline-offset-4 decoration-2 text-blue-700"
+                : ""
+            }`}
+          >
+            Home
+          </Link>
+        )}
+        {user && user.role === "OWNER" && (
           <>
             <Link
               href="/"
@@ -91,7 +103,19 @@ export default function Navbar() {
           >
             <span className="material-symbols-outlined">close</span>
           </button>
-          {user && selectedSchool && (
+          {user && user.role === "TEACHER" && selectedSchool && (
+            <Link
+              href="/"
+              className={`${
+                router.pathname === "/"
+                  ? "underline underline-offset-4 decoration-2 text-blue-700"
+                  : ""
+              }`}
+            >
+              Home
+            </Link>
+          )}
+          {user && user.role === "OWNER" && selectedSchool && (
             <>
               <Link
                 href="/"

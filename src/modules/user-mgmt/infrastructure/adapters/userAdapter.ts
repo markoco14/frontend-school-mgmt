@@ -1,3 +1,4 @@
+import { Teacher } from "../../domain/entities/Teacher";
 import { User } from "../../domain/entities/User";
 
 class UserAdapter {
@@ -22,6 +23,19 @@ class UserAdapter {
 		const user: User = await response.json();
 
 		return user;
+	}
+
+	public async addTeacher({ email, password, school_id }: {email: string, password: string, school_id: number }): Promise<Teacher> {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-teacher/`, { 
+			method: 'POST', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ email: email, password: password, school: school_id }) 
+		});
+		const teacher: Teacher = await response.json();
+
+		return teacher;
 	}
 }
 
