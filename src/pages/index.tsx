@@ -19,7 +19,7 @@ export default function Home() {
   useEffect(() => {
     async function getData() {
       if (user) {
-        await schoolAdapter.getSchoolsByOwnerId({id: user?.user_id})
+        await schoolAdapter.getSchoolsByUserAccess({id: user?.user_id})
           .then((res) => {
             setSchools(res);
           })
