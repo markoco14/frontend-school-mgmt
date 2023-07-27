@@ -126,7 +126,7 @@ export default function ClassList({
               </div>
 
               <div className="flex items-baseline gap-4 mb-4">
-                <p className="text-xl">Student List</p>
+                <h3 className="text-xl">Student List</h3>
                 <button
                   onClick={() => {
                     setIsAddingStudent(!isAddingStudent);
@@ -144,11 +144,11 @@ export default function ClassList({
                   />
                 </article>
               ) : (
-                <ul className="flex flex-col gap-2 mb-4">
+                <ul className="flex flex-col rounded gap-2 divide-y mb-8 bg-gray-100 shadow-inner">
                   {classList?.map((student: Student, index: number) => (
                     <li
                       key={index}
-                      className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
+                      className="p-2 rounded-md hover:bg-blue-200 flex justify-between "
                     >
                       {student.first_name} {student.last_name}{" "}
                       <button
@@ -165,16 +165,8 @@ export default function ClassList({
                   ))}
                 </ul>
               )}
-              <button
-                className="rounded underline underline-offset-2 text-red-500 p-2 hover:bg-red-300 hover:text-red-900"
-                onClick={async () =>
-                  await classAdapter
-                    .deleteClassById({ id: selectedClass.id })
-                    .then(handleDeleteClass)
-                }
-              >
-                Delete Class
-              </button>
+              
+              
             </>
           ) : (
             <div className="flex justify-between items-baseline mb-4">
@@ -182,6 +174,24 @@ export default function ClassList({
               <Link href="/class-mgmt">Back</Link>
             </div>
           )}
+        </section>
+        <section>
+          <h2 className="text-xl mb-4">Danger Zone</h2>
+          <article className="bg-gray-100 shadow-inner p-2 rounded">
+            <p className="mb-8">Warning, you cannot undo this. Student data will not be deleted, but all report data associated with the class will be gone forever.</p>
+            <div className="flex justify-center">
+              <button
+                  className="rounded underline underline-offset-2 text-red-500 p-2 hover:bg-red-300 hover:text-red-900"
+                  onClick={async () =>
+                    await classAdapter
+                      .deleteClassById({ id: selectedClass.id })
+                      .then(handleDeleteClass)
+                  }
+                >
+                  Delete Class
+                </button>
+            </div>
+          </article>
         </section>
       </div>
     </Layout>
