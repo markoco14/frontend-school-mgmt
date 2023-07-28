@@ -5,7 +5,7 @@ export default function LevelSection({levels, handleDeleteLevel}: {levels: Level
   
   return (
 		<div className="mb-4 xs:mb-0">
-			<h2 className="text-2xl">Levels</h2>
+			<h2 className="text-3xl mb-2">Levels</h2>
 			<ul className="bg-gray-100 rounded shadow-inner mb-4">
 				{levels?.map((level, index) => (
 					<li 
