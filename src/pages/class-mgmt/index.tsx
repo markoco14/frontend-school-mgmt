@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from "react";
 export default function ClassHome() {
   const { selectedSchool } = useContext(AuthContext);
   const [classes, setClasses] = useState<Class[]>([]);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     async function getData() {
@@ -37,6 +38,15 @@ export default function ClassHome() {
     );
   }
 
+  if (user?.role !== "OWNER") {
+    return (
+      <Layout>
+        <h2>You do not have permission to access this page.</h2>
+        <Link href="/">Back to Home</Link>
+      </Layout>
+    )
+  }
+
   return (
     <Layout>
       <div>
@@ -45,7 +55,6 @@ export default function ClassHome() {
           <div className="flex justify-between items-baseline mb-4">
             <h2 className='text-3xl'>Your Classes</h2>
           </div>
-          {/* <hr className='mb-2'></hr> */}
           <ul className="flex flex-col gap-2 divide-y mb-8 bg-gray-100 shadow-inner">
             {classes?.map((currentClass: Class, index: number) => (
               <li 
