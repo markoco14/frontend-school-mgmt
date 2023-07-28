@@ -1,3 +1,4 @@
+import { SchoolUser } from "@/src/modules/school-mgmt/domain/entities/SchoolUser";
 import { Teacher } from "../../domain/entities/Teacher";
 import { User } from "../../domain/entities/User";
 
@@ -23,6 +24,13 @@ class UserAdapter {
 		const user: User = await response.json();
 
 		return user;
+	}
+
+	public async getTeachersBySchool({school, owner}: {school:any, owner: any}): Promise<Teacher[]> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-teachers-by-school/${school}/${owner}/`);
+		const school_users = await res.json();
+		
+		return school_users;
 	}
 
 	public async addTeacher({ email, password, school_id }: {email: string, password: string, school_id: number }): Promise<Teacher> {
