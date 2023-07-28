@@ -4,10 +4,11 @@ import Link from "next/link";
 import { reportDetailAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportDetailAdapter";
 import { ReportDetail } from "@/src/modules/report-mgmt/domain/entities/ReportDetail";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { format } from "date-fns";
 import TextareaAutosize from 'react-textarea-autosize';
+import AuthContext from "@/src/AuthContext";
 
 export const getServerSideProps: GetServerSideProps<{
   reportDetails: ReportDetail[];
@@ -30,13 +31,13 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
     control,
     formState: { errors },
   } = useForm<Inputs>();
-
+  
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await reportDetailAdapter
-      .updateReportDetailById({ id: reportDetail.id, content: data.content })
-      .then(res => toast.success(`${reportDetail.student_info.first_name}'s report updated.`))
+    .updateReportDetailById({ id: reportDetail.id, content: data.content })
+    .then(res => toast.success(`${reportDetail.student_info.first_name}'s report updated.`))
   };
-
+  
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
       <p className="mb-2">
@@ -67,8 +68,10 @@ export default function ReportDate({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [reportLength, setReportLength] = useState<number>(
     reportDetails.length
-  );
-  const date = format(new Date(), 'yyyy-MM-dd')
+    );
+    const date = format(new Date(), 'yyyy-MM-dd')
+    const { user } = useContext(AuthContext);
+
   return (
     <Layout>
       <div>
@@ -78,10 +81,21 @@ export default function ReportDate({
               <span className="text-lg text-gray-500">Report Details</span> <br></br> 
               <span className="text-3xl">{date}</span>
             </h2>
-            <Link 
-            href="/report-mgmt/"
-            className='hover:underline hover:underline-offset-2 hover:text-blue-700'
-            >Reports</Link>
+            {user?.role === 'OWNER' ? (
+              <Link 
+                href="/report-mgmt/"
+                className='hover:underline hover:underline-offset-2 hover:text-blue-700'
+              >
+                Reports
+              </Link>
+            ) : (
+              <Link 
+                href="/"
+                className='hover:underline hover:underline-offset-2 hover:text-blue-700'
+              >
+                Back
+              </Link>
+            )}
           </div>
           {reportLength > 0 ? (
             reportDetails.map((reportDetail, index) => (
