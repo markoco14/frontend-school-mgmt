@@ -1,5 +1,6 @@
 import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
 import Link from "next/link";
 import { useContext, useState } from "react";
@@ -36,8 +37,7 @@ export default function Add() {
   if (user?.role !== "OWNER") {
     return (
       <Layout>
-        <h2>You do not have permission to access this page.</h2>
-        <Link href="/">Back to Home</Link>
+        <PermissionDenied />
       </Layout>
     )
   }

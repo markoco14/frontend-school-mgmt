@@ -2,6 +2,7 @@ import AuthContext from "@/src/AuthContext";
 import { Level } from "@/src/modules/class-mgmt/domain/entities/Level";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import TeacherSignup from "@/src/modules/user-mgmt/infrastructure/ui/TeacherSignup";
 import Link from "next/link";
@@ -60,8 +61,7 @@ export default function AdminHome() {
   if (user?.role !== "OWNER") {
     return (
       <Layout>
-        <h2>You do not have permission to access this page.</h2>
-        <Link href="/">Back to Home</Link>
+        <PermissionDenied />
       </Layout>
     )
   }

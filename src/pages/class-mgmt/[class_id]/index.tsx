@@ -3,6 +3,7 @@ import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import { classListAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classListAdapter";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
@@ -119,8 +120,7 @@ export default function ClassList({
   if (user?.role !== "OWNER") {
     return (
       <Layout>
-        <h2>You do not have permission to access this page.</h2>
-        <Link href="/">Back to Home</Link>
+        <PermissionDenied />
       </Layout>
     )
   }
