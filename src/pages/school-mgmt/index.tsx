@@ -4,6 +4,7 @@ import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/c
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import TeacherSignup from "@/src/modules/user-mgmt/infrastructure/ui/TeacherSignup";
+import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -17,6 +18,7 @@ export default function AdminHome() {
   const [loading, setLoading] = useState<boolean>(false);
   const [levels, setLevels] = useState<Level[]>([]);
   const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
+  const { user } = useContext(AuthContext)
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
@@ -53,6 +55,15 @@ export default function AdminHome() {
       setLevels(prevLevels => prevLevels.filter((level) => level.id !== levelId))
       toast.success('Level added.');
     })
+  }
+
+  if (user?.role !== "OWNER") {
+    return (
+      <Layout>
+        <h2>You do not have permission to access this page.</h2>
+        <Link href="/">Back to Home</Link>
+      </Layout>
+    )
   }
 
   return (

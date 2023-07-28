@@ -33,6 +33,15 @@ export default function Add() {
     }
   }
 
+  if (user?.role !== "OWNER") {
+    return (
+      <Layout>
+        <h2>You do not have permission to access this page.</h2>
+        <Link href="/">Back to Home</Link>
+      </Layout>
+    )
+  }
+
   return (
     <Layout>
       <div>
