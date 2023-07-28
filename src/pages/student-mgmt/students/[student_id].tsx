@@ -4,8 +4,10 @@ import { Student } from '@/src/modules/student-mgmt/domain/entities/Student';
 import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter';
 import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
 import toast from 'react-hot-toast';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import SchoolHeader from '@/src/modules/core/infrastructure/ui/components/SchoolHeader';
+import PermissionDenied from '@/src/modules/core/infrastructure/ui/components/PermissionDenied';
+import AuthContext from '@/src/AuthContext';
 
 
 export const getServerSideProps: GetServerSideProps<{
@@ -20,6 +22,7 @@ export const getServerSideProps: GetServerSideProps<{
 export default function Home({student}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [loading, setLoading] = useState<boolean>(false);
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
+  const { user } = useContext(AuthContext);
 
   async function handleDeleteStudent(id: number) {
     try {
@@ -32,6 +35,14 @@ export default function Home({student}: InferGetServerSidePropsType<typeof getSe
     } catch (error) {
       console.error(error)
     }
+  }
+
+  if (user?.role !== "OWNER") {
+    return (
+      <Layout>
+        <PermissionDenied />
+      </Layout>
+    )
   }
 
   return (
