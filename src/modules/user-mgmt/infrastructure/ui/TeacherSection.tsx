@@ -54,7 +54,6 @@ export default function TeacherSection() {
             <TeacherSignup
               teachers={teachers}
               setTeachers={setTeachers}
-              setIsAddTeacher={setIsAddTeacher}
             />
             <div className="flex justify-end">
               <button
