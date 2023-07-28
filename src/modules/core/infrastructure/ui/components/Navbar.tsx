@@ -94,7 +94,7 @@ export default function Navbar() {
       </div>
       {/* mobile nav */}
       {isShowing && (
-        <div className="z-10 text-3xl absolute top-0 left-0 flex flex-col gap-4 h-screen justify-center w-full items-center text-black  bg-white  bg-opacity-80 xs:hidden">
+        <div className="z-10 text-3xl absolute top-0 left-0 flex flex-col gap-4 h-screen justify-center w-full items-center text-black bg-blue-300/75 xs:hidden">
           <button
             onClick={() => {
               setIsShowing(false);

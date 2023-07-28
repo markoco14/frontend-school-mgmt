@@ -7,29 +7,37 @@ import AuthContext from "@/src/AuthContext";
 
 
 type Inputs = {
+	first_name: string;
   email: string;
   password: string;
 }
 
-export default function TeacherSignup() {
-	const { selectedSchool } = useContext(AuthContext);
+export default function TeacherSignup({teachers, setTeachers}: {teachers: Teacher[], setTeachers: Function}) {
+	const { user, selectedSchool } = useContext(AuthContext);
 
 	const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
+		if (teachers.find((teacher) => teacher.email === data.email)) {
+			toast("You already shared your school with this teacher.")
+			return
+		}
+		
+		if (teachers.find((teacher) => user?.email === data.email)) {
+			toast("You cannot add yourself as a teacher in this school.")
+			return
+		}
     try {
 			const teacher: Teacher = await userAdapter.addTeacher({
+				first_name: data.first_name,
 				email: data.email,
 				password: data.password,
 				school_id: selectedSchool.id
 			});
 		
+			toast.success('School shared with teacher.')
 			// @ts-ignore
-			if (teacher === 'Teacher already exists') {
-				toast.success('Teacher already exists')
-			} else {
-				toast.success(`User added: ${teacher.email}`);
-			}
+			setTeachers(prevTeachers => [...prevTeachers, teacher]);
       reset();
     } catch (error) {
       console.error(error)
@@ -40,6 +48,14 @@ export default function TeacherSignup() {
 		<form
 			onSubmit={handleSubmit(onSubmit)}
 		>
+			<div className="flex flex-col mb-4">
+				<label className="mb-2">First Name</label>
+				<input
+					type="text"
+					{...register("first_name", { required: true, minLength: 1, maxLength: 50 })}
+					className="shadow-md border p-2 rounded"
+				/>
+			</div>
 			<div className="flex flex-col mb-4">
 				<label className="mb-2">Email</label>
 				<input
