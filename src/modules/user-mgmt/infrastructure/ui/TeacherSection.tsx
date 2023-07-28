@@ -27,7 +27,7 @@ export default function TeacherSection() {
 
   return (
     <section>
-      <h2>Teachers</h2>
+      <h2 className="mb-2 text-3xl">Teachers</h2>
       <TeacherList teachers={teachers} />
       <button
         className="bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded"
