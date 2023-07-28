@@ -24,13 +24,9 @@ export default function TeacherSignup({setTeachers}: {setTeachers: Function}) {
 				school_id: selectedSchool.id
 			});
 		
+			toast.success('School shared with teacher.')
 			// @ts-ignore
-			if (teacher === 'Teacher already exists') {
-				toast.success(`School shared with teacher.`);
-			} else {
-				// @ts-ignore
-				setTeachers(prevTeachers => [...prevTeachers, teacher]);
-			}
+			setTeachers(prevTeachers => [...prevTeachers, teacher]);
       reset();
     } catch (error) {
       console.error(error)
