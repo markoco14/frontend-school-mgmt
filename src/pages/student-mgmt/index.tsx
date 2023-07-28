@@ -1,8 +1,20 @@
 import Link from 'next/link';
 import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
 import SchoolHeader from '@/src/modules/core/infrastructure/ui/components/SchoolHeader';
+import { useContext } from 'react';
+import AuthContext from '@/src/AuthContext';
+import PermissionDenied from '@/src/modules/core/infrastructure/ui/components/PermissionDenied';
 
 export default function StudentsHome() {
+  const { user } = useContext(AuthContext);
+
+  if (user?.role !== "OWNER") {
+    return (
+      <Layout>
+        <PermissionDenied />
+      </Layout>
+    )
+  }
   return (
     <Layout>
       <div>

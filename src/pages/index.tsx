@@ -82,7 +82,9 @@ export default function Home() {
                 }}>{school.name}</button></li>
               ))}
             </ul>
-            <Link href="/school-mgmt/add" className="bg-blue-300 rounded-lg p-2 hover:bg-blue-500">Add School</Link>
+            {user.role === 'OWNER' && (
+              <Link href="/school-mgmt/add" className="bg-blue-300 rounded-lg p-2 hover:bg-blue-500">Add School</Link>
+            )}
           </section>
         )}
 

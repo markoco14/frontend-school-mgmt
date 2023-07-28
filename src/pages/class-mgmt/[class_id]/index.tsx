@@ -1,13 +1,15 @@
+import AuthContext from "@/src/AuthContext";
 import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import { classListAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classListAdapter";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export const getServerSideProps: GetServerSideProps<{
@@ -94,6 +96,7 @@ export default function ClassList({
   const [currentClass, setCurrentClass] = useState<Class | undefined>(
     selectedClass
   );
+  const { user } = useContext(AuthContext);
 
   async function removeStudentFromClassList(
     classId: number,
@@ -112,6 +115,14 @@ export default function ClassList({
   async function handleDeleteClass() {
     setCurrentClass(undefined);
     toast.success('Class deleted!')
+  }
+
+  if (user?.role !== "OWNER") {
+    return (
+      <Layout>
+        <PermissionDenied />
+      </Layout>
+    )
   }
 
   return (

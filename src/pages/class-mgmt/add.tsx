@@ -3,6 +3,7 @@ import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
 import { Level } from "@/src/modules/class-mgmt/domain/entities/Level";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
@@ -58,6 +59,14 @@ export default function AddClass() {
       }
     }
   }, [user, selectedSchool]);
+
+  if (user?.role !== "OWNER") {
+    return (
+      <Layout>
+        <PermissionDenied />
+      </Layout>
+    )
+  }
 
   return (
     <Layout>

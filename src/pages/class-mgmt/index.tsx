@@ -2,6 +2,7 @@ import AuthContext from "@/src/AuthContext";
 import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
@@ -9,6 +10,7 @@ import { useContext, useEffect, useState } from "react";
 export default function ClassHome() {
   const { selectedSchool } = useContext(AuthContext);
   const [classes, setClasses] = useState<Class[]>([]);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     async function getData() {
@@ -37,6 +39,14 @@ export default function ClassHome() {
     );
   }
 
+  if (user?.role !== "OWNER") {
+    return (
+      <Layout>
+        <PermissionDenied />
+      </Layout>
+    )
+  }
+
   return (
     <Layout>
       <div>
@@ -45,7 +55,6 @@ export default function ClassHome() {
           <div className="flex justify-between items-baseline mb-4">
             <h2 className='text-3xl'>Your Classes</h2>
           </div>
-          {/* <hr className='mb-2'></hr> */}
           <ul className="flex flex-col gap-2 divide-y mb-8 bg-gray-100 shadow-inner">
             {classes?.map((currentClass: Class, index: number) => (
               <li 
