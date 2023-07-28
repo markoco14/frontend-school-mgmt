@@ -4,6 +4,8 @@ import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/c
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
+import TeacherList from "@/src/modules/user-mgmt/infrastructure/ui/TeacherList";
+import TeacherSection from "@/src/modules/user-mgmt/infrastructure/ui/TeacherSection";
 import TeacherSignup from "@/src/modules/user-mgmt/infrastructure/ui/TeacherSignup";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
@@ -126,10 +128,7 @@ export default function AdminHome() {
                 </div>
               </article>
             </section>
-            <section>
-              <h2>Teachers</h2>
-              <TeacherSignup />
-            </section>
+            <TeacherSection />
           </>
         )}
       </div>
