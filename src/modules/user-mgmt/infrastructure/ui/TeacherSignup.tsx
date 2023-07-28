@@ -7,6 +7,7 @@ import AuthContext from "@/src/AuthContext";
 
 
 type Inputs = {
+	first_name: string;
   email: string;
   password: string;
 }
@@ -28,6 +29,7 @@ export default function TeacherSignup({teachers, setTeachers}: {teachers: Teache
 		}
     try {
 			const teacher: Teacher = await userAdapter.addTeacher({
+				first_name: data.first_name,
 				email: data.email,
 				password: data.password,
 				school_id: selectedSchool.id
@@ -46,6 +48,14 @@ export default function TeacherSignup({teachers, setTeachers}: {teachers: Teache
 		<form
 			onSubmit={handleSubmit(onSubmit)}
 		>
+			<div className="flex flex-col mb-4">
+				<label className="mb-2">First Name</label>
+				<input
+					type="text"
+					{...register("first_name", { required: true, minLength: 1, maxLength: 50 })}
+					className="shadow-md border p-2 rounded"
+				/>
+			</div>
 			<div className="flex flex-col mb-4">
 				<label className="mb-2">Email</label>
 				<input
