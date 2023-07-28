@@ -29,7 +29,7 @@ export default function TeacherSection() {
 		<section>
 			<h2>Teachers</h2>
 			<TeacherList teachers={teachers}/>
-			<TeacherSignup setTeachers={setTeachers}/>
+			<TeacherSignup teachers={teachers} setTeachers={setTeachers}/>
 		</section>
   );
 }
