@@ -11,12 +11,21 @@ type Inputs = {
   password: string;
 }
 
-export default function TeacherSignup({setTeachers}: {setTeachers: Function}) {
+export default function TeacherSignup({teachers, setTeachers}: {teachers: Teacher[], setTeachers: Function}) {
 	const { user, selectedSchool } = useContext(AuthContext);
 
 	const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
+		if (teachers.find((teacher) => teacher.email === data.email)) {
+			toast("You already shared your school with this teacher.")
+			return
+		}
+		
+		if (teachers.find((teacher) => user?.email === data.email)) {
+			toast("You cannot add yourself as a teacher in this school.")
+			return
+		}
     try {
 			const teacher: Teacher = await userAdapter.addTeacher({
 				email: data.email,
