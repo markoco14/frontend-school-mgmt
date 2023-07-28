@@ -11,8 +11,8 @@ type Inputs = {
   password: string;
 }
 
-export default function TeacherSignup() {
-	const { selectedSchool } = useContext(AuthContext);
+export default function TeacherSignup({setTeachers}: {setTeachers: Function}) {
+	const { user, selectedSchool } = useContext(AuthContext);
 
 	const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
 
@@ -26,9 +26,10 @@ export default function TeacherSignup() {
 		
 			// @ts-ignore
 			if (teacher === 'Teacher already exists') {
-				toast.success('Teacher already exists')
+				toast.success(`School shared with teacher.`);
 			} else {
-				toast.success(`User added: ${teacher.email}`);
+				// @ts-ignore
+				setTeachers(prevTeachers => [...prevTeachers, teacher]);
 			}
       reset();
     } catch (error) {
