@@ -33,13 +33,13 @@ class UserAdapter {
 		return school_users;
 	}
 
-	public async addTeacher({ email, password, school_id }: {email: string, password: string, school_id: number }): Promise<Teacher> {
+	public async addTeacher({ first_name, email, password, school_id }: {first_name: string, email: string, password: string, school_id: number }): Promise<Teacher> {
 		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-teacher/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ email: email, password: password, school: school_id }) 
+			body: JSON.stringify({ first_name: first_name, email: email, password: password, school: school_id }) 
 		});
 		const teacher: Teacher = await response.json();
 
