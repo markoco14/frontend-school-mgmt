@@ -1,6 +1,7 @@
 import AuthContext from "@/src/AuthContext";
 import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
+import AddClass from "@/src/modules/class-mgmt/infrastructure/ui/components/AddClass";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
@@ -94,6 +95,7 @@ export default function ClassHome() {
               <div className="fixed inset-0 bg-blue-900/25" />
               <Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
                 <Dialog.Title>Add Class</Dialog.Title>
+                <AddClass setClasses={setClasses}/>
                 <div className="flex justify-end">
                   <button
                     type="button"
@@ -106,12 +108,6 @@ export default function ClassHome() {
               </Dialog.Panel>
             </Dialog>
           </Transition>
-          {/* <Link 
-            href="class-mgmt/add"
-            className="bg-blue-300 p-2 rounded"
-          >
-            New Class
-          </Link> */}
         </section>
       </div>
     </Layout>

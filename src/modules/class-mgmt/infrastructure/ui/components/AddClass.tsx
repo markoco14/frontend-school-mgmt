@@ -1,6 +1,19 @@
+import AuthContext from "@/src/AuthContext";
+import { useContext, useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Level } from "../../../domain/entities/Level";
+import { classAdapter } from "../../adapters/classAdapter";
+import { Class } from "../../../domain/entities/Class";
+import toast from "react-hot-toast";
+
+type Inputs = {
+  className: string;
+  level: number;
+  daysOfWeek: string[];
+};
 
 
-export default function AddClass() {
+export default function AddClass({ setClasses }: { setClasses: Function }) {
 	const { user, selectedSchool } = useContext(AuthContext);
   const [levels, setLevels] = useState<Level[]>([]);
   const {
@@ -10,7 +23,7 @@ export default function AddClass() {
     formState: { errors },
   } = useForm<Inputs>();
 
-	const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const days: number[] = [];
     data.daysOfWeek.forEach((day) => days.push(Number(day)));
 
@@ -22,13 +35,29 @@ export default function AddClass() {
         day: days,
       });
       toast.success("New class added.");
+			setClasses((prevClasses: Class[]) => [...prevClasses, newClass])
       reset();
     } catch (error) {
       console.error(error);
     }
   };
 
-	
+  useEffect(() => {
+    async function getLevels() {
+      await classAdapter.getLevelsBySchoolId({id: selectedSchool?.id}).then((res) => {
+        setLevels(res);
+      });
+    }
+
+    if (user) {
+      try {
+        getLevels();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, [user, selectedSchool]);
+
   return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<div className="flex flex-col mb-4">
