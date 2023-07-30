@@ -7,24 +7,26 @@ export default function SchoolHeader() {
   const { selectedSchool, setSelectedSchool, handleDeselectSchool } = useContext(AuthContext);
   const router = useRouter();
   return (
-    <p className=" text-gray-500 mb-4 flex justify-between items-baseline">
-      {selectedSchool ? (
-        <>
-          <Link href="/" className="text-2xl">{selectedSchool.name}</Link>
-          <button
-            onClick={() => {
-              handleDeselectSchool();
-              if (router.pathname !== '/') {
-                router.push('/')
-              }
-            }}
-          >
-            Change school
-          </button>
-        </>
-      ) : (
-        <Link href="/">You have not chosen a school</Link>
-      )}
-    </p>
+    <section>
+      <p className=" text-gray-500 mb-4 flex justify-between items-baseline">
+        {selectedSchool ? (
+          <>
+            <Link href="/" className="text-2xl">{selectedSchool.name}</Link>
+            <button
+              onClick={() => {
+                handleDeselectSchool();
+                if (router.pathname !== '/') {
+                  router.push('/')
+                }
+              }}
+            >
+              Change school
+            </button>
+          </>
+        ) : (
+          <Link href="/">You have not chosen a school</Link>
+        )}
+      </p>
+    </section>
   );
 }

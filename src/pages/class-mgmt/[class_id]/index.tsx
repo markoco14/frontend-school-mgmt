@@ -128,82 +128,81 @@ export default function ClassList({
   return (
     <Layout>
       <div>
-        <section>
           {currentClass ? (
             <>
-              <div className="flex justify-between items-baseline mb-4">
-                <h2 className="text-3xl">{selectedClass?.name}</h2>
-                <Link href="/class-mgmt">Back</Link>
-              </div>
+              <section>
+                <div className="flex justify-between items-baseline mb-4">
+                  <h2 className="text-3xl">{selectedClass?.name}</h2>
+                  <Link href="/class-mgmt">Back</Link>
+                </div>
 
-              <div className="flex items-baseline gap-4 mb-4">
-                <h3 className="text-xl">Student List</h3>
-                <button
-                  onClick={() => {
-                    setIsAddingStudent(!isAddingStudent);
-                  }}
-                >
-                  {isAddingStudent ? <span>Done</span> : <span>+ Student</span>}
-                </button>
-              </div>
-              {isAddingStudent ? (
-                <article>
-                  <AllStudentList
-                    classList={classList}
-                    setClassList={setClassList}
-                    selectedClass={selectedClass}
-                  />
-                </article>
-              ) : (
-                <ul className="flex flex-col rounded gap-2 divide-y mb-8 bg-gray-100 shadow-inner">
-                  {classList?.map((student: Student, index: number) => (
-                    <li
-                      key={index}
-                      className="p-2 rounded-md hover:bg-blue-200 flex justify-between "
-                    >
-                      {student.first_name} {student.last_name}{" "}
-                      <button
-                        onClick={() => {
-                          removeStudentFromClassList(
-                            selectedClass?.id,
-                            student.id
-                          );
-                        }}
+                <div className="flex items-baseline gap-4 mb-4">
+                  <h3 className="text-xl">Student List</h3>
+                  <button
+                    onClick={() => {
+                      setIsAddingStudent(!isAddingStudent);
+                    }}
+                  >
+                    {isAddingStudent ? <span>Done</span> : <span>+ Student</span>}
+                  </button>
+                </div>
+                {isAddingStudent ? (
+                  <article>
+                    <AllStudentList
+                      classList={classList}
+                      setClassList={setClassList}
+                      selectedClass={selectedClass}
+                    />
+                  </article>
+                ) : (
+                  <ul className="flex flex-col rounded gap-2 divide-y mb-8 bg-gray-100 shadow-inner">
+                    {classList?.map((student: Student, index: number) => (
+                      <li
+                        key={index}
+                        className="p-2 rounded-md hover:bg-blue-200 flex justify-between "
                       >
-                        Remove
+                        {student.first_name} {student.last_name}{" "}
+                        <button
+                          onClick={() => {
+                            removeStudentFromClassList(
+                              selectedClass?.id,
+                              student.id
+                            );
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+              <section>
+                <h2 className="text-xl mb-4">Danger Zone</h2>
+                <article className="bg-gray-100 shadow-inner p-2 rounded">
+                  <p className="mb-8">Warning, you cannot undo this. Student data will not be deleted, but all report data associated with the class will be gone forever.</p>
+                  <div className="flex justify-center">
+                    <button
+                        className="rounded underline underline-offset-2 text-red-500 p-2 hover:bg-red-300 hover:text-red-900"
+                        onClick={async () =>
+                          await classAdapter
+                            .deleteClassById({ id: selectedClass.id })
+                            .then(handleDeleteClass)
+                        }
+                      >
+                        Delete Class
                       </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              
-              
+                  </div>
+                </article>
+              </section>
             </>
           ) : (
-            <div className="flex justify-between items-baseline mb-4">
+            <div className="flex flex-col xs:flex-row xs:justify-between xs:gap-2 items-baseline mb-4">
               <h2 className="text-3xl">This class was deleted.</h2>
               <Link href="/class-mgmt">Back</Link>
             </div>
           )}
-        </section>
-        <section>
-          <h2 className="text-xl mb-4">Danger Zone</h2>
-          <article className="bg-gray-100 shadow-inner p-2 rounded">
-            <p className="mb-8">Warning, you cannot undo this. Student data will not be deleted, but all report data associated with the class will be gone forever.</p>
-            <div className="flex justify-center">
-              <button
-                  className="rounded underline underline-offset-2 text-red-500 p-2 hover:bg-red-300 hover:text-red-900"
-                  onClick={async () =>
-                    await classAdapter
-                      .deleteClassById({ id: selectedClass.id })
-                      .then(handleDeleteClass)
-                  }
-                >
-                  Delete Class
-                </button>
-            </div>
-          </article>
-        </section>
+        
       </div>
     </Layout>
   );

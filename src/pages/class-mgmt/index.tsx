@@ -1,9 +1,11 @@
 import AuthContext from "@/src/AuthContext";
 import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
+import AddClass from "@/src/modules/class-mgmt/infrastructure/ui/components/AddClass";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
+import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 
@@ -11,6 +13,7 @@ export default function ClassHome() {
   const { selectedSchool } = useContext(AuthContext);
   const [classes, setClasses] = useState<Class[]>([]);
   const { user } = useContext(AuthContext);
+  const [isAddClass, setIsAddClass] = useState<boolean>(false);
 
   useEffect(() => {
     async function getData() {
@@ -67,12 +70,44 @@ export default function ClassHome() {
               </li>
             ))}
           </ul>
-          <Link 
-            href="class-mgmt/add"
+          <button 
+            onClick={() => {
+              console.log('click')
+            setIsAddClass(true);
+            }}
             className="bg-blue-300 p-2 rounded"
           >
             New Class
-          </Link>
+          </button>
+          <Transition
+            show={isAddClass}
+            enter="transition ease-in duration-100"
+            enterFrom="transform opacity-0 scale-90"
+            enterTo="opacity-100 scale-100"
+            leave="transition ease-out duration-150"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-90"
+          >
+            <Dialog
+              onClose={() => setIsAddClass(false)}
+              className="fixed inset-0 flex items-center justify-center"
+            >
+              <div className="fixed inset-0 bg-blue-900/25" />
+              <Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
+                <Dialog.Title>Add Class</Dialog.Title>
+                <AddClass setClasses={setClasses}/>
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setIsAddClass(false)}
+                    className="bg-gray-300 text-gray-900 hover:bg-gray-500 hover:text-white px-4 py-1 rounded"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </Dialog.Panel>
+            </Dialog>
+          </Transition>
         </section>
       </div>
     </Layout>

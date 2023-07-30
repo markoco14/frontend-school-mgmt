@@ -1,6 +1,6 @@
 import AuthContext from "@/src/AuthContext";
 import { useContext } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 type Inputs = {
   email: string;
