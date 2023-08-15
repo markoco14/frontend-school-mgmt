@@ -8,7 +8,6 @@ import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -39,8 +38,9 @@ const AddStudentToClassSection = ({
   setClassList: Function;
   selectedClass: Class;
 }) => {
-  const router = useRouter();
   const [allStudents, setAllStudents] = useState<Student[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [next, setNext] = useState<boolean>(false);
 
   async function addStudentToClassList(student: Student) {
     await classListAdapter
@@ -50,11 +50,6 @@ const AddStudentToClassSection = ({
       })
       .then((res) => {
         toast.success(`Student added to class!`);
-        setAllStudents((prevAllStudents) =>
-          prevAllStudents?.filter(
-            (thisStudent) => thisStudent.id !== student.id
-          )
-        );
         setClassList([...classList, student]);
       });
     return;
@@ -63,21 +58,18 @@ const AddStudentToClassSection = ({
   useEffect(() => {
     async function getData() {
       await studentAdapter
-        .getStudentsBySchoolId({ id: selectedClass.school_id })
+        .getStudentsBySchoolId({ id: selectedClass.school_id, page: page })
         .then((res) => {
-          // setAllStudents(
-          //   res.filter(
-          //     (allStudent) =>
-          //       !classList.some(
-          //         (classStudent) => classStudent.id === allStudent.id
-          //       )
-          //   )
-          // );
-          setAllStudents(res);
+          if (res.next) {
+            setNext(true);
+          } else {
+            setNext(false);
+          }
+          setAllStudents(res.results);
         });
     }
     getData();
-  }, [selectedClass, classList]);
+  }, [selectedClass, classList, page]);
 
   return (
     <>
@@ -90,26 +82,53 @@ const AddStudentToClassSection = ({
         </article>
       )}
       {allStudents?.length >= 1 && (
-        <ul>
-          {allStudents?.map((student, index) => (
-            <li key={index} className="items-baseline p-2 flex justify-between">
-              {student.first_name} {student.last_name}{" "}
-              <button
-                // @ts-ignore 
-                disabled={classList.find((classListStudent) => {
-                  if (student.id === classListStudent.id) {
-                    return true;
-                  }
-                  return false;
-                })}
-                onClick={() => addStudentToClassList(student)}
-                className="px-2 py-1 rounded bg-blue-300 disabled:hover:cursor-not-allowed disabled:bg-gray-300"
+        <>
+          <ul className="h-[480px]">
+            {allStudents?.map((student, index) => (
+              <li
+                key={index}
+                className="items-baseline p-2 flex justify-between"
+              >
+                {student.first_name} {student.last_name}{" "}
+                <button
+                  // @ts-ignore
+                  disabled={classList.find((classListStudent) => {
+                    if (student.id === classListStudent.id) {
+                      return true;
+                    }
+                    return false;
+                  })}
+                  onClick={() => addStudentToClassList(student)}
+                  className="px-2 py-1 rounded bg-blue-300 disabled:hover:cursor-not-allowed disabled:bg-gray-300"
                 >
-                Add
-              </button>
-            </li>
-          ))}
-        </ul>
+                  Add
+                </button>
+              </li>
+            ))}
+          </ul>
+          <section className="flex justify-evenly gap-2">
+            <button
+              className="disabled:cursor-not-allowed bg-blue-300 disabled:bg-gray-300 px-2 py-1 w-full rounded"
+              disabled={page === 1}
+              onClick={() => {
+                setPage((prevPage) => prevPage - 1);
+                console.log(page - 1);
+              }}
+            >
+              Prev
+            </button>
+            <button
+              className="disabled:cursor-not-allowed bg-blue-300 disabled:bg-gray-300 px-2 py-1 w-full rounded"
+              disabled={!next}
+              onClick={() => {
+                setPage((prevPage) => prevPage + 1);
+                console.log(page + 1);
+              }}
+            >
+              Next
+            </button>
+          </section>
+        </>
       )}
     </>
   );
@@ -201,7 +220,6 @@ export default function ManageClassDetails({
     selectedClass
   );
   const { user } = useContext(AuthContext);
-  console.log(classList);
 
   async function removeStudentFromClassList(
     classId: number,
@@ -264,7 +282,6 @@ export default function ManageClassDetails({
               selectedClass={selectedClass}
               setCurrentClass={setCurrentClass}
             />
-           
           </>
         )}
         {!currentClass && (
