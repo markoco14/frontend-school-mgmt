@@ -25,13 +25,13 @@ class ReportDetailAdapter {
 		return reportDetail
 	}
 
-	public async updateReportDetailById({id, content}: {id: number, content: string}): Promise<ReportDetail> {
+	public async updateReportDetailById({id, data}: {id: number, data: any}): Promise<ReportDetail> {
 		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/update-report-details/${id}/`, { 
 			method: 'PUT', 
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ content: content }) 
+			body: JSON.stringify({ details: data }) 
 		})
 		const updatedReport: ReportDetail = await response.json();
 		

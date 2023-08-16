@@ -21,7 +21,8 @@ export const getServerSideProps: GetServerSideProps<{
 };
 
 type Inputs = {
-  content: string;
+  testScore: number;
+  comment: string;
 };
 
 const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
@@ -34,7 +35,7 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
   
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await reportDetailAdapter
-    .updateReportDetailById({ id: reportDetail.id, content: data.content })
+    .updateReportDetailById({ id: reportDetail.id, data: data })
     .then(res => toast.success(`${reportDetail.student_info.first_name}'s report updated.`))
   };
   
@@ -45,18 +46,32 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
         {reportDetail.student_info.last_name}
       </p>
       <div className="flex flex-col mb-2">
+        <label className="mb-1">Test Score</label>
+        <input 
+        defaultValue={`${reportDetail.details.testScore ? reportDetail.details.testScore : 0}`}
+        type="number" 
+        className="border brounded shadow-inner p-2"
+        {...register(`testScore`, { required: false, max: 8, min: 0, valueAsNumber: true })}
+        />
+        {errors.testScore?.type === "min" && (
+          <p role="alert" className="text-red-500 mt-2">
+            Min Value is 0
+          </p>
+        )}
+        {errors.testScore?.type === "max" && (
+          <p role="alert" className="text-red-500 mt-2">
+            Max Value is 8
+          </p>
+        )}
+      </div>
+      <div className="flex flex-col mb-2">
         <label className="mb-1">Comment</label>
         <TextareaAutosize
           minRows={2}
           className="border brounded shadow-inner p-2"
-          defaultValue={`${reportDetail.content}`}
-          {...register(`content`, { required: false })}
+          defaultValue={`${reportDetail.details.comment ? reportDetail.details.comment : ''}`}
+          {...register(`comment`, { required: false })}
         />
-        {errors.content?.type === "required" && (
-          <p role="alert" className="text-red-500 mt-2">
-            Content is required
-          </p>
-        )}
       </div>
       <button className="bg-blue-300 p-1 rounded">Save</button>
     </form>
