@@ -33,7 +33,13 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
     watch,
     control,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    defaultValues: {
+      testScore: reportDetail.details.testScore || 0,
+      comment: reportDetail.details.comment || ''
+    }
+  });
+
 
   const watchedTestScore = watch('testScore')
   const watchedComment = watch('comment')
@@ -74,7 +80,6 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
       <div className="flex flex-col mb-2">
         <label className="mb-1">Test Score</label>
         <input 
-        defaultValue={`${reportDetail.details.testScore ? reportDetail.details.testScore : 0}`}
         type="number" 
         className="border brounded shadow-inner p-2"
         {...register(`testScore`, { required: false, max: 8, min: 0, valueAsNumber: true })}
@@ -95,7 +100,6 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
         <TextareaAutosize
           minRows={2}
           className="border brounded shadow-inner p-2"
-          defaultValue={`${reportDetail.details.comment ? reportDetail.details.comment : ''}`}
           {...register(`comment`, { required: false })}
         />
       </div>
