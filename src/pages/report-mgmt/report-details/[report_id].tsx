@@ -23,6 +23,7 @@ export const getServerSideProps: GetServerSideProps<{
 
 type Inputs = {
   testScore: number;
+  newHmwkCorrections: number;
   comment: string;
 };
 
@@ -36,12 +37,13 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
   } = useForm<Inputs>({
     defaultValues: {
       testScore: reportDetail.details.testScore || 0,
+      newHmwkCorrections: reportDetail.details.newHmwkCorrections || 0,
       comment: reportDetail.details.comment || ''
     }
   });
 
-
   const watchedTestScore = watch('testScore')
+  const watchedNewHmwkCorrections = watch('newHmwkCorrections')
   const watchedComment = watch('comment')
   
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -49,12 +51,12 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
     .updateReportDetailById({ id: reportDetail.id, data: data })
     .then(res => toast.success(`${reportDetail.student_info.first_name}'s report updated.`))
   };
-
   
   useEffect(() => {
     const autoSave = debounce(async () => {
       const formData = {
         testScore: watchedTestScore,
+        newHmwkCorrections: watchedNewHmwkCorrections,
         comment: watchedComment,
       };
       await reportDetailAdapter.updateReportDetailById({ 
@@ -69,7 +71,7 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
     return () => {
       autoSave.cancel();
     };
-  }, [watchedTestScore, watchedComment, reportDetail]);
+  }, [watchedTestScore, watchedComment, watchedNewHmwkCorrections, reportDetail]);
   
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
@@ -92,6 +94,19 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
         {errors.testScore?.type === "max" && (
           <p role="alert" className="text-red-500 mt-2">
             Max Value is 8
+          </p>
+        )}
+      </div>
+      <div className="flex flex-col mb-2">
+        <label className="mb-1">Corrections for next week</label>
+        <input 
+        type="number" 
+        className="border brounded shadow-inner p-2"
+        {...register(`newHmwkCorrections`, { required: false, min: 0, valueAsNumber: true })}
+        />
+        {errors.testScore?.type === "min" && (
+          <p role="alert" className="text-red-500 mt-2">
+            Min Value is 0
           </p>
         )}
       </div>
