@@ -4,11 +4,12 @@ import Link from "next/link";
 import { reportDetailAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportDetailAdapter";
 import { ReportDetail } from "@/src/modules/report-mgmt/domain/entities/ReportDetail";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { format } from "date-fns";
 import TextareaAutosize from 'react-textarea-autosize';
 import AuthContext from "@/src/AuthContext";
+import debounce from 'lodash.debounce';
 
 export const getServerSideProps: GetServerSideProps<{
   reportDetails: ReportDetail[];
@@ -29,15 +30,40 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
   const {
     register,
     handleSubmit,
+    watch,
     control,
     formState: { errors },
   } = useForm<Inputs>();
+
+  const watchedTestScore = watch('testScore')
+  const watchedComment = watch('comment')
   
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await reportDetailAdapter
     .updateReportDetailById({ id: reportDetail.id, data: data })
     .then(res => toast.success(`${reportDetail.student_info.first_name}'s report updated.`))
   };
+
+  
+  useEffect(() => {
+    const autoSave = debounce(async () => {
+      const formData = {
+        testScore: watchedTestScore,
+        comment: watchedComment,
+      };
+      await reportDetailAdapter.updateReportDetailById({ 
+        id: reportDetail.id, 
+        data: formData 
+      })
+      .then(res => toast.success(`${reportDetail.student_info.first_name}'s report auto-saved.`))
+    }, 1500); // 1500ms (1.5 seconds) debounce
+    
+    autoSave();
+    // Cleanup on component unmount to cancel any pending debounced calls
+    return () => {
+      autoSave.cancel();
+    };
+  }, [watchedTestScore, watchedComment, reportDetail]);
   
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
