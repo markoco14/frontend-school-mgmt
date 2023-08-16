@@ -41,6 +41,7 @@ const AddStudentToClassSection = ({
   const [allStudents, setAllStudents] = useState<Student[]>([]);
   const [page, setPage] = useState<number>(1);
   const [next, setNext] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function addStudentToClassList(student: Student) {
     await classListAdapter
@@ -57,6 +58,7 @@ const AddStudentToClassSection = ({
 
   useEffect(() => {
     async function getData() {
+      setLoading(true);
       await studentAdapter
         .getStudentsBySchoolId({ id: selectedClass.school_id, page: page })
         .then((res) => {
@@ -66,6 +68,7 @@ const AddStudentToClassSection = ({
             setNext(false);
           }
           setAllStudents(res.results);
+          setLoading(false);
         });
     }
     getData();
@@ -73,17 +76,12 @@ const AddStudentToClassSection = ({
 
   return (
     <>
-      {allStudents?.length === 0 && (
-        <article className="bg-gray-100 shadow-inner p-2 rounded">
-          <p>
-            There are no students left to add. Please register more students to
-            continue.
-          </p>
-        </article>
+      {loading && (
+        <p className="min-h-[480px]">loading...</p>
       )}
-      {allStudents?.length >= 1 && (
+      {!loading && (
         <>
-          <ul className="h-[480px]">
+          <ul className="min-h-[480px]">
             {allStudents?.map((student, index) => (
               <li
                 key={index}
