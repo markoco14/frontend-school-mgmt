@@ -2,6 +2,7 @@ import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
+import { PaginatedStudentResponse } from "@/src/modules/student-mgmt/domain/entities/PaginatedStudentResponse";
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
 import Link from "next/link";
@@ -13,14 +14,14 @@ import { useContext, useEffect, useState } from "react";
 export default function ListStudents() {
   const { user, selectedSchool } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
-  const [filteredStudents, setFilteredStudents] = useState<Student[]>();
+  const [studentResponse, setStudentResponse] = useState<PaginatedStudentResponse>();
 
   useEffect(() => {
     async function getData(id: number) {  
       setLoading(true);
       if (selectedSchool) {
         await studentAdapter.getStudentsBySchool({ id: selectedSchool.id }).then((res) => {
-          setFilteredStudents(res);
+          setStudentResponse(res);
         });
       }
       setLoading(false);
@@ -55,7 +56,7 @@ export default function ListStudents() {
           <p>loading...</p>
         ) : (
           <ul>
-            {filteredStudents?.map((student: Student, index) => (
+            {studentResponse?.results.map((student: Student, index) => (
               <li key={index} className="flex justify-between gap-4">
                 <Link
                   href={`/student-mgmt/students/${student.id}`}
