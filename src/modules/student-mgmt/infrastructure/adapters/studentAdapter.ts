@@ -1,4 +1,4 @@
-import { PaginatedStudentList } from '../../domain/entities/PaginatedStudentList';
+import { PaginatedStudentResponse } from '../../domain/entities/PaginatedStudentResponse';
 import { Student } from './../../domain/entities/Student';
 
 class StudentAdapter {
@@ -17,9 +17,9 @@ class StudentAdapter {
 	}
 
 
-	public async getStudentsBySchool({id}: {id: number}): Promise<Student[]> {
+	public async getStudentsBySchool({id}: {id: number}): Promise<PaginatedStudentResponse> {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students-by-school/${id}/`);
-		const students: Student[] = await res.json();
+		const students: PaginatedStudentResponse = await res.json();
 		
 		return students
 	}
@@ -37,16 +37,16 @@ class StudentAdapter {
 		return students;
 	}
 
-	public async getStudentsBySchoolId({id, page}: {id: number, page: number}): Promise<PaginatedStudentList> {
+	public async getStudentsBySchoolId({id, page}: {id: number, page: number}): Promise<PaginatedStudentResponse> {
 		if (page === 1) {
 			const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students-by-school/${id}/`);
-			const students: PaginatedStudentList = await res.json();
+			const students: PaginatedStudentResponse = await res.json();
 			
 			return students;
 		}
 
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students-by-school/${id}/?page=${page}`);
-		const students: PaginatedStudentList = await res.json();
+		const students: PaginatedStudentResponse = await res.json();
 		
 		return students;
 	}
