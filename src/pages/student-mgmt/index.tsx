@@ -1,15 +1,43 @@
 import Link from 'next/link';
 import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
 import SchoolHeader from '@/src/modules/core/infrastructure/ui/components/SchoolHeader';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import AuthContext from '@/src/AuthContext';
 import PermissionDenied from '@/src/modules/core/infrastructure/ui/components/PermissionDenied';
 import { Dialog, Transition } from '@headlessui/react';
 import RegisterNewStudentModal from '@/src/modules/student-mgmt/infrastructure/ui/RegisterNewStudentModal';
+import { PaginatedStudentResponse } from '@/src/modules/student-mgmt/domain/entities/PaginatedStudentResponse';
+import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter';
+import { Student } from '@/src/modules/student-mgmt/domain/entities/Student';
 
 export default function StudentsHome() {
-  const { user } = useContext(AuthContext);
   const [isAddStudent, setIsAddStudent] = useState<boolean>(false);
+
+  const { user, selectedSchool } = useContext(AuthContext);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [studentResponse, setStudentResponse] = useState<PaginatedStudentResponse>();
+  const [students, setStudents] = useState<Student[]>([]);
+
+  useEffect(() => {
+    async function getData(id: number) {  
+      setLoading(true);
+      if (selectedSchool) {
+        await studentAdapter.getStudentsBySchool({ id: selectedSchool.id }).then((res) => {
+          setStudentResponse(res);
+          setStudents(res.results);
+        });
+      }
+      setLoading(false);
+    }
+  
+    if (user) {
+      try {
+        getData(user.user_id);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, [user, selectedSchool]);
 
   if (user?.role !== "OWNER") {
     return (
@@ -21,29 +49,41 @@ export default function StudentsHome() {
   return (
     <Layout>
       <div>
-        <section>
           <SchoolHeader />
-          <div className='mb-4'>
-            <h2 className='text-3xl mb-4'>Students</h2>
-            <p>Add students and edit their information here.</p>
-          </div>
-          <article className='grid grid-cols-2 gap-4'>
+        <section>
+          <div className='flex justify-between items-baseline mb-4'>
+            <h2 className='text-3xl'>Students</h2>
             <button 
             onClick={() => {
               console.log('adding')
               setIsAddStudent(true);
             }}
-              className='col-span-1 text-center hover:bg-blue-300 p-4 rounded'
+              className='bg-blue-300 hover:bg-blue-500 p-2 rounded'
             >
-              Add Students
+              <i className="fa-solid fa-plus"></i> <i className="fa-solid fa-user"></i>
             </button>
-            <Link 
-              href="/student-mgmt/students"
-              className='col-span-1 text-center hover:bg-blue-300 p-4 rounded'
-            >
-              Edit Profiles
-            </Link>
-          </article>
+          </div>
+          {loading ? (
+            <article className="min-h-[200px] bg-gray-100 shadow-inner p-2 rounded">
+              <p>loading...</p>
+            </article>
+          ) : (
+            <article className="bg-gray-100 shadow-inner p-2 rounded">
+              <ul className='divide-y divide-gray-300'>
+                {students.map((student: Student, index) => (
+                  <li key={index} className="flex justify-between gap-4">
+                    <Link
+                      href={`/student-mgmt/students/${student.id}`}
+                      className="hover:bg-blue-300 p-2 rounded w-full"
+                    >
+                      {student.first_name} {student.last_name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          )}
+        </section>
           <Transition
             show={isAddStudent}
             enter="transition ease-in duration-100"
@@ -60,7 +100,7 @@ export default function StudentsHome() {
               <div className="fixed inset-0 bg-blue-900/25" />
               <Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
                 <Dialog.Title>Add Student</Dialog.Title>
-                <RegisterNewStudentModal />
+                <RegisterNewStudentModal setStudents={setStudents}/>
                 <div className="flex justify-end">
                   <button
                     type="button"
@@ -73,7 +113,7 @@ export default function StudentsHome() {
               </Dialog.Panel>
             </Dialog>
           </Transition>
-        </section>
+        
       </div>
     </Layout>
   )
