@@ -65,7 +65,6 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
         prevHmwkComplete: Number(watchedPrevHmwkComplete),
         comment: watchedComment,
       };
-      console.log('in auto save', formData)
       await reportDetailAdapter.updateReportDetailById({ 
         id: reportDetail.id, 
         data: formData 
