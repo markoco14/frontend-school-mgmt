@@ -5,6 +5,7 @@ export class Class {
     public id: number,
     public school_id: number,
     public name: string,
-		public class_list: ClassList[]
+		public class_list?: ClassList[],
+    public day?: number[],
   ) {}
 }

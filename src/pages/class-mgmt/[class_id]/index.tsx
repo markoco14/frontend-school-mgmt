@@ -189,15 +189,14 @@ const DeleteClassSection = ({
 
   return (
     <section>
-      <h2 className="text-xl mb-4">Danger Zone</h2>
+      <h2 className="text-xl mb-4">Manage Class Details</h2>
       <article className="bg-gray-100 shadow-inner p-2 rounded">
-        <p className="mb-8">
-          Warning, you cannot undo this. Student data will not be deleted, but
-          all report data associated with the class will be gone forever.
+        <p className="mb-4">
+          Delete class here. Warning you cannot undo this.
         </p>
-        <div className="flex justify-center">
+        
           <button
-            className="rounded underline underline-offset-2 text-red-500 p-2 hover:bg-red-300 hover:text-red-900"
+            className="rounded underline underline-offset-2 text-red-500 hover:text-red-900"
             onClick={async () =>
               await classAdapter
                 .deleteClassById({ id: selectedClass.id })
@@ -206,7 +205,7 @@ const DeleteClassSection = ({
           >
             Delete Class
           </button>
-        </div>
+        
       </article>
     </section>
   );
@@ -251,16 +250,20 @@ export default function ManageClassDetails({
       <>
         {currentClass && (
           <>
-            <section>
-              <div className="flex justify-between items-baseline mb-4">
+            <section className="mb-4">
+              <div className="flex justify-between items-baseline mb-2">
                 <h2 className="text-3xl">{selectedClass?.name}</h2>
                 <Link href="/class-mgmt">Back</Link>
               </div>
+              {selectedClass.day && (
+                <p className="text-xl">{selectedClass.day[0] === 1 ? "Monday" : "Wednesday"} & {selectedClass.day[1] === 4 ? "Thursday" : "Friday"}</p>
+              )}
             </section>
-            <section>
-              <div className="flex items-baseline gap-4 mb-4">
-                <h3 className="text-xl">Student List</h3>
+            <section className="mb-4">
+              <div className="flex justify-between items-baseline gap-4 mb-4">
+                <h3 className="text-xl">Manage Student List</h3>
                 <button
+                className="bg-blue-300 p-2 rounded"
                   onClick={() => {
                     setIsAddingStudent(!isAddingStudent);
                   }}
@@ -282,6 +285,7 @@ export default function ManageClassDetails({
                   removeStudentFromClassList={removeStudentFromClassList}
                 />
               )}
+              
             </section>
             <DeleteClassSection
               selectedClass={selectedClass}
