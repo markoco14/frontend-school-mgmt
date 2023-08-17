@@ -77,11 +77,13 @@ const AddStudentToClassSection = ({
   return (
     <>
       {loading && (
-        <p className="min-h-[480px]">loading...</p>
+        <article className="bg-gray-100 shadow-inner p-2 rounded">
+          <p className="min-h-[480px]">loading...</p>
+        </article>
       )}
       {!loading && (
-        <>
-          <ul className="min-h-[480px]">
+        <article className="bg-gray-100 shadow-inner p-2 rounded">
+          <ul className="divide-y items-baseline">
             {allStudents?.map((student, index) => (
               <li
                 key={index}
@@ -104,7 +106,7 @@ const AddStudentToClassSection = ({
               </li>
             ))}
           </ul>
-          <section className="flex justify-evenly gap-2">
+          <div className="flex justify-evenly gap-2">
             <button
               className="disabled:cursor-not-allowed bg-blue-300 disabled:bg-gray-300 px-2 py-1 w-full rounded"
               disabled={page === 1}
@@ -125,8 +127,8 @@ const AddStudentToClassSection = ({
             >
               Next
             </button>
-          </section>
-        </>
+          </div>
+        </article>
       )}
     </>
   );
@@ -142,32 +144,34 @@ const ClassListSection = ({
   removeStudentFromClassList: Function;
 }) => {
   return (
-    <section>
+    <>
       {classList.length === 0 && (
         <article className="bg-gray-100 shadow-inner p-2 rounded">
           <p>There are no students in this class. Click here to add some.</p>
         </article>
       )}
       {classList.length >= 1 && (
-        <ul className="flex flex-col rounded gap-2 divide-y mb-8 bg-gray-100 shadow-inner">
-          {classList?.map((student: Student, index: number) => (
-            <li
-              key={index}
-              className="p-2 rounded-md hover:bg-blue-200 flex justify-between "
-            >
-              {student.first_name} {student.last_name}{" "}
-              <button
-                onClick={() => {
-                  removeStudentFromClassList(selectedClass?.id, student.id);
-                }}
+        <article className="bg-gray-100 shadow-inner p-2 rounded">
+          <ul className="flex flex-col gap-2 divide-y">
+            {classList?.map((student: Student, index: number) => (
+              <li
+                key={index}
+                className="p-2 rounded hover:bg-blue-200 flex justify-between "
               >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
+                {student.first_name} {student.last_name}{" "}
+                <button
+                  onClick={() => {
+                    removeStudentFromClassList(selectedClass?.id, student.id);
+                  }}
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+        </article>
       )}
-    </section>
+    </>
   );
 };
 
@@ -218,6 +222,7 @@ export default function ManageClassDetails({
     selectedClass
   );
   const { user } = useContext(AuthContext);
+  console.log(selectedClass)
 
   async function removeStudentFromClassList(
     classId: number,
@@ -251,6 +256,8 @@ export default function ManageClassDetails({
                 <h2 className="text-3xl">{selectedClass?.name}</h2>
                 <Link href="/class-mgmt">Back</Link>
               </div>
+            </section>
+            <section>
               <div className="flex items-baseline gap-4 mb-4">
                 <h3 className="text-xl">Student List</h3>
                 <button
@@ -261,21 +268,21 @@ export default function ManageClassDetails({
                   {isAddingStudent ? <span>Done</span> : <span>+ Student</span>}
                 </button>
               </div>
+              {isAddingStudent && (
+                <AddStudentToClassSection
+                  classList={classList}
+                  setClassList={setClassList}
+                  selectedClass={selectedClass}
+                />
+              )}
+              {!isAddingStudent && (
+                <ClassListSection
+                  selectedClass={selectedClass}
+                  classList={classList}
+                  removeStudentFromClassList={removeStudentFromClassList}
+                />
+              )}
             </section>
-            {isAddingStudent && (
-              <AddStudentToClassSection
-                classList={classList}
-                setClassList={setClassList}
-                selectedClass={selectedClass}
-              />
-            )}
-            {!isAddingStudent && (
-              <ClassListSection
-                selectedClass={selectedClass}
-                classList={classList}
-                removeStudentFromClassList={removeStudentFromClassList}
-              />
-            )}
             <DeleteClassSection
               selectedClass={selectedClass}
               setCurrentClass={setCurrentClass}
