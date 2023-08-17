@@ -62,7 +62,7 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
         newHmwkCorrections: watchedNewHmwkCorrections,
         // because watch() turns value into string
         // so we need to convert back to number value in the debounce auto save function
-        prevHmwkComplete: typeof watchedPrevHmwkComplete === 'string' && watchedPrevHmwkComplete === 'true' ? 1 : 0,
+        prevHmwkComplete: Number(watchedPrevHmwkComplete),
         comment: watchedComment,
       };
       console.log('in auto save', formData)
