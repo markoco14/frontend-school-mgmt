@@ -14,7 +14,7 @@ type Inputs = {
 
 export default function UserProfilePage() {
 	const [userProfile, setUserProfile] = useState<UserProfile>()
-	const [isEditing, setIsEditing] = useState<boolean>(false);
+	const [isEditingProfile, setIsEditingProfile] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
 
 	const {
@@ -60,7 +60,7 @@ export default function UserProfilePage() {
 				<div className="flex justify-between">
 					<h1>User Profile</h1>
 					<button
-					onClick={() => setIsEditing(true)}
+					onClick={() => setIsEditingProfile(true)}
 					>Edit</button>
 				</div>
 				<p>{userProfile?.first_name}</p>
@@ -68,7 +68,7 @@ export default function UserProfilePage() {
 				<p>{userProfile?.email}</p>
 			</section>
 			<Transition
-          show={isEditing}
+          show={isEditingProfile}
           enter="transition ease-in duration-100"
           enterFrom="transform opacity-0 scale-90"
           enterTo="opacity-100 scale-100"
@@ -77,7 +77,7 @@ export default function UserProfilePage() {
           leaveTo="opacity-0 scale-90"
         >
           <Dialog
-            onClose={() => setIsEditing(false)}
+            onClose={() => setIsEditingProfile(false)}
             className="fixed inset-0 flex items-center justify-center"
           >
             <div className="fixed inset-0 bg-blue-900/25" />
@@ -137,7 +137,7 @@ export default function UserProfilePage() {
               <div className="flex justify-end">
                 <button
                   type="button"
-                  onClick={() => setIsEditing(false)}
+                  onClick={() => setIsEditingProfile(false)}
                   className="bg-gray-300 text-gray-900 hover:bg-gray-500 hover:text-white px-4 py-1 rounded"
                 >
                   Cancel
