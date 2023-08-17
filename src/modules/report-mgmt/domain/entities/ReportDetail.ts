@@ -8,6 +8,7 @@ export class ReportDetail {
 			comment: string,
 			testScore: number,
 			newHmwkCorrections: number,
+			prevHmwkComplete: number,
 		},
 		public student_id: number,
 		public student_info: Student,

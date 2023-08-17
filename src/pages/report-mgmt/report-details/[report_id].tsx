@@ -1,15 +1,15 @@
-import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
-import Link from "next/link";
-import { reportDetailAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportDetailAdapter";
-import { ReportDetail } from "@/src/modules/report-mgmt/domain/entities/ReportDetail";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useContext, useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { format } from "date-fns";
-import TextareaAutosize from 'react-textarea-autosize';
 import AuthContext from "@/src/AuthContext";
+import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import { ReportDetail } from "@/src/modules/report-mgmt/domain/entities/ReportDetail";
+import { reportDetailAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportDetailAdapter";
+import { format } from "date-fns";
 import debounce from 'lodash.debounce';
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import Link from "next/link";
+import { useContext, useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import TextareaAutosize from 'react-textarea-autosize';
 
 export const getServerSideProps: GetServerSideProps<{
   reportDetails: ReportDetail[];
@@ -25,6 +25,7 @@ type Inputs = {
   testScore: number;
   newHmwkCorrections: number;
   comment: string;
+  prevHmwkComplete: number;
 };
 
 const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
@@ -38,6 +39,7 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
     defaultValues: {
       testScore: reportDetail.details.testScore || 0,
       newHmwkCorrections: reportDetail.details.newHmwkCorrections || 0,
+      prevHmwkComplete: reportDetail.details.prevHmwkComplete,
       comment: reportDetail.details.comment || ''
     }
   });
@@ -45,6 +47,7 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
   const watchedTestScore = watch('testScore')
   const watchedNewHmwkCorrections = watch('newHmwkCorrections')
   const watchedComment = watch('comment')
+  const watchedPrevHmwkComplete = watch('prevHmwkComplete')
   
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await reportDetailAdapter
@@ -57,8 +60,12 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
       const formData = {
         testScore: watchedTestScore,
         newHmwkCorrections: watchedNewHmwkCorrections,
+        // because watch() turns value into string
+        // so we need to convert back to number value in the debounce auto save function
+        prevHmwkComplete: typeof watchedPrevHmwkComplete === 'string' && watchedPrevHmwkComplete === 'true' ? 1 : 0,
         comment: watchedComment,
       };
+      console.log('in auto save', formData)
       await reportDetailAdapter.updateReportDetailById({ 
         id: reportDetail.id, 
         data: formData 
@@ -71,7 +78,7 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
     return () => {
       autoSave.cancel();
     };
-  }, [watchedTestScore, watchedComment, watchedNewHmwkCorrections, reportDetail]);
+  }, [watchedTestScore, watchedComment, watchedNewHmwkCorrections, watchedPrevHmwkComplete, reportDetail]);
   
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mb-4">
@@ -104,11 +111,34 @@ const ReportDetailForm = ({ reportDetail }: { reportDetail: ReportDetail }) => {
         className="border brounded shadow-inner p-2"
         {...register(`newHmwkCorrections`, { required: false, min: 0, valueAsNumber: true })}
         />
-        {errors.testScore?.type === "min" && (
+        {errors.newHmwkCorrections?.type === "min" && (
           <p role="alert" className="text-red-500 mt-2">
             Min Value is 0
           </p>
         )}
+      </div>
+      <div className="grid grid-cols-2">
+
+        <div className="flex flex-col mb-2">
+          <label className="mb-1">No</label>
+          <input 
+          value={0}
+          type="radio"
+          defaultChecked={reportDetail.details.prevHmwkComplete === 0 || !reportDetail.details.prevHmwkComplete}
+          className="border brounded shadow-inner p-2"
+          {...register(`prevHmwkComplete`, { required: false, valueAsNumber: true })}
+          />
+        </div>
+        <div className="flex flex-col mb-2">
+          <label className="mb-1">Yes</label>
+          <input 
+          value={1}
+          type="radio"
+          defaultChecked={reportDetail.details.prevHmwkComplete === 1}
+          className="border brounded shadow-inner p-2"
+          {...register(`prevHmwkComplete`, { required: false, valueAsNumber: true })}
+          />
+        </div>
       </div>
       <div className="flex flex-col mb-2">
         <label className="mb-1">Comment</label>
