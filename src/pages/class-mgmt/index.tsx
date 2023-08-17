@@ -58,13 +58,13 @@ export default function ClassHome() {
           <div className="flex justify-between items-baseline mb-4">
             <h2 className='text-3xl'>Your Classes</h2>
           </div>
-          <ul className="flex flex-col gap-2 divide-y mb-8 bg-gray-100 shadow-inner">
+          <ul className="flex flex-col divide-y mb-8 bg-gray-100 shadow-inner">
             {classes?.map((currentClass: Class, index: number) => (
               <li 
                 key={index}
                 className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
               >
-                <Link href={`/class-mgmt/${currentClass.id}`}>
+                <Link href={`/class-mgmt/${currentClass.id}`} className="w-full">
                   {currentClass.name}
                 </Link>
               </li>
