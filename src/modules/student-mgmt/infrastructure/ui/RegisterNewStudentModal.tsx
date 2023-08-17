@@ -25,7 +25,15 @@ export default function RegisterNewStudentModal({setStudents}: {setStudents: Fun
         schoolId: Number(selectedSchool.id)
       });
       toast.success('Student added.');
-			setStudents((prevStudents: Student[]) => [...prevStudents, student])
+			setStudents((prevStudents: Student[]) => [...prevStudents, student].sort((a: Student, b: Student) => {
+             if (a.last_name < b.last_name) {
+                return -1;
+              }
+              if (a.last_name > b.last_name) {
+                return 1;
+              }
+              return 0;
+          }).slice(0,10))
       reset();
     } catch (error) {
       console.error(error)

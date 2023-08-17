@@ -1,14 +1,14 @@
-import Link from 'next/link';
-import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
-import SchoolHeader from '@/src/modules/core/infrastructure/ui/components/SchoolHeader';
-import { useContext, useEffect, useState } from 'react';
 import AuthContext from '@/src/AuthContext';
+import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
 import PermissionDenied from '@/src/modules/core/infrastructure/ui/components/PermissionDenied';
-import { Dialog, Transition } from '@headlessui/react';
-import RegisterNewStudentModal from '@/src/modules/student-mgmt/infrastructure/ui/RegisterNewStudentModal';
+import SchoolHeader from '@/src/modules/core/infrastructure/ui/components/SchoolHeader';
 import { PaginatedStudentResponse } from '@/src/modules/student-mgmt/domain/entities/PaginatedStudentResponse';
-import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter';
 import { Student } from '@/src/modules/student-mgmt/domain/entities/Student';
+import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter';
+import RegisterNewStudentModal from '@/src/modules/student-mgmt/infrastructure/ui/RegisterNewStudentModal';
+import { Dialog, Transition } from '@headlessui/react';
+import Link from 'next/link';
+import { useContext, useEffect, useState } from 'react';
 
 export default function StudentsHome() {
   const [isAddStudent, setIsAddStudent] = useState<boolean>(false);
@@ -17,12 +17,19 @@ export default function StudentsHome() {
   const [loading, setLoading] = useState<boolean>(false);
   const [studentResponse, setStudentResponse] = useState<PaginatedStudentResponse>();
   const [students, setStudents] = useState<Student[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [isNext, setIsNext] = useState<boolean>(false)
 
   useEffect(() => {
     async function getData(id: number) {  
       setLoading(true);
       if (selectedSchool) {
-        await studentAdapter.getStudentsBySchool({ id: selectedSchool.id }).then((res) => {
+        await studentAdapter.getStudentsBySchoolId({ id: selectedSchool.id, page: page }).then((res) => {
+          if (res.next) {
+            setIsNext(true);
+          } else {
+            setIsNext(false);
+          }
           setStudentResponse(res);
           setStudents(res.results);
         });
@@ -37,7 +44,7 @@ export default function StudentsHome() {
         console.error(error);
       }
     }
-  }, [user, selectedSchool]);
+  }, [user, selectedSchool, page]);
 
   if (user?.role !== "OWNER") {
     return (
@@ -68,8 +75,8 @@ export default function StudentsHome() {
               <p>loading...</p>
             </article>
           ) : (
-            <article className="bg-gray-100 shadow-inner p-2 rounded">
-              <ul className='divide-y divide-gray-300'>
+            <article className="bg-gray-100 shadow-inner p-2 rounded ">
+              <ul className='divide-y divide-gray-300 min-h-[420px] sm:h-full'>
                 {students.map((student: Student, index) => (
                   <li key={index} className="flex justify-between gap-4">
                     <Link
@@ -81,6 +88,26 @@ export default function StudentsHome() {
                   </li>
                 ))}
               </ul>
+              <div className="flex justify-evenly gap-2">
+              <button
+                className="disabled:cursor-not-allowed bg-blue-300 disabled:bg-gray-300 px-2 py-1 w-full rounded"
+                disabled={page === 1}
+                onClick={() => {
+                  setPage((prevPage) => prevPage - 1);
+                }}
+              >
+                <i className="fa-solid fa-arrow-left"></i>
+              </button>
+              <button
+                className="disabled:cursor-not-allowed bg-blue-300 disabled:bg-gray-300 px-2 py-1 w-full rounded"
+                disabled={!isNext}
+                onClick={() => {
+                  setPage((prevPage) => prevPage + 1);
+                }}
+              >
+                <i className="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
             </article>
           )}
         </section>
