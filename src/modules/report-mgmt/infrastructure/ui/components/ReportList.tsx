@@ -116,7 +116,7 @@ export const ReportList = () => {
 								{thisClass.name}
 							</span>
 							<div className="flex gap-4">
-								{thisClass.class_list.length === 0 ? (
+								{thisClass.class_list?.length === 0 ? (
 									<Link
 										href={`/class-mgmt/${thisClass.id}`}
 										className="bg-gray-300 py-1 px-2 rounded disabled:cursor-not-allowed"
@@ -125,7 +125,7 @@ export const ReportList = () => {
 									</Link>
 								) : (
 									<button
-										disabled={thisClass.class_list.length === 0}
+										disabled={thisClass.class_list?.length === 0}
 										className="bg-blue-300 py-1 px-2 rounded disabled:cursor-not-allowed"
 										onClick={() => {
 											checkOrCreateReports(thisClass, format(date, "yyyy-MM-dd"));

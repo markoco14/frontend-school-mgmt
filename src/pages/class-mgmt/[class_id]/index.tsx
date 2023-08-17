@@ -77,15 +77,22 @@ const AddStudentToClassSection = ({
   return (
     <>
       {loading && (
-        <p className="min-h-[480px]">loading...</p>
+        <article className="bg-gray-100 shadow-inner p-2 rounded">
+          <p className="min-h-[480px]">loading...</p>
+        </article>
       )}
       {!loading && (
-        <>
-          <ul className="min-h-[480px]">
+        <article className="bg-gray-100 shadow-inner p-2 rounded">
+          <ul className="divide-y items-baseline">
             {allStudents?.map((student, index) => (
               <li
                 key={index}
-                className="items-baseline p-2 flex justify-between"
+                className={`${classList.find((classListStudent) => {
+                    if (student.id === classListStudent.id) {
+                      return true;
+                    }
+                    return false;
+                  }) ? '' : 'bg-white rounded'} items-baseline p-2 flex justify-between`}
               >
                 {student.first_name} {student.last_name}{" "}
                 <button
@@ -99,12 +106,12 @@ const AddStudentToClassSection = ({
                   onClick={() => addStudentToClassList(student)}
                   className="px-2 py-1 rounded bg-blue-300 disabled:hover:cursor-not-allowed disabled:bg-gray-300"
                 >
-                  Add
+                  <i className="fa-solid fa-plus"></i>
                 </button>
               </li>
             ))}
           </ul>
-          <section className="flex justify-evenly gap-2">
+          <div className="flex justify-evenly gap-2">
             <button
               className="disabled:cursor-not-allowed bg-blue-300 disabled:bg-gray-300 px-2 py-1 w-full rounded"
               disabled={page === 1}
@@ -113,7 +120,7 @@ const AddStudentToClassSection = ({
                 console.log(page - 1);
               }}
             >
-              Prev
+              <i className="fa-solid fa-arrow-left"></i>
             </button>
             <button
               className="disabled:cursor-not-allowed bg-blue-300 disabled:bg-gray-300 px-2 py-1 w-full rounded"
@@ -123,10 +130,10 @@ const AddStudentToClassSection = ({
                 console.log(page + 1);
               }}
             >
-              Next
+              <i className="fa-solid fa-arrow-right"></i>
             </button>
-          </section>
-        </>
+          </div>
+        </article>
       )}
     </>
   );
@@ -142,32 +149,34 @@ const ClassListSection = ({
   removeStudentFromClassList: Function;
 }) => {
   return (
-    <section>
+    <>
       {classList.length === 0 && (
         <article className="bg-gray-100 shadow-inner p-2 rounded">
           <p>There are no students in this class. Click here to add some.</p>
         </article>
       )}
       {classList.length >= 1 && (
-        <ul className="flex flex-col rounded gap-2 divide-y mb-8 bg-gray-100 shadow-inner">
-          {classList?.map((student: Student, index: number) => (
-            <li
-              key={index}
-              className="p-2 rounded-md hover:bg-blue-200 flex justify-between "
-            >
-              {student.first_name} {student.last_name}{" "}
-              <button
-                onClick={() => {
-                  removeStudentFromClassList(selectedClass?.id, student.id);
-                }}
+        <article className="bg-gray-100 shadow-inner p-2 rounded">
+          <ul className="flex flex-col gap-2 divide-y">
+            {classList?.map((student: Student, index: number) => (
+              <li
+                key={index}
+                className="p-2 rounded hover:bg-blue-200 flex justify-between "
               >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
+                {student.first_name} {student.last_name}{" "}
+                <button
+                  onClick={() => {
+                    removeStudentFromClassList(selectedClass?.id, student.id);
+                  }}
+                >
+                  <i className="fa-solid fa-minus"></i>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </article>
       )}
-    </section>
+    </>
   );
 };
 
@@ -185,15 +194,14 @@ const DeleteClassSection = ({
 
   return (
     <section>
-      <h2 className="text-xl mb-4">Danger Zone</h2>
+      <h2 className="text-xl mb-4">Manage Class Details</h2>
       <article className="bg-gray-100 shadow-inner p-2 rounded">
-        <p className="mb-8">
-          Warning, you cannot undo this. Student data will not be deleted, but
-          all report data associated with the class will be gone forever.
+        <p className="mb-4">
+          Delete class here. Warning you cannot undo this.
         </p>
-        <div className="flex justify-center">
+        
           <button
-            className="rounded underline underline-offset-2 text-red-500 p-2 hover:bg-red-300 hover:text-red-900"
+            className="rounded underline underline-offset-2 text-red-500 hover:text-red-900"
             onClick={async () =>
               await classAdapter
                 .deleteClassById({ id: selectedClass.id })
@@ -202,7 +210,7 @@ const DeleteClassSection = ({
           >
             Delete Class
           </button>
-        </div>
+        
       </article>
     </section>
   );
@@ -218,6 +226,7 @@ export default function ManageClassDetails({
     selectedClass
   );
   const { user } = useContext(AuthContext);
+  console.log(selectedClass)
 
   async function removeStudentFromClassList(
     classId: number,
@@ -246,36 +255,43 @@ export default function ManageClassDetails({
       <>
         {currentClass && (
           <>
-            <section>
-              <div className="flex justify-between items-baseline mb-4">
+            <section className="mb-4">
+              <div className="flex justify-between items-baseline mb-2">
                 <h2 className="text-3xl">{selectedClass?.name}</h2>
                 <Link href="/class-mgmt">Back</Link>
               </div>
-              <div className="flex items-baseline gap-4 mb-4">
-                <h3 className="text-xl">Student List</h3>
+              {selectedClass.day && (
+                <p className="text-xl">{selectedClass.day[0] === 1 ? "Monday" : "Wednesday"} & {selectedClass.day[1] === 4 ? "Thursday" : "Friday"}</p>
+              )}
+            </section>
+            <section className="mb-4">
+              <div className="flex justify-between items-baseline gap-4 mb-4">
+                <h3 className="text-xl">Manage Student List</h3>
                 <button
+                className="bg-blue-300 p-2 rounded"
                   onClick={() => {
                     setIsAddingStudent(!isAddingStudent);
                   }}
                 >
-                  {isAddingStudent ? <span>Done</span> : <span>+ Student</span>}
+                  {isAddingStudent ? <span><i className="fa-solid fa-check"></i></span> : <span><i className="fa-solid fa-plus"></i> <i className="fa-solid fa-user"></i></span>}
                 </button>
               </div>
+              {isAddingStudent && (
+                <AddStudentToClassSection
+                  classList={classList}
+                  setClassList={setClassList}
+                  selectedClass={selectedClass}
+                />
+              )}
+              {!isAddingStudent && (
+                <ClassListSection
+                  selectedClass={selectedClass}
+                  classList={classList}
+                  removeStudentFromClassList={removeStudentFromClassList}
+                />
+              )}
+              
             </section>
-            {isAddingStudent && (
-              <AddStudentToClassSection
-                classList={classList}
-                setClassList={setClassList}
-                selectedClass={selectedClass}
-              />
-            )}
-            {!isAddingStudent && (
-              <ClassListSection
-                selectedClass={selectedClass}
-                classList={classList}
-                removeStudentFromClassList={removeStudentFromClassList}
-              />
-            )}
             <DeleteClassSection
               selectedClass={selectedClass}
               setCurrentClass={setCurrentClass}
