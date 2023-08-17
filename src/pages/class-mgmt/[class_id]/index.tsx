@@ -87,7 +87,12 @@ const AddStudentToClassSection = ({
             {allStudents?.map((student, index) => (
               <li
                 key={index}
-                className="items-baseline p-2 flex justify-between"
+                className={`${classList.find((classListStudent) => {
+                    if (student.id === classListStudent.id) {
+                      return true;
+                    }
+                    return false;
+                  }) ? '' : 'bg-white rounded'} items-baseline p-2 flex justify-between`}
               >
                 {student.first_name} {student.last_name}{" "}
                 <button
@@ -101,7 +106,7 @@ const AddStudentToClassSection = ({
                   onClick={() => addStudentToClassList(student)}
                   className="px-2 py-1 rounded bg-blue-300 disabled:hover:cursor-not-allowed disabled:bg-gray-300"
                 >
-                  Add
+                  <i className="fa-solid fa-plus"></i>
                 </button>
               </li>
             ))}
@@ -115,7 +120,7 @@ const AddStudentToClassSection = ({
                 console.log(page - 1);
               }}
             >
-              Prev
+              <i className="fa-solid fa-arrow-left"></i>
             </button>
             <button
               className="disabled:cursor-not-allowed bg-blue-300 disabled:bg-gray-300 px-2 py-1 w-full rounded"
@@ -125,7 +130,7 @@ const AddStudentToClassSection = ({
                 console.log(page + 1);
               }}
             >
-              Next
+              <i className="fa-solid fa-arrow-right"></i>
             </button>
           </div>
         </article>
@@ -164,7 +169,7 @@ const ClassListSection = ({
                     removeStudentFromClassList(selectedClass?.id, student.id);
                   }}
                 >
-                  Remove
+                  <i className="fa-solid fa-minus"></i>
                 </button>
               </li>
             ))}
@@ -268,7 +273,7 @@ export default function ManageClassDetails({
                     setIsAddingStudent(!isAddingStudent);
                   }}
                 >
-                  {isAddingStudent ? <span>Done</span> : <span>+ Student</span>}
+                  {isAddingStudent ? <span><i className="fa-solid fa-check"></i></span> : <span><i className="fa-solid fa-plus"></i> <i className="fa-solid fa-user"></i></span>}
                 </button>
               </div>
               {isAddingStudent && (
