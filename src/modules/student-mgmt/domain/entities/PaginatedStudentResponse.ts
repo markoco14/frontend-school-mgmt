@@ -1,6 +1,6 @@
 import { Student } from "./Student";
 
-export class PaginatedStudentList {
+export class PaginatedStudentResponse {
   constructor(
     public count: number,
     public next: string | null,

@@ -11,7 +11,7 @@ type Inputs = {
   age: number
 }
 
-export default function RegisterNewStudentModal() {
+export default function RegisterNewStudentModal({setStudents}: {setStudents: Function}) {
 	const { user, selectedSchool } = useContext(AuthContext);
 
   const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
@@ -25,6 +25,7 @@ export default function RegisterNewStudentModal() {
         schoolId: Number(selectedSchool.id)
       });
       toast.success('Student added.');
+			setStudents((prevStudents: Student[]) => [...prevStudents, student])
       reset();
     } catch (error) {
       console.error(error)
