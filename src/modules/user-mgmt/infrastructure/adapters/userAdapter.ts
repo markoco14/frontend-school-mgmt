@@ -1,6 +1,6 @@
-import { SchoolUser } from "@/src/modules/school-mgmt/domain/entities/SchoolUser";
 import { Teacher } from "../../domain/entities/Teacher";
 import { User } from "../../domain/entities/User";
+import { UserProfile } from "../../domain/entities/UserProfile";
 
 class UserAdapter {
 
@@ -11,6 +11,14 @@ class UserAdapter {
 		const userList: User[] = users
 
 		return userList;
+	}
+	public async getUserProfileById({id}: {id: number}): Promise<UserProfile> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}/get/`);
+		const user = await res.json();
+		
+		const userProfile: UserProfile = user
+
+		return userProfile;
 	}
  
 	public async addUser({ firstName, lastName, email, password }: {firstName: string, lastName: string, email: string, password: string }): Promise<User> {
