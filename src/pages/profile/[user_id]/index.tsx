@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import AuthContext from "../../../AuthContext";
 import Layout from "../../../modules/core/infrastructure/ui/components/Layout";
 import { UserProfile } from "@/src/modules/user-mgmt/domain/entities/UserProfile";
@@ -6,6 +6,7 @@ import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/use
 import { Dialog, Transition } from "@headlessui/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import ChangePasswordModal from "@/src/modules/user-mgmt/infrastructure/ui/ChangePasswordModal";
 
 type Inputs = {
   first_name: string;
@@ -14,7 +15,8 @@ type Inputs = {
 
 export default function UserProfilePage() {
 	const [userProfile, setUserProfile] = useState<UserProfile>()
-	const [isEditingProfile, setIsEditingProfile] = useState<boolean>(false);
+	const [isEditProfile, setIsEditProfile] = useState<boolean>(false);
+	const [isEditPassword, setIsEditPassword] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
 
 	const {
@@ -56,33 +58,51 @@ export default function UserProfilePage() {
 	}, [user])
   return (
     <Layout>
-			<section>
+			<section className="mb-4">
 				<div className="flex justify-between">
 					<h1>User Profile</h1>
 					<button
-					onClick={() => setIsEditingProfile(true)}
+					onClick={() => setIsEditProfile(true)}
 					>Edit</button>
 				</div>
 				<p>{userProfile?.first_name}</p>
 				<p>{userProfile?.last_name}</p>
 				<p>{userProfile?.email}</p>
 			</section>
+			<section>
+				<h1>Secure info</h1>
+				<button onClick={() => setIsEditPassword(true)}>Edit password</button>
+			</section>
 			<Transition
-          show={isEditingProfile}
-          enter="transition ease-in duration-100"
-          enterFrom="transform opacity-0 scale-90"
-          enterTo="opacity-100 scale-100"
-          leave="transition ease-out duration-150"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-90"
-        >
-          <Dialog
-            onClose={() => setIsEditingProfile(false)}
-            className="fixed inset-0 flex items-center justify-center"
-          >
-            <div className="fixed inset-0 bg-blue-900/25" />
-            <Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
-              <Dialog.Title>Edit User Profile</Dialog.Title>
+				appear={true}
+				show={isEditProfile}
+			>
+				<Dialog
+					onClose={() => setIsEditProfile(false)}
+					className="fixed top-0 left-0 w-screen sm:inset-0 sm:top-8 sm:w-full flex items-center justify-center"
+				>	
+					<Transition.Child
+						as={Fragment}
+						enter="ease-out duration-300"
+						enterFrom="opacity-0"
+						enterTo="opacity-100"
+						leave="ease-in duration-200"
+						leaveFrom="opacity-100"
+						leaveTo="opacity-0"
+					>
+						<div className="fixed inset-0 bg-blue-900 bg-opacity-50" />
+					</Transition.Child>
+					<Transition.Child
+						as={Fragment}
+						enter="transition-opacity transition-scale ease-in duration-500"
+						enterFrom="opacity-0 scale-90"
+						enterTo="opacity-100 scale-100"
+						leave="transition-opacity transition-scale ease-out duration-150"
+						leaveFrom="opacity-100 scale-100"
+						leaveTo="opacity-0"
+					>
+						<Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
+							<Dialog.Title>Edit User Profile</Dialog.Title>
 							<form onSubmit={handleSubmit(onSubmit)}>
 								<div className="flex flex-col mb-4">
 									<label className="mb-2">First Name</label>
@@ -98,12 +118,12 @@ export default function UserProfilePage() {
 									/>
 									{errors.first_name?.types?.minLength && (
 										<p role="alert" className="text-red-500 mt-2">
-											 First name needs to be longer.
+											First name needs to be longer.
 										</p>
 									)}
 									{errors.first_name?.types?.maxLength && (
 										<p role="alert" className="text-red-500 mt-2">
-											 First name needs to be shorter.
+											First name needs to be shorter.
 										</p>
 									)}
 								</div>
@@ -120,12 +140,12 @@ export default function UserProfilePage() {
 									/>
 									{errors.last_name?.types?.required && (
 										<p role="alert" className="text-red-500 mt-2">
-											 Last name needs to be longer.
+											Last name needs to be longer.
 										</p>
 									)}
 									{errors.last_name?.types?.maxLength && (
 										<p role="alert" className="text-red-500 mt-2">
-											 Last name needs to be shorter.
+											Last name needs to be shorter.
 										</p>
 									)}
 								</div>
@@ -134,18 +154,20 @@ export default function UserProfilePage() {
 									Save
 								</button>
 							</form>
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => setIsEditingProfile(false)}
-                  className="bg-gray-300 text-gray-900 hover:bg-gray-500 hover:text-white px-4 py-1 rounded"
-                >
-                  Cancel
-                </button>
-              </div>
-            </Dialog.Panel>
-          </Dialog>
-        </Transition>
+							<div className="flex justify-end">
+								<button
+									type="button"
+									onClick={() => setIsEditProfile(false)}
+									className="bg-gray-300 text-gray-900 hover:bg-gray-500 hover:text-white px-4 py-1 rounded"
+								>
+									Cancel
+								</button>
+							</div>
+						</Dialog.Panel>
+					</Transition.Child>
+				</Dialog>
+			</Transition>
+			<ChangePasswordModal isEditPassword={isEditPassword} setIsEditPassword={setIsEditPassword} />
     </Layout>
   );
 }
