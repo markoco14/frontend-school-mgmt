@@ -5,6 +5,7 @@ import { Level } from "../../../domain/entities/Level";
 import { classAdapter } from "../../adapters/classAdapter";
 import { Class } from "../../../domain/entities/Class";
 import toast from "react-hot-toast";
+import { levelAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/levelAdapter";
 
 type Inputs = {
   className: string;
@@ -44,7 +45,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
 
   useEffect(() => {
     async function getLevels() {
-      await classAdapter.getLevelsBySchoolId({id: selectedSchool?.id}).then((res) => {
+      await levelAdapter.listSchoolLevels({id: selectedSchool?.id}).then((res) => {
         setLevels(res);
       });
     }

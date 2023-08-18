@@ -1,5 +1,6 @@
 import AuthContext from "@/src/AuthContext";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
+import { levelAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/levelAdapter";
 import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -15,7 +16,7 @@ export default function AddLevel({ setLevels }: {setLevels: Function}) {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      await classAdapter.addLevel({name: data.levelName, school: selectedSchool.id}).then((res) => {
+      await levelAdapter.addLevel({name: data.levelName, school: selectedSchool.id}).then((res) => {
         // @ts-ignore
         setLevels(prevLevels => [...prevLevels, res])
         toast.success('Level added.');
@@ -27,15 +28,15 @@ export default function AddLevel({ setLevels }: {setLevels: Function}) {
   };
 
   useEffect(() => {
-    async function getLevelsBySchoolId(id: number) {
-      await classAdapter.getLevelsBySchoolId({id: id}).then((res) => {
+    async function listSchoolLevels(id: number) {
+      await levelAdapter.listSchoolLevels({id: id}).then((res) => {
         setLevels(res)
       });
     }
 
     if (selectedSchool) {
       try {
-        getLevelsBySchoolId(selectedSchool.id);
+        listSchoolLevels(selectedSchool.id);
       } catch (error) {
         console.error(error);
       }
