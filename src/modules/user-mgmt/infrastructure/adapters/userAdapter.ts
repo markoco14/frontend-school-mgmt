@@ -1,3 +1,4 @@
+import { PasswordSuccessResponse } from "../../domain/entities/PasswordSuccessResponse";
 import { Teacher } from "../../domain/entities/Teacher";
 import { User } from "../../domain/entities/User";
 import { UserProfile } from "../../domain/entities/UserProfile";
@@ -45,6 +46,20 @@ class UserAdapter {
 		const userProfile: User = await response.json();
 		
 		return userProfile;
+		
+	}
+
+	public async changeUserPassword({id, current_password, new_password}: {id: number, current_password: string, new_password: string}): Promise<PasswordSuccessResponse> {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}/change-password/`, { 
+			method: 'PATCH', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ current_password: current_password, new_password: new_password }) 
+		})
+		const detail: PasswordSuccessResponse = await response.json();
+		
+		return detail;
 		
 	}
 
