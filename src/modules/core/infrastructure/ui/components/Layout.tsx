@@ -17,7 +17,7 @@ export default function Layout({ children }: LayoutProps) {
       <Script async src="https://kit.fontawesome.com/d0c81e3c08.js" crossOrigin="anonymous"/>
 
       <main className="min-h-screen bg-white xs:bg-gradient-to-t xs:from-white xs:to-blue-200">
-        <div className="xs:max-w-[600px] mx-auto">
+        <div className={`xs:max-w-[600px] mx-auto ${!user ? 'pt-[48px]' : ''}`}>
           {user && <Navbar />}
           <div className="bg-white p-4 xs:rounded-lg xs:drop-shadow-2xl">
             {children}

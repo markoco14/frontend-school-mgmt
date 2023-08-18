@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps<{
   const selectedClass = await classAdapter.getClassById({
     id: Number(context.query.class_id),
   });
-  const students = await studentAdapter.getStudentsByClassId({
+  const students = await studentAdapter.listClassStudents({
     id: Number(context.query.class_id),
   });
   return {
@@ -43,9 +43,9 @@ const AddStudentToClassSection = ({
   const [next, setNext] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  async function addStudentToClassList(student: Student) {
+  async function addClassStudent(student: Student) {
     await classListAdapter
-      .addStudentToClassList({
+      .addClassStudent({
         class_id: selectedClass.id,
         student_id: student.id,
       })
@@ -60,7 +60,7 @@ const AddStudentToClassSection = ({
     async function getData() {
       setLoading(true);
       await studentAdapter
-        .getStudentsBySchoolId({ id: selectedClass.school_id, page: page })
+        .listSchoolStudents({ id: selectedClass.school_id, page: page })
         .then((res) => {
           if (res.next) {
             setNext(true);
@@ -103,7 +103,7 @@ const AddStudentToClassSection = ({
                     }
                     return false;
                   })}
-                  onClick={() => addStudentToClassList(student)}
+                  onClick={() => addClassStudent(student)}
                   className="px-2 py-1 rounded bg-blue-300 disabled:hover:cursor-not-allowed disabled:bg-gray-300"
                 >
                   <i className="fa-solid fa-plus"></i>
@@ -204,7 +204,7 @@ const DeleteClassSection = ({
             className="rounded underline underline-offset-2 text-red-500 hover:text-red-900"
             onClick={async () =>
               await classAdapter
-                .deleteClassById({ id: selectedClass.id })
+                .deleteClass({ id: selectedClass.id })
                 .then(handleDeleteClass)
             }
           >
@@ -233,7 +233,7 @@ export default function ManageClassDetails({
     studentId: number
   ) {
     await classListAdapter
-      .removeStudentFromClassList({ class_id: classId, student_id: studentId })
+      .deleteClassStudent({ class_id: classId, student_id: studentId })
       .then((res) => {
         toast.success("student removed from class");
       });

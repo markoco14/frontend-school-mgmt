@@ -24,7 +24,7 @@ export default function StudentsHome() {
     async function getData(id: number) {  
       setLoading(true);
       if (selectedSchool) {
-        await studentAdapter.getStudentsBySchoolId({ id: selectedSchool.id, page: page }).then((res) => {
+        await studentAdapter.listSchoolStudents({ id: selectedSchool.id, page: page }).then((res) => {
           if (res.next) {
             setIsNext(true);
           } else {

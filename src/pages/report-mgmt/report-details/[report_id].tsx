@@ -158,7 +158,7 @@ export default function ReportDate({
   const [reportLength, setReportLength] = useState<number>(
     reportDetails.length
     );
-    const date = format(new Date(), 'yyyy-MM-dd')
+    // const date = format(new Date(), 'yyyy-MM-dd')
     const { user } = useContext(AuthContext);
 
   return (
@@ -168,7 +168,7 @@ export default function ReportDate({
           <div className="flex justify-between items-baseline mb-4">
             <h2 >
               <span className="text-lg text-gray-500">Report Details</span> <br></br> 
-              <span className="text-3xl">{date}</span>
+              {/* <span className="text-3xl">{date}</span> */}
             </h2>
             {user?.role === 'OWNER' ? (
               <Link 

@@ -18,7 +18,7 @@ export default function ClassHome() {
   useEffect(() => {
     async function getData() {
       if (selectedSchool) {
-        await classAdapter.getClassesBySchoolId({id: selectedSchool.id}).then((res) => {
+        await classAdapter.listSchoolClasses({id: selectedSchool.id}).then((res) => {
           setClasses(res);
         });
       }

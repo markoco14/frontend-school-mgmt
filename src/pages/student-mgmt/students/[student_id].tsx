@@ -14,7 +14,7 @@ export const getServerSideProps: GetServerSideProps<{
   student: Student;
 }> = async (context) => {
 	const id = Number(context.query.student_id)
-  const student = await studentAdapter.getStudentById({id: id});
+  const student = await studentAdapter.getStudent({id: id});
 
   return { props: { student } };
 };

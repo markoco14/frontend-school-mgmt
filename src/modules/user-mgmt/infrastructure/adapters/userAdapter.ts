@@ -6,7 +6,7 @@ import { UserProfile } from "../../domain/entities/UserProfile";
 class UserAdapter {
 
 	public async getUsers(): Promise<User[]> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-users/`);
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/`);
 		const users = await res.json();
 		
 		const userList: User[] = users
@@ -23,7 +23,7 @@ class UserAdapter {
 	}
  
 	public async addUser({ firstName, lastName, email, password }: {firstName: string, lastName: string, email: string, password: string }): Promise<User> {
-		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-user/`, { 
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/add/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
@@ -63,15 +63,8 @@ class UserAdapter {
 		
 	}
 
-	public async getTeachersBySchool({school, owner}: {school:any, owner: any}): Promise<Teacher[]> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-teachers-by-school/${school}/${owner}/`);
-		const school_users = await res.json();
-		
-		return school_users;
-	}
-
 	public async addTeacher({ first_name, email, password, school_id }: {first_name: string, email: string, password: string, school_id: number }): Promise<Teacher> {
-		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-teacher/`, { 
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/teachers/add/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",

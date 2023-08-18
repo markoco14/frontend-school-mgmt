@@ -1,10 +1,10 @@
-import { Fragment, useContext, useEffect, useState } from "react";
-import { userAdapter } from "../adapters/userAdapter";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "@/src/AuthContext";
 import TeacherList from "./TeacherList";
 import TeacherSignup from "./TeacherSignup";
 import { Teacher } from "../../domain/entities/Teacher";
 import { Dialog, Transition } from "@headlessui/react";
+import { schoolTeacherAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolTeacherAdapter";
 
 export default function TeacherSection() {
   const { user, selectedSchool } = useContext(AuthContext);
@@ -13,8 +13,8 @@ export default function TeacherSection() {
 
   useEffect(() => {
     async function getData(school_id: number, user_id: number) {
-      await userAdapter
-        .getTeachersBySchool({ school: school_id, owner: user_id })
+      await schoolTeacherAdapter
+        .listSchoolTeachers({ school: school_id, owner: user_id })
         .then((res) => {
           console.log(res);
           setTeachers(res);

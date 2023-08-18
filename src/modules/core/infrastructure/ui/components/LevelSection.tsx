@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AddLevel from "./AddLevel";
 import LevelList from "./LevelList";
+import { levelAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/levelAdapter";
 
 export default function LevelSection() {
   const { selectedSchool } = useContext(AuthContext);
@@ -15,9 +16,9 @@ export default function LevelSection() {
   const [ isAddLevel, setIsAddLevel ] = useState<boolean>(false);
 
   useEffect(() => {
-    async function getLevelsBySchoolId(id: number) {
+    async function listSchoolLevels(id: number) {
       setLoading(true);
-      await classAdapter.getLevelsBySchoolId({id: id}).then((res) => {
+      await levelAdapter.listSchoolLevels({id: id}).then((res) => {
         setLevels(res)
         setLoading(false);
       });
@@ -25,7 +26,7 @@ export default function LevelSection() {
 
     if (selectedSchool) {
       try {
-        getLevelsBySchoolId(selectedSchool.id);
+        listSchoolLevels(selectedSchool.id);
       } catch (error) {
         console.error(error);
       }
@@ -33,7 +34,7 @@ export default function LevelSection() {
   }, [selectedSchool]);
 
   async function handleDeleteLevel(levelId: number) {
-    await classAdapter.deleteLevel({id: levelId}).then((res) => {
+    await levelAdapter.deleteLevel({id: levelId}).then((res) => {
       setLevels(prevLevels => prevLevels.filter((level) => level.id !== levelId))
       toast.success('Level added.');
     })
