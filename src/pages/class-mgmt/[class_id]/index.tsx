@@ -204,7 +204,7 @@ const DeleteClassSection = ({
             className="rounded underline underline-offset-2 text-red-500 hover:text-red-900"
             onClick={async () =>
               await classAdapter
-                .deleteClassById({ id: selectedClass.id })
+                .deleteClass({ id: selectedClass.id })
                 .then(handleDeleteClass)
             }
           >

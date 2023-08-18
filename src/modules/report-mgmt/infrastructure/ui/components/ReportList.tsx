@@ -25,7 +25,7 @@ export const ReportList = () => {
 
   useEffect(() => {
     async function getData() {
-      await classAdapter.getClassesBySchoolAndDate({ school_id: selectedSchool?.id, date: date.getDay() }).then((res) => {
+      await classAdapter.listSchoolTodayClasses({ school_id: selectedSchool?.id, date: date.getDay() }).then((res) => {
         setClasses(() => res);
       });
     }
@@ -79,7 +79,7 @@ export const ReportList = () => {
 
 							if (selectedSchool) {
 								await classAdapter
-									.getClassesBySchoolAndDate({ school_id: selectedSchool?.id, date: newDate.getDay() })
+									.listSchoolTodayClasses({ school_id: selectedSchool?.id, date: newDate.getDay() })
 									.then((res) => {
 										setClasses(res);
 									});
