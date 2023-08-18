@@ -1,6 +1,7 @@
-import { SchoolUser } from "@/src/modules/school-mgmt/domain/entities/SchoolUser";
+import { PasswordSuccessResponse } from "../../domain/entities/PasswordSuccessResponse";
 import { Teacher } from "../../domain/entities/Teacher";
 import { User } from "../../domain/entities/User";
+import { UserProfile } from "../../domain/entities/UserProfile";
 
 class UserAdapter {
 
@@ -11,6 +12,14 @@ class UserAdapter {
 		const userList: User[] = users
 
 		return userList;
+	}
+	public async getUserProfileById({id}: {id: number}): Promise<UserProfile> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}/get/`);
+		const user = await res.json();
+		
+		const userProfile: UserProfile = user
+
+		return userProfile;
 	}
  
 	public async addUser({ firstName, lastName, email, password }: {firstName: string, lastName: string, email: string, password: string }): Promise<User> {
@@ -24,6 +33,34 @@ class UserAdapter {
 		const user: User = await response.json();
 
 		return user;
+	}
+
+	public async updateUser({id, first_name, last_name}: {id: number, first_name: string, last_name: string}): Promise<User> {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}/update/`, { 
+			method: 'PATCH', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ first_name: first_name, last_name: last_name }) 
+		})
+		const userProfile: User = await response.json();
+		
+		return userProfile;
+		
+	}
+
+	public async changeUserPassword({id, current_password, new_password}: {id: number, current_password: string, new_password: string}): Promise<PasswordSuccessResponse> {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}/change-password/`, { 
+			method: 'PATCH', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ current_password: current_password, new_password: new_password }) 
+		})
+		const detail: PasswordSuccessResponse = await response.json();
+		
+		return detail;
+		
 	}
 
 	public async getTeachersBySchool({school, owner}: {school:any, owner: any}): Promise<Teacher[]> {

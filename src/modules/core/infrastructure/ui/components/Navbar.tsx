@@ -15,19 +15,41 @@ export default function Navbar() {
       {/* desktop nav */}
       <div className="w-full hidden xs:flex xs:justify-end gap-2">
         {user  && (
-          <Link
-            href="/"
-            className={`${
-              router.pathname === "/"
-                ? "underline underline-offset-4 decoration-2 text-blue-700"
-                : ""
-            }`}
-          >
-            Home
-          </Link>
+          <>
+            <Link
+              href="/"
+              className={`${
+                router.pathname === "/"
+                  ? "underline underline-offset-4 decoration-2 text-blue-700"
+                  : ""
+              }`}
+            >
+              Home
+            </Link>
+            <Link
+              href={`/profile/${user.user_id}`}
+              className={`${
+                router.pathname.includes("profile")
+                  ? "underline underline-offset-4 decoration-2 text-blue-700"
+                  : ""
+              }`}
+            >
+              Profile
+            </Link>
+          </>
         )}
         {user && user.role === "OWNER" && selectedSchool && (
           <>
+            <Link
+              href="/school-mgmt/"
+              className={`${
+                router.pathname.includes("school-mgmt")
+                  ? "underline underline-offset-4 decoration-2 text-blue-700"
+                  : ""
+              }`}
+            >
+              Admin
+            </Link>
             <Link
               href="/class-mgmt/"
               className={`${
@@ -58,16 +80,6 @@ export default function Navbar() {
             >
               Reports
             </Link>
-            <Link
-              href="/school-mgmt/"
-              className={`${
-                router.pathname.includes("school-mgmt")
-                  ? "underline underline-offset-4 decoration-2 text-blue-700"
-                  : ""
-              }`}
-            >
-              Admin
-            </Link>
           </>
         )}
         {user && (
@@ -94,19 +106,41 @@ export default function Navbar() {
             <span className="material-symbols-outlined">close</span>
           </button>
           {user && (
-            <Link
-              href="/"
+            <>
+              <Link
+                href="/"
+                className={`${
+                  router.pathname === "/"
+                    ? "underline underline-offset-4 decoration-2 text-blue-700"
+                    : ""
+                }`}
+              >
+                Home
+              </Link>
+              <Link
+              href={`/profile/${user.user_id}`}
               className={`${
-                router.pathname === "/"
+                router.pathname.includes("profile")
                   ? "underline underline-offset-4 decoration-2 text-blue-700"
                   : ""
               }`}
             >
-              Home
+              Profile
             </Link>
+            </>
           )}
           {user && user.role === "OWNER" && selectedSchool && (
             <>
+              <Link
+                href="/school-mgmt/"
+                className={`${
+                  router.pathname.includes("school-mgmt")
+                    ? "underline underline-offset-4 decoration-2 text-blue-700"
+                    : ""
+                }`}
+              >
+                Admin
+              </Link>
               <Link
                 href="/class-mgmt/"
                 className={`${
@@ -136,16 +170,6 @@ export default function Navbar() {
                 }`}
               >
                 Reports
-              </Link>
-              <Link
-                href="/school-mgmt/"
-                className={`${
-                  router.pathname.includes("school-mgmt")
-                    ? "underline underline-offset-4 decoration-2 text-blue-700"
-                    : ""
-                }`}
-              >
-                Admin
               </Link>
             </>
           )}
