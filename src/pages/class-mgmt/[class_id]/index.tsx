@@ -43,9 +43,9 @@ const AddStudentToClassSection = ({
   const [next, setNext] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  async function addStudentToClassList(student: Student) {
+  async function addClassStudent(student: Student) {
     await classListAdapter
-      .addStudentToClassList({
+      .addClassStudent({
         class_id: selectedClass.id,
         student_id: student.id,
       })
@@ -103,7 +103,7 @@ const AddStudentToClassSection = ({
                     }
                     return false;
                   })}
-                  onClick={() => addStudentToClassList(student)}
+                  onClick={() => addClassStudent(student)}
                   className="px-2 py-1 rounded bg-blue-300 disabled:hover:cursor-not-allowed disabled:bg-gray-300"
                 >
                   <i className="fa-solid fa-plus"></i>
@@ -233,7 +233,7 @@ export default function ManageClassDetails({
     studentId: number
   ) {
     await classListAdapter
-      .removeStudentFromClassList({ class_id: classId, student_id: studentId })
+      .deleteClassStudent({ class_id: classId, student_id: studentId })
       .then((res) => {
         toast.success("student removed from class");
       });

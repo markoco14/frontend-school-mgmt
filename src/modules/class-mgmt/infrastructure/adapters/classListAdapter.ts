@@ -1,8 +1,8 @@
 import { ClassList } from './../../domain/entities/ClassList';
 
 class ClassListAdapter {
-	public async addStudentToClassList({class_id, student_id}: {class_id: number, student_id: number}): Promise<ClassList> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register-student-in-class/`, { 
+	public async addClassStudent({class_id, student_id}: {class_id: number, student_id: number}): Promise<ClassList> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/students/add/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
@@ -14,8 +14,8 @@ class ClassListAdapter {
 		return newClassList
 	}
 
-	public async removeStudentFromClassList({class_id, student_id}: {class_id: number, student_id: number}): Promise<ClassList> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/remove-student-from-class/${class_id}/${student_id}/`, { 
+	public async deleteClassStudent({class_id, student_id}: {class_id: number, student_id: number}): Promise<ClassList> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${class_id}/students/${student_id}/delete/`, { 
 			method: 'DELETE', 
 		});
 		const newClassList: ClassList = await res.json();
