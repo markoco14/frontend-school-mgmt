@@ -2,64 +2,37 @@ import { PaginatedStudentResponse } from '../../domain/entities/PaginatedStudent
 import { Student } from './../../domain/entities/Student';
 
 class StudentAdapter {
-	public async getStudents(): Promise<Student[]> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students/`);
-		const students: Student[] = await res.json();
-		
-		return students
-	}
-	
-	public async getStudentById({id}: {id: number}): Promise<Student> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-student/${id}/`);
-		const student: Student = await res.json();
-		
-		return student;
-	}
 
-
-	public async getStudentsBySchool({id}: {id: number}): Promise<PaginatedStudentResponse> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students-by-school/${id}/`);
-		const students: PaginatedStudentResponse = await res.json();
-		
-		return students
-	}
-	public async getStudentsByClassId({id}: {id: number}): Promise<Student[]> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students-by-class/${id}/`);
-		const students: Student[] = await res.json();
-		
-		return students
-	}
-
-	public async getStudentsByOwnerId({id}: {id: number}): Promise<Student[]> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students-by-owner/${id}/`);
-		const students: Student[] = await res.json();
-		
-		return students;
-	}
-
-	public async getStudentsBySchoolId({id, page}: {id: number, page: number}): Promise<PaginatedStudentResponse> {
+	public async listSchoolStudents({id, page}: {id: number, page: number}): Promise<PaginatedStudentResponse> {
 		if (page === 1) {
-			const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students-by-school/${id}/`);
+			const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/students/`);
 			const students: PaginatedStudentResponse = await res.json();
 			
 			return students;
 		}
 
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students-by-school/${id}/?page=${page}`);
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/students/?page=${page}`);
 		const students: PaginatedStudentResponse = await res.json();
 		
 		return students;
 	}
 
-	public async listStudentsByClassId({id}: {id: number}): Promise<Student[]> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-students-by-class/${id}/`);
+	public async listClassStudents({id}: {id: number}): Promise<Student[]> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/students/`);
 		const students: Student[] = await res.json();
 		
-		return students;
+		return students
+	}
+	
+	public async getStudent({id}: {id: number}): Promise<Student> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/students/${id}/get/`);
+		const student: Student = await res.json();
+		
+		return student;
 	}
 
 	public async addStudent({firstName, lastName, age, schoolId}: {firstName: string, lastName: string, age: number, schoolId: number}): Promise<Student> {
-		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/add-student/`, { 
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/students/add/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
@@ -72,7 +45,7 @@ class StudentAdapter {
 	}
 
 	public async deleteStudentById({id}: {id: number}) {
-		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-student/${id}/`,{
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/students/${id}/delete/`,{
 			method: 'DELETE'
 		})
 

@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps<{
   const selectedClass = await classAdapter.getClassById({
     id: Number(context.query.class_id),
   });
-  const students = await studentAdapter.getStudentsByClassId({
+  const students = await studentAdapter.listClassStudents({
     id: Number(context.query.class_id),
   });
   return {
@@ -60,7 +60,7 @@ const AddStudentToClassSection = ({
     async function getData() {
       setLoading(true);
       await studentAdapter
-        .getStudentsBySchoolId({ id: selectedClass.school_id, page: page })
+        .listSchoolStudents({ id: selectedClass.school_id, page: page })
         .then((res) => {
           if (res.next) {
             setNext(true);
