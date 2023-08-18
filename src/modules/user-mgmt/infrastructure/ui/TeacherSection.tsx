@@ -14,7 +14,7 @@ export default function TeacherSection() {
   useEffect(() => {
     async function getData(school_id: number, user_id: number) {
       await schoolTeacherAdapter
-        .getTeachersBySchool({ school: school_id, owner: user_id })
+        .listSchoolTeachers({ school: school_id, owner: user_id })
         .then((res) => {
           console.log(res);
           setTeachers(res);
