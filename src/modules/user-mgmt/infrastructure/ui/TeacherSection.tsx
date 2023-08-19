@@ -16,7 +16,6 @@ export default function TeacherSection() {
       await schoolTeacherAdapter
         .listSchoolTeachers({ school: school_id, owner: user_id })
         .then((res) => {
-          console.log(res);
           setTeachers(res);
         });
     }

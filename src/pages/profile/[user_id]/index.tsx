@@ -27,7 +27,6 @@ export default function UserProfilePage() {
   } = useForm<Inputs>();
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
-		console.log(data)
 		if (!user) {
 			return
 		}
