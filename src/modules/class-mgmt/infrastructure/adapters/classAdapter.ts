@@ -14,7 +14,7 @@ class ClassAdapter {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ name: name, school_id: school_id, level: level, day: day }) 
+			body: JSON.stringify({ name: name, school: school_id, level: level, day: day }) 
 		});
 		const newClass: Class = await res.json();
 

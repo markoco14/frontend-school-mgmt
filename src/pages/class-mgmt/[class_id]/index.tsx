@@ -60,7 +60,7 @@ const AddStudentToClassSection = ({
     async function getData() {
       setLoading(true);
       await studentAdapter
-        .listSchoolStudents({ id: selectedClass.school_id, page: page })
+        .listSchoolStudents({ id: selectedClass.school, page: page })
         .then((res) => {
           if (res.next) {
             setNext(true);
@@ -117,7 +117,6 @@ const AddStudentToClassSection = ({
               disabled={page === 1}
               onClick={() => {
                 setPage((prevPage) => prevPage - 1);
-                console.log(page - 1);
               }}
             >
               <i className="fa-solid fa-arrow-left"></i>
@@ -127,7 +126,6 @@ const AddStudentToClassSection = ({
               disabled={!next}
               onClick={() => {
                 setPage((prevPage) => prevPage + 1);
-                console.log(page + 1);
               }}
             >
               <i className="fa-solid fa-arrow-right"></i>
@@ -227,7 +225,6 @@ export default function ManageClassDetails({
     selectedClass
   );
   const { user } = useContext(AuthContext);
-  console.log(selectedClass)
 
   async function removeStudentFromClassList(
     classId: number,
