@@ -81,7 +81,6 @@ export default function ClassHome() {
           )}
           <button 
             onClick={() => {
-              console.log('click')
             setIsAddClass(true);
             }}
             className="bg-blue-300 p-2 rounded"

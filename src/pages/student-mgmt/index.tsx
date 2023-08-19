@@ -62,7 +62,6 @@ export default function StudentsHome() {
             <h2 className='text-3xl'>Students</h2>
             <button 
             onClick={() => {
-              console.log('adding')
               setIsAddStudent(true);
             }}
               className='bg-blue-300 hover:bg-blue-500 p-2 rounded'

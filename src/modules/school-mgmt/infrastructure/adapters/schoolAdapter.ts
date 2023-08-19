@@ -13,7 +13,7 @@ class SchoolAdapter {
 
 	public async addSchool({ schoolName, ownerId }: { schoolName: string, ownerId: number }): Promise<School> {
 		const response = await fetch(
-				`${process.env.NEXT_PUBLIC_API_URL}/add-school/`,
+				`${process.env.NEXT_PUBLIC_API_URL}/schools/add/`,
 				{
 					method: "POST",
 					headers: {

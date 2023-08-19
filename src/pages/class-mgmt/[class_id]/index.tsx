@@ -6,6 +6,8 @@ import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
+import { Teacher } from "@/src/modules/user-mgmt/domain/entities/Teacher";
+import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
@@ -60,7 +62,7 @@ const AddStudentToClassSection = ({
     async function getData() {
       setLoading(true);
       await studentAdapter
-        .listSchoolStudents({ id: selectedClass.school_id, page: page })
+        .listSchoolStudents({ id: selectedClass.school, page: page })
         .then((res) => {
           if (res.next) {
             setNext(true);
@@ -117,7 +119,6 @@ const AddStudentToClassSection = ({
               disabled={page === 1}
               onClick={() => {
                 setPage((prevPage) => prevPage - 1);
-                console.log(page - 1);
               }}
             >
               <i className="fa-solid fa-arrow-left"></i>
@@ -127,7 +128,6 @@ const AddStudentToClassSection = ({
               disabled={!next}
               onClick={() => {
                 setPage((prevPage) => prevPage + 1);
-                console.log(page + 1);
               }}
             >
               <i className="fa-solid fa-arrow-right"></i>
@@ -216,6 +216,7 @@ const DeleteClassSection = ({
   );
 };
 
+
 export default function ManageClassDetails({
   selectedClass,
   students,
@@ -225,8 +226,9 @@ export default function ManageClassDetails({
   const [currentClass, setCurrentClass] = useState<Class | undefined>(
     selectedClass
   );
-  const { user } = useContext(AuthContext);
-  console.log(selectedClass)
+  const { user, selectedSchool } = useContext(AuthContext);
+  const [teachers, setTeachers] = useState<Teacher[]>()
+  const [isAddTeacher, setIsAddTeacher] = useState<boolean>(false)
 
   async function removeStudentFromClassList(
     classId: number,
@@ -241,6 +243,28 @@ export default function ManageClassDetails({
       prevClassList.filter((student) => student.id !== studentId)
     );
   }
+
+  useEffect(() => {
+    async function getData() {
+      await userAdapter.listSchoolTeachers({id: selectedSchool.id})
+      .then((res) => setTeachers(res))
+    }
+
+    if (selectedSchool) {
+      getData()
+    }
+  }, [selectedSchool])
+
+  async function handleAddTeacher({id, teacherId}: {id: number, teacherId: number}) {
+    await classAdapter.addClassTeacher({id: id, teacherId: teacherId})
+    .then((res) => setCurrentClass(res));
+  }
+
+  async function handleRemoveTeacher({id}: {id: number}) {
+    await classAdapter.deleteClassTeacher({id: id})
+    .then((res) => setCurrentClass(res));
+  }
+
 
   if (user?.role !== "OWNER") {
     return (
@@ -266,7 +290,7 @@ export default function ManageClassDetails({
             </section>
             <section className="mb-4">
               <div className="flex justify-between items-baseline gap-4 mb-4">
-                <h3 className="text-xl">Manage Student List</h3>
+                <h3 className="text-xl">Student List</h3>
                 <button
                 className="bg-blue-300 p-2 rounded"
                   onClick={() => {
@@ -291,6 +315,45 @@ export default function ManageClassDetails({
                 />
               )}
               
+            </section>
+            <section className="mb-4">
+              <h3 className="text-xl">Teacher Details</h3>
+              <article className="bg-gray-100 shadow-inner p-2 rounded mb-4">
+                <div className="flex justify-between items-baseline">
+                  <p>Primary Teacher: {currentClass.teacher ? currentClass.teacher : 'No teacher assigned'}</p>
+                  <button 
+                  className="text-red-500 underline underline-offset-2 p-2 rounded hover:bg-red-100 hover:text-red-900" 
+                  onClick={() => handleRemoveTeacher({id: currentClass.id})}
+                  >
+                    Remove
+                  </button>
+                </div>
+                <button 
+                className="text-blue-700 underline underline-offset-2 hover:text-blue-900 hover:-translate-y-1 hover:underline-offset-4 ease-in-out duration-200" 
+                onClick={() => setIsAddTeacher(!isAddTeacher)}
+                >
+                  {isAddTeacher ? 'Hide Teachers' : 'Assign Teacher'}
+                </button>
+                {isAddTeacher && (
+                  <>
+                    <p className="text-xl">Available Teachers</p>
+                    <ul className=" bg-white shadow-inner p-2 rounded mb-4">
+                      {teachers?.map((teacher, index) => (
+                        <li key={index} className="flex justify-between">
+                          <span>{teacher.first_name} {teacher.last_name}</span>
+                          <button 
+                          disabled={currentClass.teacher ? true : false}
+                          className="text-blue-500 p-2 rounded hover:bg-blue-100 hover:text-blue-900 disabled:cursor-not-allowed" onClick={() => {
+                            handleAddTeacher({id:currentClass.id, teacherId: teacher.id})
+                          }}>
+                            <i className="fa-solid fa-plus"></i>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </article>
             </section>
             <DeleteClassSection
               selectedClass={selectedClass}
