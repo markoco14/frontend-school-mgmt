@@ -63,6 +63,27 @@ class UserAdapter {
 		
 	}
 
+	// TEACHER REQUESTS
+
+	public async listTeachers(): Promise<Teacher[]> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/teachers/`);
+		const teachers = await res.json();
+		
+		const teacherList: Teacher[] = teachers
+
+		return teacherList;
+	}
+	
+	public async listSchoolTeachers({id}: {id: number}): Promise<User[]> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/teachers/`);
+		const teachers = await res.json();
+		
+		const teacherList: User[] = teachers
+
+		return teacherList;
+	}
+
+
 	public async addTeacher({ first_name, email, password, school_id }: {first_name: string, email: string, password: string, school_id: number }): Promise<Teacher> {
 		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/teachers/add/`, { 
 			method: 'POST', 

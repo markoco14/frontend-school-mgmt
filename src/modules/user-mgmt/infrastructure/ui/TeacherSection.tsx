@@ -5,6 +5,7 @@ import TeacherSignup from "./TeacherSignup";
 import { Teacher } from "../../domain/entities/Teacher";
 import { Dialog, Transition } from "@headlessui/react";
 import { schoolTeacherAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolTeacherAdapter";
+import { userAdapter } from "../adapters/userAdapter";
 
 export default function TeacherSection() {
   const { user, selectedSchool } = useContext(AuthContext);
@@ -13,8 +14,8 @@ export default function TeacherSection() {
 
   useEffect(() => {
     async function getData(school_id: number, user_id: number) {
-      await schoolTeacherAdapter
-        .listSchoolTeachers({ school: school_id, owner: user_id })
+      await userAdapter
+        .listSchoolTeachers({ id: school_id })
         .then((res) => {
           setTeachers(res);
         });

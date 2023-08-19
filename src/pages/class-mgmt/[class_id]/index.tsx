@@ -6,6 +6,8 @@ import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
+import { Teacher } from "@/src/modules/user-mgmt/domain/entities/Teacher";
+import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
@@ -224,7 +226,9 @@ export default function ManageClassDetails({
   const [currentClass, setCurrentClass] = useState<Class | undefined>(
     selectedClass
   );
-  const { user } = useContext(AuthContext);
+  const { user, selectedSchool } = useContext(AuthContext);
+  const [teachers, setTeachers] = useState<Teacher[]>()
+  const [isAddTeacher, setIsAddTeacher] = useState<boolean>(false)
 
   async function removeStudentFromClassList(
     classId: number,
@@ -240,13 +244,16 @@ export default function ManageClassDetails({
     );
   }
 
-  if (user?.role !== "OWNER") {
-    return (
-      <Layout>
-        <PermissionDenied />
-      </Layout>
-    );
-  }
+  useEffect(() => {
+    async function getData() {
+      await userAdapter.listSchoolTeachers({id: selectedSchool.id})
+      .then((res) => setTeachers(res))
+    }
+
+    if (selectedSchool) {
+      getData()
+    }
+  }, [selectedSchool])
 
   async function handleAddTeacher({id, teacherId}: {id: number, teacherId: number}) {
     await classAdapter.addClassTeacher({id: id, teacherId: teacherId})
@@ -256,6 +263,15 @@ export default function ManageClassDetails({
   async function handleRemoveTeacher({id}: {id: number}) {
     await classAdapter.deleteClassTeacher({id: id})
     .then((res) => setCurrentClass(res));
+  }
+
+
+  if (user?.role !== "OWNER") {
+    return (
+      <Layout>
+        <PermissionDenied />
+      </Layout>
+    );
   }
 
   return (
@@ -312,12 +328,32 @@ export default function ManageClassDetails({
                     Remove
                   </button>
                 </div>
+                <button 
+                className="text-blue-700 underline underline-offset-2 hover:text-blue-900 hover:-translate-y-1 hover:underline-offset-4 ease-in-out duration-200" 
+                onClick={() => setIsAddTeacher(!isAddTeacher)}
+                >
+                  {isAddTeacher ? 'Hide Teachers' : 'Assign Teacher'}
+                </button>
+                {isAddTeacher && (
+                  <>
+                    <p className="text-xl">Available Teachers</p>
+                    <ul className=" bg-white shadow-inner p-2 rounded mb-4">
+                      {teachers?.map((teacher, index) => (
+                        <li key={index} className="flex justify-between">
+                          <span>{teacher.first_name} {teacher.last_name}</span>
+                          <button 
+                          disabled={currentClass.teacher ? true : false}
+                          className="text-blue-500 p-2 rounded hover:bg-blue-100 hover:text-blue-900 disabled:cursor-not-allowed" onClick={() => {
+                            handleAddTeacher({id:currentClass.id, teacherId: teacher.id})
+                          }}>
+                            <i className="fa-solid fa-plus"></i>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
               </article>
-              <button 
-              disabled={currentClass.teacher ? true : false}
-              className="bg-blue-500 text-white p-2 rounded disabled:cursor-not-allowed" onClick={() => {
-                handleAddTeacher({id:currentClass.id, teacherId: 1})
-              }}>Add Teacher</button>
             </section>
             <DeleteClassSection
               selectedClass={selectedClass}
