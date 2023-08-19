@@ -216,6 +216,7 @@ const DeleteClassSection = ({
   );
 };
 
+
 export default function ManageClassDetails({
   selectedClass,
   students,
@@ -250,6 +251,11 @@ export default function ManageClassDetails({
     );
   }
 
+  async function handleRemoveTeacher({id}: {id: number}) {
+    await classAdapter.deleteClassTeacher({id: id})
+    .then((res) => setCurrentClass(res));
+  }
+
   return (
     <Layout>
       <>
@@ -266,7 +272,7 @@ export default function ManageClassDetails({
             </section>
             <section className="mb-4">
               <div className="flex justify-between items-baseline gap-4 mb-4">
-                <h3 className="text-xl">Manage Student List</h3>
+                <h3 className="text-xl">Student List</h3>
                 <button
                 className="bg-blue-300 p-2 rounded"
                   onClick={() => {
@@ -291,6 +297,21 @@ export default function ManageClassDetails({
                 />
               )}
               
+            </section>
+            <section className="mb-4">
+              <h3 className="text-xl">Teacher Details</h3>
+              <article className="bg-gray-100 shadow-inner p-2 rounded mb-4">
+                <div className="flex justify-between items-baseline">
+                  <p>Primary Teacher: {currentClass.teacher ? currentClass.teacher : 'No teacher assigned'}</p>
+                  <button 
+                  className="text-red-500 underline underline-offset-2 p-2 rounded hover:bg-red-100 hover:text-red-900" 
+                  onClick={() => handleRemoveTeacher({id: currentClass.id})}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </article>
+              <button className="bg-blue-500 text-white p-2 rounded" onClick={() => console.log('adding teacher')}>Add Teacher</button>
             </section>
             <DeleteClassSection
               selectedClass={selectedClass}

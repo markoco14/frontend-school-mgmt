@@ -1,5 +1,4 @@
 import { Class } from "../../domain/entities/Class";
-import { Level } from "../../domain/entities/Level";
 
 class ClassAdapter {
 	public async getClassById({id}: {id: number}): Promise<Class> {
@@ -43,7 +42,20 @@ class ClassAdapter {
 
 		return classes
 	}
+	
+	public async deleteClassTeacher({id}: {id: number}): Promise<Class[]>{
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/teachers/update/`, { 
+			method: 'PATCH', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		const currentClass: Class[] = await res.json();
+	
 
+		return currentClass
+	}
+		
 }
 
 export const classAdapter = new ClassAdapter();
