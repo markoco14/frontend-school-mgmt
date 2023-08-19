@@ -43,14 +43,28 @@ class ClassAdapter {
 		return classes
 	}
 	
-	public async deleteClassTeacher({id}: {id: number}): Promise<Class[]>{
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/teachers/update/`, { 
+	public async addClassTeacher({id, teacherId}: {id: number, teacherId: number}): Promise<Class>{
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/teachers/add/`, { 
+			method: 'PATCH', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ teacher: teacherId }) 
+		});
+		const currentClass: Class = await res.json();
+	
+
+		return currentClass
+	}
+	
+	public async deleteClassTeacher({id}: {id: number}): Promise<Class>{
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/teachers/remove/`, { 
 			method: 'PATCH', 
 			headers: {
 				"Content-Type": "application/json",
 			},
 		});
-		const currentClass: Class[] = await res.json();
+		const currentClass: Class = await res.json();
 	
 
 		return currentClass

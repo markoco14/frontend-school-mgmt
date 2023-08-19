@@ -251,6 +251,11 @@ export default function ManageClassDetails({
     );
   }
 
+  async function handleAddTeacher({id, teacherId}: {id: number, teacherId: number}) {
+    await classAdapter.addClassTeacher({id: id, teacherId: teacherId})
+    .then((res) => setCurrentClass(res));
+  }
+
   async function handleRemoveTeacher({id}: {id: number}) {
     await classAdapter.deleteClassTeacher({id: id})
     .then((res) => setCurrentClass(res));
@@ -311,7 +316,11 @@ export default function ManageClassDetails({
                   </button>
                 </div>
               </article>
-              <button className="bg-blue-500 text-white p-2 rounded" onClick={() => console.log('adding teacher')}>Add Teacher</button>
+              <button 
+              disabled={currentClass.teacher ? true : false}
+              className="bg-blue-500 text-white p-2 rounded disabled:cursor-not-allowed" onClick={() => {
+                handleAddTeacher({id:currentClass.id, teacherId: 1})
+              }}>Add Teacher</button>
             </section>
             <DeleteClassSection
               selectedClass={selectedClass}
