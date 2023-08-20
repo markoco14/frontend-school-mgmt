@@ -1,6 +1,6 @@
 import AuthContext from "@/src/AuthContext";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
-import { levelAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/levelAdapter";
+import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/levelAdapter";
 import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";

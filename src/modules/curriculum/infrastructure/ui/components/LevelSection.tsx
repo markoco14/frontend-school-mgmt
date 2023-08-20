@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AddLevel from "./AddLevel";
 import LevelList from "./LevelList";
-import { levelAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/levelAdapter";
+import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/levelAdapter";
 
 export default function LevelSection() {
   const { selectedSchool } = useContext(AuthContext);

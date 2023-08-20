@@ -1,11 +1,11 @@
 import AuthContext from "@/src/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Level } from "../../../domain/entities/Level";
+import { Level } from "../../../../curriculum/domain/entities/Level";
 import { classAdapter } from "../../adapters/classAdapter";
 import { Class } from "../../../domain/entities/Class";
 import toast from "react-hot-toast";
-import { levelAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/levelAdapter";
+import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/levelAdapter";
 
 type Inputs = {
   className: string;
