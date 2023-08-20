@@ -1,4 +1,4 @@
-import { Level } from "@/src/modules/class-mgmt/domain/entities/Level";
+import { Level } from "@/src/modules/curriculum/domain/entities/Level";
 
 class LevelAdapter {
 
