@@ -41,14 +41,24 @@ export default function Navbar() {
         {user && user.role === "OWNER" && selectedSchool && (
           <>
             <Link
-              href="/school-mgmt/"
+              href="/curriculum/"
               className={`${
-                router.pathname.includes("school-mgmt")
+                router.pathname.includes("curriculum")
                   ? "underline underline-offset-4 decoration-2 text-blue-700"
                   : ""
               }`}
             >
-              Admin
+              Curriculum
+            </Link>
+            <Link
+              href="/teachers/"
+              className={`${
+                router.pathname.includes("teachers")
+                  ? "underline underline-offset-4 decoration-2 text-blue-700"
+                  : ""
+              }`}
+            >
+              Teachers
             </Link>
             <Link
               href="/class-mgmt/"

@@ -79,7 +79,6 @@ export default function AdminHome() {
               </Transition>
             </article>
           </section>
-          <TeacherSection />
       </div>
     </Layout>
   );
