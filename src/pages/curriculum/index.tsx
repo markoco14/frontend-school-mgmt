@@ -6,6 +6,7 @@ import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/School
 import TeacherSection from "@/src/modules/user-mgmt/infrastructure/ui/TeacherSection";
 import { Dialog, Transition } from "@headlessui/react";
 import { useContext, useEffect, useState } from "react";
+import { subjectAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectAdapter";
 
 export default function AdminHome() {
   const { user, selectedSchool } = useContext(AuthContext)
@@ -15,10 +16,9 @@ export default function AdminHome() {
   useEffect(() => {
     async function getSubjects() {
       if(selectedSchool) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subjects/?school=5`)
-        const subjects = await res.json()
-        console.log(subjects)
-        setSubjects(subjects.results)
+				await subjectAdapter.listSchoolSubjects({schoolId: selectedSchool.id})
+				.then((res) => {
+					setSubjects(res.results)})
       }
     }
 
