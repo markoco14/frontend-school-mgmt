@@ -9,7 +9,6 @@ export default function Navbar() {
   const { user, selectedSchool, logout } = useContext(AuthContext);
   const router = useRouter();
   const [isShowing, setIsShowing] = useState<boolean>(false);
-
   return (
     <nav className="xs:relative h-[48px] bg-blue-900 text-white xs:bg-transparent xs:text-black flex justify-between items-center px-2 ">
       {/* desktop nav */}
@@ -38,17 +37,27 @@ export default function Navbar() {
             </Link>
           </>
         )}
-        {user && user.role === "OWNER" && selectedSchool && (
+        {user && user.role === "OWNER" && selectedSchool && user.user_id === selectedSchool.owner_id && (
           <>
             <Link
-              href="/school-mgmt/"
+              href="/curriculum/"
               className={`${
-                router.pathname.includes("school-mgmt")
+                router.pathname.includes("curriculum")
                   ? "underline underline-offset-4 decoration-2 text-blue-700"
                   : ""
               }`}
             >
-              Admin
+              Curriculum
+            </Link>
+            <Link
+              href="/teachers/"
+              className={`${
+                router.pathname.includes("teachers")
+                  ? "underline underline-offset-4 decoration-2 text-blue-700"
+                  : ""
+              }`}
+            >
+              Teachers
             </Link>
             <Link
               href="/class-mgmt/"
@@ -129,7 +138,7 @@ export default function Navbar() {
             </Link>
             </>
           )}
-          {user && user.role === "OWNER" && selectedSchool && (
+          {user && user.role === "OWNER" && selectedSchool && user.user_id === selectedSchool.owner_id && (
             <>
               <Link
                 href="/school-mgmt/"
