@@ -9,7 +9,6 @@ export default function Navbar() {
   const { user, selectedSchool, logout } = useContext(AuthContext);
   const router = useRouter();
   const [isShowing, setIsShowing] = useState<boolean>(false);
-
   return (
     <nav className="xs:relative h-[48px] bg-blue-900 text-white xs:bg-transparent xs:text-black flex justify-between items-center px-2 ">
       {/* desktop nav */}
@@ -38,7 +37,7 @@ export default function Navbar() {
             </Link>
           </>
         )}
-        {user && user.role === "OWNER" && selectedSchool && (
+        {user && user.role === "OWNER" && selectedSchool && user.user_id === selectedSchool.owner_id && (
           <>
             <Link
               href="/curriculum/"
@@ -139,7 +138,7 @@ export default function Navbar() {
             </Link>
             </>
           )}
-          {user && user.role === "OWNER" && selectedSchool && (
+          {user && user.role === "OWNER" && selectedSchool && user.user_id === selectedSchool.owner_id && (
             <>
               <Link
                 href="/school-mgmt/"
