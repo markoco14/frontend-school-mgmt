@@ -1,6 +1,5 @@
 import AuthContext from "@/src/AuthContext";
 import { Level } from "@/src/modules/curriculum/domain/entities/Level";
-import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import { Dialog, Transition } from "@headlessui/react";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -19,7 +18,7 @@ export default function LevelSection() {
     async function listSchoolLevels(id: number) {
       setLoading(true);
       await levelAdapter.listSchoolLevels({id: id}).then((res) => {
-        setLevels(res)
+        setLevels(res.results)
         setLoading(false);
       });
     }

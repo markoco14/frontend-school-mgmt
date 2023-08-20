@@ -1,7 +1,6 @@
 import AuthContext from "@/src/AuthContext";
-import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/levelAdapter";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -17,6 +16,7 @@ export default function AddLevel({ setLevels }: {setLevels: Function}) {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       await levelAdapter.addLevel({name: data.levelName, school: selectedSchool.id}).then((res) => {
+        // because prevLevels implicitly has any type
         // @ts-ignore
         setLevels(prevLevels => [...prevLevels, res])
         toast.success('Level added.');
@@ -30,7 +30,7 @@ export default function AddLevel({ setLevels }: {setLevels: Function}) {
   useEffect(() => {
     async function listSchoolLevels(id: number) {
       await levelAdapter.listSchoolLevels({id: id}).then((res) => {
-        setLevels(res)
+        setLevels(res.results)
       });
     }
 
