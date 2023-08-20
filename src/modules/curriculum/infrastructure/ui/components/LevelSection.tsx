@@ -1,5 +1,5 @@
 import AuthContext from "@/src/AuthContext";
-import { Level } from "@/src/modules/class-mgmt/domain/entities/Level";
+import { Level } from "@/src/modules/curriculum/domain/entities/Level";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import { Dialog, Transition } from "@headlessui/react";
 import { useContext, useEffect, useState } from "react";
