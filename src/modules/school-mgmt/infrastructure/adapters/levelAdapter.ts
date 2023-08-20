@@ -10,7 +10,7 @@ class LevelAdapter {
 	}
 
 	public async addLevel({name, school}: {name: string, school: number}): Promise<Level> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/levels/add`, { 
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/levels/add/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
