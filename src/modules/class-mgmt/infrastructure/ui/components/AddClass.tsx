@@ -46,7 +46,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
   useEffect(() => {
     async function getLevels() {
       await levelAdapter.listSchoolLevels({id: selectedSchool?.id}).then((res) => {
-        setLevels(res);
+        setLevels(res.results);
       });
     }
 
