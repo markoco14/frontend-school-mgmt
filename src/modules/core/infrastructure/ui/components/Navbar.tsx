@@ -50,6 +50,16 @@ export default function Navbar() {
               Curriculum
             </Link>
             <Link
+              href="/schedule/"
+              className={`${
+                router.pathname.includes("schedule")
+                  ? "underline underline-offset-4 decoration-2 text-blue-700"
+                  : ""
+              }`}
+            >
+              Schedule
+            </Link>
+            <Link
               href="/teachers/"
               className={`${
                 router.pathname.includes("teachers")
@@ -149,6 +159,16 @@ export default function Navbar() {
                 }`}
               >
                 Curriculum
+              </Link>
+              <Link
+                href="/schedule/"
+                className={`${
+                  router.pathname.includes("schedule")
+                    ? "underline underline-offset-4 decoration-2 text-blue-700"
+                    : ""
+                }`}
+              >
+                Schedule
               </Link>
               <Link
                 href="/teachers/"

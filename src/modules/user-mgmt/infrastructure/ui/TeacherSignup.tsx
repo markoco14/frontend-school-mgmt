@@ -36,8 +36,7 @@ export default function TeacherSignup({teachers, setTeachers}: {teachers: Teache
 			});
 		
 			toast.success('School shared with teacher.')
-			// @ts-ignore
-			setTeachers(prevTeachers => [...prevTeachers, teacher]);
+			setTeachers((prevTeachers: Teacher[]) => [...prevTeachers, teacher]);
       reset();
     } catch (error) {
       console.error(error)

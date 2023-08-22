@@ -76,6 +76,10 @@ const AddStudentToClassSection = ({
     getData();
   }, [selectedClass, classList, page]);
 
+  function checkStudentInClassList({student}: {student: Student}) {
+    return classList.some((classListStudent) => student.id === classListStudent.id)
+	}
+
   return (
     <>
       {loading && (
@@ -98,13 +102,7 @@ const AddStudentToClassSection = ({
               >
                 {student.first_name} {student.last_name}{" "}
                 <button
-                  // @ts-ignore
-                  disabled={classList.find((classListStudent) => {
-                    if (student.id === classListStudent.id) {
-                      return true;
-                    }
-                    return false;
-                  })}
+                  disabled={checkStudentInClassList({student: student})}
                   onClick={() => addClassStudent(student)}
                   className="px-2 py-1 rounded bg-blue-300 disabled:hover:cursor-not-allowed disabled:bg-gray-300"
                 >

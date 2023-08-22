@@ -28,9 +28,7 @@ const SubjectList = ({
 
 	async function handleDeleteSubject({subjectId}: {subjectId: number}) {
     await subjectAdapter.deleteSubject({id: subjectId}).then((res) => {
-			// because prevSubjects has any type 
-			// @ts-ignore
-      setSubjects(prevSubjects => prevSubjects?.filter((subject) => subject.id !== subjectId))
+      setSubjects((prevSubjects: Subject[]) => prevSubjects?.filter((subject) => subject.id !== subjectId))
       toast.success('Subject deleted.');
     })
   }
