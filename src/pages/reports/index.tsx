@@ -22,9 +22,6 @@ export default function ReportsHome() {
       <div>
         <section>
           <SchoolHeader />
-          <div className="grid grid-cols-3">
-            <Link href='reports/sample1/'>Sample 1</Link>
-          </div>
           <ReportList />
         </section>
       </div>

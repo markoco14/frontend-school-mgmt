@@ -91,6 +91,9 @@ export default function Home() {
         {user && selectedSchool && (
           <section>
             <SchoolHeader />
+            <div className="text-3xl mb-4 grid grid-cols-3">
+              <Link href='reports/sample1/'>Sample 1</Link>
+            </div>
             <ReportList />
           </section>
         )}
