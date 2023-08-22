@@ -4,6 +4,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { useContext, useState, } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { Subject } from "../../../domain/entities/Subject";
 
 type Inputs = {
   subjectName: string;
@@ -18,9 +19,7 @@ export default function AddSubject({setSubjects}: { setSubjects: Function, }) {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       await subjectAdapter.addSubject({name: data.subjectName, school: selectedSchool.id}).then((res) => {
-				// because prevSubjects type Subject[] or undefined 
-				// @ts-ignore
-				setSubjects(prevSubjects => [...prevSubjects, res])
+				setSubjects((prevSubjects: Subject[]) => [...prevSubjects, res])
         toast.success('Subject added.');
       });
       reset();

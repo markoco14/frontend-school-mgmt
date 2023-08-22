@@ -25,16 +25,12 @@ export default function AddSchoolDay({schoolDays, setSchoolDays}: {schoolDays: S
   }, [selectedSchool])
 
 	const handleAddSchoolDay = async ({weekday}: {weekday: WeekDay}) => {
-		// @ts-ignore
 		const doesWeekdayExist = schoolDays.some((schoolDay) => schoolDay.day === weekday.day);
 
 		if (!doesWeekdayExist) {
-			// TODO: change this to adapter response
 			await schoolDayAdapter.addSchoolDay({schoolId: selectedSchool.id, day: weekday.id})
 			.then((res) => {
 				const daysOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-				// because prevSubjects implicity has any type
-				// @ts-ignore
 				setSchoolDays((prevSubjects: SchoolDay[]) => [...prevSubjects, res].sort((a: SchoolDay, b: SchoolDay) => {
 					return daysOrder.indexOf(a.day.toString()) - daysOrder.indexOf(b.day.toString());
 				}))
@@ -42,6 +38,10 @@ export default function AddSchoolDay({schoolDays, setSchoolDays}: {schoolDays: S
 				return
 			})
 		} 
+	}
+
+	function checkWeekDayInSchoolDays({weekday}: {weekday: WeekDay}) {
+		return schoolDays.some((schoolDay) => schoolDay.day === weekday.day)
 	}
 
   return (
@@ -70,13 +70,15 @@ export default function AddSchoolDay({schoolDays, setSchoolDays}: {schoolDays: S
 						<p className="mb-4">Click days to add them to your school.</p>
 						<ul className="bg-gray-100 rounded grid gap-2">
 							{weekDays?.map((weekday, index) => (
-								<li key={index}
-									// @ts-ignore
-									disabled={schoolDays.some((schoolDay) => schoolDay.day === weekday.day) ? true : false}
-									onClick={() => {handleAddSchoolDay({weekday: weekday}) }}
-									// @ts-ignore
-									className={`${schoolDays.some((schoolDay) => schoolDay.day === weekday.day) ? 'bg-blue-300 hover:cursor-not-allowed' : 'hover:bg-blue-300 hover:cursor-pointer'} p-2 rounded`}
-								>{weekday.day}</li>
+								<li key={index}>
+									<button 
+										onClick={() => {handleAddSchoolDay({weekday: weekday}) }}
+										disabled={checkWeekDayInSchoolDays({weekday: weekday})} 
+										className={`${checkWeekDayInSchoolDays({weekday: weekday}) ? 'bg-blue-300 hover:cursor-not-allowed' : 'hover:bg-blue-300 hover:cursor-pointer'} w-full text-left p-2 rounded`}
+									>
+										{weekday.day}
+									</button>
+								</li>
 							))}
 						</ul>
             <div className="flex justify-end">

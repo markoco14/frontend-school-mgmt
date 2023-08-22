@@ -3,6 +3,7 @@ import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/l
 import { useContext, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { Level } from "../../../domain/entities/Level";
 
 type Inputs = {
   levelName: string;
@@ -16,9 +17,7 @@ export default function AddLevel({ setLevels }: {setLevels: Function}) {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       await levelAdapter.addLevel({name: data.levelName, school: selectedSchool.id}).then((res) => {
-        // because prevLevels implicitly has any type
-        // @ts-ignore
-        setLevels(prevLevels => [...prevLevels, res])
+        setLevels((prevLevels: Level[]) => [...prevLevels, res])
         toast.success('Level added.');
       });
       reset();
