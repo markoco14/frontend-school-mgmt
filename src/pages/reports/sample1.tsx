@@ -33,10 +33,20 @@ export default function ReportsHome() {
     )
   }
 
-	function checkIfSubject({subject}: {subject: string}) {
-		console.log(subject)
-		console.log(subjects.find((current_subject) => current_subject === subject))
-		return subjects.find((current_subject) => current_subject === subject)
+	function checkIfSubject({this_subject}: {this_subject: string}) {
+		return this_subject === subject
+	}
+
+	function checkIfLevel({this_level}: {this_level: number}) {
+		return this_level === level
+	}
+
+	function checkIfUnit({this_unit}: {this_unit: number}) {
+		return this_unit === unit
+	}
+
+	function checkIfDay({this_day}: {this_day: string | number}) {
+		return this_day === day
 	}
 
   return (
@@ -73,8 +83,21 @@ export default function ReportsHome() {
 							{subjects?.map((this_subject, index) => (
 								<li key={index}>
 									<button 
-										onClick={() => setSubject(this_subject)}
-										className={`${this_subject === subject ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
+										onClick={() => {
+											setSubject(this_subject)
+											if (subject === 'Phonics' && (this_subject === 'Grammar' || this_subject === 'Reading')) {
+												setLevel(5)
+												setUnit(1)
+												setDay(1)
+											}
+											
+											if ((subject === 'Grammar' || subject === 'Reading') && this_subject === 'Phonics') {
+												setLevel(1)
+												setUnit(1)
+												setDay(1)
+											}
+										}}
+										className={`${checkIfSubject({this_subject: this_subject}) ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
 									>
 										{this_subject}
 									</button>
@@ -86,26 +109,26 @@ export default function ReportsHome() {
 						<p className="mb-2">Level (Level choices based on subject)</p>
 							{(subject === 'Grammar' || subject === 'Reading') ? (
 								<ul className="grid grid-cols-6">
-									{upperLevels?.map((upperLevel, index) => (
+									{upperLevels?.map((this_level, index) => (
 										<li key={index}>
 											<button 
-												onClick={() => setLevel(upperLevel)}
-												className={`${upperLevel === level ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
+												onClick={() => setLevel(this_level)}
+												className={`${checkIfLevel({this_level: this_level}) ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
 											>
-												{upperLevel}
+												{this_level}
 											</button>
 										</li>
 									))}
 								</ul>
 							) : (
 								<ul className="grid grid-cols-4">
-									{lowerLevels?.map((lowerLevel, index) => (
+									{lowerLevels?.map((this_level, index) => (
 										<li key={index}>
 											<button 
-												onClick={() => setLevel(lowerLevel)}
-												className={`${lowerLevel === level ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
+												onClick={() => setLevel(this_level)}
+												className={`${checkIfLevel({this_level: this_level}) ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
 											>
-												{lowerLevel}
+												{this_level}
 											</button>
 										</li>
 									))}
@@ -115,28 +138,28 @@ export default function ReportsHome() {
 					
 					<article className="bg-blue-200 p-4 rounded mb-4">
 						<p className="mb-2">Unit (Unit choices based on subject and level)</p>
-						{(level >= 5 && level <= 12) ? (
+						{((subject === 'Grammar' || subject || 'Reading') && level >= 5 && level <= 12) ? (
 								<ul className="grid grid-cols-6">
-									{upperUnits?.map((upperUnit, index) => (
+									{upperUnits?.map((this_unit, index) => (
 										<li key={index}>
 											<button 
-												onClick={() => setUnit(upperUnit)}
-												className={`${upperUnit === unit ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
+												onClick={() => setUnit(this_unit)}
+												className={`${checkIfUnit({this_unit: this_unit}) ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
 											>
-												{upperUnit}
+												{this_unit}
 											</button>
 										</li>
 									))}
 								</ul>
 							) : (
 								<ul className="grid grid-cols-5">
-									{lowerUnits?.map((lowerUnit, index) => (
+									{lowerUnits?.map((this_unit, index) => (
 										<li key={index}>
 											<button 
-												onClick={() => setUnit(lowerUnit)}
-												className={`${lowerUnit === unit ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
+												onClick={() => setUnit(this_unit)}
+												className={`${checkIfUnit({this_unit: this_unit}) ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
 											>
-												{lowerUnit}
+												{this_unit}
 											</button>
 										</li>
 									))}
@@ -147,26 +170,26 @@ export default function ReportsHome() {
 						<p className="mb-2">Day (Day choices based on subject)</p>
 						{(subject === 'Grammar' || subject === 'Reading') ? (
 								<ul className="grid grid-cols-4">
-									{upperDays?.map((upperDay, index) => (
+									{upperDays?.map((this_day, index) => (
 										<li key={index}>
 											<button 
-												onClick={() => setDay(upperDay)}
-												className={`${upperDay === day ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
+												onClick={() => setDay(this_day)}
+												className={`${checkIfDay({this_day: this_day}) ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
 											>
-												{upperDay}
+												{this_day}
 											</button>
 										</li>
 									))}
 								</ul>
 							) : (
 								<ul className="grid grid-cols-5">
-									{lowerDays?.map((lowerDay, index) => (
+									{lowerDays?.map((this_day, index) => (
 										<li key={index}>
 											<button 
-												onClick={() => setDay(lowerDay)}
-												className={`${lowerDay === day ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
+												onClick={() => setDay(this_day)}
+												className={`${checkIfDay({this_day: this_day}) ? "bg-blue-500 text-white" : "bg-gray-100"} w-full py-2 text-center `}
 											>
-												{lowerDay}
+												{this_day}
 											</button>
 										</li>
 									))}
