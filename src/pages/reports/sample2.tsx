@@ -367,14 +367,14 @@ const ReportDetails = ({ setIsConfirmed }: { setIsConfirmed: Function }) => {
 			<ul className="grid grid-cols-6 gap-2 p-2 mb-4 rounded sticky top-0 bg-white z-10">
 				{students?.map((student, index) => (
 					<li key={index}>
-						<div className="relative aspect-square ">
+						<div className={`relative aspect-square`}>
 							<Image 
 								src={student.photo_url}
 								alt='An image of a student'
 								fill={true}
 								sizes="(max-width: 768px) 50vw, (max-width: 1200px) 20vw"
 								style={{ objectFit: 'cover' }}
-								className="rounded-full"
+								className={`${selectedStudent.id === student.id && 'border border-2 border-green-300 scale-125'} rounded-full`}
                 onClick={() => {
                   setSelectedStudent(student);
                   setTestScore(0);
