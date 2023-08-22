@@ -12,19 +12,19 @@ class SchoolDayAdapter {
 		return schoolDayList
 	}
 
-	// public async addSchoolDay({schoolId, day}: {schoolId: number, day: string}): Promise<SchoolDay> {
-	// 	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/days/`, { 
-	// 		method: 'POST', 
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 		},
-	// 		body: JSON.stringify({ day: day }) 
-	// 	});
-	// 	const level: SchoolDay = await res.json();
+	public async addSchoolDay({schoolId, day}: {schoolId: number, day: number}): Promise<SchoolDay> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/days/`, { 
+			method: 'POST', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ day: day }) 
+		});
+		const level: SchoolDay = await res.json();
 
-	// 	return level
+		return level
 
-	// }
+	}
 
 }
 
