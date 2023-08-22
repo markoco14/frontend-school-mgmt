@@ -25,6 +25,14 @@ class SchoolDayAdapter {
 		return level
 
 	}
+	public async deleteSchoolDay({schoolDayId}: {schoolDayId: number}) {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/days/${schoolDayId}/`,{
+			method: 'DELETE'
+		})
+
+		return response;
+
+	}
 
 }
 

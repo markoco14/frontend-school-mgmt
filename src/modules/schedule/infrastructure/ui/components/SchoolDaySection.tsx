@@ -1,8 +1,9 @@
 import AuthContext from "@/src/AuthContext";
+import AddSchoolDay from "@/src/modules/school-mgmt/infrastructure/ui/components/AddSchoolDay";
 import { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { SchoolDay } from "../../../domain/entities/SchoolDay";
 import { schoolDayAdapter } from "../adapters/schoolDayAdapter";
-import AddSchoolDay from "@/src/modules/school-mgmt/infrastructure/ui/components/AddSchoolDay";
 
 const SchoolDayList = ({
 	schoolDays,
@@ -12,7 +13,6 @@ const SchoolDayList = ({
 	setSchoolDays: Function;
 }) => {
 	const { selectedSchool } = useContext(AuthContext)
-	const [fakeSchoolDays, setFakeSchoolDays] = useState<SchoolDay[]>([])
 	
 
 	useEffect(() => {
@@ -27,33 +27,29 @@ const SchoolDayList = ({
     getSubjects();
   }, [selectedSchool, setSchoolDays])
 
-	// async function handleDeleteSubject({subjectId}: {subjectId: number}) {
-  //   await subjectAdapter.deleteSubject({id: subjectId}).then((res) => {
-	// 		// because prevSubjects has any type 
-	// 		// @ts-ignore
-  //     setSubjects(prevSubjects => prevSubjects?.filter((subject) => subject.id !== subjectId))
-  //     toast.success('Subject deleted.');
-  //   })
-  // }
+	async function handleDeleteSchoolDay({schoolDayId}: {schoolDayId: number}) {
+    await schoolDayAdapter.deleteSchoolDay({schoolDayId: schoolDayId}).then((res) => {
+      setSchoolDays((prevSchoolDays: SchoolDay[]) => prevSchoolDays?.filter((schoolDay: SchoolDay) => schoolDay.id !== schoolDayId))
+      toast.success('Subject deleted.');
+    })
+  }
 
 
 	return (
-		<>
-			<ul className="bg-gray-100 rounded shadow-inner mb-4">
-				{schoolDays?.map((schoolDay, index) => (
-					<li 
-						key={index}
-						className="p-2 hover:bg-gray-300 flex justify-between"
-					>
-						<span>{schoolDay.day}</span>
-						{/* <button 
-						onClick={() => handleDeleteSubject({subjectId: subject.id})}
-						className="text-red-500 hover:text-red-600"
-						>delete</button> */}
-					</li>
-				))}
-			</ul>
-		</>
+		<ul className="bg-gray-100 rounded shadow-inner mb-4">
+			{schoolDays?.map((schoolDay, index) => (
+				<li 
+					key={index}
+					className="p-2 hover:bg-gray-300 flex justify-between"
+				>
+					<span>{schoolDay.day}</span>
+					<button 
+					onClick={() => handleDeleteSchoolDay({schoolDayId: schoolDay.id})}
+					className="text-red-500 hover:text-red-600"
+					>delete</button>
+				</li>
+			))}
+		</ul>
 	);
 }
 
