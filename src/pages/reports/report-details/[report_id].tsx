@@ -1,7 +1,7 @@
 import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import { ReportDetail } from "@/src/modules/report-mgmt/domain/entities/ReportDetail";
-import { reportDetailAdapter } from "@/src/modules/report-mgmt/infrastructure/adapters/reportDetailAdapter";
+import { ReportDetail } from "@/src/modules/reports/domain/entities/ReportDetail";
+import { reportDetailAdapter } from "@/src/modules/reports/infrastructure/adapters/reportDetailAdapter";
 import { format } from "date-fns";
 import debounce from 'lodash.debounce';
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
@@ -172,7 +172,7 @@ export default function ReportDate({
             </h2>
             {user?.role === 'OWNER' ? (
               <Link 
-                href="/report-mgmt/"
+                href="/reports/"
                 className='hover:underline hover:underline-offset-2 hover:text-blue-700'
               >
                 Reports

@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import AuthContext from "../AuthContext";
 import Layout from "../modules/core/infrastructure/ui/components/Layout";
 import SchoolHeader from "../modules/core/infrastructure/ui/components/SchoolHeader";
-import { ReportList } from "../modules/report-mgmt/infrastructure/ui/components/ReportList";
+import { ReportList } from "../modules/reports/infrastructure/ui/components/ReportList";
 import { School } from "../modules/school-mgmt/domain/entities/School";
 import { schoolAdapter } from "../modules/school-mgmt/infrastructure/adapters/schoolAdapter";
 import Login from "../modules/user-mgmt/infrastructure/ui/Login";

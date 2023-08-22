@@ -2,8 +2,7 @@ import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
-import { ReportList } from "@/src/modules/report-mgmt/infrastructure/ui/components/ReportList";
-import Link from "next/link";
+import { ReportList } from "@/src/modules/reports/infrastructure/ui/components/ReportList";
 import { useContext } from "react";
 
 
