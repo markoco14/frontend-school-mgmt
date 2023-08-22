@@ -58,21 +58,12 @@ export default function ReportsHome() {
               <span className="text-lg text-gray-500">{date.toDateString()}</span> <br></br> 
               {/* <span className="text-3xl">{date}</span> */}
             </h2>
-            {user?.role === 'OWNER' ? (
-              <Link 
-                href="/reports/"
-                className='hover:underline hover:underline-offset-2 hover:text-blue-700'
-              >
-                Reports
-              </Link>
-            ) : (
-              <Link 
-                href="/"
-                className='hover:underline hover:underline-offset-2 hover:text-blue-700'
-              >
-                Back
-              </Link>
-            )}
+						<Link 
+							href="/"
+							className='hover:underline hover:underline-offset-2 hover:text-blue-700'
+						>
+							Back
+						</Link>
           </div>
         </section>
 				<section>
