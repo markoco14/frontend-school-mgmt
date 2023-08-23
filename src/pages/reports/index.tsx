@@ -113,21 +113,48 @@ export default function ReportsHome() {
       <div>
         <section>
           <SchoolHeader />
-          <article>
-            <h2 className="text-lg text-gray-600">Report Status</h2>
-            <p className="text-2xl">{date.toDateString()}</p>
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th></th>
-                  <th className="bg-gray-300 rounded-t-lg">Complete?</th>
-                </tr>
-              </thead>
-              <tbody className="rounded">
+            <article>
+              <h2 className="text-lg text-gray-600">Report Status</h2>
+              <p className="text-2xl">{date.toDateString()}</p>
+              <table className="xs:w-1/2">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th className="bg-gray-300 rounded-t-lg">Complete?</th>
+                  </tr>
+                </thead>
+                <tbody className="rounded">
+                  {reports?.map((report, index) => (
+                    <tr key={index} className={`${report.is_complete ? 'bg-green-100 hover:bg-green-300' : 'bg-red-100 hover:bg-red-300'} py-1 rounded`}>
+                      <td className="relative flex justify-center py-1">
+                        <Image 
+                          src={report.teacher.photo_url}
+                          alt='An image of a teacher'
+                          width={50}
+                          height={50}
+                          style={{ objectFit: 'cover' }}
+                          className="rounded-full"
+                        />
+                      </td>
+                    <td className="text-left py-1">
+                      {report.class} - {report.teacher.first_name}
+                    </td>
+                    <td className="text-center py-1">
+                      {report.is_complete ? <i className="fa-solid fa-check text-green-500"></i> : <i className="fa-solid fa-xmark text-red-500"></i>}
+                    </td>
+                  </tr>
+                  ))}
+                </tbody>
+              </table>
+            </article>
+            <article>
+              <h2 className="text-lg text-gray-600">Report Status</h2>
+              <p className="text-2xl">{date.toDateString()}</p>
+              <ul className="grid gap-2 xs:w-1/2">
                 {reports?.map((report, index) => (
-                  <tr key={index} className={`${report.is_complete ? 'bg-green-100' : 'bg-red-100'} py-1 rounded`}>
-                    <td className="relative flex justify-center py-1">
+                  <li key={index} className={`${report.is_complete ? 'bg-green-100' : 'bg-red-100'} px-2 py-1 rounded grid grid-cols-4 gap-2 items-center `}>
+                    <div className="relative col-span-1 flex justify-center">
                       <Image 
                         src={report.teacher.photo_url}
                         alt='An image of a teacher'
@@ -136,44 +163,17 @@ export default function ReportsHome() {
                         style={{ objectFit: 'cover' }}
                         className="rounded-full"
                       />
-                    </td>
-                  <td className="text-left py-1">
-                    {report.class} - {report.teacher.first_name}
-                  </td>
-                  <td className="text-center py-1">
-                    {report.is_complete ? <i className="fa-solid fa-check text-green-500"></i> : <i className="fa-solid fa-xmark text-red-500"></i>}
-                  </td>
-                </tr>
+                    </div>
+                    <div 
+                      className={`flex justify-between col-span-3 rounded text-center`}
+                    >
+                      <p>{report.class} - {report.teacher.first_name}</p>
+                      <p>{report.is_complete ? <i className="fa-solid fa-check text-green-500"></i> : <i className="fa-solid fa-xmark text-red-500"></i>}</p>
+                    </div>
+                  </li>
                 ))}
-              </tbody>
-            </table>
-          </article>
-          <article>
-            <h2 className="text-lg text-gray-600">Report Status</h2>
-            <p className="text-2xl">{date.toDateString()}</p>
-            <ul className="grid gap-2">
-              {reports?.map((report, index) => (
-                <li key={index} className={`${report.is_complete ? 'bg-green-100' : 'bg-red-100'} px-2 py-1 rounded grid grid-cols-4 gap-2 items-center `}>
-                  <div className="relative col-span-1 flex justify-center">
-                    <Image 
-                      src={report.teacher.photo_url}
-                      alt='An image of a teacher'
-                      width={50}
-                      height={50}
-                      style={{ objectFit: 'cover' }}
-                      className="rounded-full"
-                    />
-                  </div>
-                  <div 
-                    className={`flex justify-between col-span-3 rounded text-center`}
-                  >
-                    <p>{report.class} - {report.teacher.first_name}</p>
-                    <p>{report.is_complete ? <i className="fa-solid fa-check text-green-500"></i> : <i className="fa-solid fa-xmark text-red-500"></i>}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </article>
+              </ul>
+            </article>
         </section>
       </div>
     </Layout>
