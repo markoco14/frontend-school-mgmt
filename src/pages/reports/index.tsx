@@ -116,7 +116,7 @@ export default function ReportsHome() {
             <article>
               <h2 className="text-lg text-gray-600">Report Status</h2>
               <p className="text-2xl">{date.toDateString()}</p>
-              <table className="xs:w-1/2">
+              <table className="w-full">
                 <thead>
                   <tr>
                     <th></th>
@@ -151,7 +151,7 @@ export default function ReportsHome() {
             <article>
               <h2 className="text-lg text-gray-600">Report Status</h2>
               <p className="text-2xl">{date.toDateString()}</p>
-              <ul className="grid gap-2 xs:w-1/2">
+              <ul className="grid gap-2">
                 {reports?.map((report, index) => (
                   <li key={index} className={`${report.is_complete ? 'bg-green-100' : 'bg-red-100'} px-2 py-1 rounded grid grid-cols-4 gap-2 items-center `}>
                     <div className="relative col-span-1 flex justify-center">
