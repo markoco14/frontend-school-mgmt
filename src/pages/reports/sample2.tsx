@@ -580,7 +580,7 @@ export default function WriteReport() {
             </>
           ) : (
 						<>
-							{user.role !== 'TEACHER' && (
+							{user?.role !== 'TEACHER' && (
 								<button className="mb-4 text-lg " onClick={() => setIsConfirmed(false)}>Edit Report Details</button>
 							)}
 							<ReportDetails setIsConfirmed={setIsConfirmed} />
