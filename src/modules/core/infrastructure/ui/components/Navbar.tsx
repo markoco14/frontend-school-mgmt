@@ -90,9 +90,9 @@ export default function Navbar() {
               Students
             </Link>
             <Link
-              href="/report-mgmt/"
+              href="/reports/"
               className={`${
-                router.pathname.includes("report-mgmt")
+                router.pathname.includes("reports")
                   ? "underline underline-offset-4 decoration-2 text-blue-700"
                   : ""
               }`}
@@ -201,9 +201,9 @@ export default function Navbar() {
                 Students
               </Link>
               <Link
-                href="/report-mgmt/"
+                href="/reports/"
                 className={`${
-                  router.pathname.includes("report-mgmt")
+                  router.pathname.includes("reports")
                     ? "underline underline-offset-4 decoration-2 text-blue-700"
                     : ""
                 }`}

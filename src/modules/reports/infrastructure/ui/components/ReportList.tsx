@@ -39,13 +39,13 @@ export const ReportList = () => {
       .getReportByClassAndDate({ class_id: thisClass.id, date: date })
       .then((res) => {
         if (res.id) {
-          router.push(`report-mgmt/report-details/${res.id}/`);
+          router.push(`reports/report-details/${res.id}/`);
         }
         else {
           reportAdapter
             .createReportForClassAndDate({ class_id: thisClass.id, date: date })
             .then((res) => {
-              router.push(`report-mgmt/report-details/${res.id}/`);
+              router.push(`reports/report-details/${res.id}/`);
             });
         }
       });
