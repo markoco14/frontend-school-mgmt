@@ -2,7 +2,7 @@
 export default function PaginationButtons({count, page, setPage, next}: {count: number; page: number; setPage: Function; next: boolean;}) {
 	
 	return (
-		count >= 10 && (
+		count > 10 && (
 			<div className="flex justify-evenly gap-2">
 				<button
 					className="disabled:cursor-not-allowed bg-blue-300 disabled:bg-gray-300 px-2 py-1 w-full rounded"

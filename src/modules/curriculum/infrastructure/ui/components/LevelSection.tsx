@@ -41,12 +41,32 @@ export default function LevelSection() {
     }
   }, [selectedSchool, page]);
 
+  async function fetchSchoolLevels(id: number) {
+    setLoading(true);
+      await levelAdapter.listSchoolLevels({id: id, page: page}).then((res) => {
+        console.log(res)
+        if (res.next) {
+          setNext(true);
+        } else {
+          setNext(false);
+        }
+        setLevels(res.results);
+        setCount(res.count);
+        setLoading(false);
+      });
+  }
+
   async function handleDeleteLevel(levelId: number) {
     await levelAdapter.deleteLevel({id: levelId}).then((res) => {
       if (levels.length === 1 && page > 1) {
-          setPage((prevPage: number) => prevPage - 1)
-          return
-        }
+        setPage((prevPage: number) => prevPage - 1)
+        return
+      }
+
+      if (levels.length - 1 === 9) {
+        fetchSchoolLevels(selectedSchool.id)
+      }
+     
       setLevels(prevLevels => prevLevels.filter((level) => level.id !== levelId))
       toast.success('Level deleted.');
     })
@@ -57,7 +77,7 @@ export default function LevelSection() {
       <article>
         <LevelList levels={levels} handleDeleteLevel={handleDeleteLevel}/>
         <PaginationButtons count={count} page={page} setPage={setPage} next={next}/>
-        <AddLevel setNext={setNext} page={page} setLevels={setLevels}/>
+        <AddLevel setCount={setCount} levels={levels} count={count} page={page} setPage={setPage} setNext={setNext} setLevels={setLevels}/>
       </article>
     </section>
   );

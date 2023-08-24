@@ -5,17 +5,32 @@ import { levelAdapter } from "../../adapters/levelAdapter";
 import { Level } from "../../../domain/entities/Level";
 import toast from "react-hot-toast";
 
-export default function AddLevel({page, setNext, setLevels}: {page: number; setNext: Function; setLevels: Function;}) {
+export default function AddLevel({count, setCount, page, setPage, setNext, levels, setLevels}: {count: number; setCount: Function; page: number; levels: Level[]; setPage: Function; setNext: Function; setLevels: Function;}) {
 	const [ isAddLevel, setIsAddLevel ] = useState<boolean>(false);
 
 	async function handleAddLevel({name, school, order}: {name: string, school: number, order: number}) {
 		try {
       await levelAdapter.addLevel({name: name, school: school, order: order}).then((res) => {
+				
+				// WAIT FOR RESPONSE B/C IF FAILED DO NOTHING
+				
+				// 1: CHECK IS THE RESPONSE.ORDER GREATER THAN THE HIGHEST ORDER? === BUMP USER TO NEXT PAGE
+				if (res.order > levels[9]?.order) {
+					setPage((prevPage: number) => prevPage + 1)
+				}
+
+				// 2: IF COUNT CURRENTLY 10, TOGGLE SHOW PAGE BUTTONS
+				if (count === 10) {
+					setCount(11)
+					setNext(true);
+				}
+				
+				// 3: ELSE JUST DO AS WE DO
         setLevels((prevLevels: Level[]) => {
 					const newLevels = [...prevLevels, res].sort((a, b) => a.order - b.order)
+					
 					if (prevLevels.length >= 10) {
 						newLevels.pop()
-						setNext(true);
 					}
 					
 					return newLevels;
