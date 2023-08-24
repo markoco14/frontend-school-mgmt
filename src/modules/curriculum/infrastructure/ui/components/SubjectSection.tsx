@@ -69,7 +69,7 @@ export default function SubjectSection() {
   }, [selectedSchool])
   
   return (
-    <section>
+    <section className="col-span-2 xs:col-span-1">
 			<article>
 				<h2 className="text-3xl mb-2">Subjects</h2>
 				<SubjectList subjects={subjects} setSubjects={setSubjects} />

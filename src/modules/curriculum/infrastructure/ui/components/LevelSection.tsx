@@ -73,7 +73,7 @@ export default function LevelSection() {
   }
   
   return (
-    <section>
+    <section className="col-span-2 xs:col-span-1">
       <article>
         <LevelList levels={levels} handleDeleteLevel={handleDeleteLevel}/>
         <PaginationButtons count={count} page={page} setPage={setPage} next={next}/>
