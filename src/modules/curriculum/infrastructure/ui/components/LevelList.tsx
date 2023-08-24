@@ -7,7 +7,7 @@ export default function LevelSection({levels, handleDeleteLevel}: {levels: Level
 		<div className="mb-4 xs:mb-0">
 			<h2 className="text-3xl mb-2">Levels</h2>
 			<ul className="bg-gray-100 rounded shadow-inner mb-4">
-				{levels?.map((level, index) => (
+				{levels?.length >= 1 ? levels?.map((level, index) => (
 					<li 
 						key={index}
 						className="p-2 hover:bg-gray-300 flex justify-between"
@@ -21,7 +21,11 @@ export default function LevelSection({levels, handleDeleteLevel}: {levels: Level
 							delete
 						</button>
 					</li>
-				))}
+				)) : (
+					<article className="bg-gray-100 rounded shadow-inner mb-4">
+						<p>This page is empty.</p>
+					</article>
+				)}
 			</ul>
 		</div>
   );
