@@ -10,7 +10,7 @@ type Inputs = {
   order: number;
 }
 
-export default function AddLevelForm({ page, setLevels }: {page: number; setLevels: Function}) {
+export default function AddLevelForm({ setNext, page, setLevels }: {setNext: Function; page: number; setLevels: Function}) {
 	const { selectedSchool } = useContext(AuthContext);
 
   const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
@@ -18,7 +18,15 @@ export default function AddLevelForm({ page, setLevels }: {page: number; setLeve
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       await levelAdapter.addLevel({name: data.levelName, school: selectedSchool.id, order: data.order}).then((res) => {
-        setLevels((prevLevels: Level[]) => [...prevLevels, res])
+        setLevels((prevLevels: Level[]) => {
+					const newLevels = [...prevLevels, res].sort((a, b) => a.order - b.order)
+					if (prevLevels.length >= 10) {
+						newLevels.pop()
+						setNext(true);
+					}
+					
+					return newLevels;
+				})
         toast.success('Level added.');
       });
       reset();

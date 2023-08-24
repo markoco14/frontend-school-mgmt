@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import AddLevelForm from "./AddLevelForm";
 import { useState } from "react";
 
-export default function AddLevel({page, setLevels}: {page: number; setLevels: Function;}) {
+export default function AddLevel({page, setNext, setLevels}: {page: number; setNext: Function; setLevels: Function;}) {
 	  const [ isAddLevel, setIsAddLevel ] = useState<boolean>(false);
 
 	
@@ -28,7 +28,7 @@ export default function AddLevel({page, setLevels}: {page: number; setLevels: Fu
 					<div className="fixed inset-0 bg-blue-900/25" />
 					<Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
 						<Dialog.Title>Add Level</Dialog.Title>
-						<AddLevelForm page={page} setLevels={setLevels}/>
+						<AddLevelForm setNext={setNext} page={page} setLevels={setLevels}/>
 						<div className="flex justify-end">
 							<button
 								type="button"

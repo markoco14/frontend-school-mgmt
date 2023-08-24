@@ -53,7 +53,7 @@ export default function LevelSection() {
       <article>
         <LevelList levels={levels} handleDeleteLevel={handleDeleteLevel}/>
         <PaginationButtons count={count} page={page} setPage={setPage} next={next}/>
-        <AddLevel page={page} setLevels={setLevels}/>
+        <AddLevel setNext={setNext} page={page} setLevels={setLevels}/>
       </article>
     </section>
   );
