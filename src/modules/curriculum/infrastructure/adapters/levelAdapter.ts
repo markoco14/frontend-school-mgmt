@@ -4,8 +4,6 @@ import { LevelListResponse } from "../../domain/entities/LevelListResponse";
 class LevelAdapter {
 
 	public async listSchoolLevels({id, page}: {id: number, page:number}): Promise<LevelListResponse> {
-		console.log('in adapter', page)
-
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/levels/?page=${page}&school=${id}`);
 		const levels: LevelListResponse = await res.json();
 
