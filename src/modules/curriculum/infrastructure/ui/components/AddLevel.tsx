@@ -20,11 +20,11 @@ export default function AddLevel({count, setCount, page, setPage, setNext, level
 				}
 
 				// 2: IF COUNT CURRENTLY 10, TOGGLE SHOW PAGE BUTTONS
-				if (count === 10) {
+				
+				if (levels.length + 1 === 11) {
 					setCount(11)
 					setNext(true);
 				}
-				
 				// 3: ELSE JUST DO AS WE DO
         setLevels((prevLevels: Level[]) => {
 					const newLevels = [...prevLevels, res].sort((a, b) => a.order - b.order)
