@@ -43,6 +43,10 @@ export default function LevelSection() {
 
   async function handleDeleteLevel(levelId: number) {
     await levelAdapter.deleteLevel({id: levelId}).then((res) => {
+      if (levels.length === 1 && page > 1) {
+          setPage((prevPage: number) => prevPage - 1)
+          return
+        }
       setLevels(prevLevels => prevLevels.filter((level) => level.id !== levelId))
       toast.success('Level deleted.');
     })
