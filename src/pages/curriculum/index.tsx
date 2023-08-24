@@ -19,10 +19,10 @@ export default function CurriculumHome() {
 
   return (
     <Layout>
-      <div className="grid gap-4">
-          <SchoolHeader />
-          <LevelSection />
-					<SubjectSection />
+      <SchoolHeader />
+      <div className="grid xs:grid-cols-2 gap-4">
+        <LevelSection />
+        <SubjectSection />
       </div>
     </Layout>
   );
