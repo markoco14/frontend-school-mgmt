@@ -7,6 +7,7 @@ import { Level } from "../../../domain/entities/Level";
 
 type Inputs = {
   levelName: string;
+  order: number;
 }
 
 export default function AddLevel({ page, setLevels }: {page: number; setLevels: Function}) {
@@ -16,7 +17,7 @@ export default function AddLevel({ page, setLevels }: {page: number; setLevels: 
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      await levelAdapter.addLevel({name: data.levelName, school: selectedSchool.id}).then((res) => {
+      await levelAdapter.addLevel({name: data.levelName, school: selectedSchool.id, order: data.order}).then((res) => {
         setLevels((prevLevels: Level[]) => [...prevLevels, res])
         toast.success('Level added.');
       });
@@ -61,6 +62,22 @@ export default function AddLevel({ page, setLevels }: {page: number; setLevels: 
 							className='text-red-500 mt-2'
 						>
 							Level name is required
+						</p>
+					)}
+				</div>
+				<div className="flex flex-col mb-4">
+					<label>Order</label>
+					<input 
+						className="shadow p-2"
+						type="number"
+						{...register("order", {required: true, min: 1})}
+					/>
+					{errors.order?.type === "required" && (
+						<p 
+							role="alert"
+							className='text-red-500 mt-2'
+						>
+							Order is required
 						</p>
 					)}
 				</div>
