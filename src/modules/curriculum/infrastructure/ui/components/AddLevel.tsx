@@ -1,10 +1,31 @@
 import { Dialog, Transition } from "@headlessui/react";
 import AddLevelForm from "./AddLevelForm";
 import { useState } from "react";
+import { levelAdapter } from "../../adapters/levelAdapter";
+import { Level } from "../../../domain/entities/Level";
+import toast from "react-hot-toast";
 
 export default function AddLevel({page, setNext, setLevels}: {page: number; setNext: Function; setLevels: Function;}) {
-	  const [ isAddLevel, setIsAddLevel ] = useState<boolean>(false);
+	const [ isAddLevel, setIsAddLevel ] = useState<boolean>(false);
 
+	async function handleAddLevel({name, school, order}: {name: string, school: number, order: number}) {
+		try {
+      await levelAdapter.addLevel({name: name, school: school, order: order}).then((res) => {
+        setLevels((prevLevels: Level[]) => {
+					const newLevels = [...prevLevels, res].sort((a, b) => a.order - b.order)
+					if (prevLevels.length >= 10) {
+						newLevels.pop()
+						setNext(true);
+					}
+					
+					return newLevels;
+				})
+        toast.success('Level added.');
+      });
+    } catch (error) {
+      console.error(error)
+    }
+	}
 	
 	return (
 		<>
@@ -28,7 +49,7 @@ export default function AddLevel({page, setNext, setLevels}: {page: number; setN
 					<div className="fixed inset-0 bg-blue-900/25" />
 					<Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
 						<Dialog.Title>Add Level</Dialog.Title>
-						<AddLevelForm setNext={setNext} page={page} setLevels={setLevels}/>
+						<AddLevelForm handleAddLevel={handleAddLevel}/>
 						<div className="flex justify-end">
 							<button
 								type="button"
