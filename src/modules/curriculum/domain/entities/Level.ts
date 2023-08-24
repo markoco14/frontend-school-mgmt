@@ -4,5 +4,6 @@ export class Level {
     public id: number,
     public school: number,
     public name: string,
+    public order: number,
   ) {}
 }
