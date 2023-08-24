@@ -75,7 +75,7 @@ export default function LevelSection() {
             <div className="fixed inset-0 bg-blue-900/25" />
             <Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
               <Dialog.Title>Add Level</Dialog.Title>
-              <AddLevel setLevels={setLevels}/>
+              <AddLevel page={page} setLevels={setLevels}/>
               <div className="flex justify-end">
                 <button
                   type="button"

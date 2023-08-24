@@ -9,7 +9,7 @@ type Inputs = {
   levelName: string;
 }
 
-export default function AddLevel({ setLevels }: {setLevels: Function}) {
+export default function AddLevel({ page, setLevels }: {page: number; setLevels: Function}) {
 	const { selectedSchool } = useContext(AuthContext);
 
   const { reset, register, handleSubmit, formState: { errors }} = useForm<Inputs>();
@@ -27,20 +27,20 @@ export default function AddLevel({ setLevels }: {setLevels: Function}) {
   };
 
   useEffect(() => {
-    async function listSchoolLevels(id: number) {
-      await levelAdapter.listSchoolLevels({id: id}).then((res) => {
+    async function listSchoolLevels({id, page}: {id: number; page: number}) {
+      await levelAdapter.listSchoolLevels({id: id, page: page}).then((res) => {
         setLevels(res.results)
       });
     }
 
     if (selectedSchool) {
       try {
-        listSchoolLevels(selectedSchool.id);
+        listSchoolLevels({id: selectedSchool.id, page: page});
       } catch (error) {
         console.error(error);
       }
     }
-  }, [selectedSchool, setLevels]);
+  }, [selectedSchool, setLevels, page]);
 
   return (
     <div className="xs:col-span-1">
