@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import AddLevel from "./AddLevel";
 import LevelList from "./LevelList";
 import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/levelAdapter";
+import PaginationButtons from "@/src/modules/core/infrastructure/ui/components/PaginationButtons";
 
 export default function LevelSection() {
   const { selectedSchool } = useContext(AuthContext);
@@ -13,12 +14,22 @@ export default function LevelSection() {
   const [loading, setLoading] = useState<boolean>(false);
   const [levels, setLevels] = useState<Level[]>([]);
   const [ isAddLevel, setIsAddLevel ] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1)
+  const [next, setNext] = useState<boolean>(false);
+  const [count, setCount] = useState<number>(0);
 
   useEffect(() => {
     async function listSchoolLevels(id: number) {
       setLoading(true);
-      await levelAdapter.listSchoolLevels({id: id}).then((res) => {
-        setLevels(res.results)
+      await levelAdapter.listSchoolLevels({id: id, page: page}).then((res) => {
+        console.log(res)
+        if (res.next) {
+          setNext(true);
+        } else {
+          setNext(false);
+        }
+        setLevels(res.results);
+        setCount(res.count);
         setLoading(false);
       });
     }
@@ -30,12 +41,12 @@ export default function LevelSection() {
         console.error(error);
       }
     }
-  }, [selectedSchool]);
+  }, [selectedSchool, page]);
 
   async function handleDeleteLevel(levelId: number) {
     await levelAdapter.deleteLevel({id: levelId}).then((res) => {
       setLevels(prevLevels => prevLevels.filter((level) => level.id !== levelId))
-      toast.success('Level added.');
+      toast.success('Level deleted.');
     })
   }
   
@@ -43,6 +54,7 @@ export default function LevelSection() {
     <section>
       <article>
         <LevelList levels={levels} handleDeleteLevel={handleDeleteLevel}/>
+        <PaginationButtons count={count} page={page} setPage={setPage} next={next}/>
         <button
           className="bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded"
           onClick={() => setIsAddLevel(true)}
