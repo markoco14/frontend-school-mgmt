@@ -10,19 +10,19 @@ class SubjectLevelAdapter {
 		return levels
 	}
 
-	// public async addLevel({name, school, order}: {name: string, school: number, order: number}): Promise<Level> {
-	// 	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/levels/`, { 
-	// 		method: 'POST', 
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 		},
-	// 		body: JSON.stringify({ name: name, school: school, order: order }) 
-	// 	});
-	// 	const level: Level	 = await res.json();
+	public async addSubjectLevel({subject, level}: {subject: number, level: number}): Promise<SubjectLevel> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subject-levels/`, { 
+			method: 'POST', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ subject: subject, level: level }) 
+		});
+		const subjectLevel: SubjectLevel	 = await res.json();
 
-	// 	return level
+		return subjectLevel
 
-	// }
+	}
 
 	// public async deleteLevel({id}: {id:number}): Promise<any> {
 	// 	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/levels/${id}/`,{
