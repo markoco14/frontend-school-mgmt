@@ -130,12 +130,14 @@ const SubjectLevelModal = ({
 									levels?.map((level, index) => (
 										<li
 											key={index}
-											className={`${checkLevelAssigned({level: level, subject: subject, subjectLevels: subjectLevels}) ? 'bg-blue-300 hover:bg-blue-500 ' : 'hover:bg-gray-300 '} p-2 flex justify-between`}
-											onClick={() => {
-												handleAddSubjectLevel({ subject: subject, level: level });
-											}}
 										>
-											<span>{level.name}</span>
+											<button
+												disabled={checkLevelAssigned({level: level, subject: subject, subjectLevels: subjectLevels})}
+												onClick={() => {
+													handleAddSubjectLevel({ subject: subject, level: level });
+												}}
+												className={`${checkLevelAssigned({level: level, subject: subject, subjectLevels: subjectLevels}) ? 'bg-blue-300 hover:bg-blue-500' : 'hover:bg-gray-300 '} w-full p-2 flex justify-between disabled:cursor-not-allowed`}
+											>{level.name}</button>
 										</li>
 									))
 								) : (
