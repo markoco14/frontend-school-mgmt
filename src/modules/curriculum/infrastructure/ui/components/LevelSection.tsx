@@ -20,7 +20,6 @@ export default function LevelSection() {
     async function listSchoolLevels(id: number) {
       setLoading(true);
       await levelAdapter.listSchoolLevels({id: id, page: page}).then((res) => {
-        console.log(res)
         if (res.next) {
           setNext(true);
         } else {
@@ -44,7 +43,6 @@ export default function LevelSection() {
   async function fetchSchoolLevels(id: number) {
     setLoading(true);
       await levelAdapter.listSchoolLevels({id: id, page: page}).then((res) => {
-        console.log(res)
         if (res.next) {
           setNext(true);
         } else {

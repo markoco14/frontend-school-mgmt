@@ -10,10 +10,10 @@ import { resolve } from "dns";
 export default function SubjectLevelSection() {
 	const { selectedSchool } = useContext(AuthContext);
 
-	const [levels, setLevels] = useState<any[]>([])
-
-
-	const [subjects, setSubjects] = useState<Subject[]>([])
+	
+	const [response, setResponse] = useState<any[]>([])
+	const [subjectLevels, setSubjectLevels] = useState<any[]>([])
+	const [uniqueSubjects, setUniqueSubjects] = useState<Subject[]>([])
 	const [currentSubject, setCurrentSubject] = useState<string>("")
 
 
@@ -21,27 +21,28 @@ export default function SubjectLevelSection() {
 		 async function getSubjectLevels() {
 			await subjectLevelAdapter.listSchoolSubjectLevels({id: selectedSchool.id})
 			.then((res) => {
-				// Extract unique subject names
-				const uniqueSubjects = res.reduce((acc: Subject[], item: SubjectLevel) => {
-						if (!acc.find((subject: Subject) => subject.name === item.subject.name)) {
-								acc.push(item.subject);
-						}
-						return acc;
+				const uniqueSubjects = res.reduce((acc: Subject[], subjectLevel: SubjectLevel) => {
+					if (!acc.find((subject: Subject) => subject.name === subjectLevel.subject.name)) {
+						acc.push(subjectLevel.subject);
+					}
+					return acc;
 				}, []);
-				console.log(uniqueSubjects)
-
-				const filteredLevels = res.filter(item => item.subject.name === currentSubject);
-
-				setLevels(filteredLevels);
-				// Using useState
-				setSubjects(uniqueSubjects);
-				console.log(uniqueSubjects[0].name)
+				const filteredLevels = res.filter(subjectLevel => subjectLevel.subject.name === uniqueSubjects[0].name).map(subjectLevel => subjectLevel.level);
+				
+				setResponse(res)
+				setUniqueSubjects(uniqueSubjects);
 				setCurrentSubject(uniqueSubjects[0].name)
-				console.log(res)
+				setSubjectLevels(filteredLevels);
 			})
 		 }
 		 getSubjectLevels();
-	}, [selectedSchool, currentSubject])
+	}, [selectedSchool])
+
+	function handleChangeLevel(response: SubjectLevel[], subjectName: string) {
+		const filteredLevels = response.filter(subjectLevel => subjectLevel.subject.name === subjectName).map(subjectLevel => subjectLevel.level);
+		setCurrentSubject(subjectName)
+		setSubjectLevels(filteredLevels)
+	}
 	
 	return (
 		<section className="col-span-2">
@@ -50,12 +51,11 @@ export default function SubjectLevelSection() {
 				<div className="col-span-3 xs:col-span-1">
 					<h3 className="text-center">Subjects</h3>
 					<ul className="bg-gray-100 rounded shadow-inner mb-4">
-						{subjects?.map((subject: Subject, index) => (
+						{uniqueSubjects?.map((subject: Subject, index) => (
 							<li key={index}
 							className={`${subject.name === currentSubject ? "bg-blue-300" : "bg-white" } p-2 hover:bg-gray-300`}
 							onClick={() => {
-								console.log(subject.name)
-								setCurrentSubject(subject.name)
+								handleChangeLevel(response, subject.name)
 							}}
 							
 							>{subject.name}</li>
@@ -65,13 +65,10 @@ export default function SubjectLevelSection() {
 				<div className="col-span-3 xs:col-span-1">
 					<h3 className="text-center">Levels</h3>
 					<ul className="bg-gray-100 rounded shadow-inner mb-4">
-						{levels?.map((subjectLevel, index) => (
+						{subjectLevels?.map((level, index) => (
 							<li key={index}
 							className="p-2 hover:bg-gray-300"
-							onClick={() => {
-								console.log(subjectLevel)
-							}}
-							>{subjectLevel.level.name}</li>
+							>{level.name}</li>
 						))}
 					</ul>
 				</div>
