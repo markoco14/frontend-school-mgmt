@@ -9,7 +9,7 @@ import { Level } from "../../../domain/entities/Level";
 import PaginationButtons from "@/src/modules/core/infrastructure/ui/components/PaginationButtons";
 import { subjectLevelAdapter } from "../../adapters/subjectLevelAdapter";
 
-const SubjectLevelModal = ({ subject }: { subject: Subject }) => {
+const SubjectLevelModal = ({ subject, setCurrentSubject }: { subject: Subject; setCurrentSubject: Function; }) => {
   const { selectedSchool } = useContext(AuthContext);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -65,8 +65,11 @@ const SubjectLevelModal = ({ subject }: { subject: Subject }) => {
 
   return (
     <>
-      <h1>Subject Level Modal</h1>
-      <p>{subject.name}</p>
+			<div className="flex justify-between">
+				<h1 className="text-lg text-gray-500">Manage Subject Levels</h1>
+				<button onClick={() => setCurrentSubject("")}><i className="fa-solid fa-xmark" /></button>
+			</div>
+      <p className="text-2xl">Add levels to {subject.name}</p>
       <ul className="bg-gray-100 rounded shadow-inner mb-4">
         {loading ? (
           <p>loading...</p>
@@ -150,7 +153,7 @@ const SubjectList = ({
           </li>
         ))}
       </ul>
-      {currentSubject && <SubjectLevelModal subject={currentSubject} />}
+      {currentSubject && <SubjectLevelModal subject={currentSubject} setCurrentSubject={setCurrentSubject}/>}
     </>
   );
 };
@@ -176,7 +179,10 @@ export default function SubjectSection() {
   return (
     <section className="col-span-2 xs:col-span-1">
       <article>
-        <h2 className="text-3xl mb-2">Subjects</h2>
+				<div className="mb-2">
+					<h2 className="text-3xl mb-2">Subjects</h2>
+					<p>Click a subject to assign Levels.</p>
+				</div>
         <SubjectList subjects={subjects} setSubjects={setSubjects} />
         <AddSubject setSubjects={setSubjects} />
       </article>
