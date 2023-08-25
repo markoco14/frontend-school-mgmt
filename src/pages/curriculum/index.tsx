@@ -40,7 +40,7 @@ export default function CurriculumHome() {
       <SchoolHeader />
       <div className="grid xs:grid-cols-2 gap-4">
         <LevelSection />
-        <SubjectSection />
+        <SubjectSection subjectLevels={subjectLevels} setSubjectLevels={setSubjectLevels}/>
         <SubjectLevelSection subjectLevels={subjectLevels}/>
       </div>
     </Layout>
