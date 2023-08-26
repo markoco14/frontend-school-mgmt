@@ -31,9 +31,12 @@ export default function AddSchoolDay({schoolDays, setSchoolDays}: {schoolDays: S
 			await schoolDayAdapter.addSchoolDay({schoolId: selectedSchool.id, day: weekday.id})
 			.then((res) => {
 				const daysOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+				
 				setSchoolDays((prevSubjects: SchoolDay[]) => [...prevSubjects, res].sort((a: SchoolDay, b: SchoolDay) => {
 					if (typeof a.day === 'string' && typeof b.day === 'string') {
 						return daysOrder.indexOf(a.day) - daysOrder.indexOf(b.day);
+					} else {
+						return Number(a.day) - Number(b.day)
 					}
 				}))
 				toast.success('School day added.')
