@@ -4,7 +4,7 @@ import { SubjectLevel } from "../../domain/entities/SubjectLevel";
 class SubjectLevelAdapter {
 
 	public async listSchoolSubjectLevels({id}: {id: number}): Promise<SubjectLevel[]> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subject-levels/`);
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/subject-levels/`);
 		const levels: SubjectLevel[] = await res.json();
 
 		return levels
