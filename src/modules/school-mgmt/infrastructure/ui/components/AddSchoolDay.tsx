@@ -1,11 +1,11 @@
 import AuthContext from "@/src/AuthContext";
-import { SchoolDay } from "@/src/modules/schedule/domain/entities/SchoolDay";
 import { WeekDay } from "@/src/modules/schedule/domain/entities/WeekDay";
 import { scheduleAdapter } from "@/src/modules/schedule/infrastructure/ui/adapters/scheduleAdapter";
 import { schoolDayAdapter } from "@/src/modules/schedule/infrastructure/ui/adapters/schoolDayAdapter";
 import { Dialog, Transition } from "@headlessui/react";
 import { useContext, useEffect, useState, } from "react";
 import toast from "react-hot-toast";
+import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
 
 export default function AddSchoolDay({schoolDays, setSchoolDays}: {schoolDays: SchoolDay[]; setSchoolDays: Function;}) {
 	const { selectedSchool } = useContext(AuthContext);

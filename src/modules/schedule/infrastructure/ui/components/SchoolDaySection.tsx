@@ -2,8 +2,8 @@ import AuthContext from "@/src/AuthContext";
 import AddSchoolDay from "@/src/modules/school-mgmt/infrastructure/ui/components/AddSchoolDay";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { SchoolDay } from "../../../domain/entities/SchoolDay";
 import { schoolDayAdapter } from "../adapters/schoolDayAdapter";
+import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
 
 const SchoolDayList = ({
 	schoolDays,
