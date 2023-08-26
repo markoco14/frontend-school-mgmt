@@ -17,7 +17,7 @@ export default function LevelSection() {
   const [count, setCount] = useState<number>(0);
 
   useEffect(() => {
-    async function listSchoolLevels(id: number) {
+    async function listSchoolLevels(id: number, page: number) {
       setLoading(true);
       await levelAdapter.listSchoolLevels({id: id, page: page}).then((res) => {
         if (res.next) {
@@ -33,7 +33,7 @@ export default function LevelSection() {
 
     if (selectedSchool) {
       try {
-        listSchoolLevels(selectedSchool.id);
+        listSchoolLevels(selectedSchool.id, page);
       } catch (error) {
         console.error(error);
       }

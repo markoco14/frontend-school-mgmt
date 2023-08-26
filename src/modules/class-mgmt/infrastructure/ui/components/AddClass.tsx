@@ -6,6 +6,7 @@ import { classAdapter } from "../../adapters/classAdapter";
 import { Class } from "../../../domain/entities/Class";
 import toast from "react-hot-toast";
 import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/levelAdapter";
+import PaginationButtons from "@/src/modules/core/infrastructure/ui/components/PaginationButtons";
 
 type Inputs = {
   className: string;
@@ -17,6 +18,9 @@ type Inputs = {
 export default function AddClass({ setClasses }: { setClasses: Function }) {
 	const { user, selectedSchool } = useContext(AuthContext);
   const [levels, setLevels] = useState<Level[]>([]);
+  const [page, setPage] = useState<number>(1)
+  const [next, setNext] = useState<boolean>(false);
+  const [count, setCount] = useState<number>(0);
   const {
     reset,
     register,
@@ -45,8 +49,14 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
 
   useEffect(() => {
     async function getLevels() {
-      await levelAdapter.listSchoolLevels({id: selectedSchool?.id}).then((res) => {
+      await levelAdapter.listSchoolLevels({id: selectedSchool?.id, page: page}).then((res) => {
+				if (res.next) {
+          setNext(true);
+        } else {
+          setNext(false);
+        }
         setLevels(res.results);
+				setCount(res.count);
       });
     }
 
@@ -57,7 +67,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
         console.error(error);
       }
     }
-  }, [user, selectedSchool]);
+  }, [user, selectedSchool, page]);
 
   return (
 		<form onSubmit={handleSubmit(onSubmit)}>
@@ -79,23 +89,23 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
 				)}
 			</div>
 			<div className="flex flex-col mb-4">
-				<label className="mb-2">Level</label>
-				<select
-					className="py-2 rounded bg-white shadow"
-					{...register("level", { required: true })}
-				>
-					<option value="">Choose a level</option>
-					{levels?.map((level: Level, index: number) => (
-						<option key={index} value={level.id} className="p-4">
-							{level.name}
-						</option>
-					))}
-				</select>
+				<label>Level</label>
+				{levels?.map((level: Level, index: number) => (
+					<div className="flex flex-col" key={index}>
+						<label className="text-center">{level.name}</label>
+						<input
+							type="checkbox"
+							{...register("level", { required: true })}
+							value={level.id}
+						/>
+					</div>
+				))}
 				{errors.level?.type === "required" && (
 					<p role="alert" className="text-red-500 mt-2">
 						Level is required
 					</p>
 				)}
+				<PaginationButtons count={count} page={page} setPage={setPage} next={next}/>
 			</div>
 			<div className="grid grid-cols-5 mb-4">
 				<div className="flex flex-col">
