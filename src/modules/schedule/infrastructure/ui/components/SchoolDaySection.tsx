@@ -42,7 +42,7 @@ const SchoolDayList = ({
 					key={index}
 					className="p-2 hover:bg-gray-300 flex justify-between"
 				>
-					<span>{schoolDay.day}</span>
+					<span>{schoolDay?.day}</span>
 					<button 
 					onClick={() => handleDeleteSchoolDay({schoolDayId: schoolDay.id})}
 					className="text-red-500 hover:text-red-600"

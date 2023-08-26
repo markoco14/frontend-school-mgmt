@@ -32,7 +32,9 @@ export default function AddSchoolDay({schoolDays, setSchoolDays}: {schoolDays: S
 			.then((res) => {
 				const daysOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 				setSchoolDays((prevSubjects: SchoolDay[]) => [...prevSubjects, res].sort((a: SchoolDay, b: SchoolDay) => {
-					return daysOrder.indexOf(a.day.toString()) - daysOrder.indexOf(b.day.toString());
+					if (typeof a.day === 'string' && typeof b.day === 'string') {
+						return daysOrder.indexOf(a.day) - daysOrder.indexOf(b.day);
+					}
 				}))
 				toast.success('School day added.')
 				return
