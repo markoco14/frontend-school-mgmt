@@ -6,6 +6,9 @@ import { classAdapter } from "../../adapters/classAdapter";
 import { Class } from "../../../domain/entities/Class";
 import toast from "react-hot-toast";
 import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/levelAdapter";
+import PaginationButtons from "@/src/modules/core/infrastructure/ui/components/PaginationButtons";
+import { schoolDayAdapter } from "@/src/modules/schedule/infrastructure/ui/adapters/schoolDayAdapter";
+import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
 
 type Inputs = {
   className: string;
@@ -17,12 +20,26 @@ type Inputs = {
 export default function AddClass({ setClasses }: { setClasses: Function }) {
 	const { user, selectedSchool } = useContext(AuthContext);
   const [levels, setLevels] = useState<Level[]>([]);
+	const [days, setDays] = useState<SchoolDay[]>([])
+  const [page, setPage] = useState<number>(1)
+  const [next, setNext] = useState<boolean>(false);
+  const [count, setCount] = useState<number>(0);
   const {
     reset,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+
+	const dayValues = [
+		{value: 1, day: "Monday"},
+		{value: 2, day: "Tuesday"},
+		{value: 3, day: "Wednesday"},
+		{value: 4, day: "Thursday"},
+		{value: 5, day: "Friday"},
+		{value: 6, day: "Saturday"},
+		{value: 7, day: "Sunday"},
+	]
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const days: number[] = [];
@@ -45,19 +62,33 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
 
   useEffect(() => {
     async function getLevels() {
-      await levelAdapter.listSchoolLevels({id: selectedSchool?.id}).then((res) => {
+      await levelAdapter.listSchoolLevels({id: selectedSchool?.id, page: page}).then((res) => {
+				if (res.next) {
+          setNext(true);
+        } else {
+          setNext(false);
+        }
         setLevels(res.results);
+				setCount(res.count);
       });
     }
+
+		async function getWeekdays() {
+			await schoolDayAdapter.listSchoolSchoolDays({schoolId: selectedSchool?.id}).then((res) => {
+				console.log(res)
+				setDays(res);
+			})
+		}
 
     if (user) {
       try {
         getLevels();
+				getWeekdays();
       } catch (error) {
         console.error(error);
       }
     }
-  }, [user, selectedSchool]);
+  }, [user, selectedSchool, page]);
 
   return (
 		<form onSubmit={handleSubmit(onSubmit)}>
@@ -79,65 +110,35 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
 				)}
 			</div>
 			<div className="flex flex-col mb-4">
-				<label className="mb-2">Level</label>
-				<select
-					className="py-2 rounded bg-white shadow"
-					{...register("level", { required: true })}
-				>
-					<option value="">Choose a level</option>
-					{levels?.map((level: Level, index: number) => (
-						<option key={index} value={level.id} className="p-4">
-							{level.name}
-						</option>
-					))}
-				</select>
+				<label>Level</label>
+				{levels?.map((level: Level, index: number) => (
+					<div className="flex flex-col" key={index}>
+						<label className="text-center">{level.name}</label>
+						<input
+							type="checkbox"
+							{...register("level", { required: true })}
+							value={level.id}
+						/>
+					</div>
+				))}
 				{errors.level?.type === "required" && (
 					<p role="alert" className="text-red-500 mt-2">
 						Level is required
 					</p>
 				)}
+				<PaginationButtons count={count} page={page} setPage={setPage} next={next}/>
 			</div>
 			<div className="grid grid-cols-5 mb-4">
-				<div className="flex flex-col">
-					<label className="text-center">Monday</label>
-					<input
-						type="checkbox"
-						{...register("daysOfWeek", { required: true })}
-						value={1}
-					/>
-				</div>
-				<div className="flex flex-col">
-					<label className="text-center">Tuesday</label>
-					<input
-						type="checkbox"
-						{...register("daysOfWeek", { required: true })}
-						value={2}
-					/>
-				</div>
-				<div className="flex flex-col">
-					<label className="text-center">Wednesday</label>
-					<input
-						type="checkbox"
-						{...register("daysOfWeek", { required: true })}
-						value={3}
-					/>
-				</div>
-				<div className="flex flex-col">
-					<label className="text-center">Thursday</label>
-					<input
-						type="checkbox"
-						{...register("daysOfWeek", { required: true })}
-						value={4}
-					/>
-				</div>
-				<div className="flex flex-col">
-					<label className="text-center">Friday</label>
-					<input
-						type="checkbox"
-						{...register("daysOfWeek", { required: true })}
-						value={5}
-					/>
-				</div>
+				{days?.map((day, index) => (
+					<div key={index} className="flex flex-col">
+						<label className="text-center">{day.day}</label>
+						<input
+							type="checkbox"
+							{...register("daysOfWeek", { required: true })}
+							value={dayValues.find(dayValue => dayValue.day === day.day)?.value}
+						/>
+					</div>
+				))}
 				{errors.daysOfWeek?.type === "required" && (
 					<p role="alert" className="text-red-500 mt-2 col-span-5">
 						Days are required

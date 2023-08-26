@@ -2,8 +2,8 @@ import AuthContext from "@/src/AuthContext";
 import AddSchoolDay from "@/src/modules/school-mgmt/infrastructure/ui/components/AddSchoolDay";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { SchoolDay } from "../../../domain/entities/SchoolDay";
 import { schoolDayAdapter } from "../adapters/schoolDayAdapter";
+import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
 
 const SchoolDayList = ({
 	schoolDays,
@@ -42,7 +42,7 @@ const SchoolDayList = ({
 					key={index}
 					className="p-2 hover:bg-gray-300 flex justify-between"
 				>
-					<span>{schoolDay.day}</span>
+					<span>{schoolDay?.day}</span>
 					<button 
 					onClick={() => handleDeleteSchoolDay({schoolDayId: schoolDay.id})}
 					className="text-red-500 hover:text-red-600"
