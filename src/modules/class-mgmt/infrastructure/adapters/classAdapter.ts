@@ -2,14 +2,14 @@ import { Class } from "../../domain/entities/Class";
 
 class ClassAdapter {
 	public async getClassById({id}: {id: number}): Promise<Class> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/get/`);
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/`);
 		const thisClass: Class = await res.json();
 		
 		return thisClass
 	}
 
 	public async addClass({name, school_id, level, day}: {name: string, school_id: number, level: number, day: number[]}): Promise<Class> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/add/`, { 
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
@@ -22,7 +22,7 @@ class ClassAdapter {
 	}
 
 	public async deleteClass({id}: {id: number}) {
-		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/delete/`,{
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/`,{
 			method: 'DELETE'
 		})
 
