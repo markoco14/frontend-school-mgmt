@@ -7,8 +7,6 @@ import { useContext, useEffect, useState } from "react";
 import SubjectSection from "@/src/modules/curriculum/infrastructure/ui/components/SubjectSection";
 import SubjectLevelSection from "@/src/modules/curriculum/infrastructure/ui/components/SubjectLevelSection";
 import { subjectLevelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectLevelAdapter";
-import { Subject } from "@/src/modules/curriculum/domain/entities/Subject";
-import { SubjectLevel } from "@/src/modules/curriculum/domain/entities/SubjectLevel";
 
 export default function CurriculumHome() {
   const { user, selectedSchool } = useContext(AuthContext)
@@ -24,7 +22,9 @@ export default function CurriculumHome() {
           setSubjectLevels(res);
         });
     }
-    getSubjectLevels();
+    if (selectedSchool) {
+      getSubjectLevels();
+    }
   }, [selectedSchool]);
 
   if (user?.role !== "OWNER") {

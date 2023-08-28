@@ -13,18 +13,7 @@ export default function SubjectLevelSection({
 }) {
   const { selectedSchool } = useContext(AuthContext);
 
-  const [uniqueSubjects, setUniqueSubjects] = useState<Subject[]>(
-    subjectLevels.reduce((acc: Subject[], subjectLevel: SubjectLevel) => {
-      if (
-        !acc.find(
-          (subject: Subject) => subject.name === subjectLevel.subject.name
-        )
-      ) {
-        acc.push(subjectLevel.subject);
-      }
-      return acc;
-    }, [])
-  );
+  const [uniqueSubjects, setUniqueSubjects] = useState<Subject[]>([]);
 
   const [currentSubject, setCurrentSubject] = useState<string>(
     subjectLevels.reduce((acc: Subject[], subjectLevel: SubjectLevel) => {
@@ -36,43 +25,56 @@ export default function SubjectLevelSection({
         acc.push(subjectLevel.subject);
       }
       return acc;
-    }, [])[0].name
+    }, [])[0]?.name
   );
 
-  const [currentSubjectLevels, setCurrentSubjectLevels] = useState<Level[]>(
-    subjectLevels
+  const [currentSubjectLevels, setCurrentSubjectLevels] = useState<Level[]>([]);
+  const [currentLevel, setCurrentLevel] = useState<number>();
+
+  const [modules, setModules] = useState<Module[]>([]);
+
+  useEffect(() => {
+    async function fetchModules({schoolId, currentSubject, currentLevel}: {schoolId: number, currentSubject: string, currentLevel: number}){
+       if (selectedSchool) {
+        await moduleAdapter
+          .listSchoolModules({
+            schoolId: schoolId,
+            subjectName: currentSubject,
+            levelOrder: currentLevel,
+          })
+          .then((res) => setModules(res));
+      }
+    }
+    
+
+    const uniqueSubjects = subjectLevels.reduce((acc: Subject[], subjectLevel: SubjectLevel) => {
+      if (
+        !acc.find(
+          (subject: Subject) => subject.name === subjectLevel.subject.name
+        )
+      ) {
+        acc.push(subjectLevel.subject);
+      }
+      return acc;
+    }, [])
+
+    const defaultSubject = uniqueSubjects[0]?.name
+    setUniqueSubjects(uniqueSubjects);
+    setCurrentSubject(defaultSubject)
+
+    const filteredLevels =  subjectLevels
       .filter(
         (subjectLevel) => subjectLevel.subject.name === uniqueSubjects[0]?.name
       )
       .map((subjectLevel) => subjectLevel.level)
       .sort((a, b) => a.order - b.order)
-  );
-  const [currentLevel, setCurrentLevel] = useState<number>(
-    subjectLevels
-      .filter(
-        (subjectLevel) => subjectLevel.subject.name === uniqueSubjects[0]?.name
-      )
-      .map((subjectLevel) => subjectLevel.level)
-      .sort((a, b) => a.order - b.order)[0].order
-  );
 
-  const [modules, setModules] = useState<Module[]>([]);
+    const defaultLevel = filteredLevels[0]?.order
+    setCurrentSubjectLevels(filteredLevels)
+    setCurrentLevel(defaultLevel)
 
-  useEffect(() => {
-    async function getSchoolModules() {
-      if (selectedSchool) {
-        await moduleAdapter
-          .listSchoolModules({
-            schoolId: selectedSchool.id,
-            levelOrder: currentLevel,
-            subjectName: currentSubject,
-          })
-          .then((res) => setModules(res));
-      }
-    }
-
-    getSchoolModules();
-  }, [selectedSchool, subjectLevels, currentLevel, currentSubject]);
+    fetchModules({schoolId: selectedSchool.id, currentSubject: defaultSubject, currentLevel: defaultLevel,})
+  }, [subjectLevels, selectedSchool])
 
   async function handleFetchModules({
     schoolId,
@@ -130,7 +132,7 @@ export default function SubjectLevelSection({
                     handleFetchModules({
                       schoolId: selectedSchool.id,
                       subject: subject.name,
-                      level: currentLevel,
+                      level: Number(currentLevel),
                     });
                   }}
                 >
