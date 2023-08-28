@@ -8,7 +8,7 @@ import { moduleAdapter } from "../../adapters/moduleAdapter";
 import { Dialog, Transition } from "@headlessui/react";
 import { moduleTypeAdapter } from "../../adapters/moduleTypeAdapter";
 import { ModuleType } from "../../../domain/entities/ModuleType";
-import { SubmitHandler, useForm  } from 'react-hook-form';
+import { SubmitHandler, useForm } from "react-hook-form";
 
 type Inputs = {
   name: string;
@@ -17,20 +17,26 @@ type Inputs = {
 };
 
 const AddModuleForm = ({
+  setModules,
   currentSubjectLevel,
 }: {
+  setModules: Function;
   currentSubjectLevel: SubjectLevel;
 }) => {
   const { selectedSchool } = useContext(AuthContext);
   const [moduleTypes, setModuleTypes] = useState<ModuleType[]>([]);
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
 
   useEffect(() => {
     async function fetchSchoolModuleTypes({ schoolId }: { schoolId: number }) {
       await moduleTypeAdapter
         .listSchoolModuleTypes({ schoolId: schoolId })
         .then((res) => {
-          console.log(res);
           setModuleTypes(res);
         });
     }
@@ -38,33 +44,39 @@ const AddModuleForm = ({
     selectedSchool && fetchSchoolModuleTypes({ schoolId: selectedSchool.id });
   }, [selectedSchool]);
 
-  const onSubmit: SubmitHandler<Inputs> = (data: any) => {
-    // Handle form submission here
-    console.log(data);
-    console.log(currentSubjectLevel.id)
-    return
-    
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    await moduleAdapter.add({
+      name: data.name,
+      type: Number(data.type),
+      order: Number(data.order),
+      subjectLevel: currentSubjectLevel.id,
+    })
+    .then((res) => {
+      setModules((prevModules: Module[]) => [...prevModules, res]);
+      reset();
+    });
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-2">
         <label>Name</label>
-          <input 
+        <input
           {...register("name", {
-						required: true,
-						minLength: 2,
-						maxLength: 50,
-					})}
-          />
+            required: true,
+            minLength: 2,
+            maxLength: 50,
+          })}
+        />
         {errors.name && <span>This field is required</span>}
       </div>
       <div className="flex flex-col gap-2">
         <label>Order</label>
-        <input 
+        <input
           {...register("order", {
-						required: true,
-					})} 
+            required: true,
+            min: 1
+          })}
         />
         {errors.order && <span>This field is required</span>}
       </div>
@@ -92,6 +104,7 @@ const AddModuleForm = ({
 
 const AddModule = ({
   modules,
+  setModules,
   currentSubject,
   currentLevel,
   subjectLevels,
@@ -99,13 +112,13 @@ const AddModule = ({
   setIsAddModule,
 }: {
   modules: Module[];
+  setModules: Function;
   currentSubject: Subject;
   currentLevel: Level;
   subjectLevels: SubjectLevel[];
   isAddModule: boolean;
   setIsAddModule: Function;
 }) => {
-  console.log(subjectLevels);
   const [currentSubjectLevel, setCurrentSubjectLevel] =
     useState<SubjectLevel>();
 
@@ -170,7 +183,7 @@ const AddModule = ({
               <section>
                 <p>New Module</p>
                 {currentSubjectLevel && (
-                  <AddModuleForm currentSubjectLevel={currentSubjectLevel} />
+                  <AddModuleForm setModules={setModules} currentSubjectLevel={currentSubjectLevel} />
                 )}
               </section>
             </article>
@@ -383,6 +396,7 @@ export default function ModuleSection({
           {isAddModule && currentSubject && currentLevel && (
             <AddModule
               modules={modules}
+              setModules={setModules}
               currentSubject={currentSubject}
               currentLevel={currentLevel}
               subjectLevels={subjectLevels}

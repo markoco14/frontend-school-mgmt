@@ -75,7 +75,6 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
 
 		async function getWeekdays() {
 			await schoolDayAdapter.listSchoolSchoolDays({schoolId: selectedSchool?.id}).then((res) => {
-				console.log(res)
 				setDays(res);
 			})
 		}
