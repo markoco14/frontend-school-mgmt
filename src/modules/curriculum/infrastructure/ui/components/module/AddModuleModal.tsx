@@ -61,31 +61,39 @@ export default function AddModuleModal ({
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0"
         >
-          <Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
-            <Dialog.Title>Create New Module</Dialog.Title>
-            <p>
-              You are creating a new Module for {currentSubject?.name} Level{" "}
-              {currentLevel?.order}{" "}
-            </p>
-            <article className="grid grid-cols-2">
-              <section>
-                <p>Current Modules</p>
-                <ul className="bg-gray-100 rounded shadow-inner mb-4">
+          <Dialog.Panel className="bg-gray-100 rounded-2xl shadow-xl p-8 z-10">
+            <Dialog.Title className="mb-4 flex justify-between items-baseline">
+              <div className="text-2xl ">
+                <span>{currentSubject?.name}</span>{" "}
+                <span>Level {currentLevel?.order}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAddModule(false)}
+                className="text-gray-800"
+              >
+                Cancel
+              </button>
+            </Dialog.Title>
+            <article className="grid grid-cols-2 gap-2">
+              <section className="bg-white border-2 rounded-lg p-4">
+                <h3 className="text-xl mb-4">Current Modules</h3>
+                <ul className="divide-y border rounded shadow-inner">
                   {modules?.map((module, index) => (
                     <li
                       key={index}
                       className="p-2 hover:bg-gray-300 flex justify-between"
                     >
                       <span>
-                        {module.order}. {module.name}
+                        Unit {module.order}: {module.name}
                       </span>{" "}
-                      <span>Edit</span>
+                      {/* <span>Edit</span> */}
                     </li>
                   ))}
                 </ul>
               </section>
-              <section>
-                <p>New Module</p>
+              <section className="bg-white border-2 rounded-lg p-4">
+                <h3 className="text-xl mb-4">New Module</h3>
                 {currentSubjectLevel && (
                   <AddModuleForm
                     setModules={setModules}
@@ -95,15 +103,7 @@ export default function AddModuleModal ({
               </section>
             </article>
 
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={() => setIsAddModule(false)}
-                className="bg-gray-300 text-gray-900 hover:bg-gray-500 hover:text-white px-4 py-1 rounded"
-              >
-                Cancel
-              </button>
-            </div>
+            
           </Dialog.Panel>
         </Transition.Child>
       </Dialog>
