@@ -6,7 +6,7 @@ import { Level } from "../../../domain/entities/Level";
 import { Module } from "../../../domain/entities/Module";
 import { moduleAdapter } from "../../adapters/moduleAdapter";
 
-export default function SubjectLevelSection({
+export default function ModuleSection({
   subjectLevels,
 }: {
   subjectLevels: SubjectLevel[];
