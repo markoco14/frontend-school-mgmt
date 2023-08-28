@@ -3,18 +3,18 @@ import { Module } from "../../domain/entities/Module";
 class ModuleAdapter {
   public async listSchoolModules({
     schoolId,
-    levelOrder,
     subjectName,
+    levelOrder,
   }: {
     schoolId: number;
-    levelOrder?: number;
     subjectName?: string;
+    levelOrder?: number;
   }): Promise<Module[]> {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/modules/`;
 
     const queryParams: string[] = [];
-    if (levelOrder) queryParams.push(`level=${levelOrder}`);
     if (subjectName) queryParams.push(`subject=${encodeURIComponent(subjectName)}`);
+    if (levelOrder) queryParams.push(`level=${levelOrder}`);
 
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;
