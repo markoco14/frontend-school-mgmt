@@ -57,46 +57,52 @@ export default function AddModuleForm({
 
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <label>Name</label>
+        <label className="flex justify-between"><span>Name</span> {errors.name && <span className="text-red-500">required</span>}</label>
         <input
+          className="border shadow-inner rounded p-2"
           {...register("name", {
             required: true,
             minLength: 2,
             maxLength: 50,
           })}
         />
-        {errors.name && <span>This field is required</span>}
       </div>
       <div className="flex flex-col gap-2">
-        <label>Order</label>
+        <label className="flex justify-between"><span>Order</span> {errors.order && <span className="text-red-500">required</span>}</label>
         <input
+          className="border shadow-inner rounded p-2"
+          type="number"
           {...register("order", {
             required: true,
             min: 1,
           })}
         />
-        {errors.order && <span>This field is required</span>}
+        
       </div>
       <div className="flex flex-col gap-2">
-        <label>Type</label>
-        <div>
+        <div className="flex flex-col gap-2">
+          <p className="flex justify-between"><span>Type</span> {errors.type && <span className="text-red-500">required</span>}</p>
           {moduleTypes?.map((type, index) => (
-            <label key={index}>
-              <span>{type.name}</span>
+            <div key={index} className="flex flex-col gap-2">
+            <label key={index} className="relative cursor-pointer w-full flex">
               <input
+                className="sr-only peer"
+                id={`checkbox-${type.id}`} 
                 type="checkbox"
                 value={type.id}
                 {...register("type", {
                   required: true,
                 })}
               />
+              <span className="w-full hover:bg-gray-300 ease-in-out duration-200 bg-gray-100 peer-checked:bg-gray-500 peer-checked:text-white p-2 border shadow-inner rounded">{type.name}</span>
             </label>
+            </div>
           ))}
         </div>
       </div>
-      <button>Submit</button>
+      <button className="w-full ease-in-out duration-200 bg-blue-600  hover:bg-blue-900 p-2 rounded shadow text-white">Submit</button>
     </form>
   );
 };
