@@ -157,7 +157,7 @@ export default function ModuleSection({
     }
   }
 
-  function handleChangeLevel(
+  function handleChangeSubjectAndLevel(
     subjectLevels: SubjectLevel[],
     subject: Subject
   ) {
@@ -189,10 +189,10 @@ export default function ModuleSection({
                       : "bg-white hover:bg-gray-300"
                   } p-2 hover:cursor-pointer`}
                   onClick={() => {
-                    // change level when change subject
+                    // change subject & level when change subject
                     // because different subjects have different levels
                     // set to a consistent default value of [0]
-                    handleChangeLevel(subjectLevels, subject);
+                    handleChangeSubjectAndLevel(subjectLevels, subject);
                     currentLevel && handleFetchModules({
                       schoolId: selectedSchool.id,
                       subjectName: subject.name,
