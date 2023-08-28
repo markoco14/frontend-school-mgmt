@@ -83,19 +83,19 @@ export default function ModuleSection({
   useEffect(() => {
     async function fetchModules({
       schoolId,
-      currentSubject,
-      currentLevel,
+      subjectName,
+      levelOrder,
     }: {
       schoolId: number;
-      currentSubject: string;
-      currentLevel: number;
+      subjectName: string;
+      levelOrder: number;
     }) {
       if (selectedSchool) {
         await moduleAdapter
           .listSchoolModules({
             schoolId: schoolId,
-            subjectName: currentSubject,
-            levelOrder: currentLevel,
+            subjectName: subjectName,
+            levelOrder: levelOrder,
           })
           .then((res) => setModules(res));
       }
@@ -132,8 +132,8 @@ export default function ModuleSection({
 
     fetchModules({
       schoolId: selectedSchool.id,
-      currentSubject: defaultSubject?.name,
-      currentLevel: defaultLevel?.order,
+      subjectName: defaultSubject?.name,
+      levelOrder: defaultLevel?.order,
     });
   }, [subjectLevels, selectedSchool]);
 
