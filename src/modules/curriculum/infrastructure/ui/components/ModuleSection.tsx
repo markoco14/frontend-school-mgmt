@@ -172,7 +172,17 @@ export default function ModuleSection({
 
   return (
     <section className="col-span-2">
-      <h2 className="text-3xl mb-2">Modules</h2>
+      <div className="flex justify-between">
+        <h2 className="text-3xl mb-2">Modules</h2>
+        <button
+          className=""
+          onClick={() => {
+            setIsAddModule(!isAddModule);
+          }}
+        >
+          <i className="fa-solid fa-plus"></i>
+        </button>
+      </div>
       {!subjectLevels.length ? (
         <p>there are no levels connected to your subjects</p>
       ) : (
@@ -231,17 +241,7 @@ export default function ModuleSection({
             </ul>
           </div>
           <div className="col-span-4 xs:col-span-2">
-            <div className="flex justify-between">
-              <h3 className="text-xl">Modules</h3>
-              <button
-                className=""
-                onClick={() => {
-                  setIsAddModule(!isAddModule);
-                }}
-              >
-                <i className="fa-solid fa-plus"></i>
-              </button>
-            </div>
+            <h3 className="text-xl">Modules</h3>
             <ul className="bg-gray-100 rounded shadow-inner mb-4">
               {modules?.map((module, index) => (
                 <li key={index} className="p-2 hover:bg-gray-300">
