@@ -102,15 +102,15 @@ export default function ModuleSection({
     }
 
     const uniqueSubjects = subjectLevels.reduce(
-      (acc: Subject[], subjectLevel: SubjectLevel) => {
+      (subjects: Subject[], subjectLevel: SubjectLevel) => {
         if (
-          !acc.find(
+          !subjects.find(
             (subject: Subject) => subject.name === subjectLevel.subject.name
           )
         ) {
-          acc.push(subjectLevel.subject);
+          subjects.push(subjectLevel.subject);
         }
-        return acc;
+        return subjects;
       },
       []
     );
