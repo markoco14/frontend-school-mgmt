@@ -73,18 +73,7 @@ export default function ModuleSection({
 
   const [uniqueSubjects, setUniqueSubjects] = useState<Subject[]>([]);
 
-  const [currentSubject, setCurrentSubject] = useState<string>(
-    subjectLevels.reduce((acc: Subject[], subjectLevel: SubjectLevel) => {
-      if (
-        !acc.find(
-          (subject: Subject) => subject.name === subjectLevel.subject.name
-        )
-      ) {
-        acc.push(subjectLevel.subject);
-      }
-      return acc;
-    }, [])[0]?.name
-  );
+  const [currentSubject, setCurrentSubject] = useState<string>();
 
   const [currentSubjectLevels, setCurrentSubjectLevels] = useState<Level[]>([]);
   const [currentLevel, setCurrentLevel] = useState<number>();
