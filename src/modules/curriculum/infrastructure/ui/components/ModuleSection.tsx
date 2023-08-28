@@ -45,16 +45,17 @@ const AddModuleForm = ({
   }, [selectedSchool]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await moduleAdapter.add({
-      name: data.name,
-      type: Number(data.type),
-      order: Number(data.order),
-      subjectLevel: currentSubjectLevel.id,
-    })
-    .then((res) => {
-      setModules((prevModules: Module[]) => [...prevModules, res]);
-      reset();
-    });
+    await moduleAdapter
+      .add({
+        name: data.name,
+        type: Number(data.type),
+        order: Number(data.order),
+        subjectLevel: currentSubjectLevel.id,
+      })
+      .then((res) => {
+        setModules((prevModules: Module[]) => [...prevModules, res]);
+        reset();
+      });
   };
 
   return (
@@ -75,7 +76,7 @@ const AddModuleForm = ({
         <input
           {...register("order", {
             required: true,
-            min: 1
+            min: 1,
           })}
         />
         {errors.order && <span>This field is required</span>}
@@ -183,7 +184,10 @@ const AddModule = ({
               <section>
                 <p>New Module</p>
                 {currentSubjectLevel && (
-                  <AddModuleForm setModules={setModules} currentSubjectLevel={currentSubjectLevel} />
+                  <AddModuleForm
+                    setModules={setModules}
+                    currentSubjectLevel={currentSubjectLevel}
+                  />
                 )}
               </section>
             </article>
@@ -294,14 +298,19 @@ export default function ModuleSection({
           subjectName: subjectName,
           levelOrder: levelOrder,
         })
-        .then((res) => setModules(res));
+        .then((res) => {
+          setModules(res);
+        });
     }
   }
 
-  function handleChangeSubjectAndLevel(
-    subjectLevels: SubjectLevel[],
-    subject: Subject
-  ) {
+  function handleChangeSubjectLevelAndModules({
+    subjectLevels,
+    subject,
+  }: {
+    subjectLevels: SubjectLevel[];
+    subject: Subject;
+  }) {
     const filteredLevels = subjectLevels
       .filter((subjectLevel) => subjectLevel.subject.name === subject.name)
       .map((subjectLevel) => subjectLevel.level)
@@ -309,6 +318,12 @@ export default function ModuleSection({
     setCurrentSubject(subject);
     setCurrentSubjectLevels(filteredLevels);
     setCurrentLevel(filteredLevels[0]);
+    selectedSchool &&
+      handleFetchModules({
+        schoolId: selectedSchool.id,
+        subjectName: subject.name,
+        levelOrder: filteredLevels[0].order,
+      });
   }
 
   return (
@@ -343,13 +358,7 @@ export default function ModuleSection({
                     // change subject & level when change subject
                     // because different subjects have different levels
                     // set to a consistent default value of [0]
-                    handleChangeSubjectAndLevel(subjectLevels, subject);
-                    currentLevel &&
-                      handleFetchModules({
-                        schoolId: selectedSchool.id,
-                        subjectName: subject.name,
-                        levelOrder: Number(currentLevel),
-                      });
+                    handleChangeSubjectLevelAndModules({subjectLevels: subjectLevels, subject: subject});
                   }}
                 >
                   {subject.name}
