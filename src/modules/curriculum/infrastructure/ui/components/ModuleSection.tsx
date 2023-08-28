@@ -139,19 +139,19 @@ export default function ModuleSection({
 
   async function handleFetchModules({
     schoolId,
-    level,
-    subject,
+    subjectName,
+    levelOrder,
   }: {
     schoolId: number;
-    level: number;
-    subject: string;
+    subjectName: string;
+    levelOrder: number;
   }) {
     if (selectedSchool) {
       await moduleAdapter
         .listSchoolModules({
           schoolId: schoolId,
-          levelOrder: level,
-          subjectName: subject,
+          subjectName: subjectName,
+          levelOrder: levelOrder,
         })
         .then((res) => setModules(res));
     }
@@ -195,8 +195,8 @@ export default function ModuleSection({
                     handleChangeLevel(subjectLevels, subject);
                     currentLevel && handleFetchModules({
                       schoolId: selectedSchool.id,
-                      subject: subject.name,
-                      level: Number(currentLevel),
+                      subjectName: subject.name,
+                      levelOrder: Number(currentLevel),
                     });
                   }}
                 >
@@ -220,8 +220,8 @@ export default function ModuleSection({
                     setCurrentLevel(level);
                     currentSubject && handleFetchModules({
                       schoolId: selectedSchool.id,
-                      subject: currentSubject?.name,
-                      level: level.order,
+                      subjectName: currentSubject?.name,
+                      levelOrder: level.order,
                     });
                   }}
                 >
