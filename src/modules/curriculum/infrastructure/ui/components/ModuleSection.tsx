@@ -13,7 +13,7 @@ const AddModule = ({
   isAddModule,
   setIsAddModule,
 }: {
-  currentSubject: string;
+  currentSubject: Subject;
   currentLevel: number;
   isAddModule: boolean;
   setIsAddModule: Function;
@@ -46,7 +46,7 @@ const AddModule = ({
         >
           <Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
             <Dialog.Title>Create New Module</Dialog.Title>
-            <p>You are creating a new Module for {currentSubject} Level {currentLevel} </p>
+            <p>You are creating a new Module for {currentSubject.name} Level {currentLevel} </p>
             <div className="flex justify-end">
               <button
                 type="button"
@@ -73,7 +73,7 @@ export default function ModuleSection({
 
   const [uniqueSubjects, setUniqueSubjects] = useState<Subject[]>([]);
 
-  const [currentSubject, setCurrentSubject] = useState<string>();
+  const [currentSubject, setCurrentSubject] = useState<Subject>();
 
   const [currentSubjectLevels, setCurrentSubjectLevels] = useState<Level[]>([]);
   const [currentLevel, setCurrentLevel] = useState<number>();
@@ -115,7 +115,7 @@ export default function ModuleSection({
       []
     );
 
-    const defaultSubject = uniqueSubjects[0]?.name;
+    const defaultSubject = uniqueSubjects[0];
     setUniqueSubjects(uniqueSubjects);
     setCurrentSubject(defaultSubject);
 
@@ -132,7 +132,7 @@ export default function ModuleSection({
 
     fetchModules({
       schoolId: selectedSchool.id,
-      currentSubject: defaultSubject,
+      currentSubject: defaultSubject?.name,
       currentLevel: defaultLevel,
     });
   }, [subjectLevels, selectedSchool]);
@@ -159,13 +159,13 @@ export default function ModuleSection({
 
   function handleChangeLevel(
     subjectLevels: SubjectLevel[],
-    subjectName: string
+    subject: Subject
   ) {
     const filteredLevels = subjectLevels
-      .filter((subjectLevel) => subjectLevel.subject.name === subjectName)
+      .filter((subjectLevel) => subjectLevel.subject.name === subject.name)
       .map((subjectLevel) => subjectLevel.level)
       .sort((a, b) => a.order - b.order);
-    setCurrentSubject(subjectName);
+    setCurrentSubject(subject);
     setCurrentSubjectLevels(filteredLevels);
     setCurrentLevel(filteredLevels[0].order);
   }
@@ -184,12 +184,12 @@ export default function ModuleSection({
                 <li
                   key={index}
                   className={`${
-                    subject.name === currentSubject
+                    subject.name === currentSubject?.name
                       ? "bg-blue-300 hover:bg-blue-500"
                       : "bg-white hover:bg-gray-300"
                   } p-2 hover:cursor-pointer`}
                   onClick={() => {
-                    handleChangeLevel(subjectLevels, subject.name);
+                    handleChangeLevel(subjectLevels, subject);
                     handleFetchModules({
                       schoolId: selectedSchool.id,
                       subject: subject.name,
@@ -217,7 +217,7 @@ export default function ModuleSection({
                     setCurrentLevel(level.order);
                     handleFetchModules({
                       schoolId: selectedSchool.id,
-                      subject: currentSubject,
+                      subject: currentSubject?.name,
                       level: level.order,
                     });
                   }}
