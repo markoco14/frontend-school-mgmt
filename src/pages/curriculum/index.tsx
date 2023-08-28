@@ -1,12 +1,12 @@
 import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import LevelSection from "@/src/modules/curriculum/infrastructure/ui/components/LevelSection";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
-import { useContext, useEffect, useState } from "react";
-import SubjectSection from "@/src/modules/curriculum/infrastructure/ui/components/SubjectSection";
 import { subjectLevelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectLevelAdapter";
-import ModuleSection from "@/src/modules/curriculum/infrastructure/ui/components/ModuleSection";
+import LevelSection from "@/src/modules/curriculum/infrastructure/ui/components/LevelSection";
+import SubjectSection from "@/src/modules/curriculum/infrastructure/ui/components/SubjectSection";
+import ModuleSection from "@/src/modules/curriculum/infrastructure/ui/components/module/ModuleSection";
+import { useContext, useEffect, useState } from "react";
 
 export default function CurriculumHome() {
   const { user, selectedSchool } = useContext(AuthContext)
