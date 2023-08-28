@@ -6,18 +6,118 @@ import { Level } from "../../../domain/entities/Level";
 import { Module } from "../../../domain/entities/Module";
 import { moduleAdapter } from "../../adapters/moduleAdapter";
 import { Dialog, Transition } from "@headlessui/react";
+import { moduleTypeAdapter } from "../../adapters/moduleTypeAdapter";
+import { ModuleType } from "../../../domain/entities/ModuleType";
+import { SubmitHandler, useForm  } from 'react-hook-form';
+
+type Inputs = {
+  name: string;
+  type: number;
+  order: number;
+};
+
+const AddModuleForm = ({
+  currentSubjectLevel,
+}: {
+  currentSubjectLevel: SubjectLevel;
+}) => {
+  const { selectedSchool } = useContext(AuthContext);
+  const [moduleTypes, setModuleTypes] = useState<ModuleType[]>([]);
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+
+  useEffect(() => {
+    async function fetchSchoolModuleTypes({ schoolId }: { schoolId: number }) {
+      await moduleTypeAdapter
+        .listSchoolModuleTypes({ schoolId: schoolId })
+        .then((res) => {
+          console.log(res);
+          setModuleTypes(res);
+        });
+    }
+
+    selectedSchool && fetchSchoolModuleTypes({ schoolId: selectedSchool.id });
+  }, [selectedSchool]);
+
+  const onSubmit: SubmitHandler<Inputs> = (data: any) => {
+    // Handle form submission here
+    console.log(data);
+    console.log(currentSubjectLevel.id)
+    return
+    
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex flex-col gap-2">
+        <label>Name</label>
+          <input 
+          {...register("name", {
+						required: true,
+						minLength: 2,
+						maxLength: 50,
+					})}
+          />
+        {errors.name && <span>This field is required</span>}
+      </div>
+      <div className="flex flex-col gap-2">
+        <label>Order</label>
+        <input 
+          {...register("order", {
+						required: true,
+					})} 
+        />
+        {errors.order && <span>This field is required</span>}
+      </div>
+      <div className="flex flex-col gap-2">
+        <label>Type</label>
+        <div>
+          {moduleTypes?.map((type, index) => (
+            <label key={index}>
+              <span>{type.name}</span>
+              <input
+                type="checkbox"
+                value={type.id}
+                {...register("type", {
+                  required: true,
+                })}
+              />
+            </label>
+          ))}
+        </div>
+      </div>
+      <button>Submit</button>
+    </form>
+  );
+};
 
 const AddModule = ({
+  modules,
   currentSubject,
   currentLevel,
+  subjectLevels,
   isAddModule,
   setIsAddModule,
 }: {
+  modules: Module[];
   currentSubject: Subject;
   currentLevel: Level;
+  subjectLevels: SubjectLevel[];
   isAddModule: boolean;
   setIsAddModule: Function;
 }) => {
+  console.log(subjectLevels);
+  const [currentSubjectLevel, setCurrentSubjectLevel] =
+    useState<SubjectLevel>();
+
+  useEffect(() => {
+    const subjectLevel = subjectLevels.find(
+      (subjectLevel) =>
+        subjectLevel.level.id === currentLevel.id &&
+        subjectLevel.subject.id === currentSubject.id
+    );
+    setCurrentSubjectLevel(subjectLevel);
+  }, [currentLevel, currentSubject, subjectLevels]);
+
   return (
     <Transition appear={true} show={isAddModule}>
       <Dialog
@@ -46,7 +146,35 @@ const AddModule = ({
         >
           <Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
             <Dialog.Title>Create New Module</Dialog.Title>
-            <p>You are creating a new Module for {currentSubject?.name} Level {currentLevel?.order} </p>
+            <p>
+              You are creating a new Module for {currentSubject?.name} Level{" "}
+              {currentLevel?.order}{" "}
+            </p>
+            <article className="grid grid-cols-2">
+              <section>
+                <p>Current Modules</p>
+                <ul className="bg-gray-100 rounded shadow-inner mb-4">
+                  {modules?.map((module, index) => (
+                    <li
+                      key={index}
+                      className="p-2 hover:bg-gray-300 flex justify-between"
+                    >
+                      <span>
+                        {module.order}. {module.name}
+                      </span>{" "}
+                      <span>Edit</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+              <section>
+                <p>New Module</p>
+                {currentSubjectLevel && (
+                  <AddModuleForm currentSubjectLevel={currentSubjectLevel} />
+                )}
+              </section>
+            </article>
+
             <div className="flex justify-end">
               <button
                 type="button"
@@ -203,11 +331,12 @@ export default function ModuleSection({
                     // because different subjects have different levels
                     // set to a consistent default value of [0]
                     handleChangeSubjectAndLevel(subjectLevels, subject);
-                    currentLevel && handleFetchModules({
-                      schoolId: selectedSchool.id,
-                      subjectName: subject.name,
-                      levelOrder: Number(currentLevel),
-                    });
+                    currentLevel &&
+                      handleFetchModules({
+                        schoolId: selectedSchool.id,
+                        subjectName: subject.name,
+                        levelOrder: Number(currentLevel),
+                      });
                   }}
                 >
                   {subject.name}
@@ -228,11 +357,12 @@ export default function ModuleSection({
                   } p-2 hover:cursor-pointer`}
                   onClick={() => {
                     setCurrentLevel(level);
-                    currentSubject && handleFetchModules({
-                      schoolId: selectedSchool.id,
-                      subjectName: currentSubject?.name,
-                      levelOrder: level.order,
-                    });
+                    currentSubject &&
+                      handleFetchModules({
+                        schoolId: selectedSchool.id,
+                        subjectName: currentSubject?.name,
+                        levelOrder: level.order,
+                      });
                   }}
                 >
                   {level.name}
@@ -245,15 +375,17 @@ export default function ModuleSection({
             <ul className="bg-gray-100 rounded shadow-inner mb-4">
               {modules?.map((module, index) => (
                 <li key={index} className="p-2 hover:bg-gray-300">
-                  {module.name}
+                  Unit {module.order} {module.name}
                 </li>
               ))}
             </ul>
           </div>
           {isAddModule && currentSubject && currentLevel && (
             <AddModule
+              modules={modules}
               currentSubject={currentSubject}
               currentLevel={currentLevel}
+              subjectLevels={subjectLevels}
               isAddModule={isAddModule}
               setIsAddModule={setIsAddModule}
             />
