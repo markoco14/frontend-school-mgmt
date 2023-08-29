@@ -14,6 +14,22 @@ class ModuleTypeAdapter {
 
     return moduleTypeList;
   }
+  
+  public async add({schoolId, moduleName}: {schoolId: number, moduleName: string}): Promise<ModuleType> {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/module-types/`;
+  
+    const res = await fetch(url, { 
+			method: 'POST', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ name: moduleName, school: schoolId }) 
+		});
+    const newModule: ModuleType = await res.json();
+  
+    return newModule;
+    
+  }
 
 }
 
