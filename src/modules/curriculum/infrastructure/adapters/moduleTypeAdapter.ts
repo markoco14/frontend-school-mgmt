@@ -31,6 +31,16 @@ class ModuleTypeAdapter {
     
   }
 
+  public async delete({typeId}: {typeId: number}): Promise<any> {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/module-types/${typeId}/`;
+  
+    const res = await fetch(url, {
+        method: "DELETE",
+      });
+  
+    return res;
+  }
+
 }
 
 export const moduleTypeAdapter = new ModuleTypeAdapter();
