@@ -3,6 +3,8 @@ import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ModuleType } from "../../../../domain/entities/ModuleType";
 import { moduleTypeAdapter } from "../../../adapters/moduleTypeAdapter";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import toast from "react-hot-toast";
 
 type Inputs = {
   name: string;
@@ -11,6 +13,8 @@ type Inputs = {
 export default function ModuleTypeSection() {
   const { selectedSchool } = useContext(AuthContext);
   const [moduleTypes, setModuleTypes] = useState<ModuleType[]>([]);
+	const [isManageType, setIsManageType] = useState<boolean>(false);
+	const [selectedType, setSelectedType] = useState<ModuleType>();
   const {
     register,
     reset,
@@ -32,10 +36,28 @@ export default function ModuleTypeSection() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
 		selectedSchool && await moduleTypeAdapter.add({schoolId: selectedSchool?.id, moduleName: data.name})
-		.then((res) => setModuleTypes((prevTypes: ModuleType[]) => [...prevTypes, res]))
+		.then((res) => {
+			toast.success('Module Type saved successfully!')
+			setModuleTypes((prevTypes: ModuleType[]) => [...prevTypes, res])
+		})
 		reset();
     return;
   };
+
+	function handleClose() {
+		setSelectedType(undefined)
+		setIsManageType(false)
+	}
+
+	const handleDelete = async () => {
+		selectedType && await moduleTypeAdapter.delete({typeId: selectedType.id})
+		.then(() => {
+			setModuleTypes((prevTypes: ModuleType[]) => prevTypes.filter(
+          (type) => type.id !== selectedType.id
+        ))
+			toast.success('Module Type deleted successfully!')
+		})
+	}
 
   return (
     <section>
@@ -48,7 +70,10 @@ export default function ModuleTypeSection() {
           ) : (
             <ul>
               {moduleTypes?.map((type, index) => (
-                <li key={index}>{type.name}</li>
+                <li key={index} onClick={() => {
+									setSelectedType(type)
+									setIsManageType(true)
+								}}>{type.name}</li>
               ))}
             </ul>
           )}
@@ -79,6 +104,11 @@ export default function ModuleTypeSection() {
           </form>
         </article>
       </div>
+			<Modal show={isManageType} close={handleClose} title={`Manage ${selectedType?.name}`}>
+				<button onClick={() => {
+					handleDelete();
+				}}>Delete</button>
+			</Modal>
     </section>
   );
 }
