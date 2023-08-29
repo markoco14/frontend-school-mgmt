@@ -268,7 +268,7 @@ export default function SubjectSection({
   }, [selectedSchool]);
 
   return (
-    <section className="col-span-2 xs:col-span-1">
+    <section className="border p-4 rounded shadow col-span-2 xs:col-span-1">
       <article>
         <div className="mb-2">
           <h2 className="text-3xl mb-2">Subjects</h2>
