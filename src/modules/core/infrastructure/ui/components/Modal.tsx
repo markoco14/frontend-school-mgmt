@@ -43,7 +43,7 @@ export default function Modal({show, close, title, children}: {show: boolean, cl
 									onClick={() => close(false)}
 									className="text-gray-800"
 								>
-									Cancel
+									Close
 								</button>
 							</div>
 						</div>
