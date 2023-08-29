@@ -10,26 +10,26 @@ class AssessmentTypeAdapter {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/assessment-types/`;
 
     const res = await fetch(url);
-    const moduleTypeList: AssessmentType[] = await res.json();
+    const assessmentTypeList: AssessmentType[] = await res.json();
 
-    return moduleTypeList;
+    return assessmentTypeList;
   }
   
-  // public async add({schoolId, typeName}: {schoolId: number, typeName: string}): Promise<AssessmentType> {
-  //   let url = `${process.env.NEXT_PUBLIC_API_URL}/module-types/`;
+  public async add({schoolId, typeName}: {schoolId: number, typeName: string}): Promise<AssessmentType> {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/assessment-types/`;
   
-  //   const res = await fetch(url, { 
-	// 		method: 'POST', 
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 		},
-	// 		body: JSON.stringify({ name: typeName, school: schoolId }) 
-	// 	});
-  //   const newModule: AssessmentType = await res.json();
+    const res = await fetch(url, { 
+			method: 'POST', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ name: typeName, school: schoolId }) 
+		});
+    const newAssessment: AssessmentType = await res.json();
   
-  //   return newModule;
+    return newAssessment;
     
-  // }
+  }
 
   // public async patch({typeId, typeName}: {typeId: number, typeName: string}): Promise<AssessmentType> {
   //   let url = `${process.env.NEXT_PUBLIC_API_URL}/module-types/${typeId}/`;

@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { assessmentTypeAdapter } from "../../../adapters/assessmentTypeAdapter";
 import { AssessmentType } from "@/src/modules/curriculum/domain/entities/AssessmentType";
+import toast from "react-hot-toast";
 
 type Inputs = {
   name: string;
@@ -17,17 +18,17 @@ export default function AssessmentTypeSection() {
     formState: { errors },
   } = useForm<Inputs>();
 
-	const [assessmentTypes, setAssessmentTypes] = useState<AssessmentType[]>()
+	const [assessmentTypes, setAssessmentTypes] = useState<AssessmentType[]>([])
 
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    // selectedSchool &&
-    //   (await moduleTypeAdapter
-    //     .add({ schoolId: selectedSchool?.id, typeName: data.name })
-    //     .then((res) => {
-    //       toast.success("Module Type saved successfully!");
-    //       // setModuleTypes((prevTypes: ModuleType[]) => [...prevTypes, res]);
-    //     }));
+    selectedSchool &&
+      (await assessmentTypeAdapter
+        .add({ schoolId: selectedSchool?.id, typeName: data.name })
+        .then((res) => {
+          toast.success("Module Type saved successfully!");
+          setAssessmentTypes((prevTypes: AssessmentType[]) => [...prevTypes, res]);
+        }));
     reset();
     return;
   };
