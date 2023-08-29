@@ -5,8 +5,8 @@ import { Module } from "../../../../domain/entities/Module";
 import { Subject } from "../../../../domain/entities/Subject";
 import { SubjectLevel } from "../../../../domain/entities/SubjectLevel";
 import { moduleAdapter } from "../../../adapters/moduleAdapter";
-import AddModuleModal from "./AddModuleModal";
-
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import AddModule from "./AddModule";
 
 export default function ModuleSection({
   subjectLevels,
@@ -158,7 +158,10 @@ export default function ModuleSection({
                     // change subject & level when change subject
                     // because different subjects have different levels
                     // set to a consistent default value of [0]
-                    handleChangeSubjectLevelAndModules({subjectLevels: subjectLevels, subject: subject});
+                    handleChangeSubjectLevelAndModules({
+                      subjectLevels: subjectLevels,
+                      subject: subject,
+                    });
                   }}
                 >
                   {subject.name}
@@ -209,15 +212,19 @@ export default function ModuleSection({
             )}
           </section>
           {isAddModule && currentSubject && currentLevel && (
-            <AddModuleModal
-              modules={modules}
-              setModules={setModules}
-              currentSubject={currentSubject}
-              currentLevel={currentLevel}
-              subjectLevels={subjectLevels}
-              isAddModule={isAddModule}
-              setIsAddModule={setIsAddModule}
-            />
+            <Modal
+              show={isAddModule}
+              close={setIsAddModule}
+              title={`${currentSubject?.name} Level ${currentLevel?.order}`}
+            >
+              <AddModule
+                modules={modules}
+                setModules={setModules}
+                currentSubject={currentSubject}
+                currentLevel={currentLevel}
+                subjectLevels={subjectLevels}
+              />
+            </Modal>
           )}
         </article>
       )}
