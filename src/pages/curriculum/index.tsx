@@ -6,12 +6,13 @@ import { subjectLevelAdapter } from "@/src/modules/curriculum/infrastructure/ada
 import CurriculumNav from "@/src/modules/curriculum/infrastructure/ui/components/CurriculumNav";
 import LevelSection from "@/src/modules/curriculum/infrastructure/ui/components/LevelSection";
 import SubjectSection from "@/src/modules/curriculum/infrastructure/ui/components/SubjectSection";
+import ModuleTypeSection from "@/src/modules/curriculum/infrastructure/ui/components/module-type/ModuleTypeSection";
 import ModuleSection from "@/src/modules/curriculum/infrastructure/ui/components/module/ModuleSection";
 import { useContext, useEffect, useState } from "react";
 
 export default function CurriculumHome() {
   const { user, selectedSchool } = useContext(AuthContext)
-  const [tab, setTab] = useState<number>(1);
+  const [tab, setTab] = useState<number>(4);
 
 
   const [subjectLevels, setSubjectLevels] = useState<any[]>([]);
@@ -50,6 +51,9 @@ export default function CurriculumHome() {
         )}
         {tab === 3 && (
           <ModuleSection subjectLevels={subjectLevels}/>
+        )}
+        {tab === 4 && (
+          <ModuleTypeSection />
         )}
       </div>
     </Layout>
