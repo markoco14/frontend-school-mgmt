@@ -35,6 +35,15 @@ export default function Modal({show, close, title, children}: {show: boolean, cl
 					<Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
 						<Dialog.Title>{title}</Dialog.Title>
 						{children}
+						<div className="flex justify-end">
+							<button
+								type="button"
+								onClick={() => close(false)}
+								className="bg-gray-300 text-gray-900 hover:bg-gray-500 hover:text-white px-4 py-1 rounded"
+							>
+								Cancel
+							</button>
+						</div>
 					</Dialog.Panel>
 				</Transition.Child>
 			</Dialog>
