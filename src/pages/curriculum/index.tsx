@@ -3,6 +3,7 @@ import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import { subjectLevelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectLevelAdapter";
+import CurriculumNav from "@/src/modules/curriculum/infrastructure/ui/components/CurriculumNav";
 import LevelSection from "@/src/modules/curriculum/infrastructure/ui/components/LevelSection";
 import SubjectSection from "@/src/modules/curriculum/infrastructure/ui/components/SubjectSection";
 import ModuleSection from "@/src/modules/curriculum/infrastructure/ui/components/module/ModuleSection";
@@ -10,6 +11,7 @@ import { useContext, useEffect, useState } from "react";
 
 export default function CurriculumHome() {
   const { user, selectedSchool } = useContext(AuthContext)
+  const [tab, setTab] = useState<number>(1);
 
 
   const [subjectLevels, setSubjectLevels] = useState<any[]>([]);
@@ -38,10 +40,17 @@ export default function CurriculumHome() {
   return (
     <Layout>
       <SchoolHeader />
+      <CurriculumNav tab={tab} setTab={setTab}/>
       <div className="grid xs:grid-cols-2 gap-4">
-        <SubjectSection subjectLevels={subjectLevels} setSubjectLevels={setSubjectLevels}/>
-        <LevelSection />
-        <ModuleSection subjectLevels={subjectLevels}/>
+        {tab === 1 && (
+          <SubjectSection subjectLevels={subjectLevels} setSubjectLevels={setSubjectLevels}/>
+        )}
+        {tab === 2 && (
+          <LevelSection />
+        )}
+        {tab === 3 && (
+          <ModuleSection subjectLevels={subjectLevels}/>
+        )}
       </div>
     </Layout>
   );
