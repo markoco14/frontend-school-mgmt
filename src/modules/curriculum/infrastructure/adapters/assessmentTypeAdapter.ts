@@ -31,20 +31,20 @@ class AssessmentTypeAdapter {
     
   }
 
-  // public async patch({typeId, typeName}: {typeId: number, typeName: string}): Promise<AssessmentType> {
-  //   let url = `${process.env.NEXT_PUBLIC_API_URL}/module-types/${typeId}/`;
+  public async patch({typeId, typeName}: {typeId: number, typeName: string}): Promise<AssessmentType> {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/assessment-types/${typeId}/`;
   
-  //   const res = await fetch(url, { 
-	// 		method: 'PATCH', 
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 		},
-	// 		body: JSON.stringify({ name: typeName}) 
-	// 	});
-  //   const newModule: AssessmentType = await res.json();
+    const res = await fetch(url, { 
+			method: 'PATCH', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ name: typeName}) 
+		});
+    const updatedAssessment: AssessmentType = await res.json();
   
-  //   return newModule;
-  // }
+    return updatedAssessment;
+  }
 
   // public async delete({typeId}: {typeId: number}): Promise<any> {
   //   let url = `${process.env.NEXT_PUBLIC_API_URL}/module-types/${typeId}/`;
