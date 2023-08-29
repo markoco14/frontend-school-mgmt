@@ -18,17 +18,11 @@ export default function AddModule ({
   currentLevel: Level;
   subjectLevels: SubjectLevel[];
 }) {
-  const [currentSubjectLevel, setCurrentSubjectLevel] =
-    useState<SubjectLevel>();
-
-  useEffect(() => {
-    const subjectLevel = subjectLevels.find(
+    const currentSubjectLevel = subjectLevels.find(
       (subjectLevel) =>
         subjectLevel.level.id === currentLevel.id &&
         subjectLevel.subject.id === currentSubject.id
     );
-    setCurrentSubjectLevel(subjectLevel);
-  }, [currentLevel, currentSubject, subjectLevels]);
 
   return (
     <article className="grid sm:grid-cols-2 gap-2 mb-4">
