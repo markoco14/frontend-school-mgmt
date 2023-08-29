@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, ReactNode } from "react";
 
-export default function Modal({show, close, title, children}: {show: boolean, close: Function, title: string, children: ReactNode}) {
+export default function Modal({show, close, title, children}: {show: boolean, close: Function, title: string | ReactNode, children: ReactNode}) {
   
   return (
     <Transition
@@ -33,17 +33,21 @@ export default function Modal({show, close, title, children}: {show: boolean, cl
 					leaveTo="opacity-0"
 				>
 					<Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
-						<Dialog.Title>{title}</Dialog.Title>
-						{children}
-						<div className="flex justify-end">
-							<button
-								type="button"
-								onClick={() => close(false)}
-								className="bg-gray-300 text-gray-900 hover:bg-gray-500 hover:text-white px-4 py-1 rounded"
-							>
-								Cancel
-							</button>
+						<div className="mb-4 flex justify-between items-baseline">
+							<Dialog.Title className="text-2xl ">
+								{title}
+							</Dialog.Title>
+							<div className="flex justify-end">
+								<button
+									type="button"
+									onClick={() => close(false)}
+									className="text-gray-800"
+								>
+									Cancel
+								</button>
+							</div>
 						</div>
+						{children}
 					</Dialog.Panel>
 				</Transition.Child>
 			</Dialog>
