@@ -1,5 +1,4 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ModuleType } from "../../../../domain/entities/ModuleType";
 import toast from "react-hot-toast";
 import { assessmentTypeAdapter } from "../../../adapters/assessmentTypeAdapter";
 import { AssessmentType } from "@/src/modules/curriculum/domain/entities/AssessmentType";
@@ -34,7 +33,6 @@ export default function ManageAssessmentType({
       (await assessmentTypeAdapter
         .patch({ typeId: selectedType?.id, typeName: data.name })
         .then((res: AssessmentType) => {
-          console.log(res);
           // Find the index of the object to replace
           const index = types.findIndex(
             (item) => item.id === selectedType?.id
@@ -53,16 +51,16 @@ export default function ManageAssessmentType({
         }));
   };
 
-  // const handleDelete = async () => {
-  //   selectedType &&
-  //     (await assessmentTypeAdapter.delete({ typeId: selectedType.id }).then(() => {
-  //       setTypes((prevTypes: AssessmentType[]) =>
-  //         prevTypes.filter((type) => type.id !== selectedType.id)
-  //       );
-  //       setSelectedType(null);
-  //       toast.success("Module Type deleted successfully!");
-  //     }));
-  // };
+  const handleDelete = async () => {
+    selectedType &&
+      (await assessmentTypeAdapter.delete({ typeId: selectedType.id }).then(() => {
+        setTypes((prevTypes: AssessmentType[]) =>
+          prevTypes.filter((type) => type.id !== selectedType.id)
+        );
+        setSelectedType(null);
+        toast.success("Assessment Type deleted successfully!");
+      }));
+  };
 
   return !selectedType ? (
     <section>
@@ -98,9 +96,9 @@ export default function ManageAssessmentType({
         <p className="mb-2">
           Warning, this will delete all data related to {selectedType?.name}
         </p>
-        {/* <button onClick={() => handleDelete()} className="text-gray-500">
+        <button onClick={() => handleDelete()} className="text-gray-500">
           Delete
-        </button> */}
+        </button>
       </section>
     </article>
   );

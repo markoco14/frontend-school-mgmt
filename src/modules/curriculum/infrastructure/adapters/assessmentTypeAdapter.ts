@@ -46,15 +46,15 @@ class AssessmentTypeAdapter {
     return updatedAssessment;
   }
 
-  // public async delete({typeId}: {typeId: number}): Promise<any> {
-  //   let url = `${process.env.NEXT_PUBLIC_API_URL}/module-types/${typeId}/`;
+  public async delete({typeId}: {typeId: number}): Promise<any> {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/assessment-types/${typeId}/`;
   
-  //   const res = await fetch(url, {
-  //       method: "DELETE",
-  //     });
+    const res = await fetch(url, {
+        method: "DELETE",
+      });
   
-  //   return res;
-  // }
+    return res;
+  }
 
 }
 
