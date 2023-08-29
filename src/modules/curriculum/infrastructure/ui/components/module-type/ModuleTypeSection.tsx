@@ -6,7 +6,6 @@ import { moduleTypeAdapter } from "../../../adapters/moduleTypeAdapter";
 
 type Inputs = {
   name: string;
-  school: number;
 };
 
 export default function ModuleTypeSection() {
@@ -32,13 +31,10 @@ export default function ModuleTypeSection() {
   }, [selectedSchool]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
-    console.log(selectedSchool?.id);
+		selectedSchool && await moduleTypeAdapter.add({schoolId: selectedSchool?.id, moduleName: data.name})
+		.then((res) => setModuleTypes((prevTypes: ModuleType[]) => [...prevTypes, res]))
+		reset();
     return;
-    // send data
-    // get response
-    // change state
-    // reset
   };
 
   return (
@@ -74,22 +70,6 @@ export default function ModuleTypeSection() {
                   required: true,
                   minLength: 2,
                   maxLength: 50,
-                })}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="flex justify-between">
-                <span>Order</span>{" "}
-                {errors.school && (
-                  <span className="text-red-500">required</span>
-                )}
-              </label>
-              <input
-                className="border shadow-inner rounded p-2"
-                type="number"
-                {...register("school", {
-                  required: true,
-                  min: 1,
                 })}
               />
             </div>
