@@ -4,6 +4,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { assessmentTypeAdapter } from "../../../adapters/assessmentTypeAdapter";
 import { AssessmentType } from "@/src/modules/curriculum/domain/entities/AssessmentType";
 import toast from "react-hot-toast";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import ManageAssessmentType from "./ManageAssessmentType";
 
 type Inputs = {
   name: string;
@@ -20,6 +22,9 @@ export default function AssessmentTypeSection() {
 
 	const [assessmentTypes, setAssessmentTypes] = useState<AssessmentType[]>([])
 
+	const [isManageType, setIsManageType] = useState<boolean>(false);
+	const [selectedType, setSelectedType] = useState<AssessmentType | null>(null);
+
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
     selectedSchool &&
@@ -33,6 +38,11 @@ export default function AssessmentTypeSection() {
     return;
   };
 
+	 function handleClose() {
+			setSelectedType(null);
+			setIsManageType(false);
+		}
+
 	useEffect(() => {
     async function getData() {
       await assessmentTypeAdapter
@@ -44,6 +54,7 @@ export default function AssessmentTypeSection() {
 
     selectedSchool && getData();
   }, [selectedSchool]);
+
 	return (
 		<section>
 			<h2 className="text-3xl mb-4">Assessment Types</h2>
@@ -58,8 +69,8 @@ export default function AssessmentTypeSection() {
 								<li
 									key={index}
 									onClick={() => {
-										// setSelectedType(type);
-										// setIsManageType(true);
+										setSelectedType(type);
+										setIsManageType(true);
 									}}
 								>
 									{type.name}
@@ -94,6 +105,14 @@ export default function AssessmentTypeSection() {
 					</form>
 				</article>
 			</div>
+			<Modal show={isManageType} close={handleClose} title={"Manage Assessment Type"}>
+				<ManageAssessmentType 
+					types={assessmentTypes}
+          setTypes={setAssessmentTypes}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+				/>
+			</Modal>
 		</section>
 	);
 }
