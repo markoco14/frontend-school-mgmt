@@ -13,9 +13,11 @@ type Inputs = {
 
 export default function ModuleTypeSection() {
   const { selectedSchool } = useContext(AuthContext);
-  const [moduleTypes, setModuleTypes] = useState<ModuleType[]>([]);
   const [isManageType, setIsManageType] = useState<boolean>(false);
-  const [selectedType, setSelectedType] = useState<ModuleType>();
+
+  const [moduleTypes, setModuleTypes] = useState<ModuleType[]>([]);
+  const [selectedType, setSelectedType] = useState<ModuleType | null>(null);
+
   const {
     register,
     reset,
@@ -49,18 +51,9 @@ export default function ModuleTypeSection() {
   };
 
   function handleClose() {
+    setSelectedType(null);
     setIsManageType(false);
   }
-
-  const handleDelete = async () => {
-    selectedType &&
-      (await moduleTypeAdapter.delete({ typeId: selectedType.id }).then(() => {
-        setModuleTypes((prevTypes: ModuleType[]) =>
-          prevTypes.filter((type) => type.id !== selectedType.id)
-        );
-        toast.success("Module Type deleted successfully!");
-      }));
-  };
 
   return (
     <section>
@@ -115,17 +108,14 @@ export default function ModuleTypeSection() {
       <Modal
         show={isManageType}
         close={handleClose}
-        title={`Manage ${selectedType?.name}`}
+        title={`Manage Module Type`}
       >
-        {selectedType && (
-          <ManageModuleType
-            moduleTypes={moduleTypes}
-            setModuleTypes={setModuleTypes}
-            selectedType={selectedType}
-						setSelectedType={setSelectedType}
-            handleDelete={handleDelete}
-          />
-        )}
+        <ManageModuleType
+          moduleTypes={moduleTypes}
+          setModuleTypes={setModuleTypes}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+        />
       </Modal>
     </section>
   );

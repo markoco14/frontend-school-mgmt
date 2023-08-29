@@ -11,14 +11,12 @@ export default function ManageModuleType({
   moduleTypes,
   setModuleTypes,
   selectedType,
-	setSelectedType,
-  handleDelete,
+  setSelectedType,
 }: {
-	moduleTypes: ModuleType[];
+  moduleTypes: ModuleType[];
   setModuleTypes: Function;
-  selectedType: ModuleType;
-	setSelectedType: Function;
-  handleDelete: Function;
+  selectedType: ModuleType | null;
+  setSelectedType: Function;
 }) {
   const {
     register,
@@ -27,38 +25,52 @@ export default function ManageModuleType({
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
-		if (selectedType.name === data.name) {
-			toast('You need to change the name to update module type')
-			return
-		}
-    await moduleTypeAdapter
-      .patch({ typeId: selectedType?.id, typeName: data.name })
-      .then((res) => {
-        console.log(res);
-        // Find the index of the object to replace
-        const index = moduleTypes.findIndex(
-          (item) => item.id === selectedType?.id
-        );
+    if (selectedType?.name === data.name) {
+      toast("You need to change the name to update module type");
+      return;
+    }
+    selectedType &&
+      (await moduleTypeAdapter
+        .patch({ typeId: selectedType?.id, typeName: data.name })
+        .then((res) => {
+          console.log(res);
+          // Find the index of the object to replace
+          const index = moduleTypes.findIndex(
+            (item) => item.id === selectedType?.id
+          );
 
-        // Create a copy of the original array
-        const updatedModuleTypes = [...moduleTypes];
+          // Create a copy of the original array
+          const updatedModuleTypes = [...moduleTypes];
 
-        // Replace the object at the found index with the new object
-        updatedModuleTypes[index] = res;
+          // Replace the object at the found index with the new object
+          updatedModuleTypes[index] = res;
 
-        // Update the state
-        setModuleTypes(updatedModuleTypes);
-				setSelectedType(res)
-				toast.success('New name saved successfuly!')
-      });
-    return;
+          // Update the state
+          setModuleTypes(updatedModuleTypes);
+          setSelectedType(res);
+          toast.success("New name saved successfuly!");
+        }));
   };
 
-  return (
+  const handleDelete = async () => {
+    selectedType &&
+      (await moduleTypeAdapter.delete({ typeId: selectedType.id }).then(() => {
+        setModuleTypes((prevTypes: ModuleType[]) =>
+          prevTypes.filter((type) => type.id !== selectedType.id)
+        );
+        setSelectedType(null);
+        toast.success("Module Type deleted successfully!");
+      }));
+  };
+
+  return !selectedType ? (
+    <section>
+      <p>This module type has been deleted.</p>
+    </section>
+  ) : (
     <article className="flex flex-col gap-4 divide-y">
       <section>
-        <h3 className="text-lg mb-4 text-gray-700">Edit Module Type</h3>
+        <h3 className="text-lg mb-4 text-gray-700">{selectedType?.name}</h3>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label className="flex justify-between">
