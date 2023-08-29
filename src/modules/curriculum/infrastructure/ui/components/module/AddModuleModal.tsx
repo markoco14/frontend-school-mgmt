@@ -61,7 +61,7 @@ export default function AddModuleModal ({
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0"
         >
-          <Dialog.Panel className="bg-gray-100 rounded-2xl shadow-xl p-8 z-10">
+          <Dialog.Panel className="bg-gray-100 rounded-2xl shadow-xl p-8 z-10 max-h-[80vh] overflow-y-auto">
             <Dialog.Title className="mb-4 flex justify-between items-baseline">
               <div className="text-2xl ">
                 <span>{currentSubject?.name}</span>{" "}
@@ -75,8 +75,8 @@ export default function AddModuleModal ({
                 Cancel
               </button>
             </Dialog.Title>
-            <article className="grid grid-cols-2 gap-2">
-              <section className="bg-white border-2 rounded-lg p-4">
+            <article className="grid sm:grid-cols-2 gap-2">
+              <section className="bg-white border-2 col-span-1 rounded-lg p-4">
                 <h3 className="text-xl mb-4">Current Modules</h3>
                 <ul className="divide-y border rounded shadow-inner">
                   {modules?.map((module, index) => (
@@ -92,7 +92,7 @@ export default function AddModuleModal ({
                   ))}
                 </ul>
               </section>
-              <section className="bg-white border-2 rounded-lg p-4">
+              <section className="bg-white border-2 col-span-1 rounded-lg p-4">
                 <h3 className="text-xl mb-4">New Module</h3>
                 {currentSubjectLevel && (
                   <AddModuleForm
