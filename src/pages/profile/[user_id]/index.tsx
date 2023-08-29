@@ -3,7 +3,7 @@ import AuthContext from "../../../AuthContext";
 import Layout from "../../../modules/core/infrastructure/ui/components/Layout";
 import { UserProfile } from "@/src/modules/user-mgmt/domain/entities/UserProfile";
 import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
-import ChangePasswordModal from "@/src/modules/user-mgmt/infrastructure/ui/ChangePasswordModal";
+import ChangePasswordForm from "@/src/modules/user-mgmt/infrastructure/ui/ChangePasswordForm";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import UserProfileForm from "@/src/modules/user-mgmt/infrastructure/ui/UserProfileForm";
 
@@ -43,8 +43,9 @@ export default function UserProfilePage() {
 			<Modal show={isEditProfile} close={setIsEditProfile} title={"Edit User Profile"}>
 				<UserProfileForm userProfile={userProfile} setUserProfile={setUserProfile}/>
 			</Modal>
-			
-			<ChangePasswordModal isEditPassword={isEditPassword} setIsEditPassword={setIsEditPassword} />
+			<Modal show={isEditPassword} close={setIsEditPassword} title={"Change Password"}>
+				<ChangePasswordForm />
+			</Modal>
     </Layout>
   );
 }
