@@ -13,7 +13,7 @@ import { useContext, useEffect, useState } from "react";
 
 export default function CurriculumHome() {
   const { user, selectedSchool } = useContext(AuthContext)
-  const [tab, setTab] = useState<number>(4);
+  const [tab, setTab] = useState<number>(5);
 
 
   const [subjectLevels, setSubjectLevels] = useState<any[]>([]);
