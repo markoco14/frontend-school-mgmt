@@ -6,6 +6,7 @@ import { subjectLevelAdapter } from "@/src/modules/curriculum/infrastructure/ada
 import CurriculumNav from "@/src/modules/curriculum/infrastructure/ui/components/CurriculumNav";
 import LevelSection from "@/src/modules/curriculum/infrastructure/ui/components/LevelSection";
 import SubjectSection from "@/src/modules/curriculum/infrastructure/ui/components/SubjectSection";
+import AssessmentTypeSection from "@/src/modules/curriculum/infrastructure/ui/components/assessment-type/AssessmentTypeSection";
 import ModuleTypeSection from "@/src/modules/curriculum/infrastructure/ui/components/module-type/ModuleTypeSection";
 import ModuleSection from "@/src/modules/curriculum/infrastructure/ui/components/module/ModuleSection";
 import { useContext, useEffect, useState } from "react";
@@ -53,6 +54,9 @@ export default function CurriculumHome() {
       )}
       {tab === 4 && (
         <ModuleTypeSection />
+      )}
+      {tab === 5 && (
+        <AssessmentTypeSection />
       )}
     </Layout>
   );
