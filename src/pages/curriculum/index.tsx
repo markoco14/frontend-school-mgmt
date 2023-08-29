@@ -42,20 +42,18 @@ export default function CurriculumHome() {
     <Layout>
       <SchoolHeader />
       <CurriculumNav tab={tab} setTab={setTab}/>
-      <div className="grid xs:grid-cols-2 gap-4">
-        {tab === 1 && (
-          <SubjectSection subjectLevels={subjectLevels} setSubjectLevels={setSubjectLevels}/>
-        )}
-        {tab === 2 && (
-          <LevelSection />
-        )}
-        {tab === 3 && (
-          <ModuleSection subjectLevels={subjectLevels}/>
-        )}
-        {tab === 4 && (
-          <ModuleTypeSection />
-        )}
-      </div>
+      {tab === 1 && (
+        <SubjectSection subjectLevels={subjectLevels} setSubjectLevels={setSubjectLevels}/>
+      )}
+      {tab === 2 && (
+        <LevelSection />
+      )}
+      {tab === 3 && (
+        <ModuleSection subjectLevels={subjectLevels}/>
+      )}
+      {tab === 4 && (
+        <ModuleTypeSection />
+      )}
     </Layout>
   );
 }
