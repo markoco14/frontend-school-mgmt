@@ -142,8 +142,8 @@ export default function ModuleSection({
       {!subjectLevels.length ? (
         <p>there are no levels connected to your subjects</p>
       ) : (
-        <article className="grid grid-cols-4">
-          <div className="col-span-4 xs:col-span-1">
+        <article className="grid grid-cols-4 gap-4">
+          <section className="border p-4 rounded shadow col-span-4 xs:col-span-2 sm:col-span-1">
             <h3 className="text-xl">Subjects</h3>
             <ul className="bg-gray-100 rounded shadow-inner mb-4">
               {uniqueSubjects?.map((subject: Subject, index) => (
@@ -165,8 +165,8 @@ export default function ModuleSection({
                 </li>
               ))}
             </ul>
-          </div>
-          <div className="col-span-4 xs:col-span-1">
+          </section>
+          <section className="border p-4 rounded shadow col-span-4 xs:col-span-2 sm:col-span-1">
             <h3 className="text-xl">Levels</h3>
             <ul className="bg-gray-100 rounded shadow-inner mb-4">
               {currentSubjectLevels?.map((level, index) => (
@@ -191,17 +191,23 @@ export default function ModuleSection({
                 </li>
               ))}
             </ul>
-          </div>
-          <div className="col-span-4 xs:col-span-2">
+          </section>
+          <section className="border p-4 rounded shadow col-span-4 sm:col-span-2">
             <h3 className="text-xl">Modules</h3>
-            <ul className="bg-gray-100 rounded shadow-inner mb-4">
-              {modules?.map((module, index) => (
-                <li key={index} className="p-2 hover:bg-gray-300">
-                  Unit {module.order} {module.name}
-                </li>
-              ))}
-            </ul>
-          </div>
+            {modules.length > 0 ? (
+              <ul className="bg-gray-100 rounded shadow-inner">
+                {modules.map((module, index) => (
+                  <li key={index} className="p-2 hover:bg-gray-300">
+                    Unit {module.order} {module.name}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <article className="bg-gray-100 rounded shadow-inner p-2">
+                <p>There are no modules in this level</p>
+              </article>
+            )}
+          </section>
           {isAddModule && currentSubject && currentLevel && (
             <AddModuleModal
               modules={modules}
