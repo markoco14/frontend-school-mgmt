@@ -29,45 +29,45 @@ class AssessmentAdapter {
     return moduleWithAssessmentList;
 	}
   
-  // public async add({
-	// 	name, 
-	// 	description, 
-	// 	module, 
-	// 	type, 
-	// 	order, 
-	// 	max_score, 
-	// 	status 
-	// }: {
-	// 	name: string;
-	// 	description: string;
-	// 	module: number;
-	// 	type: number;
-	// 	order: number;
-	// 	max_score: number;
-	// 	status: number;
-	// }): Promise<Assessment> {
-  //   let url = `${process.env.NEXT_PUBLIC_API_URL}/assessments/`;
+  public async add({
+		name, 
+		description, 
+		module, 
+		type, 
+		order, 
+		max_score, 
+		status 
+	}: {
+		name: string;
+		description: string;
+		module: number;
+		type: number;
+		order: number;
+		max_score: number;
+		status: number;
+	}): Promise<Assessment> {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/assessments/`;
   
-  //   const res = await fetch(url, { 
-	// 		method: 'POST', 
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 		},
-	// 		body: JSON.stringify({ 
-	// 			name: name, 
-	// 			description: description, 
-	// 			module: module, 
-	// 			type: type, 
-	// 			order: order, 
-	// 			max_score: max_score, 
-	// 			status: status, 
-	// 		}) 
-	// 	});
-  //   const newAssessment: Assessment = await res.json();
+    const res = await fetch(url, { 
+			method: 'POST', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ 
+				name: name, 
+				description: description, 
+				module: module, 
+				type: type, 
+				order: order, 
+				max_score: max_score, 
+				status: status, 
+			}) 
+		});
+    const newAssessment: Assessment = await res.json();
   
-  //   return newAssessment;
+    return newAssessment;
     
-  // }
+  }
 
   // public async patch({typeId, typeName}: {typeId: number, typeName: string}): Promise<AssessmentType> {
   //   let url = `${process.env.NEXT_PUBLIC_API_URL}/assessment-types/${typeId}/`;
