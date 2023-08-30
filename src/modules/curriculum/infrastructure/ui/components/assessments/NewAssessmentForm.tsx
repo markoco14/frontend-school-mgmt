@@ -1,9 +1,11 @@
 import AuthContext from "@/src/AuthContext";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { assessmentAdapter } from "../../../adapters/assessmentAdapter";
 import toast from "react-hot-toast";
 import { Module } from "@/src/modules/curriculum/domain/entities/Module";
+import { assessmentTypeAdapter } from "../../../adapters/assessmentTypeAdapter";
+import { AssessmentType } from "@/src/modules/curriculum/domain/entities/AssessmentType";
 
 type Inputs = {
   name: string;
@@ -32,6 +34,8 @@ export default function NewAssessmentForm({selectedModule}: {selectedModule: Mod
 			"string": 'Draft'
 		},
 	];
+
+	const [types, setTypes] = useState<AssessmentType[]>([])
 	
   const {
     register,
@@ -46,7 +50,7 @@ export default function NewAssessmentForm({selectedModule}: {selectedModule: Mod
         .add({
           name: data.name,
           description: data.description,
-          module: data.module,
+          module: selectedModule.id,
           type: data.type,
           order: data.order,
           max_score: data.max_score,
@@ -65,8 +69,15 @@ export default function NewAssessmentForm({selectedModule}: {selectedModule: Mod
   };
 
 	useEffect(() => {
-		console.log('effecting')
-	}, [])
+		async function getTypes() {
+			selectedSchool && await assessmentTypeAdapter.list({schoolId: selectedSchool.id})
+			.then((res) => {
+				setTypes(res)
+			})
+		}
+
+		getTypes();
+	}, [selectedSchool])
 
   return (
 		<form
@@ -107,17 +118,26 @@ export default function NewAssessmentForm({selectedModule}: {selectedModule: Mod
 			<div className="flex flex-col gap-2">
 				<label className="flex justify-between">
 					<span>Type</span>{" "}
-					{errors.type && <span className="text-red-500">required</span>}
+					{errors.status && (
+						<span className="text-red-500">required</span>
+					)}
 				</label>
-				<input
-					type="number"
-					className="border shadow-inner rounded p-2"
-					{...register("type", {
-						required: true,
-						min: 1,
-						valueAsNumber: true,
-					})}
-				/>
+				{types?.map((type, valueIndex) => (
+					<div key={`type-${valueIndex}`} className="flex gap-2">
+						<label className="peer-checked:bg-blue-500 relative cursor-pointer w-full flex">
+							<input
+								type="radio"
+								value={type.id}
+								className="sr-only peer"
+								{...register("type", {
+									required: true,
+									valueAsNumber: true,
+								})}
+							/>
+							<span className="w-full hover:bg-gray-300 ease-in-out duration-200 bg-gray-100 peer-checked:bg-gray-500 peer-checked:text-white p-2 border shadow-inner rounded">{type.name}</span>
+						</label>
+					</div>
+				))}
 			</div>
 			<div className="flex flex-col gap-2">
 				<label className="flex justify-between">
