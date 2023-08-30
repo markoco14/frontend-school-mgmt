@@ -7,13 +7,14 @@ import CurriculumNav from "@/src/modules/curriculum/infrastructure/ui/components
 import LevelSection from "@/src/modules/curriculum/infrastructure/ui/components/LevelSection";
 import SubjectSection from "@/src/modules/curriculum/infrastructure/ui/components/SubjectSection";
 import AssessmentTypeSection from "@/src/modules/curriculum/infrastructure/ui/components/assessment-type/AssessmentTypeSection";
+import AssessmentSection from "@/src/modules/curriculum/infrastructure/ui/components/assessments/AssessmentSection";
 import ModuleTypeSection from "@/src/modules/curriculum/infrastructure/ui/components/module-type/ModuleTypeSection";
 import ModuleSection from "@/src/modules/curriculum/infrastructure/ui/components/module/ModuleSection";
 import { useContext, useEffect, useState } from "react";
 
 export default function CurriculumHome() {
   const { user, selectedSchool } = useContext(AuthContext)
-  const [tab, setTab] = useState<number>(5);
+  const [tab, setTab] = useState<number>(6);
 
 
   const [subjectLevels, setSubjectLevels] = useState<any[]>([]);
@@ -57,6 +58,9 @@ export default function CurriculumHome() {
       )}
       {tab === 5 && (
         <AssessmentTypeSection />
+      )}
+      {tab === 6 && (
+        <AssessmentSection />
       )}
     </Layout>
   );
