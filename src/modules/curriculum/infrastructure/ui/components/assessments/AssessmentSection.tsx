@@ -124,7 +124,7 @@ export default function AssessmentSection() {
 					{selectedModule && (
 						<>
 							<div className="flex justify-between items-baseline">
-								<h3 className="text-xl text-gray-500">New {selectedModule.name} Assessment</h3>
+								<h3 className="text-xl text-gray-500">New {selectedModule.subject_level.subject.name} L{selectedModule.subject_level.level.order} {selectedModule.name} Assessment</h3>
 								<button onClick={() => setSelectedModule(null)}><i className="fa-solid fa-xmark" /></button>
 							</div>
 							<NewAssessmentForm selectedModule={selectedModule}/>
