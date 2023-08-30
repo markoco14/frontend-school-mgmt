@@ -90,7 +90,7 @@ export default function AddModuleForm({
               <input
                 className="sr-only peer"
                 id={`checkbox-${type.id}`} 
-                type="checkbox"
+                type="radio"
                 value={type.id}
                 {...register("type", {
                   required: true,

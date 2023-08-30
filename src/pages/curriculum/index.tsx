@@ -2,26 +2,30 @@ import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
+import { SubjectLevel } from "@/src/modules/curriculum/domain/entities/SubjectLevel";
 import { subjectLevelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectLevelAdapter";
 import CurriculumNav from "@/src/modules/curriculum/infrastructure/ui/components/CurriculumNav";
 import LevelSection from "@/src/modules/curriculum/infrastructure/ui/components/LevelSection";
 import SubjectSection from "@/src/modules/curriculum/infrastructure/ui/components/SubjectSection";
+import AssessmentTypeSection from "@/src/modules/curriculum/infrastructure/ui/components/assessment-type/AssessmentTypeSection";
+import AssessmentSection from "@/src/modules/curriculum/infrastructure/ui/components/assessments/AssessmentSection";
 import ModuleTypeSection from "@/src/modules/curriculum/infrastructure/ui/components/module-type/ModuleTypeSection";
 import ModuleSection from "@/src/modules/curriculum/infrastructure/ui/components/module/ModuleSection";
 import { useContext, useEffect, useState } from "react";
 
 export default function CurriculumHome() {
   const { user, selectedSchool } = useContext(AuthContext)
-  const [tab, setTab] = useState<number>(4);
+  const [tab, setTab] = useState<number>(6);
 
 
-  const [subjectLevels, setSubjectLevels] = useState<any[]>([]);
+  const [subjectLevels, setSubjectLevels] = useState<SubjectLevel[]>([]);
 
   useEffect(() => {
     async function getSubjectLevels() {
       await subjectLevelAdapter
         .listSchoolSubjectLevels({ id: selectedSchool?.id })
         .then((res) => {
+          console.log('subject levels', res)
           setSubjectLevels(res);
         });
     }
@@ -53,6 +57,12 @@ export default function CurriculumHome() {
       )}
       {tab === 4 && (
         <ModuleTypeSection />
+      )}
+      {tab === 5 && (
+        <AssessmentTypeSection />
+      )}
+      {tab === 6 && (
+        <AssessmentSection />
       )}
     </Layout>
   );
