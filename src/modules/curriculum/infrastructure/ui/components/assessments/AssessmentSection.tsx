@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { assessmentAdapter } from "../../../adapters/assessmentAdapter";
 import { Module } from "@/src/modules/curriculum/domain/entities/Module";
 import NewAssessmentForm from "./NewAssessmentForm";
+import { Subject } from "react-hook-form/dist/utils/createSubject";
 
 type Inputs = {
   name: string;
@@ -25,8 +26,7 @@ export default function AssessmentSection() {
   } = useForm<Inputs>();
 
   const [modules, setModules] = useState<Module[]>([]);
-  const subjectCategories = ["Grammar", "Phonics", "Reading"];
-
+	const [subjects, setSubjects] = useState<string[]>([])
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -62,7 +62,13 @@ export default function AssessmentSection() {
         .listWithDetails({ schoolId: selectedSchool?.id })
         .then((res) => {
           console.log(res);
+					const subjectNames = res.map((module) => module.subject_level.subject.name);
+
+					// Remove duplicates by converting the array to a Set and then back to an array
+					const uniqueSubjectNames = Array.from(new Set(subjectNames));
+
           setModules(res);
+					setSubjects(uniqueSubjectNames)
         });
     }
 
@@ -78,7 +84,7 @@ export default function AssessmentSection() {
           {modules?.length === 0 ? (
             <p>There are no modules.</p>
           ) : (
-            subjectCategories?.map((category, categoryIndex) => (
+            subjects?.map((category, categoryIndex) => (
               <div key={categoryIndex} className="grid gap-2 divide-y">
                 <h3 className="text-lg">{category}</h3>
                 <ul className="grid gap-2 pt-2">
