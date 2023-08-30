@@ -203,10 +203,10 @@ const SubjectList = ({
       setSubjects((prevSubjects: Subject[]) =>
         prevSubjects?.filter((subject) => subject.id !== subjectId)
       );
-      setSubjectLevels((prevSubjectLevels: SubjectLevel[]) =>
+      setSubjectLevels((prevSubjectLevels: SubjectLevel[]) =>{ 
         prevSubjectLevels.filter(
           (subjectLevel) => subjectLevel.subject.id !== subjectId
-        )
+        )}
       );
       toast.success("Subject deleted.");
     });

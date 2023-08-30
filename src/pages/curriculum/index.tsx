@@ -2,6 +2,7 @@ import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
+import { SubjectLevel } from "@/src/modules/curriculum/domain/entities/SubjectLevel";
 import { subjectLevelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectLevelAdapter";
 import CurriculumNav from "@/src/modules/curriculum/infrastructure/ui/components/CurriculumNav";
 import LevelSection from "@/src/modules/curriculum/infrastructure/ui/components/LevelSection";
@@ -17,13 +18,14 @@ export default function CurriculumHome() {
   const [tab, setTab] = useState<number>(6);
 
 
-  const [subjectLevels, setSubjectLevels] = useState<any[]>([]);
+  const [subjectLevels, setSubjectLevels] = useState<SubjectLevel[]>([]);
 
   useEffect(() => {
     async function getSubjectLevels() {
       await subjectLevelAdapter
         .listSchoolSubjectLevels({ id: selectedSchool?.id })
         .then((res) => {
+          console.log('subject levels', res)
           setSubjectLevels(res);
         });
     }
