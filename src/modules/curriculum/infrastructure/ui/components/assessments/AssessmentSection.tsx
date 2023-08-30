@@ -10,6 +10,12 @@ import { Assessment } from "@/src/modules/curriculum/domain/entities/Assessment"
 
 // type Inputs = {
 //   name: string;
+// 	description: string;
+// 	module: number;
+// 	type: number;
+// 	order: number;
+// 	max_score: number;
+// 	status: number;
 // };
 
 export default function AssessmentSection() {
@@ -28,12 +34,22 @@ export default function AssessmentSection() {
 
 
 	// const onSubmit: SubmitHandler<Inputs> = async (data) => {
+	// 	console.log(data)
+	// 	// return
   //   selectedSchool &&
-  //     (await assessmentTypeAdapter
-  //       .add({ schoolId: selectedSchool?.id, typeName: data.name })
+  //     (await assessmentAdapter
+  //       .add({ 
+	// 				name: data.name,
+	// 				description: data.description,
+	// 				module: data.module,
+	// 				type: data.type,
+	// 				order: data.order,
+	// 				max_score: data.max_score,
+	// 				status: data.status,
+	// 			})
   //       .then((res) => {
-  //         toast.success("Module Type saved successfully!");
-  //         setAssessmentTypes((prevTypes: AssessmentType[]) => [...prevTypes, res]);
+  //         toast.success("Assessment saved successfully!");
+  //         setAssessments((prevTypes: Assessment[]) => [...prevTypes, res]);
   //       }));
   //   reset();
   //   return;
@@ -49,6 +65,7 @@ export default function AssessmentSection() {
       await assessmentAdapter
         .list({ schoolId: selectedSchool?.id })
         .then((res) => {
+					console.log(res)
           setAssessments(res);
         });
     }
@@ -74,7 +91,7 @@ export default function AssessmentSection() {
 									// 	setIsManageType(true);
 									// }}
 								>
-									Module {assessment.module} {assessment.name} ( /{assessment.max_score})
+									{assessment.module.name}: {assessment.name} Order {assessment.order} Type {assessment.type} ( /{assessment.max_score})
 								</li>
 							))}
 						</ul>
@@ -92,11 +109,102 @@ export default function AssessmentSection() {
 								{errors.name && <span className="text-red-500">required</span>}
 							</label>
 							<input
+								type="text"
 								className="border shadow-inner rounded p-2"
 								{...register("name", {
 									required: true,
 									minLength: 2,
 									maxLength: 50,
+								})}
+							/>
+						</div>
+						<div className="flex flex-col gap-2">
+							<label className="flex justify-between">
+								<span>Description</span>{" "}
+								{errors.description && <span className="text-red-500">required</span>}
+							</label>
+							<textarea
+								className="border shadow-inner rounded p-2"
+								{...register("description", {
+									// required: true,
+									minLength: 2,
+									maxLength: 255,
+								})}
+							/>
+						</div>
+						<div className="flex flex-col gap-2">
+							<label className="flex justify-between">
+								<span>Module</span>{" "}
+								{errors.module?.type && <span className="text-red-500">1 or higher</span>}
+							</label>
+							<input
+								type="number"
+								className="border shadow-inner rounded p-2"
+								{...register("module", {
+									required: true,
+									min: 1,
+									valueAsNumber: true,
+								})}
+							/>
+						</div>
+						<div className="flex flex-col gap-2">
+							<label className="flex justify-between">
+								<span>Type</span>{" "}
+								{errors.type && <span className="text-red-500">required</span>}
+							</label>
+							<input
+								type="number"
+								className="border shadow-inner rounded p-2"
+								{...register("type", {
+									required: true,
+									min: 1,
+									valueAsNumber: true,
+								})}
+							/>
+						</div>
+						<div className="flex flex-col gap-2">
+							<label className="flex justify-between">
+								<span>Order</span>{" "}
+								{errors.order && <span className="text-red-500">required</span>}
+							</label>
+							<input
+								type="number"
+								className="border shadow-inner rounded p-2"
+								{...register("order", {
+									required: true,
+									min: 1,
+									valueAsNumber: true,
+								})}
+							/>
+						</div>
+						<div className="flex flex-col gap-2">
+							<label className="flex justify-between">
+								<span>Max Score</span>{" "}
+								{errors.max_score && <span className="text-red-500">required</span>}
+							</label>
+							<input
+								type="number"
+								className="border shadow-inner rounded p-2"
+								{...register("max_score", {
+									required: true,
+									min: 1,
+									valueAsNumber: true,
+								})}
+							/>
+						</div>
+						<div className="flex flex-col gap-2">
+							<label className="flex justify-between">
+								<span>Status</span>{" "}
+								{errors.status && <span className="text-red-500">required</span>}
+							</label>
+							<input
+								type="number"
+								className="border shadow-inner rounded p-2"
+								{...register("status", {
+									required: true,
+									min: 0,
+									max: 4,
+									valueAsNumber: true,
 								})}
 							/>
 						</div>

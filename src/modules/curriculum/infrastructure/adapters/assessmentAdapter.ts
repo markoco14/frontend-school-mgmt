@@ -15,17 +15,41 @@ class AssessmentAdapter {
     return assessmentList;
   }
   
-  // public async add({schoolId, typeName}: {schoolId: number, typeName: string}): Promise<AssessmentType> {
-  //   let url = `${process.env.NEXT_PUBLIC_API_URL}/assessment-types/`;
+  // public async add({
+	// 	name, 
+	// 	description, 
+	// 	module, 
+	// 	type, 
+	// 	order, 
+	// 	max_score, 
+	// 	status 
+	// }: {
+	// 	name: string;
+	// 	description: string;
+	// 	module: number;
+	// 	type: number;
+	// 	order: number;
+	// 	max_score: number;
+	// 	status: number;
+	// }): Promise<Assessment> {
+  //   let url = `${process.env.NEXT_PUBLIC_API_URL}/assessments/`;
   
   //   const res = await fetch(url, { 
 	// 		method: 'POST', 
 	// 		headers: {
 	// 			"Content-Type": "application/json",
 	// 		},
-	// 		body: JSON.stringify({ name: typeName, school: schoolId }) 
+	// 		body: JSON.stringify({ 
+	// 			name: name, 
+	// 			description: description, 
+	// 			module: module, 
+	// 			type: type, 
+	// 			order: order, 
+	// 			max_score: max_score, 
+	// 			status: status, 
+	// 		}) 
 	// 	});
-  //   const newAssessment: AssessmentType = await res.json();
+  //   const newAssessment: Assessment = await res.json();
   
   //   return newAssessment;
     
