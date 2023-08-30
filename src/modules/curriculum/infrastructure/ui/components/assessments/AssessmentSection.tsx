@@ -4,6 +4,8 @@ import { useContext, useEffect, useState } from "react";
 import { assessmentAdapter } from "../../../adapters/assessmentAdapter";
 import { Assessment } from "@/src/modules/curriculum/domain/entities/Assessment";
 import { Module } from "@/src/modules/curriculum/domain/entities/Module";
+import { Subject } from "@/src/modules/curriculum/domain/entities/Subject";
+import { SubjectLevel } from "@/src/modules/curriculum/domain/entities/SubjectLevel";
 // import toast from "react-hot-toast";
 // import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 // import ManageAssessmentType from "@/src/modules/curriculum/infrastructure/ui/components/assessment-type/ManageAssessmentType";
@@ -29,6 +31,7 @@ export default function AssessmentSection() {
   // } = useForm<Inputs>();
 
 	const [modules, setModules] = useState<Module[]>([])
+	const subjectCategories = ['Grammar', 'Phonics', 'Reading'];
 
 	// const [isManageType, setIsManageType] = useState<boolean>(false);
 	// const [selectedType, setSelectedType] = useState<AssessmentType | null>(null);
@@ -83,19 +86,29 @@ export default function AssessmentSection() {
 					{modules?.length === 0 ? (
 						<p>There are no modules.</p>
 					) : (
-						<ul>
-							{modules?.map((module, index) => (
-								<li
-									key={index}
-									// onClick={() => {
-									// 	setSelectedType(module);
-									// 	setIsManageType(true);
-									// }}
-								>
-									{module.name} {module.order}
-								</li>
-							))}
-						</ul>
+						subjectCategories?.map((category, categoryIndex) => (
+						<div key={categoryIndex} className="grid gap-2 divide-y">
+							<h3 className="text-lg">{category}</h3>
+							<ul className="grid gap-2 indent-4 pt-2">
+								{modules?.filter(module => module.subject_level.subject.name === category).map((filteredModule, index) => (
+									<li
+										key={index}
+										// onClick={() => {
+										// 	setSelectedType(filteredModule);
+										// 	setIsManageType(true);
+										// }}
+									>
+										<span>Level {filteredModule.subject_level.level.order} Unit {filteredModule.order}: {filteredModule.name} </span>
+										<ul className="grid gap-2 indent-8 pt-2">
+											{filteredModule.assessments?.map((assessment, assessmentIndex) => (
+												<li key={assessmentIndex}>{assessment.name}</li>
+											))}
+										</ul>
+									</li>
+								))}
+							</ul>
+						</div>
+						))
 					)}
 				</article>
 				{/* <article className="border rounded shadow mb-4 p-4 flex flex-col gap-6 text-gray-700">
