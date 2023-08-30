@@ -1,4 +1,5 @@
 import { Assessment } from '../../domain/entities/Assessment';
+import { Module } from '../../domain/entities/Module';
 
 
 class AssessmentAdapter {
@@ -14,6 +15,19 @@ class AssessmentAdapter {
 
     return assessmentList;
   }
+
+	public async listWithDetails({
+    schoolId,
+  }: {
+    schoolId: number;
+  }): Promise<Module[]> {
+		 let url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/module-assessments/`;
+
+    const res = await fetch(url);
+    const moduleWithAssessmentList: Module[] = await res.json();
+
+    return moduleWithAssessmentList;
+	}
   
   // public async add({
 	// 	name, 

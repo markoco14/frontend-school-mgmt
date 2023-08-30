@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 // import { SubmitHandler, useForm } from "react-hook-form";
 import { assessmentAdapter } from "../../../adapters/assessmentAdapter";
 import { Assessment } from "@/src/modules/curriculum/domain/entities/Assessment";
+import { Module } from "@/src/modules/curriculum/domain/entities/Module";
 // import toast from "react-hot-toast";
 // import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 // import ManageAssessmentType from "@/src/modules/curriculum/infrastructure/ui/components/assessment-type/ManageAssessmentType";
@@ -27,7 +28,7 @@ export default function AssessmentSection() {
   //   formState: { errors },
   // } = useForm<Inputs>();
 
-	const [assessments, setAssessments] = useState<Assessment[]>([])
+	const [modules, setModules] = useState<Module[]>([])
 
 	// const [isManageType, setIsManageType] = useState<boolean>(false);
 	// const [selectedType, setSelectedType] = useState<AssessmentType | null>(null);
@@ -49,7 +50,7 @@ export default function AssessmentSection() {
 	// 			})
   //       .then((res) => {
   //         toast.success("Assessment saved successfully!");
-  //         setAssessments((prevTypes: Assessment[]) => [...prevTypes, res]);
+  //         setModules((prevTypes: Assessment[]) => [...prevTypes, res]);
   //       }));
   //   reset();
   //   return;
@@ -63,10 +64,10 @@ export default function AssessmentSection() {
 	useEffect(() => {
     async function getData() {
       await assessmentAdapter
-        .list({ schoolId: selectedSchool?.id })
+        .listWithDetails({ schoolId: selectedSchool?.id })
         .then((res) => {
 					console.log(res)
-          setAssessments(res);
+          setModules(res);
         });
     }
 
@@ -79,19 +80,19 @@ export default function AssessmentSection() {
 				<div className="grid sm:grid-cols-2 gap-4">
 				<article className="border rounded shadow mb-4 p-4 flex flex-col gap-6 text-gray-700">
 					<h3 className="text-xl">{selectedSchool.name} Assessments</h3>
-					{assessments?.length === 0 ? (
-						<p>There are no assessments.</p>
+					{modules?.length === 0 ? (
+						<p>There are no modules.</p>
 					) : (
 						<ul>
-							{assessments?.map((assessment, index) => (
+							{modules?.map((module, index) => (
 								<li
 									key={index}
 									// onClick={() => {
-									// 	setSelectedType(assessment);
+									// 	setSelectedType(module);
 									// 	setIsManageType(true);
 									// }}
 								>
-									{assessment.module.name}: {assessment.name} Order {assessment.order} Type {assessment.type} ( /{assessment.max_score})
+									{module.name} {module.order}
 								</li>
 							))}
 						</ul>
