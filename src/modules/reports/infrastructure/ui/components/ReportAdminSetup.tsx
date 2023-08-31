@@ -1,5 +1,55 @@
 import { useState } from "react";
 
+const SelectSubject = ({subject, setSubject}: {subject: string; setSubject: Function}) => {
+	const subjects = ["Grammar", "Reading", "Phonics"];
+
+	function checkIfSubject({ this_subject}: { this_subject: string }) {
+    return this_subject === subject;
+  }
+
+	return(
+		<article className="bg-blue-200 p-4 rounded mb-4">
+			<p className="mb-2">Subject</p>
+			<ul className="grid grid-cols-3">
+				{subjects?.map((this_subject, index) => (
+					<li key={index}>
+						<button
+							onClick={() => {
+								setSubject(this_subject);
+								// if (
+								// 	subject === "Phonics" &&
+								// 	(this_subject === "Grammar" || this_subject === "Reading")
+								// ) {
+								// 	setLevel(5);
+								// 	setUnit(1);
+								// 	setDay(1);
+								// }
+
+								// if (
+								// 	(subject === "Grammar" || subject === "Reading") &&
+								// 	this_subject === "Phonics"
+								// ) {
+								// 	setLevel(1);
+								// 	setUnit(1);
+								// 	setDay(1);
+								// }
+							}}
+							className={`${
+								checkIfSubject({ this_subject: this_subject })
+									? "bg-blue-500 text-white"
+									: "bg-gray-100"
+							} w-full py-2 text-center `}
+						>
+							{this_subject}
+						</button>
+					</li>
+				))}
+			</ul>
+		</article>
+	);
+}
+
+
 export default function ReportAdminSetup({
 	setReportData,
   setIsConfirmed,
@@ -7,7 +57,6 @@ export default function ReportAdminSetup({
 	setReportData: Function;
   setIsConfirmed: Function;
 }) {
-	const subjects = ["Grammar", "Reading", "Phonics"];
 
   const upperLevels = [5, 6, 7, 8, 9, 10, 11, 12];
   const lowerLevels = [1, 2, 3, 4];
@@ -18,15 +67,13 @@ export default function ReportAdminSetup({
   const upperUnits = [1, 2, 3, 4, 5, 6];
   const lowerUnits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-	const [subject, setSubject] = useState<string>("Grammar");
+	const [subject, setSubject] = useState<string>("");
   const [level, setLevel] = useState<number>(5);
   const [unit, setUnit] = useState<number>(1);
   const [day, setDay] = useState<string | number>(1);
 
 
-  function checkIfSubject({ this_subject }: { this_subject: string }) {
-    return this_subject === subject;
-  }
+  
 
   function checkIfLevel({ this_level }: { this_level: number }) {
     return this_level === level;
@@ -42,45 +89,10 @@ export default function ReportAdminSetup({
 
   return (
     <>
-      <article className="bg-blue-200 p-4 rounded mb-4">
-        <p className="mb-2">Subject</p>
-        <ul className="grid grid-cols-3">
-          {subjects?.map((this_subject, index) => (
-            <li key={index}>
-              <button
-                onClick={() => {
-                  setSubject(this_subject);
-                  if (
-                    subject === "Phonics" &&
-                    (this_subject === "Grammar" || this_subject === "Reading")
-                  ) {
-                    setLevel(5);
-                    setUnit(1);
-                    setDay(1);
-                  }
-
-                  if (
-                    (subject === "Grammar" || subject === "Reading") &&
-                    this_subject === "Phonics"
-                  ) {
-                    setLevel(1);
-                    setUnit(1);
-                    setDay(1);
-                  }
-                }}
-                className={`${
-                  checkIfSubject({ this_subject: this_subject })
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-100"
-                } w-full py-2 text-center `}
-              >
-                {this_subject}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </article>
-      <article className="bg-blue-200 p-4 rounded mb-4">
+			<SelectSubject subject={subject} setSubject={setSubject}/>
+			{subject && (
+				<>
+				      <article className="bg-blue-200 p-4 rounded mb-4">
         <p className="mb-2">Level (Level choices based on subject)</p>
         {subject === "Grammar" || subject === "Reading" ? (
           <ul className="grid grid-cols-6">
@@ -205,6 +217,9 @@ export default function ReportAdminSetup({
       >
         Confirm
       </button>
+				</>
+			)}
+
     </>
   );
 }
