@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const SelectSubject = ({subject, setSubject}: {subject: string; setSubject: Function}) => {
+const SelectSubject = ({subject, setSubject, setLevel}: {subject: string; setSubject: Function; setLevel: Function;}) => {
 	const subjects = ["Grammar", "Reading", "Phonics"];
 
 	function checkIfSubject({ this_subject}: { this_subject: string }) {
@@ -16,23 +16,23 @@ const SelectSubject = ({subject, setSubject}: {subject: string; setSubject: Func
 						<button
 							onClick={() => {
 								setSubject(this_subject);
-								// if (
-								// 	subject === "Phonics" &&
-								// 	(this_subject === "Grammar" || this_subject === "Reading")
-								// ) {
-								// 	setLevel(5);
-								// 	setUnit(1);
-								// 	setDay(1);
-								// }
+								if (
+									subject === "Phonics" &&
+									(this_subject === "Grammar" || this_subject === "Reading")
+								) {
+									setLevel(5);
+									// setUnit(1);
+									// setDay(1);
+								}
 
-								// if (
-								// 	(subject === "Grammar" || subject === "Reading") &&
-								// 	this_subject === "Phonics"
-								// ) {
-								// 	setLevel(1);
-								// 	setUnit(1);
-								// 	setDay(1);
-								// }
+								if (
+									(subject === "Grammar" || subject === "Reading") &&
+									this_subject === "Phonics"
+								) {
+									setLevel(1);
+									// setUnit(1);
+									// setDay(1);
+								}
 							}}
 							className={`${
 								checkIfSubject({ this_subject: this_subject })
@@ -49,6 +49,56 @@ const SelectSubject = ({subject, setSubject}: {subject: string; setSubject: Func
 	);
 }
 
+const SelectLevel = ({subject, level, setLevel}: {subject: string; level: number, setLevel: Function;}) => {
+	const upperLevels = [5, 6, 7, 8, 9, 10, 11, 12];
+  const lowerLevels = [1, 2, 3, 4];
+
+	function checkIfLevel({ this_level }: { this_level: number }) {
+    return this_level === level;
+  }
+
+	return (
+		<article className="bg-blue-200 p-4 rounded mb-4">
+			<p className="mb-2">Level (Level choices based on subject)</p>
+			{subject === "Grammar" || subject === "Reading" ? (
+				<ul className="grid grid-cols-6">
+					{upperLevels?.map((this_level, index) => (
+						<li key={index}>
+							<button
+								onClick={() => setLevel(this_level)}
+								className={`${
+									checkIfLevel({ this_level: this_level })
+										? "bg-blue-500 text-white"
+										: "bg-gray-100"
+								} w-full py-2 text-center `}
+							>
+								{this_level}
+							</button>
+						</li>
+					))}
+				</ul>
+			) : (
+				<ul className="grid grid-cols-4">
+					{lowerLevels?.map((this_level, index) => (
+						<li key={index}>
+							<button
+								onClick={() => setLevel(this_level)}
+								className={`${
+									checkIfLevel({ this_level: this_level })
+										? "bg-blue-500 text-white"
+										: "bg-gray-100"
+								} w-full py-2 text-center `}
+							>
+								{this_level}
+							</button>
+						</li>
+					))}
+				</ul>
+			)}
+		</article>
+	);
+}
+
 
 export default function ReportAdminSetup({
 	setReportData,
@@ -58,8 +108,7 @@ export default function ReportAdminSetup({
   setIsConfirmed: Function;
 }) {
 
-  const upperLevels = [5, 6, 7, 8, 9, 10, 11, 12];
-  const lowerLevels = [1, 2, 3, 4];
+  
 
   const upperDays = [1, 2, "Review"];
   const lowerDays = [1, 2, 3, 4, "Review"];
@@ -75,9 +124,7 @@ export default function ReportAdminSetup({
 
   
 
-  function checkIfLevel({ this_level }: { this_level: number }) {
-    return this_level === level;
-  }
+  
 
   function checkIfUnit({ this_unit }: { this_unit: number }) {
     return this_unit === unit;
@@ -89,49 +136,14 @@ export default function ReportAdminSetup({
 
   return (
     <>
-			<SelectSubject subject={subject} setSubject={setSubject}/>
+			<SelectSubject subject={subject} setLevel={setLevel} setSubject={setSubject}/>
+			
 			{subject && (
+				<SelectLevel subject={subject} level={level} setLevel={setLevel}/>
+			)}
+			{level === 1000 && (
 				<>
-				      <article className="bg-blue-200 p-4 rounded mb-4">
-        <p className="mb-2">Level (Level choices based on subject)</p>
-        {subject === "Grammar" || subject === "Reading" ? (
-          <ul className="grid grid-cols-6">
-            {upperLevels?.map((this_level, index) => (
-              <li key={index}>
-                <button
-                  onClick={() => setLevel(this_level)}
-                  className={`${
-                    checkIfLevel({ this_level: this_level })
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-100"
-                  } w-full py-2 text-center `}
-                >
-                  {this_level}
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <ul className="grid grid-cols-4">
-            {lowerLevels?.map((this_level, index) => (
-              <li key={index}>
-                <button
-                  onClick={() => setLevel(this_level)}
-                  className={`${
-                    checkIfLevel({ this_level: this_level })
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-100"
-                  } w-full py-2 text-center `}
-                >
-                  {this_level}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </article>
-
-      <article className="bg-blue-200 p-4 rounded mb-4">
+					<article className="bg-blue-200 p-4 rounded mb-4">
         <p className="mb-2">Unit (Unit choices based on subject and level)</p>
         {(subject === "Grammar" || subject || "Reading") &&
         level >= 5 &&
@@ -219,7 +231,6 @@ export default function ReportAdminSetup({
       </button>
 				</>
 			)}
-
     </>
   );
 }
