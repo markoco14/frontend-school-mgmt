@@ -7,10 +7,7 @@ import { useContext, useState } from "react";
 
 export default function WriteReport() {
   const { user } = useContext(AuthContext);
-  const [subject, setSubject] = useState<string>("Grammar");
-  const [level, setLevel] = useState<number>(5);
-  const [unit, setUnit] = useState<number>(1);
-  const [day, setDay] = useState<string | number>(1);
+  const [reportData, setReportData] = useState<any>()
 
   const [isConfirmed, setIsConfirmed] = useState<boolean>(user?.role === "TEACHER" ? true : false);
 
@@ -40,14 +37,7 @@ export default function WriteReport() {
             <>
               <h2 className="text-3xl mb-4">Level 9 Monday/Thursday (Andrew)</h2>
               <ReportAdminSetup
-                subject={subject}
-                setSubject={setSubject}
-                level={level}
-                setLevel={setLevel}
-                unit={unit}
-                setUnit={setUnit}
-                day={day}
-                setDay={setDay}
+                setReportData={setReportData}
                 setIsConfirmed={setIsConfirmed}
               />
             </>

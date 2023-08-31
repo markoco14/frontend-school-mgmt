@@ -1,22 +1,10 @@
+import { useState } from "react";
+
 export default function ReportAdminSetup({
-  subject,
-  setSubject,
-  level,
-  setLevel,
-  unit,
-  setUnit,
-  day,
-  setDay,
+	setReportData,
   setIsConfirmed,
 }: {
-  subject: string;
-  setSubject: Function;
-  level: number;
-  setLevel: Function;
-  unit: number;
-  setUnit: Function;
-  day: string | number;
-  setDay: Function;
+	setReportData: Function;
   setIsConfirmed: Function;
 }) {
 	const subjects = ["Grammar", "Reading", "Phonics"];
@@ -29,6 +17,12 @@ export default function ReportAdminSetup({
 
   const upperUnits = [1, 2, 3, 4, 5, 6];
   const lowerUnits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+	const [subject, setSubject] = useState<string>("Grammar");
+  const [level, setLevel] = useState<number>(5);
+  const [unit, setUnit] = useState<number>(1);
+  const [day, setDay] = useState<string | number>(1);
+
 
   function checkIfSubject({ this_subject }: { this_subject: string }) {
     return this_subject === subject;
