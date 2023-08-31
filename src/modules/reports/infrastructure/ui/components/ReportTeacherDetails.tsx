@@ -6,7 +6,7 @@ import { useContext, useState } from "react";
 import TextareaAutosize from 'react-textarea-autosize';
 
 
-export default function ReportTeacherDetails({ setIsConfirmed }: { setIsConfirmed: Function }) {
+export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { reportData: any; setIsConfirmed: Function }) {
 	const students = [
 		{
       id: 1,
@@ -129,6 +129,7 @@ export default function ReportTeacherDetails({ setIsConfirmed }: { setIsConfirme
 			absent: false,
 		},
 	]
+	console.log(reportData)
 
 	const { user } = useContext(AuthContext);
 
@@ -147,6 +148,8 @@ export default function ReportTeacherDetails({ setIsConfirmed }: { setIsConfirme
 		<>
 			<ul className="grid grid-cols-6 gap-2 p-2 mb-4 rounded sticky top-0 bg-white z-10">
 				{students?.map((student, index) => (
+					!student.absent && (
+
 					<li key={index}>
 						<div className={`relative aspect-square`}>
 							<Image 
@@ -168,6 +171,7 @@ export default function ReportTeacherDetails({ setIsConfirmed }: { setIsConfirme
 						</div>
 
 					</li>
+					)
 				))}
 			</ul>
       {!selectedStudent ? (
@@ -216,26 +220,26 @@ export default function ReportTeacherDetails({ setIsConfirmed }: { setIsConfirme
 					{!absent && (
 						<div className="grid grid-cols-3 mb-4">
 							<button 
-								onClick={() => setCategory('homework')}
-								className={`${category === 'homework' && 'underline underline-offset-2 decoration-4 decoration-blue-500'} hover:underline hover:underline-offset-2 hover:decoration-4 hover:decoration-blue-300 ease-in-out duration-200`}
+								onClick={() => setCategory('previous')}
+								className={`${category === 'previous' && 'underline underline-offset-2 decoration-4 decoration-blue-500'} hover:underline hover:underline-offset-2 hover:decoration-4 hover:decoration-blue-300 ease-in-out duration-200`}
 							>
-								Homework
+								Last Time
 							</button>
 							<button 
-								onClick={() => setCategory('test')}
-								className={`${category === 'test' && 'underline underline-offset-2 decoration-4 decoration-blue-500'} hover:underline hover:underline-offset-2 hover:decoration-4 hover:decoration-blue-300 ease-in-out duration-200`}
+								onClick={() => setCategory('inclass')}
+								className={`${category === 'inclass' && 'underline underline-offset-2 decoration-4 decoration-blue-500'} hover:underline hover:underline-offset-2 hover:decoration-4 hover:decoration-blue-300 ease-in-out duration-200`}
 							>
-								Test
+								In Class
 							</button>
 							<button 
-								onClick={() => setCategory('comment')}
-								className={`${category === 'comment' && 'underline underline-offset-2 decoration-4 decoration-blue-500'} hover:underline hover:underline-offset-2 hover:decoration-4 hover:decoration-blue-300 ease-in-out duration-200`}
+								onClick={() => setCategory('evaluation')}
+								className={`${category === 'evaluation' && 'underline underline-offset-2 decoration-4 decoration-blue-500'} hover:underline hover:underline-offset-2 hover:decoration-4 hover:decoration-blue-300 ease-in-out duration-200`}
 							>
-								Comment
+								Evaluation
 							</button>
 						</div>
 					)}
-					{!absent && category === 'homework' && (
+					{!absent && category === 'previous' && (
 						<div className="grid xs:grid-cols-2 gap-2 mb-4">
 							<div 
 								onClick={() => setHomeworkDone(!homeworkDone)}
@@ -269,7 +273,7 @@ export default function ReportTeacherDetails({ setIsConfirmed }: { setIsConfirme
 						</div>
 					)}
 					
-					{!absent && category === 'test' && (
+					{!absent && category === 'inclass' && (
 						<>
 							<div className="grid xs:grid-cols-2 gap-2 mb-4">
                 <div className={`${testScore >= 7 && 'bg-green-300'} ${testScore <= 6 && testScore >=4  && 'bg-orange-300'} ${testScore < 6 && 'bg-red-300'} rounded p-2 flex flex-col items-center justify-between col-span-1`}>
@@ -295,7 +299,7 @@ export default function ReportTeacherDetails({ setIsConfirmed }: { setIsConfirme
               </div>
 						</>
 					)}
-					{!absent && category === 'comment' && (
+					{!absent && category === 'evaluation' && (
 						<>
 							  <div className="grid">
                 <label>Comment</label>
