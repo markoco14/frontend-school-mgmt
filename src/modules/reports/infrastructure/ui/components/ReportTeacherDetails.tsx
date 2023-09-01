@@ -46,6 +46,38 @@ const HomeworkSection = ({scores, reportData}: {scores: number[]; reportData: an
 	);
 }
 
+const InClassSection = ({scores, reportData}: {scores: number[]; reportData: any;}) => {
+	const [testScore, setTestScore] = useState<number>(0);
+  const [testCorrections, setTestCorrections] = useState<number>(0);
+
+	return (
+		reportData?.inClassAssessments?.map((assessment: any, index: number) => (
+			<div key={index} className="grid xs:grid-cols-2 gap-2 mb-4">
+				<div className={`${testScore >= 7 && 'bg-green-300'} ${testScore <= 6 && testScore >=4  && 'bg-orange-300'} ${testScore < 6 && 'bg-red-300'} rounded p-2 flex flex-col items-center justify-between col-span-1`}>
+					<p>{assessment} Score?</p>
+					<ul className='w-full text-center  grid grid-cols-5 gap-2'>
+						{scores.map((number, index) => (
+							<li key={index}
+							className={`${testScore === number ? 'bg-blue-500': 'bg-white'} rounded p-2 block`}
+							onClick={() => setTestScore(number)}>{number}</li>
+						))}
+					</ul>
+				</div>
+				<div className={`${testCorrections >= 7 && 'bg-red-300'} ${testCorrections <= 6 && testCorrections >=4  && 'bg-orange-300'} ${testCorrections < 4 && 'bg-green-300'} rounded p-2 flex flex-col items-center justify-between col-span-1`}>
+					<p>{assessment} Corrections?</p>
+					<ul className='w-full text-center  grid grid-cols-5 gap-2'>
+						{scores.map((number, index) => (
+							<li key={index}
+							className={`${testCorrections === number ? 'bg-blue-500': 'bg-white'} rounded p-2 block `}
+							onClick={() => setTestCorrections(number)}>{number}</li>
+						))}
+					</ul>
+				</div>
+			</div>
+		))
+	);
+}
+
 
 export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { reportData: any; setIsConfirmed: Function }) {
 	const students = [
@@ -285,30 +317,7 @@ export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { r
 						<HomeworkSection scores={scores} reportData={reportData}/>
 					)}
 					{!absent && category === 'inclass' && (
-						<>
-							<div className="grid xs:grid-cols-2 gap-2 mb-4">
-                <div className={`${testScore >= 7 && 'bg-green-300'} ${testScore <= 6 && testScore >=4  && 'bg-orange-300'} ${testScore < 6 && 'bg-red-300'} rounded p-2 flex flex-col items-center justify-between col-span-1`}>
-                  <p>Test Score?</p>
-                  <ul className='w-full text-center  grid grid-cols-5 gap-2'>
-                    {scores.map((number, index) => (
-                      <li key={index}
-                      className={`${testScore === number ? 'bg-blue-500': 'bg-white'} rounded p-2 block`}
-                      onClick={() => setTestScore(number)}>{number}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className={`${testCorrections >= 7 && 'bg-red-300'} ${testCorrections <= 6 && testCorrections >=4  && 'bg-orange-300'} ${testCorrections < 4 && 'bg-green-300'} rounded p-2 flex flex-col items-center justify-between col-span-1`}>
-                  <p>Test Corrections?</p>
-                  <ul className='w-full text-center  grid grid-cols-5 gap-2'>
-                    {scores.map((number, index) => (
-                      <li key={index}
-                      className={`${testCorrections === number ? 'bg-blue-500': 'bg-white'} rounded p-2 block `}
-                      onClick={() => setTestCorrections(number)}>{number}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-						</>
+						<InClassSection scores={scores} reportData={reportData}/>
 					)}
 					{!absent && category === 'evaluation' && (
 						<>
