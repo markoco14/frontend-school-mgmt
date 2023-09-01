@@ -158,7 +158,7 @@ export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { r
 								fill={true}
 								sizes="(max-width: 768px) 50vw, (max-width: 1200px) 20vw"
 								style={{ objectFit: 'cover' }}
-								className={`${selectedStudent.id === student.id && 'border border-2 border-green-300'} rounded-full`}
+								className={`${selectedStudent.id === student.id ? 'border-2 border-green-300 shadow-xl shadow-green-100' : 'shadow-inner-xl'} rounded-full`}
                 onClick={() => {
                   setSelectedStudent(student);
                   setTestScore(0);
@@ -223,7 +223,7 @@ export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { r
 								onClick={() => setCategory('previous')}
 								className={`${category === 'previous' && 'underline underline-offset-2 decoration-4 decoration-blue-500'} hover:underline hover:underline-offset-2 hover:decoration-4 hover:decoration-blue-300 ease-in-out duration-200`}
 							>
-								Last Time
+								Homework
 							</button>
 							<button 
 								onClick={() => setCategory('inclass')}
