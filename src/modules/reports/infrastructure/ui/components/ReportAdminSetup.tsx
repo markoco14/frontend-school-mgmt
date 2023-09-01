@@ -322,6 +322,62 @@ const AssessmentSelector = ({
   );
 };
 
+const DaySelector = ({
+  subject,
+  day,
+  setDay,
+}: {
+  subject: any;
+  day: number | string | undefined;
+  setDay: Function;
+}) => {
+  const upperDays = [1, 2, "Review"];
+  const lowerDays = [1, 2, 3, 4, "Review"];
+  function checkIfDay({ this_day }: { this_day: string | number }) {
+    return this_day === day;
+  }
+  return (
+    <article className="border shadow p-4 rounded">
+      <p className="mb-2">Day (Day choices based on subject)</p>
+      {subject === "Grammar" || subject === "Reading" ? (
+        <ul className="grid grid-cols-4">
+          {upperDays?.map((this_day, index) => (
+            <li key={index}>
+              <button
+                onClick={() => setDay(this_day)}
+                className={`${
+                  checkIfDay({ this_day: this_day })
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-100"
+                } w-full py-2 text-center `}
+              >
+                {this_day}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <ul className="grid grid-cols-5">
+          {lowerDays?.map((this_day, index) => (
+            <li key={index}>
+              <button
+                onClick={() => setDay(this_day)}
+                className={`${
+                  checkIfDay({ this_day: this_day })
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-100"
+                } w-full py-2 text-center `}
+              >
+                {this_day}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </article>
+  );
+};
+
 const SummaryBar = ({
   subject,
   level,
@@ -333,8 +389,8 @@ const SummaryBar = ({
   hasNextHmwk,
   nextHmwkAssessments,
   day,
-	setIsConfirmed,
-	setReportData,
+  setIsConfirmed,
+  setReportData,
 }: {
   subject: string;
   level: number | undefined;
@@ -346,8 +402,8 @@ const SummaryBar = ({
   hasNextHmwk: boolean;
   nextHmwkAssessments: any[];
   day: number | string | undefined;
-	setIsConfirmed: Function;
-	setReportData: Function;
+  setIsConfirmed: Function;
+  setReportData: Function;
 }) => {
   return (
     <div className="sticky top-0 col-span-1">
@@ -408,12 +464,6 @@ export default function ReportAdminSetup({
   setReportData: Function;
   setIsConfirmed: Function;
 }) {
-  const upperDays = [1, 2, "Review"];
-  const lowerDays = [1, 2, 3, 4, "Review"];
-  function checkIfDay({ this_day }: { this_day: string | number }) {
-    return this_day === day;
-  }
-
   const [subject, setSubject] = useState<string>("");
   const [level, setLevel] = useState<number | undefined>();
   const [unit, setUnit] = useState<number | undefined>();
@@ -457,6 +507,7 @@ export default function ReportAdminSetup({
             setAssessments={setPrevHmwkAssessments}
           />
         )}
+					{/* IN CLASS ASSESSMENT SECTION */}
         {subject && level && unit && (
           <AssessmentSelector
             title={"In Class Assessments?"}
@@ -466,6 +517,7 @@ export default function ReportAdminSetup({
             setAssessments={setInClassAssessments}
           />
         )}
+				{/* NEW HOMEWORK ASSESSMENT SECTION */}
         {subject && level && unit && (
           <AssessmentSelector
             title={"New Homework Assessments?"}
@@ -476,60 +528,23 @@ export default function ReportAdminSetup({
           />
         )}
         {subject && level && unit && (
-          <article className="border shadow p-4 rounded">
-            <p className="mb-2">Day (Day choices based on subject)</p>
-            {subject === "Grammar" || subject === "Reading" ? (
-              <ul className="grid grid-cols-4">
-                {upperDays?.map((this_day, index) => (
-                  <li key={index}>
-                    <button
-                      onClick={() => setDay(this_day)}
-                      className={`${
-                        checkIfDay({ this_day: this_day })
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-100"
-                      } w-full py-2 text-center `}
-                    >
-                      {this_day}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <ul className="grid grid-cols-5">
-                {lowerDays?.map((this_day, index) => (
-                  <li key={index}>
-                    <button
-                      onClick={() => setDay(this_day)}
-                      className={`${
-                        checkIfDay({ this_day: this_day })
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-100"
-                      } w-full py-2 text-center `}
-                    >
-                      {this_day}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </article>
+          <DaySelector subject={subject} day={day} setDay={setDay} />
         )}
       </div>
-			<SummaryBar 
-					subject={subject}
-					level={level}
-					unit={unit}
-					hasPrevHmwk={hasPrevHmwk}
-					prevHmwkAssessments={prevHmwkAssessments}
-					hasInClass={hasInClass}
-					inClassAssessments={inClassAssessments}
-					hasNextHmwk={hasNextHmwk}
-					nextHmwkAssessments={nextHmwkAssessments}
-					day={day}
-					setIsConfirmed={setIsConfirmed}
-					setReportData={setReportData}
-				/>
+      <SummaryBar
+        subject={subject}
+        level={level}
+        unit={unit}
+        hasPrevHmwk={hasPrevHmwk}
+        prevHmwkAssessments={prevHmwkAssessments}
+        hasInClass={hasInClass}
+        inClassAssessments={inClassAssessments}
+        hasNextHmwk={hasNextHmwk}
+        nextHmwkAssessments={nextHmwkAssessments}
+        day={day}
+        setIsConfirmed={setIsConfirmed}
+        setReportData={setReportData}
+      />
     </section>
   );
 }
