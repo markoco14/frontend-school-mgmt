@@ -198,6 +198,46 @@ const EvaluationSection = () => {
   );
 };
 
+const PhotoBar = ({students, selectedStudent, setSelectedStudent}: {students: any[]; selectedStudent: Student; setSelectedStudent: Function;}) => {
+	return (
+		<ul className="grid grid-cols-6 gap-2 sm:gap-8 p-2 mb-4 rounded sticky top-0 bg-white z-10">
+        {students?.map(
+          (student, index) =>
+            !student.absent && (
+              <li key={index}>
+                <div className={`relative aspect-square`}>
+                  <Image
+                    src={student.photo_url}
+                    alt="An image of a student"
+                    fill={true}
+                    sizes="(max-width: 768px) 25vw, (max-width: 1200px) 20vw"
+                    style={{ objectFit: "cover" }}
+                    className={`${
+                      selectedStudent.id === student.id
+                        ? "border-2 border-green-300 shadow-xl shadow-green-100"
+                        : "shadow-inner-xl"
+                    } rounded-full`}
+                    onClick={() => {
+                      setSelectedStudent(student);
+                      // setTestScore(0);
+                      // setHomeworkDone(false);
+                      // setHomeworkMistakes(0);
+                      // setTestCorrections(0);
+                    }}
+                  />
+                </div>
+              </li>
+            )
+        )}
+        <div
+          className={`relative aspect-square grid place-items-center rounded-full bg-blue-100`}
+        >
+          <i className="fa-solid fa-plus text-blue-900"></i>
+        </div>
+      </ul>
+	);
+}
+
 export default function ReportTeacherDetails({
   reportData,
   setIsConfirmed,
@@ -351,41 +391,8 @@ export default function ReportTeacherDetails({
 
   return (
     <>
-      <ul className="grid grid-cols-6 gap-2 p-2 mb-4 rounded sticky top-0 bg-white z-10">
-        {students?.map(
-          (student, index) =>
-            !student.absent && (
-              <li key={index}>
-                <div className={`relative aspect-square`}>
-                  <Image
-                    src={student.photo_url}
-                    alt="An image of a student"
-                    fill={true}
-                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 20vw"
-                    style={{ objectFit: "cover" }}
-                    className={`${
-                      selectedStudent.id === student.id
-                        ? "border-2 border-green-300 shadow-xl shadow-green-100"
-                        : "shadow-inner-xl"
-                    } rounded-full`}
-                    onClick={() => {
-                      setSelectedStudent(student);
-                      // setTestScore(0);
-                      // setHomeworkDone(false);
-                      // setHomeworkMistakes(0);
-                      // setTestCorrections(0);
-                    }}
-                  />
-                </div>
-              </li>
-            )
-        )}
-        <div
-          className={`relative aspect-square grid place-items-center rounded-full bg-blue-100`}
-        >
-          <i className="fa-solid fa-plus text-blue-900"></i>
-        </div>
-      </ul>
+			<PhotoBar students={students} selectedStudent={selectedStudent} setSelectedStudent={setSelectedStudent} />
+      
       {!selectedStudent ? (
         <article className="p-2 bg-gray-100 shadow-inner mb-4 rounded">
           <p>Choose a student to start writing reports</p>
