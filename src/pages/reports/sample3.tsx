@@ -32,15 +32,13 @@ export default function WriteReport() {
             </Link>
           </div>
         </section>
-        <section>
+        
+        <h2 className="text-3xl mb-4">Level 9 Monday/Thursday (Andrew)</h2>
           {!isConfirmed ? (
-            <>
-              <h2 className="text-3xl mb-4">Level 9 Monday/Thursday (Andrew)</h2>
               <ReportAdminSetup
                 setReportData={setReportData}
                 setIsConfirmed={setIsConfirmed}
               />
-            </>
           ) : (
 						<>
 							{user?.role !== 'TEACHER' && (
@@ -49,7 +47,7 @@ export default function WriteReport() {
 							<ReportTeacherDetails reportData={reportData} setIsConfirmed={setIsConfirmed} />
 						</>
           )}
-        </section>
+        
       </div>
     </Layout>
   );

@@ -350,139 +350,142 @@ export default function ReportAdminSetup({
   const [nextHmwkAssessments, setNextHmwkAssessments] = useState<any[]>([]);
 
   return (
-    <div className="relative min-h-screen grid sm:grid-cols-4 gap-4">
-      <div className="grid gap-4 sm:col-span-3">
-        <SelectSubject
-          subject={subject}
-          setLevel={setLevel}
-          setSubject={setSubject}
-        />
-        {subject && (
-          <SelectLevel subject={subject} level={level} setLevel={setLevel} />
-        )}
-        {subject && level && (
-          <SelectUnit
-            subject={subject}
-            level={level}
-            unit={unit}
-            setUnit={setUnit}
-          />
-        )}
-				{/* DUE TODAY HOMEWORK SECTION */}
-        {subject && level && unit && (
-					<AssessmentSelector 
-						title={'Previous Homework Assessments?'}
-						hasAsssessments={hasPrevHmwk}
-						setHasAssessments={setHasPrevHmwk}
-						assessments={prevHmwkAssessments}
-						setAssessments={setPrevHmwkAssessments}
+		<section className="relative min-h-screen grid sm:grid-cols-4 gap-4">
+				<div className="grid gap-4 sm:col-span-3">
+					<SelectSubject
+						subject={subject}
+						setLevel={setLevel}
+						setSubject={setSubject}
 					/>
-        )}
-        {subject && level && unit && (
-					<AssessmentSelector 
-						title={'In Class Assessments?'}
-						hasAsssessments={hasInClass}
-						setHasAssessments={setHasInClass}
-						assessments={prevHmwkAssessments}
-						setAssessments={setInClassAssessments}
-					/>
-        )}
-        {subject && level && unit && (
-					<AssessmentSelector 
-						title={'New Homework Assessments?'}
-						hasAsssessments={hasNextHmwk}
-						setHasAssessments={setHasNextHmwk}
-						assessments={prevHmwkAssessments}
-						setAssessments={setNextHmwkAssessments}
-					/>
-        )}
-        {subject && level && unit && (
-          <article className="border shadow p-4 rounded">
-            <p className="mb-2">Day (Day choices based on subject)</p>
-            {subject === "Grammar" || subject === "Reading" ? (
-              <ul className="grid grid-cols-4">
-                {upperDays?.map((this_day, index) => (
-                  <li key={index}>
-                    <button
-                      onClick={() => setDay(this_day)}
-                      className={`${
-                        checkIfDay({ this_day: this_day })
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-100"
-                      } w-full py-2 text-center `}
-                    >
-                      {this_day}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <ul className="grid grid-cols-5">
-                {lowerDays?.map((this_day, index) => (
-                  <li key={index}>
-                    <button
-                      onClick={() => setDay(this_day)}
-                      className={`${
-                        checkIfDay({ this_day: this_day })
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-100"
-                      } w-full py-2 text-center `}
-                    >
-                      {this_day}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </article>
-        )}
-        {subject && level && unit && day && (
-          <button
-            className="w-full p-2 rounded bg-blue-900 text-white"
-            onClick={() => {
-              setIsConfirmed(true);
-              setReportData({
-                subject: subject,
-                level: level,
-                unit: unit,
-                hasPrevHmwk: hasPrevHmwk,
-                prevHmwkAssessments: prevHmwkAssessments,
-                hasInClass: hasInClass,
-                inClassAssessments: inClassAssessments,
-                hasNextHmwk: hasNextHmwk,
-                nextHmwkAssessments: nextHmwkAssessments,
-                day: day,
-              });
-            }}
-          >
-            Confirm
-          </button>
-        )}
-      </div>
-      <div className="sticky top-0 col-span-1">
-        <article className="border shadow p-4 rounded">
-          <h2>Summary</h2>
-          <p>Subject: {!subject ? "Not chosen" : subject}</p>
-          <p>Level: {!level ? "Not chosen" : level}</p>
-          <p>Unit: {!unit ? "Not chosen" : unit}</p>
-          <p>Prev Hmwk? {hasPrevHmwk ? "Yes" : "No"}</p>
-          <p>Prev Hmwk Assessments</p>
-          {prevHmwkAssessments.map((assessment, index) => (
-            <li key={index}>{assessment}</li>
-          ))}
-          <p>In Class? {hasInClass ? "Yes" : "No"}</p>
-          <p>In Class Assessments</p>
-          {inClassAssessments.map((assessment, index) => (
-            <li key={index}>{assessment}</li>
-          ))}
-          <p>Next Hmwk? {hasNextHmwk ? "Yes" : "No"}</p>
-          <p>Next Hmwk Assessments</p>
-          {nextHmwkAssessments.map((assessment, index) => (
-            <li key={index}>{assessment}</li>
-          ))}
-          <p>Day: {!day ? "Not chosen" : day}</p>
-        </article>
-      </div>
-    </div>
+					{subject && (
+						<SelectLevel subject={subject} level={level} setLevel={setLevel} />
+					)}
+					{subject && level && (
+						<SelectUnit
+							subject={subject}
+							level={level}
+							unit={unit}
+							setUnit={setUnit}
+						/>
+					)}
+					{/* DUE TODAY HOMEWORK SECTION */}
+					{subject && level && unit && (
+						<AssessmentSelector 
+							title={'Previous Homework Assessments?'}
+							hasAsssessments={hasPrevHmwk}
+							setHasAssessments={setHasPrevHmwk}
+							assessments={prevHmwkAssessments}
+							setAssessments={setPrevHmwkAssessments}
+						/>
+					)}
+					{subject && level && unit && (
+						<AssessmentSelector 
+							title={'In Class Assessments?'}
+							hasAsssessments={hasInClass}
+							setHasAssessments={setHasInClass}
+							assessments={prevHmwkAssessments}
+							setAssessments={setInClassAssessments}
+						/>
+					)}
+					{subject && level && unit && (
+						<AssessmentSelector 
+							title={'New Homework Assessments?'}
+							hasAsssessments={hasNextHmwk}
+							setHasAssessments={setHasNextHmwk}
+							assessments={prevHmwkAssessments}
+							setAssessments={setNextHmwkAssessments}
+						/>
+					)}
+					{subject && level && unit && (
+						<article className="border shadow p-4 rounded">
+							<p className="mb-2">Day (Day choices based on subject)</p>
+							{subject === "Grammar" || subject === "Reading" ? (
+								<ul className="grid grid-cols-4">
+									{upperDays?.map((this_day, index) => (
+										<li key={index}>
+											<button
+												onClick={() => setDay(this_day)}
+												className={`${
+													checkIfDay({ this_day: this_day })
+														? "bg-blue-500 text-white"
+														: "bg-gray-100"
+												} w-full py-2 text-center `}
+											>
+												{this_day}
+											</button>
+										</li>
+									))}
+								</ul>
+							) : (
+								<ul className="grid grid-cols-5">
+									{lowerDays?.map((this_day, index) => (
+										<li key={index}>
+											<button
+												onClick={() => setDay(this_day)}
+												className={`${
+													checkIfDay({ this_day: this_day })
+														? "bg-blue-500 text-white"
+														: "bg-gray-100"
+												} w-full py-2 text-center `}
+											>
+												{this_day}
+											</button>
+										</li>
+									))}
+								</ul>
+							)}
+						</article>
+					)}
+					
+				</div>
+				<div className="sticky top-0 col-span-1">
+					<article className="sticky grid gap-4 top-4 border shadow p-4 rounded">
+						<div>
+							<h2>Summary</h2>
+							<p>Subject: {!subject ? "Not chosen" : subject}</p>
+							<p>Level: {!level ? "Not chosen" : level}</p>
+							<p>Unit: {!unit ? "Not chosen" : unit}</p>
+							<p>Prev Hmwk? {hasPrevHmwk ? "Yes" : "No"}</p>
+							<p>Prev Hmwk Assessments</p>
+							{prevHmwkAssessments.map((assessment, index) => (
+								<li key={index}>{assessment}</li>
+							))}
+							<p>In Class? {hasInClass ? "Yes" : "No"}</p>
+							<p>In Class Assessments</p>
+							{inClassAssessments.map((assessment, index) => (
+								<li key={index}>{assessment}</li>
+							))}
+							<p>Next Hmwk? {hasNextHmwk ? "Yes" : "No"}</p>
+							<p>Next Hmwk Assessments</p>
+							{nextHmwkAssessments.map((assessment, index) => (
+								<li key={index}>{assessment}</li>
+							))}
+							<p>Day: {!day ? "Not chosen" : day}</p>
+						</div>
+						{subject && level && unit && day && (
+							<button
+								className="w-full p-2 rounded bg-blue-900 text-white"
+								onClick={() => {
+									setIsConfirmed(true);
+									setReportData({
+										subject: subject,
+										level: level,
+										unit: unit,
+										hasPrevHmwk: hasPrevHmwk,
+										prevHmwkAssessments: prevHmwkAssessments,
+										hasInClass: hasInClass,
+										inClassAssessments: inClassAssessments,
+										hasNextHmwk: hasNextHmwk,
+										nextHmwkAssessments: nextHmwkAssessments,
+										day: day,
+									});
+								}}
+							>
+								Confirm
+							</button>
+						)}
+					</article>
+				</div>
+		</section>
   );
 }
