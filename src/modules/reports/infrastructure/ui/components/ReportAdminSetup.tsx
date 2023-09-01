@@ -8,7 +8,7 @@ const SelectSubject = ({subject, setSubject, setLevel}: {subject: string; setSub
   }
 
 	return(
-		<article className="border shadow p-4 rounded mb-4">
+		<article className="border shadow p-4 rounded">
 			<p className="mb-2">Subject</p>
 			<ul className="grid grid-cols-3">
 				{subjects?.map((this_subject, index) => (
@@ -54,7 +54,7 @@ const SelectLevel = ({subject, level, setLevel}: {subject: string; level: number
   }
 
 	return (
-		<article className="border shadow p-4 rounded mb-4">
+		<article className="border shadow p-4 rounded">
 			<p className="mb-2">Level (Level choices based on subject)</p>
 			{subject === "Grammar" || subject === "Reading" ? (
 				<ul className="grid grid-cols-6">
@@ -105,7 +105,7 @@ const SelectUnit = ({subject, level, unit, setUnit}: {subject: string; level: nu
 
 
 	return(
-		<article className="border shadow p-4 rounded mb-4">
+		<article className="border shadow p-4 rounded">
         <p className="mb-2">Unit (Unit choices based on subject and level)</p>
         {(subject === "Grammar" || subject || "Reading") && level &&
         level >= 5 &&
@@ -182,8 +182,8 @@ export default function ReportAdminSetup({
 	const [nextHmwkAssessments, setNextHmwkAssessments] = useState<any[]>([]);
 
   return (
-		<div className="relative min-h-screen grid grid-cols-4 gap-4">
-			<div className="col-span-3">
+		<div className="relative min-h-screen grid sm:grid-cols-4 gap-4">
+			<div className="grid gap-4 sm:col-span-3">
 				<SelectSubject subject={subject} setLevel={setLevel} setSubject={setSubject}/>
 				{subject && (
 					<SelectLevel subject={subject} level={level} setLevel={setLevel}/>
@@ -192,7 +192,7 @@ export default function ReportAdminSetup({
 					<SelectUnit subject={subject} level={level} unit={unit} setUnit={setUnit}/>
 				)}
 				{subject && level && unit && (
-					<article className="border shadow p-4 rounded mb-4">
+					<article className="border shadow p-4 rounded">
 						<h2>Previous Homework?</h2>
 						<label htmlFor="prevHmwk">
 							<span>No</span>
@@ -212,7 +212,7 @@ export default function ReportAdminSetup({
 					</article>
 				)}
 				{hasPrevHmwk && (
-					<article className="border shadow p-4 rounded mb-4">
+					<article className="border shadow p-4 rounded">
 						<h2>Previous class homework</h2>
 						<ul>
 							<li className={`${prevHmwkAssessments.includes('Exercise 1') && 'bg-blue-300'}`}>
@@ -243,7 +243,7 @@ export default function ReportAdminSetup({
 					</article>
 				)}
 				{subject && level && unit && (
-					<article className="border shadow p-4 rounded mb-4">
+					<article className="border shadow p-4 rounded">
 						<h2>In Class Assessments?</h2>
 						<label htmlFor="inClass">
 							<span>No</span>
@@ -261,7 +261,7 @@ export default function ReportAdminSetup({
 					</article>
 				)}
 				{hasInClass && (
-					<article className="border shadow p-4 rounded mb-4">
+					<article className="border shadow p-4 rounded">
 						<h2>In Class Assessments</h2>
 						<ul>
 							<li className={`${inClassAssessments.includes('Exercise 1') && 'bg-blue-300'}`}>
@@ -292,7 +292,7 @@ export default function ReportAdminSetup({
 					</article>
 				)}
 				{subject && level && unit && (
-					<article className="border shadow p-4 rounded mb-4">
+					<article className="border shadow p-4 rounded">
 						<h2>Next Homework?</h2>
 						<label htmlFor="prevHmwk">
 							<span>No</span>
@@ -310,7 +310,7 @@ export default function ReportAdminSetup({
 					</article>
 				)}
 				{hasNextHmwk && (
-					<article className="border shadow p-4 rounded mb-4">
+					<article className="border shadow p-4 rounded">
 						<h2>Homework for next class</h2>
 						<ul>
 							<li className={`${nextHmwkAssessments.includes('Exercise 1') && 'bg-blue-300'}`}>
@@ -341,7 +341,7 @@ export default function ReportAdminSetup({
 					</article>
 				)}
 				{subject && level && unit && (
-					<article className="border shadow p-4 rounded mb-4">
+					<article className="border shadow p-4 rounded">
 					<p className="mb-2">Day (Day choices based on subject)</p>
 					{subject === "Grammar" || subject === "Reading" ? (
 						<ul className="grid grid-cols-4">
@@ -404,7 +404,7 @@ export default function ReportAdminSetup({
 				)}
 			</div>
 			<div className="sticky top-0 col-span-1">
-				<article className="border shadow p-4 rounded mb-4">
+				<article className="border shadow p-4 rounded">
 					<h2>Summary</h2>
 					<p>Subject: {!subject ? 'Not chosen': subject}</p>
 					<p>Level: {!level ? 'Not chosen': level}</p>
