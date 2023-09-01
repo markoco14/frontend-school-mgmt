@@ -175,150 +175,229 @@ const SelectUnit = ({
 };
 
 const AssessmentSelector = ({
-	title,
+  title,
   hasAsssessments,
   setHasAssessments,
   assessments,
   setAssessments,
 }: {
-	title: string;
+  title: string;
   hasAsssessments: boolean;
   setHasAssessments: Function;
   assessments: any[];
   setAssessments: Function;
 }) => {
   return (
-		<>
-			<article className="border shadow p-4 rounded">
-				<h2>{title}</h2>
-				<label htmlFor="prevHmwk">
-					<span>No</span>
-					<input
-						onChange={() => {
-							setHasAssessments(false);
-							if (assessments.length > 0) {
-								setAssessments([]);
-							}
-						}}
-						type="checkbox"
-						checked={!hasAsssessments}
-					/>
-				</label>
-				<label htmlFor="">
-					<span>Yes</span>
-					<input
-						onChange={() => {
-							setHasAssessments(true);
-						}}
-						type="checkbox"
-						checked={hasAsssessments}
-					/>
-				</label>
-			</article>
-			{hasAsssessments && (
-				<article className="border shadow p-4 rounded">
-					<h2>Assessments</h2>
-					<ul>
-						<li
-							className={`${
-								assessments.includes("Exercise 1") && "bg-blue-300"
-							}`}
-						>
-							<span
-								onClick={() =>
-									setAssessments((prev: any) => [...prev, "Exercise 1"])
-								}
-							>
-								Exercise 1
-							</span>
-							{assessments.includes("Exercise 1") && (
-								<button
-									onClick={() =>
-										setAssessments((prev: any) =>
-											prev.filter((assessment: any) => assessment !== "Exercise 1")
-										)
-									}
-								>
-									Remove
-								</button>
-							)}
-						</li>
-						<li
-							className={`${
-								assessments.includes("Exercise 2") && "bg-blue-300"
-							}`}
-						>
-							<span
-								onClick={() =>
-									setAssessments((prev: any) => [...prev, "Exercise 2"])
-								}
-							>
-								Exercise 2
-							</span>
-							{assessments.includes("Exercise 2") && (
-								<button
-									onClick={() =>
-										setAssessments((prev: any) =>
-											prev.filter((assessment: any) => assessment !== "Exercise 2")
-										)
-									}
-								>
-									Remove
-								</button>
-							)}
-						</li>
-						<li
-							className={`${
-								assessments.includes("Test 1") && "bg-blue-300"
-							}`}
-						>
-							<span
-								onClick={() =>
-									setAssessments((prev: any) => [...prev, "Test 1"])
-								}
-							>
-								Test 1
-							</span>
-							{assessments.includes("Test 1") && (
-								<button
-									onClick={() =>
-										setAssessments((prev: any) =>
-											prev.filter((assessment: any) => assessment !== "Test 1")
-										)
-									}
-								>
-									Remove
-								</button>
-							)}
-						</li>
-						<li
-							className={`${
-								assessments.includes("Test 2") && "bg-blue-300"
-							}`}
-						>
-							<span
-								onClick={() =>
-									setAssessments((prev: any) => [...prev, "Test 2"])
-								}
-							>
-								Test 2
-							</span>
-							{assessments.includes("Test 2") && (
-								<button
-									onClick={() =>
-										setAssessments((prev: any) =>
-											prev.filter((assessment: any) => assessment !== "Test 2")
-										)
-									}
-								>
-									Remove
-								</button>
-							)}
-						</li>
-					</ul>
-				</article>
-			)}
-		</>
+    <>
+      <article className="border shadow p-4 rounded">
+        <h2>{title}</h2>
+        <label htmlFor="prevHmwk">
+          <span>No</span>
+          <input
+            onChange={() => {
+              setHasAssessments(false);
+              if (assessments.length > 0) {
+                setAssessments([]);
+              }
+            }}
+            type="checkbox"
+            checked={!hasAsssessments}
+          />
+        </label>
+        <label htmlFor="">
+          <span>Yes</span>
+          <input
+            onChange={() => {
+              setHasAssessments(true);
+            }}
+            type="checkbox"
+            checked={hasAsssessments}
+          />
+        </label>
+      </article>
+      {hasAsssessments && (
+        <article className="border shadow p-4 rounded">
+          <h2>Assessments</h2>
+          <ul>
+            <li
+              className={`${
+                assessments.includes("Exercise 1") && "bg-blue-300"
+              }`}
+            >
+              <span
+                onClick={() =>
+                  setAssessments((prev: any) => [...prev, "Exercise 1"])
+                }
+              >
+                Exercise 1
+              </span>
+              {assessments.includes("Exercise 1") && (
+                <button
+                  onClick={() =>
+                    setAssessments((prev: any) =>
+                      prev.filter(
+                        (assessment: any) => assessment !== "Exercise 1"
+                      )
+                    )
+                  }
+                >
+                  Remove
+                </button>
+              )}
+            </li>
+            <li
+              className={`${
+                assessments.includes("Exercise 2") && "bg-blue-300"
+              }`}
+            >
+              <span
+                onClick={() =>
+                  setAssessments((prev: any) => [...prev, "Exercise 2"])
+                }
+              >
+                Exercise 2
+              </span>
+              {assessments.includes("Exercise 2") && (
+                <button
+                  onClick={() =>
+                    setAssessments((prev: any) =>
+                      prev.filter(
+                        (assessment: any) => assessment !== "Exercise 2"
+                      )
+                    )
+                  }
+                >
+                  Remove
+                </button>
+              )}
+            </li>
+            <li
+              className={`${assessments.includes("Test 1") && "bg-blue-300"}`}
+            >
+              <span
+                onClick={() =>
+                  setAssessments((prev: any) => [...prev, "Test 1"])
+                }
+              >
+                Test 1
+              </span>
+              {assessments.includes("Test 1") && (
+                <button
+                  onClick={() =>
+                    setAssessments((prev: any) =>
+                      prev.filter((assessment: any) => assessment !== "Test 1")
+                    )
+                  }
+                >
+                  Remove
+                </button>
+              )}
+            </li>
+            <li
+              className={`${assessments.includes("Test 2") && "bg-blue-300"}`}
+            >
+              <span
+                onClick={() =>
+                  setAssessments((prev: any) => [...prev, "Test 2"])
+                }
+              >
+                Test 2
+              </span>
+              {assessments.includes("Test 2") && (
+                <button
+                  onClick={() =>
+                    setAssessments((prev: any) =>
+                      prev.filter((assessment: any) => assessment !== "Test 2")
+                    )
+                  }
+                >
+                  Remove
+                </button>
+              )}
+            </li>
+          </ul>
+        </article>
+      )}
+    </>
+  );
+};
+
+const SummaryBar = ({
+  subject,
+  level,
+  unit,
+  hasPrevHmwk,
+  prevHmwkAssessments,
+  hasInClass,
+  inClassAssessments,
+  hasNextHmwk,
+  nextHmwkAssessments,
+  day,
+	setIsConfirmed,
+	setReportData,
+}: {
+  subject: string;
+  level: number | undefined;
+  unit: number | undefined;
+  hasPrevHmwk: boolean;
+  prevHmwkAssessments: any[];
+  hasInClass: boolean;
+  inClassAssessments: any[];
+  hasNextHmwk: boolean;
+  nextHmwkAssessments: any[];
+  day: number | string | undefined;
+	setIsConfirmed: Function;
+	setReportData: Function;
+}) => {
+  return (
+    <div className="sticky top-0 col-span-1">
+      <article className="sticky grid gap-4 top-4 border shadow p-4 rounded">
+        <div>
+          <h2>Summary</h2>
+          <p>Subject: {!subject ? "Not chosen" : subject}</p>
+          <p>Level: {!level ? "Not chosen" : level}</p>
+          <p>Unit: {!unit ? "Not chosen" : unit}</p>
+          <p>Prev Hmwk? {hasPrevHmwk ? "Yes" : "No"}</p>
+          <p>Prev Hmwk Assessments</p>
+          {prevHmwkAssessments.map((assessment, index) => (
+            <li key={index}>{assessment}</li>
+          ))}
+          <p>In Class? {hasInClass ? "Yes" : "No"}</p>
+          <p>In Class Assessments</p>
+          {inClassAssessments.map((assessment, index) => (
+            <li key={index}>{assessment}</li>
+          ))}
+          <p>Next Hmwk? {hasNextHmwk ? "Yes" : "No"}</p>
+          <p>Next Hmwk Assessments</p>
+          {nextHmwkAssessments.map((assessment, index) => (
+            <li key={index}>{assessment}</li>
+          ))}
+          <p>Day: {!day ? "Not chosen" : day}</p>
+        </div>
+        {subject && level && unit && day && (
+          <button
+            className="w-full p-2 rounded bg-blue-900 text-white"
+            onClick={() => {
+              setIsConfirmed(true);
+              setReportData({
+                subject: subject,
+                level: level,
+                unit: unit,
+                hasPrevHmwk: hasPrevHmwk,
+                prevHmwkAssessments: prevHmwkAssessments,
+                hasInClass: hasInClass,
+                inClassAssessments: inClassAssessments,
+                hasNextHmwk: hasNextHmwk,
+                nextHmwkAssessments: nextHmwkAssessments,
+                day: day,
+              });
+            }}
+          >
+            Confirm
+          </button>
+        )}
+      </article>
+    </div>
   );
 };
 
@@ -338,7 +417,7 @@ export default function ReportAdminSetup({
   const [subject, setSubject] = useState<string>("");
   const [level, setLevel] = useState<number | undefined>();
   const [unit, setUnit] = useState<number | undefined>();
-  const [day, setDay] = useState<string | number>();
+  const [day, setDay] = useState<string | number | undefined>();
 
   const [hasPrevHmwk, setHasPrevHmwk] = useState<boolean>(false);
   const [prevHmwkAssessments, setPrevHmwkAssessments] = useState<any[]>([]);
@@ -350,142 +429,107 @@ export default function ReportAdminSetup({
   const [nextHmwkAssessments, setNextHmwkAssessments] = useState<any[]>([]);
 
   return (
-		<section className="relative min-h-screen grid sm:grid-cols-4 gap-4">
-				<div className="grid gap-4 sm:col-span-3">
-					<SelectSubject
-						subject={subject}
-						setLevel={setLevel}
-						setSubject={setSubject}
-					/>
-					{subject && (
-						<SelectLevel subject={subject} level={level} setLevel={setLevel} />
-					)}
-					{subject && level && (
-						<SelectUnit
-							subject={subject}
-							level={level}
-							unit={unit}
-							setUnit={setUnit}
-						/>
-					)}
-					{/* DUE TODAY HOMEWORK SECTION */}
-					{subject && level && unit && (
-						<AssessmentSelector 
-							title={'Previous Homework Assessments?'}
-							hasAsssessments={hasPrevHmwk}
-							setHasAssessments={setHasPrevHmwk}
-							assessments={prevHmwkAssessments}
-							setAssessments={setPrevHmwkAssessments}
-						/>
-					)}
-					{subject && level && unit && (
-						<AssessmentSelector 
-							title={'In Class Assessments?'}
-							hasAsssessments={hasInClass}
-							setHasAssessments={setHasInClass}
-							assessments={prevHmwkAssessments}
-							setAssessments={setInClassAssessments}
-						/>
-					)}
-					{subject && level && unit && (
-						<AssessmentSelector 
-							title={'New Homework Assessments?'}
-							hasAsssessments={hasNextHmwk}
-							setHasAssessments={setHasNextHmwk}
-							assessments={prevHmwkAssessments}
-							setAssessments={setNextHmwkAssessments}
-						/>
-					)}
-					{subject && level && unit && (
-						<article className="border shadow p-4 rounded">
-							<p className="mb-2">Day (Day choices based on subject)</p>
-							{subject === "Grammar" || subject === "Reading" ? (
-								<ul className="grid grid-cols-4">
-									{upperDays?.map((this_day, index) => (
-										<li key={index}>
-											<button
-												onClick={() => setDay(this_day)}
-												className={`${
-													checkIfDay({ this_day: this_day })
-														? "bg-blue-500 text-white"
-														: "bg-gray-100"
-												} w-full py-2 text-center `}
-											>
-												{this_day}
-											</button>
-										</li>
-									))}
-								</ul>
-							) : (
-								<ul className="grid grid-cols-5">
-									{lowerDays?.map((this_day, index) => (
-										<li key={index}>
-											<button
-												onClick={() => setDay(this_day)}
-												className={`${
-													checkIfDay({ this_day: this_day })
-														? "bg-blue-500 text-white"
-														: "bg-gray-100"
-												} w-full py-2 text-center `}
-											>
-												{this_day}
-											</button>
-										</li>
-									))}
-								</ul>
-							)}
-						</article>
-					)}
-					
-				</div>
-				<div className="sticky top-0 col-span-1">
-					<article className="sticky grid gap-4 top-4 border shadow p-4 rounded">
-						<div>
-							<h2>Summary</h2>
-							<p>Subject: {!subject ? "Not chosen" : subject}</p>
-							<p>Level: {!level ? "Not chosen" : level}</p>
-							<p>Unit: {!unit ? "Not chosen" : unit}</p>
-							<p>Prev Hmwk? {hasPrevHmwk ? "Yes" : "No"}</p>
-							<p>Prev Hmwk Assessments</p>
-							{prevHmwkAssessments.map((assessment, index) => (
-								<li key={index}>{assessment}</li>
-							))}
-							<p>In Class? {hasInClass ? "Yes" : "No"}</p>
-							<p>In Class Assessments</p>
-							{inClassAssessments.map((assessment, index) => (
-								<li key={index}>{assessment}</li>
-							))}
-							<p>Next Hmwk? {hasNextHmwk ? "Yes" : "No"}</p>
-							<p>Next Hmwk Assessments</p>
-							{nextHmwkAssessments.map((assessment, index) => (
-								<li key={index}>{assessment}</li>
-							))}
-							<p>Day: {!day ? "Not chosen" : day}</p>
-						</div>
-						{subject && level && unit && day && (
-							<button
-								className="w-full p-2 rounded bg-blue-900 text-white"
-								onClick={() => {
-									setIsConfirmed(true);
-									setReportData({
-										subject: subject,
-										level: level,
-										unit: unit,
-										hasPrevHmwk: hasPrevHmwk,
-										prevHmwkAssessments: prevHmwkAssessments,
-										hasInClass: hasInClass,
-										inClassAssessments: inClassAssessments,
-										hasNextHmwk: hasNextHmwk,
-										nextHmwkAssessments: nextHmwkAssessments,
-										day: day,
-									});
-								}}
-							>
-								Confirm
-							</button>
-						)}
-					</article>
-				</div>
-		</section>
+    <section className="relative min-h-screen grid sm:grid-cols-4 gap-4">
+      <div className="grid gap-4 sm:col-span-3">
+        <SelectSubject
+          subject={subject}
+          setLevel={setLevel}
+          setSubject={setSubject}
+        />
+        {subject && (
+          <SelectLevel subject={subject} level={level} setLevel={setLevel} />
+        )}
+        {subject && level && (
+          <SelectUnit
+            subject={subject}
+            level={level}
+            unit={unit}
+            setUnit={setUnit}
+          />
+        )}
+        {/* DUE TODAY HOMEWORK SECTION */}
+        {subject && level && unit && (
+          <AssessmentSelector
+            title={"Previous Homework Assessments?"}
+            hasAsssessments={hasPrevHmwk}
+            setHasAssessments={setHasPrevHmwk}
+            assessments={prevHmwkAssessments}
+            setAssessments={setPrevHmwkAssessments}
+          />
+        )}
+        {subject && level && unit && (
+          <AssessmentSelector
+            title={"In Class Assessments?"}
+            hasAsssessments={hasInClass}
+            setHasAssessments={setHasInClass}
+            assessments={prevHmwkAssessments}
+            setAssessments={setInClassAssessments}
+          />
+        )}
+        {subject && level && unit && (
+          <AssessmentSelector
+            title={"New Homework Assessments?"}
+            hasAsssessments={hasNextHmwk}
+            setHasAssessments={setHasNextHmwk}
+            assessments={prevHmwkAssessments}
+            setAssessments={setNextHmwkAssessments}
+          />
+        )}
+        {subject && level && unit && (
+          <article className="border shadow p-4 rounded">
+            <p className="mb-2">Day (Day choices based on subject)</p>
+            {subject === "Grammar" || subject === "Reading" ? (
+              <ul className="grid grid-cols-4">
+                {upperDays?.map((this_day, index) => (
+                  <li key={index}>
+                    <button
+                      onClick={() => setDay(this_day)}
+                      className={`${
+                        checkIfDay({ this_day: this_day })
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-100"
+                      } w-full py-2 text-center `}
+                    >
+                      {this_day}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul className="grid grid-cols-5">
+                {lowerDays?.map((this_day, index) => (
+                  <li key={index}>
+                    <button
+                      onClick={() => setDay(this_day)}
+                      className={`${
+                        checkIfDay({ this_day: this_day })
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-100"
+                      } w-full py-2 text-center `}
+                    >
+                      {this_day}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
+        )}
+      </div>
+			<SummaryBar 
+					subject={subject}
+					level={level}
+					unit={unit}
+					hasPrevHmwk={hasPrevHmwk}
+					prevHmwkAssessments={prevHmwkAssessments}
+					hasInClass={hasInClass}
+					inClassAssessments={inClassAssessments}
+					hasNextHmwk={hasNextHmwk}
+					nextHmwkAssessments={nextHmwkAssessments}
+					day={day}
+					setIsConfirmed={setIsConfirmed}
+					setReportData={setReportData}
+				/>
+    </section>
   );
 }
