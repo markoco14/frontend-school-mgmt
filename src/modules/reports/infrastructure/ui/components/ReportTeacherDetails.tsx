@@ -166,77 +166,135 @@ const InClassSection = ({
 const EvaluationSection = () => {
   const scale = [1, 2, 3, 4, 5];
   return (
-    <article className="grid border shadow p-4 rounded mb-4">
-      <div>
-        <label>Participation</label>
-        <div className="flex gap-4">
-          {scale.map((number: number, index: number) => (
-            <span key={index} className="bg-gray-300 rounded shadow p-4">
-              {number}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div>
-        <label>Listening</label>
-        <div className="flex gap-4">
-          {scale.map((number: number, index: number) => (
-            <span key={index} className="bg-gray-300 rounded shadow p-4">
-              {number}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="grid">
+    <article className="grid gap-4">
+			<div className="grid sm:grid-cols-3 gap-4">
+				<div className="grid gap-2 border shadow p-4 rounded">
+					<label>Participation</label>
+					<div className="flex gap-4">
+						{scale.map((number: number, index: number) => (
+							<span key={index} className="bg-gray-100 rounded shadow-inner p-4">
+								{number}
+							</span>
+						))}
+					</div>
+				</div>
+				<div className="grid gap-2 border shadow p-4 rounded">
+					<label>Listening</label>
+					<div className="flex gap-4">
+						{scale.map((number: number, index: number) => (
+							<span key={index} className="bg-gray-100 rounded shadow-inner p-4">
+								{number}
+							</span>
+						))}
+					</div>
+				</div>
+			</div>
+      <div className="grid gap-2 border shadow p-4 rounded">
         <label>Comment</label>
         <TextareaAutosize
           minRows={2}
-          className="border brounded shadow-inner p-2"
+          className="border rounded shadow-inner p-2 bg-gray-100"
         />
       </div>
     </article>
   );
 };
 
-const PhotoBar = ({students, selectedStudent, setSelectedStudent}: {students: any[]; selectedStudent: Student; setSelectedStudent: Function;}) => {
-	return (
-		<ul className="grid grid-cols-6 gap-2 sm:gap-8 p-2 mb-4 rounded sticky top-0 bg-white z-10">
-        {students?.map(
-          (student, index) =>
-            !student.absent && (
-              <li key={index}>
-                <div className={`relative aspect-square`}>
-                  <Image
-                    src={student.photo_url}
-                    alt="An image of a student"
-                    fill={true}
-                    sizes="(max-width: 768px) 25vw, (max-width: 1200px) 20vw"
-                    style={{ objectFit: "cover" }}
-                    className={`${
-                      selectedStudent.id === student.id
-                        ? "border-2 border-green-300 shadow-xl shadow-green-100"
-                        : "shadow-inner-xl"
-                    } rounded-full`}
-                    onClick={() => {
-                      setSelectedStudent(student);
-                      // setTestScore(0);
-                      // setHomeworkDone(false);
-                      // setHomeworkMistakes(0);
-                      // setTestCorrections(0);
-                    }}
-                  />
-                </div>
-              </li>
-            )
-        )}
-        <div
-          className={`relative aspect-square grid place-items-center rounded-full bg-blue-100`}
-        >
-          <i className="fa-solid fa-plus text-blue-900"></i>
+const PhotoBar = ({
+  students,
+  selectedStudent,
+  setSelectedStudent,
+}: {
+  students: any[];
+  selectedStudent: Student;
+  setSelectedStudent: Function;
+}) => {
+  return (
+    <ul className="grid grid-cols-6 gap-2 sm:gap-8 p-2 mb-4 rounded sticky top-0 bg-white z-10">
+      {students?.map(
+        (student, index) =>
+          !student.absent && (
+            <li key={index}>
+              <div className={`relative aspect-square`}>
+                <Image
+                  src={student.photo_url}
+                  alt="An image of a student"
+                  fill={true}
+                  sizes="(max-width: 768px) 25vw, (max-width: 1200px) 20vw"
+                  style={{ objectFit: "cover" }}
+                  className={`${
+                    selectedStudent.id === student.id
+                      ? "border-2 border-green-300 shadow-xl shadow-green-100"
+                      : "shadow-inner-xl"
+                  } rounded-full`}
+                  onClick={() => {
+                    setSelectedStudent(student);
+                    // setTestScore(0);
+                    // setHomeworkDone(false);
+                    // setHomeworkMistakes(0);
+                    // setTestCorrections(0);
+                  }}
+                />
+              </div>
+            </li>
+          )
+      )}
+      <div
+        className={`relative aspect-square grid place-items-center rounded-full bg-blue-100`}
+      >
+        <i className="fa-solid fa-plus text-blue-900"></i>
+      </div>
+    </ul>
+  );
+};
+
+const StudentSummary = ({
+  absent,
+  setAbsent,
+  selectedStudent,
+}: {
+  absent: boolean;
+  setAbsent: Function;
+  selectedStudent: any;
+}) => {
+  const { user } = useContext(AuthContext);
+  return (
+    <div className="grid grid-cols-4 gap-4 items-center border shadow p-4 rounded mb-4">
+      <div className="relative aspect-square col-span-1">
+        <Image
+          src={selectedStudent.photo_url}
+          alt="An image of a student"
+          fill={true}
+          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 20vw"
+          style={{ objectFit: "cover" }}
+          className="rounded-full"
+        />
+      </div>
+      <div className="col-span-3">
+        <p className="text-3xl mb-2">
+          {selectedStudent.first_name} {selectedStudent.last_name}
+        </p>
+        <div className="flex gap-4 items-center">
+          <p className="text-xl">Absent?</p>
+          <Switch
+            disabled={user?.role === "TEACHER"}
+            checked={absent}
+            onChange={() => setAbsent(!absent)}
+            className={`${absent ? "bg-red-700" : "bg-green-700"}
+							relative inline-flex h-[28px] w-[56px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+          >
+            <span className="sr-only">Use setting</span>
+            <span
+              aria-hidden="true"
+              className={`${absent ? "translate-x-[28px]" : "translate-x-0"}
+								pointer-events-none inline-block h-[24px] w-[24px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+            />
+          </Switch>
         </div>
-      </ul>
-	);
-}
+      </div>
+    </div>
+  );
+};
 
 export default function ReportTeacherDetails({
   reportData,
@@ -391,50 +449,19 @@ export default function ReportTeacherDetails({
 
   return (
     <>
-			<PhotoBar students={students} selectedStudent={selectedStudent} setSelectedStudent={setSelectedStudent} />
-      
+      <PhotoBar
+        students={students}
+        selectedStudent={selectedStudent}
+        setSelectedStudent={setSelectedStudent}
+      />
+
       {!selectedStudent ? (
         <article className="p-2 bg-gray-100 shadow-inner mb-4 rounded">
           <p>Choose a student to start writing reports</p>
         </article>
       ) : (
         <article className="p-2 mb-4 rounded">
-          <div className="grid grid-cols-4 gap-4 items-center mb-4">
-            <div className="relative aspect-square col-span-1">
-              <Image
-                src={selectedStudent.photo_url}
-                alt="An image of a student"
-                fill={true}
-                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 20vw"
-                style={{ objectFit: "cover" }}
-                className="rounded-full"
-              />
-            </div>
-            <div className="col-span-3">
-              <p className="text-3xl mb-2">
-                {selectedStudent.first_name} {selectedStudent.last_name}
-              </p>
-              <div className="flex gap-4 items-center">
-                <p className="text-xl">Absent?</p>
-                <Switch
-                  disabled={user?.role === "TEACHER"}
-                  checked={absent}
-                  onChange={setAbsent}
-                  className={`${absent ? "bg-red-700" : "bg-green-700"}
-                    relative inline-flex h-[28px] w-[56px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
-                >
-                  <span className="sr-only">Use setting</span>
-                  <span
-                    aria-hidden="true"
-                    className={`${
-                      absent ? "translate-x-[28px]" : "translate-x-0"
-                    }
-                      pointer-events-none inline-block h-[24px] w-[24px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-                  />
-                </Switch>
-              </div>
-            </div>
-          </div>
+					<StudentSummary absent={absent} setAbsent={setAbsent} selectedStudent={selectedStudent}/>
           {absent && (
             <article className="border shadow p-4 rounded mb-4">
               <p>No report for {selectedStudent.first_name} today.</p>
