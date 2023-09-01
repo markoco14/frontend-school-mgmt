@@ -1,9 +1,50 @@
 import AuthContext from "@/src/AuthContext";
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
+import Home from "@/src/pages";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
 import { useContext, useState } from "react";
 import TextareaAutosize from 'react-textarea-autosize';
+
+const HomeworkSection = ({scores, reportData}: {scores: number[]; reportData: any;}) => {
+	  const [homeworkDone, setHomeworkDone] = useState<boolean>(false);
+  const [homeworkMistakes, setHomeworkMistakes] = useState<number>(0);
+	return (
+		reportData?.prevHmwkAssessments.map((assessment: any, index: number) => (
+			<div key={index} className="grid xs:grid-cols-2 gap-2 mb-4">
+				<div 
+					onClick={() => setHomeworkDone(!homeworkDone)}
+					className={`${homeworkDone ? 'bg-green-300' : 'bg-red-300'} hover:cursor-pointer rounded p-2 flex flex-col items-center  col-span-1`}
+				>
+					<p>{assessment} done?</p>
+					<Switch
+						checked={homeworkDone}
+						onChange={setHomeworkDone}
+						className={`${homeworkDone ? 'bg-green-700' : 'bg-red-700'}
+							relative inline-flex h-[28px] w-[56px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+					>
+						<span className="sr-only">Use setting</span>
+						<span
+							aria-hidden="true"
+							className={`${homeworkDone ? 'translate-x-[28px]' : 'translate-x-0'}
+								pointer-events-none inline-block h-[24px] w-[24px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+						/>
+					</Switch>
+				</div>
+				<div className={`${homeworkMistakes >= 7 && 'bg-red-300'} ${homeworkMistakes <= 6 && homeworkMistakes >=4  && 'bg-orange-300'} ${homeworkMistakes < 4 && 'bg-green-300'} rounded p-2 flex flex-col items-center justify-between col-span-1`}>
+					<p>{assessment} Corrections?</p>
+					<ul className='w-full text-center  grid grid-cols-5 gap-2'>
+						{scores.map((number, index) => (
+							<li key={index}
+							className={`${homeworkMistakes === number ? 'bg-blue-500': 'bg-white'} rounded p-2 block`}
+							onClick={() => setHomeworkMistakes(number)}>{number}</li>
+						))}
+					</ul>
+				</div>
+			</div>
+		))
+	);
+}
 
 
 export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { reportData: any; setIsConfirmed: Function }) {
@@ -137,8 +178,8 @@ export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { r
   const [absent, setAbsent] = useState<boolean>(false)
 	const [category, setCategory] = useState<string>('homework')
 
-  const [homeworkDone, setHomeworkDone] = useState<boolean>(false);
-  const [homeworkMistakes, setHomeworkMistakes] = useState<number>(0);
+  // const [homeworkDone, setHomeworkDone] = useState<boolean>(false);
+  // const [homeworkMistakes, setHomeworkMistakes] = useState<number>(0);
   const [testScore, setTestScore] = useState<number>(0);
   const [testCorrections, setTestCorrections] = useState<number>(0);
 
@@ -162,8 +203,8 @@ export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { r
                 onClick={() => {
                   setSelectedStudent(student);
                   setTestScore(0);
-                  setHomeworkDone(false);
-                  setHomeworkMistakes(0);
+                  // setHomeworkDone(false);
+                  // setHomeworkMistakes(0);
                   setTestCorrections(0);
                   setAbsent(student.absent);
                 }}
@@ -239,40 +280,10 @@ export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { r
 							</button>
 						</div>
 					)}
+					{/* HOMEWORK SECTION */}
 					{!absent && category === 'previous' && (
-						<div className="grid xs:grid-cols-2 gap-2 mb-4">
-							<div 
-								onClick={() => setHomeworkDone(!homeworkDone)}
-								className={`${homeworkDone ? 'bg-green-300' : 'bg-red-300'} hover:cursor-pointer rounded p-2 flex flex-col items-center  col-span-1`}
-							>
-								<p>Homework done?</p>
-								<Switch
-									checked={homeworkDone}
-									onChange={setHomeworkDone}
-									className={`${homeworkDone ? 'bg-green-700' : 'bg-red-700'}
-										relative inline-flex h-[28px] w-[56px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
-								>
-									<span className="sr-only">Use setting</span>
-									<span
-										aria-hidden="true"
-										className={`${homeworkDone ? 'translate-x-[28px]' : 'translate-x-0'}
-											pointer-events-none inline-block h-[24px] w-[24px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-									/>
-								</Switch>
-							</div>
-							<div className={`${homeworkMistakes >= 7 && 'bg-red-300'} ${homeworkMistakes <= 6 && homeworkMistakes >=4  && 'bg-orange-300'} ${homeworkMistakes < 4 && 'bg-green-300'} rounded p-2 flex flex-col items-center justify-between col-span-1`}>
-								<p>Homework Corrections?</p>
-								<ul className='w-full text-center  grid grid-cols-5 gap-2'>
-									{scores.map((number, index) => (
-										<li key={index}
-										className={`${homeworkMistakes === number ? 'bg-blue-500': 'bg-white'} rounded p-2 block`}
-										onClick={() => setHomeworkMistakes(number)}>{number}</li>
-									))}
-								</ul>
-							</div>
-						</div>
+						<HomeworkSection scores={scores} reportData={reportData}/>
 					)}
-					
 					{!absent && category === 'inclass' && (
 						<>
 							<div className="grid xs:grid-cols-2 gap-2 mb-4">
