@@ -406,7 +406,7 @@ const SummaryBar = ({
   setReportData: Function;
 }) => {
   return (
-    <div className="sticky top-0 col-span-1">
+    <div className="sm:row-span-2 col-span-1">
       <article className="sticky grid gap-4 top-4 border shadow p-4 rounded">
         <div>
           <h2>Summary</h2>
@@ -479,8 +479,8 @@ export default function ReportAdminSetup({
   const [nextHmwkAssessments, setNextHmwkAssessments] = useState<any[]>([]);
 
   return (
-    <section className="relative min-h-screen grid sm:grid-cols-4 gap-4">
-      <div className="grid gap-4 sm:col-span-3">
+    <section className="relative grid grid-cols-1 justify-start sm:grid-cols-4 gap-4">
+      <div className="grid gap-4 col-span-1 sm:col-span-3">
         <SelectSubject
           subject={subject}
           setLevel={setLevel}
