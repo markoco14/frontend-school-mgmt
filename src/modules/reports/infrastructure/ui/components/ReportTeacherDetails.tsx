@@ -78,6 +78,36 @@ const InClassSection = ({scores, reportData}: {scores: number[]; reportData: any
 	);
 }
 
+const EvaluationSection = () => {
+	const scale = [1, 2, 3, 4, 5];
+	return (
+		<article className="grid">
+			<div>
+				<label>Participation</label>
+				<div className="flex gap-4">
+					{scale.map((number: number, index: number) => (
+						<span key={index} className="bg-gray-300 rounded shadow p-4">{number}</span>
+					))}
+				</div>
+			</div>
+			<div>
+				<label>Listening</label>
+				<div className="flex gap-4">
+					{scale.map((number: number, index: number) => (
+						<span key={index} className="bg-gray-300 rounded shadow p-4">{number}</span>
+					))}
+				</div>
+			</div>
+			<div className="grid">
+				<label>Comment</label>			
+				<TextareaAutosize
+					minRows={2}
+					className="border brounded shadow-inner p-2" 
+				/>
+			</div>
+		</article>
+	);
+}
 
 export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { reportData: any; setIsConfirmed: Function }) {
 	const students = [
@@ -210,11 +240,6 @@ export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { r
   const [absent, setAbsent] = useState<boolean>(false)
 	const [category, setCategory] = useState<string>('homework')
 
-  // const [homeworkDone, setHomeworkDone] = useState<boolean>(false);
-  // const [homeworkMistakes, setHomeworkMistakes] = useState<number>(0);
-  const [testScore, setTestScore] = useState<number>(0);
-  const [testCorrections, setTestCorrections] = useState<number>(0);
-
   const scores = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return (
@@ -234,11 +259,10 @@ export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { r
 								className={`${selectedStudent.id === student.id ? 'border-2 border-green-300 shadow-xl shadow-green-100' : 'shadow-inner-xl'} rounded-full`}
                 onClick={() => {
                   setSelectedStudent(student);
-                  setTestScore(0);
+                  // setTestScore(0);
                   // setHomeworkDone(false);
                   // setHomeworkMistakes(0);
-                  setTestCorrections(0);
-                  setAbsent(student.absent);
+                  // setTestCorrections(0);
                 }}
 							/>
 						</div>
@@ -246,6 +270,9 @@ export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { r
 					</li>
 					)
 				))}
+				<div className={`relative aspect-square grid place-items-center rounded-full bg-blue-100`}>
+					<i className="fa-solid fa-plus text-blue-900"></i>
+				</div>
 			</ul>
       {!selectedStudent ? (
         <article className="p-2 bg-gray-100 shadow-inner mb-4 rounded">
@@ -320,16 +347,7 @@ export default function ReportTeacherDetails({ reportData, setIsConfirmed }: { r
 						<InClassSection scores={scores} reportData={reportData}/>
 					)}
 					{!absent && category === 'evaluation' && (
-						<>
-							  <div className="grid">
-                <label>Comment</label>
-                
-                <TextareaAutosize
-                  minRows={2}
-                  className="border brounded shadow-inner p-2" 
-                />
-              </div>
-						</>
+						<EvaluationSection />
 					)}
         </article>
       )}
