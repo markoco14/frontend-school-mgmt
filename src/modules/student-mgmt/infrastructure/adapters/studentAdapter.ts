@@ -18,14 +18,14 @@ class StudentAdapter {
 	}
 	
 	public async getStudent({id}: {id: number}): Promise<Student> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/students/${id}/get/`);
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/students/${id}/`);
 		const student: Student = await res.json();
 		
 		return student;
 	}
 
 	public async addStudent({firstName, lastName, age, schoolId}: {firstName: string, lastName: string, age: number, schoolId: number}): Promise<Student> {
-		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/students/add/`, { 
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/students/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
@@ -38,7 +38,7 @@ class StudentAdapter {
 	}
 
 	public async deleteStudentById({id}: {id: number}) {
-		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/students/${id}/delete/`,{
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/students/${id}/`,{
 			method: 'DELETE'
 		})
 

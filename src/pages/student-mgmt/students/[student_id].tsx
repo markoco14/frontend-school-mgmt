@@ -31,7 +31,6 @@ export default function Home({student}: InferGetServerSidePropsType<typeof getSe
       toast.success('Student deleted.')
       setLoading(false);
       setIsDeleted(true);
-      return response.json();
     } catch (error) {
       console.error(error)
     }
@@ -53,7 +52,6 @@ export default function Home({student}: InferGetServerSidePropsType<typeof getSe
           <>
             <section className='mb-4'>
               <div className='flex justify-between items-baseline mb-4'>
-                {/* <h2 className='text-3xl'>Student Profile</h2> */}
                 <h2 className='text-3xl'>{student.first_name}&apos;s Profile</h2>
                 <Link href="/student-mgmt">Back</Link>
               </div>
