@@ -10,6 +10,17 @@ import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 
+const NoData = ({text}: {text: string;}) => {
+  return (
+    <article
+        className="grid xs:grid-cols-2 gap-2 mb-4 border shadow p-4 rounded"
+      >
+        <p>{text}</p>
+      </article>
+  );
+}
+
+
 export default function StudentsHome() {
   const [isAddStudent, setIsAddStudent] = useState<boolean>(false);
 
@@ -74,20 +85,25 @@ export default function StudentsHome() {
               <p>loading...</p>
             </article>
           ) : (
-            <article className="bg-gray-100 shadow-inner p-2 rounded ">
-              <ul className='divide-y divide-gray-300 min-h-[420px] sm:h-full'>
-                {students.map((student: Student, index) => (
-                  <li key={index} className="flex justify-between gap-4">
-                    <Link
-                      href={`/student-mgmt/students/${student.id}`}
-                      className="hover:bg-blue-300 p-2 rounded w-full"
-                    >
-                      {student.first_name} {student.last_name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <div className="flex justify-evenly gap-2">
+            <article className="grid gap-2 mb-4 border shadow p-4 rounded">
+              {!students && (
+                <NoData text={'No students found'} />
+              )}
+              {students && (
+                <>
+                <ul className='divide-y divide-gray-300 min-h-[420px] sm:h-full'>
+                  {students?.map((student: Student, index) => (
+                    <li key={index} className="flex justify-between gap-4">
+                      <Link
+                        href={`/student-mgmt/students/${student.id}`}
+                        className="hover:bg-blue-300 p-2 rounded w-full"
+                      >
+                        {student.first_name} {student.last_name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                 <div className="flex justify-evenly gap-2">
               <button
                 className="disabled:cursor-not-allowed bg-blue-300 disabled:bg-gray-300 px-2 py-1 w-full rounded"
                 disabled={page === 1}
@@ -107,6 +123,8 @@ export default function StudentsHome() {
                 <i className="fa-solid fa-arrow-right"></i>
               </button>
             </div>
+                </>
+              )}
             </article>
           )}
         </section>

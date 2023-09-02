@@ -4,13 +4,6 @@ import { Student } from './../../domain/entities/Student';
 class StudentAdapter {
 
 	public async listSchoolStudents({id, page}: {id: number, page: number}): Promise<PaginatedStudentResponse> {
-		if (page === 1) {
-			const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/students/`);
-			const students: PaginatedStudentResponse = await res.json();
-			
-			return students;
-		}
-
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/students/?page=${page}`);
 		const students: PaginatedStudentResponse = await res.json();
 		
