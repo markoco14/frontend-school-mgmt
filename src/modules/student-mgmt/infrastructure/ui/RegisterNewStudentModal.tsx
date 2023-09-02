@@ -6,9 +6,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 
 type Inputs = {
-  firstName: string
-  lastName: string
-  age: number
+  firstName: string;
+  lastName: string;
+  age: number;
+	gender: number;
 }
 
 export default function RegisterNewStudentModal({setStudents}: {setStudents: Function}) {
@@ -22,6 +23,8 @@ export default function RegisterNewStudentModal({setStudents}: {setStudents: Fun
         firstName: data.firstName,
         lastName: data.lastName,
         age: Number(data.age),
+				gender: Number(data.gender),
+				photo_url: "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_4.jpeg",
         schoolId: Number(selectedSchool.id)
       });
       toast.success('Student added.');
@@ -87,6 +90,22 @@ export default function RegisterNewStudentModal({setStudents}: {setStudents: Fun
 						className='text-red-500 mt-2'
 					>
 						Age is required
+					</p>
+				)}
+			</div>
+			<div className="flex flex-col mb-4">
+				<label className='mb-2'>Gender</label>
+				<input
+					className="px-1 py-2 rounded shadow"
+					type="number"
+					{...register("gender", { required: true, min: 0, max: 1 })}
+				/>
+				{errors.gender?.type === "required" && (
+					<p 
+						role="alert"
+						className='text-red-500 mt-2'
+					>
+						Gender is required
 					</p>
 				)}
 			</div>
