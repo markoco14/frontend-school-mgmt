@@ -4,32 +4,34 @@ import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/c
 import { classListAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classListAdapter";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
+import { PaginatedStudentResponse } from "@/src/modules/student-mgmt/domain/entities/PaginatedStudentResponse";
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
 import { Teacher } from "@/src/modules/user-mgmt/domain/entities/Teacher";
 import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-export const getServerSideProps: GetServerSideProps<{
-  selectedClass: Class;
-  students: Student[];
-}> = async (context) => {
-  const selectedClass = await classAdapter.getClassById({
-    id: Number(context.query.class_id),
-  });
-  const students = await studentAdapter.listClassStudents({
-    id: Number(context.query.class_id),
-  });
-  return {
-    props: {
-      selectedClass,
-      students,
-    },
-  };
-};
+// export const getServerSideProps: GetServerSideProps<{
+//   selectedClass: Class;
+//   students: PaginatedStudentResponse[];
+// }> = async (context) => {
+//   const selectedClass = await classAdapter.getClassById({
+//     id: Number(context.query.class_id),
+//   });
+//   const students = await studentAdapter.listClassStudents({
+//     id: Number(context.query.class_id),
+//   });
+//   return {
+//     props: {
+//       selectedClass,
+//       students,
+//     },
+//   };
+// };
 
 const AddStudentToClassSection = ({
   classList,
@@ -148,12 +150,12 @@ const ClassListSection = ({
 }) => {
   return (
     <>
-      {classList.length === 0 && (
+      {classList?.length === 0 && (
         <article className="bg-gray-100 shadow-inner p-2 rounded">
           <p>There are no students in this class. Click here to add some.</p>
         </article>
       )}
-      {classList.length >= 1 && (
+      {classList?.length >= 1 && (
         <article className="bg-gray-100 shadow-inner p-2 rounded">
           <ul className="flex flex-col gap-2 divide-y">
             {classList?.map((student: Student, index: number) => (
@@ -180,13 +182,13 @@ const ClassListSection = ({
 
 const DeleteClassSection = ({
   selectedClass,
-  setCurrentClass,
+  setSelectedClass,
 }: {
   selectedClass: Class;
-  setCurrentClass: Function;
+  setSelectedClass: Function;
 }) => {
   async function handleDeleteClass() {
-    setCurrentClass(undefined);
+    setSelectedClass(undefined);
     toast.success("Class deleted!");
   }
 
@@ -215,18 +217,14 @@ const DeleteClassSection = ({
 };
 
 
-export default function ManageClassDetails({
-  selectedClass,
-  students,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function ManageClassDetails() {
   const [isAddingStudent, setIsAddingStudent] = useState<boolean>(false);
-  const [classList, setClassList] = useState<Student[]>(students);
-  const [currentClass, setCurrentClass] = useState<Class | undefined>(
-    selectedClass
-  );
+  const [classList, setClassList] = useState<Student[]>();
+  const [selectedClass, setSelectedClass] = useState<Class>();
   const { user, selectedSchool } = useContext(AuthContext);
   const [teachers, setTeachers] = useState<Teacher[]>()
   const [isAddTeacher, setIsAddTeacher] = useState<boolean>(false)
+  const router = useRouter();
 
   async function removeStudentFromClassList(
     classId: number,
@@ -238,7 +236,7 @@ export default function ManageClassDetails({
         toast.success("student removed from class");
       });
     setClassList((prevClassList) =>
-      prevClassList.filter((student) => student.id !== studentId)
+      prevClassList?.filter((student) => student.id !== studentId)
     );
   }
 
@@ -248,19 +246,36 @@ export default function ManageClassDetails({
       .then((res) => setTeachers(res))
     }
 
-    if (selectedSchool) {
-      getData()
+    async function getClassData() {
+      await classAdapter.getClassById({id: Number(router?.query.class_id)})
+      .then((res) => {
+        // console.log(res)
+        setSelectedClass(res)
+      })
     }
-  }, [selectedSchool])
+
+    async function getClassList() {
+      await studentAdapter.listClassStudents({id: Number(router?.query.class_id)})
+      .then((res) => {
+        console.log(res)
+      })
+    }
+
+    if (selectedSchool) {
+      getData();
+      getClassData();
+      getClassList();
+    }
+  }, [selectedSchool, router])
 
   async function handleAddTeacher({id, teacherId}: {id: number, teacherId: number}) {
     await classAdapter.addClassTeacher({id: id, teacherId: teacherId})
-    .then((res) => setCurrentClass(res));
+    .then((res) => setSelectedClass(res));
   }
 
   async function handleRemoveTeacher({id}: {id: number}) {
     await classAdapter.deleteClassTeacher({id: id})
-    .then((res) => setCurrentClass(res));
+    .then((res) => setSelectedClass(res));
   }
 
 
@@ -275,7 +290,7 @@ export default function ManageClassDetails({
   return (
     <Layout>
       <>
-        {currentClass && (
+        {selectedClass && (
           <>
             <section className="mb-4">
               <div className="flex justify-between items-baseline mb-2">
@@ -298,7 +313,8 @@ export default function ManageClassDetails({
                   {isAddingStudent ? <span><i className="fa-solid fa-check"></i></span> : <span><i className="fa-solid fa-plus"></i> <i className="fa-solid fa-user"></i></span>}
                 </button>
               </div>
-              {isAddingStudent && (
+              <p>Class List unavailable at this time.</p>
+              {/* {isAddingStudent && (
                 <AddStudentToClassSection
                   classList={classList}
                   setClassList={setClassList}
@@ -311,17 +327,17 @@ export default function ManageClassDetails({
                   classList={classList}
                   removeStudentFromClassList={removeStudentFromClassList}
                 />
-              )}
+              )} */}
               
             </section>
             <section className="mb-4">
               <h3 className="text-xl">Teacher Details</h3>
               <article className="bg-gray-100 shadow-inner p-2 rounded mb-4">
                 <div className="flex justify-between items-baseline">
-                  <p>Primary Teacher: {currentClass.teacher ? currentClass.teacher : 'No teacher assigned'}</p>
+                  <p>Primary Teacher: {selectedClass.teacher ? selectedClass.teacher : 'No teacher assigned'}</p>
                   <button 
                   className="text-red-500 underline underline-offset-2 p-2 rounded hover:bg-red-100 hover:text-red-900" 
-                  onClick={() => handleRemoveTeacher({id: currentClass.id})}
+                  onClick={() => handleRemoveTeacher({id: selectedClass.id})}
                   >
                     Remove
                   </button>
@@ -340,9 +356,9 @@ export default function ManageClassDetails({
                         <li key={index} className="flex justify-between">
                           <span>{teacher.first_name} {teacher.last_name}</span>
                           <button 
-                          disabled={currentClass.teacher ? true : false}
+                          disabled={selectedClass.teacher ? true : false}
                           className="text-blue-500 p-2 rounded hover:bg-blue-100 hover:text-blue-900 disabled:cursor-not-allowed" onClick={() => {
-                            handleAddTeacher({id:currentClass.id, teacherId: teacher.id})
+                            handleAddTeacher({id:selectedClass.id, teacherId: teacher.id})
                           }}>
                             <i className="fa-solid fa-plus"></i>
                           </button>
@@ -355,11 +371,11 @@ export default function ManageClassDetails({
             </section>
             <DeleteClassSection
               selectedClass={selectedClass}
-              setCurrentClass={setCurrentClass}
+              setSelectedClass={setSelectedClass}
             />
           </>
         )}
-        {!currentClass && (
+        {!selectedClass && (
           <div className="flex flex-col xs:flex-row xs:justify-between xs:gap-2 items-baseline mb-4 bg-gray-100 shadow-inner p-2 rounded">
             <h2 className="text-3xl">This class was deleted.</h2>
             <Link href="/class-mgmt">Back</Link>
