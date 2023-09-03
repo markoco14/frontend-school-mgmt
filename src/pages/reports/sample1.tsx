@@ -337,7 +337,7 @@ const ReportDetails = ({ setIsConfirmed }: { setIsConfirmed: Function }) => {
 		},
 	]
 
-  const [selectedStudent, setSelectedStudent] = useState<Student>(students[0]);
+  const [selectedStudent, setSelectedStudent] = useState<any>(students[0]);
   const [absent, setAbsent] = useState<boolean>(false)
 
   const [homeworkDone, setHomeworkDone] = useState<boolean>(false);
