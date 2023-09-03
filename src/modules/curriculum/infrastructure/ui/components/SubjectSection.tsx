@@ -32,10 +32,10 @@ const SubjectLevelModal = ({
 	const [show, setShow] = useState<boolean>(() => subject.name === "" ? false : true);
 
   useEffect(() => {
-    async function listSchoolLevels(id: number) {
+    async function listSchoolLevels() {
       setLoading(true);
       await levelAdapter
-        .listSchoolLevels({ id: id, page: page })
+        .paginatedList({ school_id: selectedSchool?.id, page: page })
         .then((res) => {
           if (res.next) {
             setNext(true);
@@ -49,11 +49,7 @@ const SubjectLevelModal = ({
     }
 
     if (selectedSchool) {
-      try {
-        listSchoolLevels(selectedSchool.id);
-      } catch (error) {
-        console.error(error);
-      }
+      listSchoolLevels();
     }
   }, [selectedSchool, page]);
 
