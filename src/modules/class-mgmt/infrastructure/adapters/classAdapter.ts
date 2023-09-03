@@ -43,13 +43,13 @@ class ClassAdapter {
 		return classes
 	}
 	
-	public async addClassTeacher({id, teacherId}: {id: number, teacherId: number}): Promise<Class>{
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/teachers/add/`, { 
+	public async addClassTeacher({class_id, teacher_id}: {class_id: number, teacher_id: number}): Promise<Class>{
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${class_id}/`, { 
 			method: 'PATCH', 
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ teacher: teacherId }) 
+			body: JSON.stringify({ teacher: teacher_id }) 
 		});
 		const currentClass: Class = await res.json();
 	
@@ -57,12 +57,13 @@ class ClassAdapter {
 		return currentClass
 	}
 	
-	public async deleteClassTeacher({id}: {id: number}): Promise<Class>{
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/teachers/remove/`, { 
+	public async deleteClassTeacher({class_id}: {class_id: number}): Promise<Class>{
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${class_id}/`, { 
 			method: 'PATCH', 
 			headers: {
 				"Content-Type": "application/json",
 			},
+			body: JSON.stringify({ teacher: null }) 
 		});
 		const currentClass: Class = await res.json();
 	

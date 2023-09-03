@@ -4,6 +4,7 @@ import { ClassStudent } from "@/src/modules/class-mgmt/domain/entities/ClassStud
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import { classStudentAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classStudentAdapter";
 import ClassStudentList from "@/src/modules/class-mgmt/infrastructure/ui/components/ClassStudentList";
+import ManageClassTeacher from "@/src/modules/class-mgmt/infrastructure/ui/components/ManageClassTeacher";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
@@ -27,7 +28,7 @@ export default function ManageClassDetails() {
   const [selectedClass, setSelectedClass] = useState<Class>();
   const { user, selectedSchool } = useContext(AuthContext);
   const [teachers, setTeachers] = useState<Teacher[]>()
-  const [isAddTeacher, setIsAddTeacher] = useState<boolean>(false)
+  
   const router = useRouter();
 
   async function removeStudentFromClassList(
@@ -58,17 +59,6 @@ export default function ManageClassDetails() {
     }
   }, [router])
 
-  async function handleAddTeacher({id, teacherId}: {id: number, teacherId: number}) {
-    await classAdapter.addClassTeacher({id: id, teacherId: teacherId})
-    .then((res) => setSelectedClass(res));
-  }
-
-  async function handleRemoveTeacher({id}: {id: number}) {
-    await classAdapter.deleteClassTeacher({id: id})
-    .then((res) => setSelectedClass(res));
-  }
-
-
   if (user?.role !== "OWNER") {
     return (
       <Layout>
@@ -91,6 +81,8 @@ export default function ManageClassDetails() {
                 <p className="text-xl">{selectedClass.day[0] === 1 ? "Monday" : "Wednesday"} & {selectedClass.day[1] === 4 ? "Thursday" : "Friday"}</p>
               )}
             </section>
+            <section>
+
               <div className="flex justify-between items-baseline gap-4 mb-4">
                 <h3 className="text-xl">Student List</h3>
                 <button
@@ -103,6 +95,8 @@ export default function ManageClassDetails() {
                 </button>
               </div>
               <ClassStudentList />
+            </section>
+            <ManageClassTeacher selectedClass={selectedClass} setSelectedClass={setSelectedClass}/>
           </>
         )}
         {!selectedClass && (
