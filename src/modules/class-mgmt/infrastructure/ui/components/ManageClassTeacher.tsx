@@ -13,7 +13,6 @@ export default function ManageClassTeacher({selectedClass, setSelectedClass}: {s
   async function handleAddTeacher({class_id, teacher_id}: {class_id: number, teacher_id: number}) {
     await classAdapter.addClassTeacher({class_id: class_id, teacher_id: teacher_id})
     .then((res) =>{
-			console.log(res)
 			setSelectedClass(res)
 		});
   }
@@ -21,7 +20,6 @@ export default function ManageClassTeacher({selectedClass, setSelectedClass}: {s
   async function handleRemoveTeacher({class_id}: {class_id: number}) {
     await classAdapter.deleteClassTeacher({class_id: class_id})
     .then((res) =>{
-			console.log(res)
 			setSelectedClass(res)
 		});
   }

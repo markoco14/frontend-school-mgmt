@@ -25,7 +25,6 @@ export default function CurriculumHome() {
       await subjectLevelAdapter
         .listSchoolSubjectLevels({ id: selectedSchool?.id })
         .then((res) => {
-          console.log('subject levels', res)
           setSubjectLevels(res);
         });
     }

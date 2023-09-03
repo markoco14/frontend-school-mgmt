@@ -493,7 +493,6 @@ export default function ReportTeacherDetails({
       absent: false,
     },
   ];
-  console.log(reportData);
 
   const { user } = useContext(AuthContext);
 

@@ -11,7 +11,6 @@ export default function ClassStudentList() {
     async function getClassList() {
       await classStudentAdapter.list({class_id: Number(router?.query.class_id)})
       .then((res) => {
-        console.log('class student list', res);
         setClassStudentList(res);
       })
     }

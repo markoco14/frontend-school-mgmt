@@ -30,7 +30,6 @@ export default function AssessmentSection() {
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
     // return
     selectedSchool &&
       (await assessmentAdapter
@@ -61,7 +60,6 @@ export default function AssessmentSection() {
       await assessmentAdapter
         .listWithDetails({ schoolId: selectedSchool?.id })
         .then((res) => {
-          console.log(res);
 					const subjectNames = res.map((module) => module.subject_level.subject.name);
 
 					// Remove duplicates by converting the array to a Set and then back to an array
@@ -97,7 +95,6 @@ export default function AssessmentSection() {
                         key={index}
 												className="grid"
                         onClick={() => {
-													console.log(filteredModule)
                         	setSelectedModule(filteredModule);
                         }}
                       >

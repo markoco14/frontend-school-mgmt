@@ -33,7 +33,6 @@ export default function ManageModuleType({
       (await moduleTypeAdapter
         .patch({ typeId: selectedType?.id, typeName: data.name })
         .then((res) => {
-          console.log(res);
           // Find the index of the object to replace
           const index = moduleTypes.findIndex(
             (item) => item.id === selectedType?.id
