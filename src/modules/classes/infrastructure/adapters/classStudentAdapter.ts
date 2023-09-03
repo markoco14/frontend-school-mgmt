@@ -1,8 +1,19 @@
 import { ClassStudent } from "../../domain/entities/ClassStudent";
 
 class ClassStudentAdapter {
-	public async list({class_id}: {class_id: number}): Promise<ClassStudent[]> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/class-students/?school_class=${class_id}`);
+	public async list({class_id, details}: {class_id: number, details?: boolean}): Promise<ClassStudent[]> {
+		let url = `${process.env.NEXT_PUBLIC_API_URL}/class-students/`;
+
+		const queryParams: string[] = [];
+    if (class_id) queryParams.push(`school_class=${encodeURIComponent(class_id)}`);
+    if (details) queryParams.push(`details=${encodeURIComponent(class_id)}`);
+
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
+    }
+
+
+		const res = await fetch(url);
 		const ClassStudent: ClassStudent[] = await res.json();
 		
 		return ClassStudent
