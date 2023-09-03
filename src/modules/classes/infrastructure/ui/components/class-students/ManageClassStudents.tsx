@@ -12,7 +12,10 @@ export default function ManageClassStudents({selectedClass}: {selectedClass: Cla
 	const [isAddingStudent, setIsAddingStudent] = useState<boolean>(false);
   useEffect(() => {
     async function getClassList() {
-      await classStudentAdapter.list({class_id: Number(router?.query.class_id)})
+      await classStudentAdapter.list({
+        class_id: Number(router?.query.class_id),
+        details: true,
+      })
       .then((res) => {
         setClassStudentList(res);
       })
