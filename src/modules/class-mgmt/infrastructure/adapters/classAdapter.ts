@@ -21,8 +21,8 @@ class ClassAdapter {
 		return newClass
 	}
 
-	public async deleteClass({id}: {id: number}) {
-		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/`,{
+	public async deleteClass({class_id}: {class_id: number}) {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${class_id}/`,{
 			method: 'DELETE'
 		})
 

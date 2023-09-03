@@ -4,6 +4,7 @@ import { ClassStudent } from "@/src/modules/class-mgmt/domain/entities/ClassStud
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
 import { classStudentAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classStudentAdapter";
 import ClassStudentList from "@/src/modules/class-mgmt/infrastructure/ui/components/ClassStudentList";
+import DeleteClass from "@/src/modules/class-mgmt/infrastructure/ui/components/DeleteClass";
 import ManageClassTeacher from "@/src/modules/class-mgmt/infrastructure/ui/components/ManageClassTeacher";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
@@ -97,14 +98,18 @@ export default function ManageClassDetails() {
               <ClassStudentList />
             </section>
             <ManageClassTeacher selectedClass={selectedClass} setSelectedClass={setSelectedClass}/>
+            {/* <DeleteClass
+              selectedClass={selectedClass}
+              setSelectedClass={setSelectedClass}
+            /> */}
           </>
         )}
-        {!selectedClass && (
+        {/* {!selectedClass && (
           <div className="flex flex-col xs:flex-row xs:justify-between xs:gap-2 items-baseline mb-4 bg-gray-100 shadow-inner p-2 rounded">
             <h2 className="text-3xl">This class was deleted.</h2>
             <Link href="/class-mgmt">Back</Link>
           </div>
-        )}
+        )} */}
       </>
     </Layout>
   );
