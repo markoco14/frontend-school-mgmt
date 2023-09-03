@@ -50,8 +50,10 @@ export default function ManageClassDetails() {
                 <p className="text-xl">{selectedClass.day[0] === 1 ? "Monday" : "Wednesday"} & {selectedClass.day[1] === 4 ? "Thursday" : "Friday"}</p>
               )}
             </section>
-            <ManageClassStudents selectedClass={selectedClass}/>
-            <ManageClassTeacher selectedClass={selectedClass} setSelectedClass={setSelectedClass}/>
+            <section className="grid md:grid-cols-2 gap-4">
+              <ManageClassStudents selectedClass={selectedClass}/>
+              <ManageClassTeacher selectedClass={selectedClass} setSelectedClass={setSelectedClass}/>
+            </section>
             {/* <DeleteClass
               selectedClass={selectedClass}
               setSelectedClass={setSelectedClass}

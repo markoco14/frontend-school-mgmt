@@ -35,9 +35,11 @@ export default function ManageClassTeacher({selectedClass, setSelectedClass}: {s
 
 
 	return (
-		<section className="mb-4">
-			<h3 className="text-xl">Teacher Details</h3>
-			<article className="bg-gray-100 shadow-inner p-2 rounded mb-4">
+		<article className="border-2 p-4 rounded">
+			<div className="flex justify-between items-baseline gap-4 mb-4">
+				<h3 className="text-xl">Teacher Details</h3>
+			</div>
+			<section>
 				<div className="flex justify-between items-baseline">
 					<p>Primary Teacher: {selectedClass.teacher ? selectedClass.teacher : 'No teacher assigned'}</p>
 					<button 
@@ -72,7 +74,7 @@ export default function ManageClassTeacher({selectedClass, setSelectedClass}: {s
 						</ul>
 					</>
 				)}
-			</article>
-		</section>
+			</section>
+		</article>
 	);
 }

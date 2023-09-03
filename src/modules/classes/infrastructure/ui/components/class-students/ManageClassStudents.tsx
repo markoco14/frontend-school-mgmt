@@ -15,6 +15,7 @@ export default function ManageClassStudents({selectedClass}: {selectedClass: Cla
       await classStudentAdapter.list({
         class_id: Number(router?.query.class_id),
         details: true,
+        order: 'last_name'
       })
       .then((res) => {
         setClassStudentList(res);
@@ -26,28 +27,26 @@ export default function ManageClassStudents({selectedClass}: {selectedClass: Cla
   }, [router])
 	
 	return (
-		<section>
-
-              <div className="flex justify-between items-baseline gap-4 mb-4">
-                <h3 className="text-xl">Student List</h3>
-                <button
-                className="bg-blue-300 p-2 rounded"
-                  onClick={() => {
-                    setIsAddingStudent(!isAddingStudent);
-                  }}
-                >
-                  {isAddingStudent ? <span><i className="fa-solid fa-check"></i></span> : <span><i className="fa-solid fa-plus"></i> <i className="fa-solid fa-user"></i></span>}
-                </button>
-              </div>
-              {isAddingStudent ? (
-                <AddClassStudent
-									selectedClass={selectedClass} 
-                  classStudentList={classStudentList}
-                  setClassStudentList={setClassStudentList}
-                />
-              ) : (
-								<ClassStudentList classStudentList={classStudentList}/>
-              )}
-            </section>
+		<div className="border-2 p-4 rounded">
+      <div className="flex justify-between items-baseline gap-4 mb-4">
+        <h3 className="text-xl">Student List</h3>
+        <button
+          onClick={() => {
+            setIsAddingStudent(!isAddingStudent);
+          }}
+        >
+          {isAddingStudent ? <span><i className="fa-solid fa-check"></i></span> : <span><i className="fa-solid fa-plus"></i> <i className="fa-solid fa-user"></i></span>}
+        </button>
+      </div>
+      {isAddingStudent ? (
+        <AddClassStudent
+          selectedClass={selectedClass} 
+          classStudentList={classStudentList}
+          setClassStudentList={setClassStudentList}
+        />
+      ) : (
+        <ClassStudentList classStudentList={classStudentList}/>
+      )}
+    </div>
 	);
 }

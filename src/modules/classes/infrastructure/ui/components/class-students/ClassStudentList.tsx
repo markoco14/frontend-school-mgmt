@@ -18,14 +18,13 @@ export default function ClassStudentList({classStudentList}: {classStudentList: 
   // }
   
   return (
-    <section className="grid md:grid-cols-2">
-      {classStudentList?.length === 0 && (
-        <article className="bg-gray-100 shadow-inner p-2 rounded">
+    <>
+      {classStudentList?.length === 0 ? (
+        <article>
           <p>There are no students in this class. Click here to add some.</p>
         </article>
-      )}
-      {classStudentList?.length >= 1 && (
-        <article className="border-2 p-4 rounded">
+      ) : (
+        <article>
           <ul className="flex flex-col gap-2 divide-y">
             {classStudentList?.map((student: ClassStudent, index: number) => (
               <li
@@ -57,6 +56,6 @@ export default function ClassStudentList({classStudentList}: {classStudentList: 
           </ul>
         </article>
       )}
-    </section>
+    </>
   );
 };
