@@ -1,8 +1,8 @@
 import { Class } from "../../domain/entities/Class";
 
 class ClassAdapter {
-	public async getClassById({id}: {id: number}): Promise<Class> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/`);
+	public async getClassById({class_id}: {class_id: number}): Promise<Class> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${class_id}/`);
 		const thisClass: Class = await res.json();
 		
 		return thisClass

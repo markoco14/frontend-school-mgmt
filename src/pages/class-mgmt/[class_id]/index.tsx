@@ -48,14 +48,13 @@ export default function ManageClassDetails() {
 
   useEffect(() => {
     async function getClassData() {
-      await classAdapter.getClassById({id: Number(router?.query.class_id)})
+      await classAdapter.getClassById({class_id: Number(router.query.class_id)})
       .then((res) => {
-        console.log('class data', res)
         setSelectedClass(res)
       })
     }
 
-    if (router) {
+    if (router.query.class_id) {
       getClassData();
     }
   }, [router])
