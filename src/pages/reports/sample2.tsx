@@ -351,7 +351,7 @@ const ReportDetails = ({ setIsConfirmed }: { setIsConfirmed: Function }) => {
 
 	const { user } = useContext(AuthContext);
 
-  const [selectedStudent, setSelectedStudent] = useState<Student>(students[0]);
+  const [selectedStudent, setSelectedStudent] = useState<any>(students[0]);
   const [absent, setAbsent] = useState<boolean>(false)
 	const [category, setCategory] = useState<string>('homework')
 
@@ -374,7 +374,7 @@ const ReportDetails = ({ setIsConfirmed }: { setIsConfirmed: Function }) => {
 								fill={true}
 								sizes="(max-width: 768px) 50vw, (max-width: 1200px) 20vw"
 								style={{ objectFit: 'cover' }}
-								className={`${selectedStudent.id === student.id && 'border border-2 border-green-300 scale-125'} rounded-full`}
+								className={`${selectedStudent.id === student.id && 'border-2 border-green-300 scale-125'} rounded-full`}
                 onClick={() => {
                   setSelectedStudent(student);
                   setTestScore(0);

@@ -30,7 +30,6 @@ export default function ModuleTypeSection() {
       await moduleTypeAdapter
         .listSchoolModuleTypes({ schoolId: selectedSchool?.id })
         .then((res) => {
-          console.log(res);
           setModuleTypes(res);
         });
     }

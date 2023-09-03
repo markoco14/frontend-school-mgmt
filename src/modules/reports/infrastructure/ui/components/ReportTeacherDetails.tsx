@@ -493,11 +493,10 @@ export default function ReportTeacherDetails({
       absent: false,
     },
   ];
-  console.log(reportData);
 
   const { user } = useContext(AuthContext);
 
-  const [selectedStudent, setSelectedStudent] = useState<Student>(students[0]);
+  const [selectedStudent, setSelectedStudent] = useState<any>(students[0]);
   const [absent, setAbsent] = useState<boolean>(false);
   const [category, setCategory] = useState<string>("homework");
 

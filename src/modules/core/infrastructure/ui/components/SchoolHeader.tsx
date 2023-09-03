@@ -8,7 +8,7 @@ export default function SchoolHeader() {
   const router = useRouter();
   return (
     <section>
-      <p className=" text-gray-500 mb-4 flex justify-between items-baseline">
+      <p className=" text-gray-500 mb-4 flex justify-between items-baseline px-4">
         {selectedSchool ? (
           <>
             <Link href="/" className="text-2xl">{selectedSchool.name}</Link>

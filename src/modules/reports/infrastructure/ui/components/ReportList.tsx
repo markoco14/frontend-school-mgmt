@@ -1,11 +1,11 @@
 import AuthContext from '@/src/AuthContext';
-import { Class } from '@/src/modules/class-mgmt/domain/entities/Class';
-import { classAdapter } from '@/src/modules/class-mgmt/infrastructure/adapters/classAdapter';
+import { Class } from '@/src/modules/classes/domain/entities/Class';
+import { classAdapter } from '@/src/modules/classes/infrastructure/adapters/classAdapter';
 import { format } from 'date-fns';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { reportAdapter } from '../../adapters/reportAdapter';
-import Link from 'next/link';
 
 export const ReportList = () => {
 	const router = useRouter();
@@ -118,7 +118,7 @@ export const ReportList = () => {
 							<div className="flex gap-4">
 								{thisClass.class_list?.length === 0 ? (
 									<Link
-										href={`/class-mgmt/${thisClass.id}`}
+										href={`/classes/${thisClass.id}`}
 										className="bg-gray-300 py-1 px-2 rounded disabled:cursor-not-allowed"
 									>
 										Add Students
