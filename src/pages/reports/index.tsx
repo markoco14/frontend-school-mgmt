@@ -1,10 +1,13 @@
 import AuthContext from "@/src/AuthContext";
 import { Class } from "@/src/modules/classes/domain/entities/Class";
+import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import DailyReportOverview from "@/src/modules/reports/infrastructure/ui/components/DailyReportOverview";
+import { StudentAttendance } from "@/src/modules/students/domain/entities/StudentAttendance";
+import { studentAttendanceAdapter } from "@/src/modules/students/infrastructure/adapters/studentAttendanceAdapter";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -13,7 +16,13 @@ export default function ReportsHome() {
 
   const { user } = useContext(AuthContext);
   const date = new Date();
-  const day = date.getDay();
+  date.setDate(date.getDate() + 1); 
+  const dayNumber = date.getDay();
+  const year = date.getFullYear(); // Get the year
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Get the month and pad with 0 if needed
+  const day = String(date.getDate()).padStart(2, "0"); // Get the day and pad with 0 if needed
+
+  const formattedDate = `${year}-${month}-${day}`; // Format the date
   const days = [
     "Sunday",
     "Monday",
@@ -23,10 +32,10 @@ export default function ReportsHome() {
     "Friday",
     "Saturday",
   ];
-  const dayName = days[day];
+  const dayName = days[dayNumber];
 
   const [todayClasses, setTodayClasses] = useState<Class[]>([]);
-  const [selectedClass, setSelectedClass] = useState<Class>();
+  const [classAttendance, setClassAttendance] = useState<StudentAttendance[]>();
 
   useEffect(() => {
     async function getClasses() {
@@ -48,6 +57,24 @@ export default function ReportsHome() {
       </Layout>
     );
   }
+
+  async function getAttendanceList({
+    school_class,
+    date,
+  }: {
+    school_class: number | undefined;
+    date: string | undefined;
+  }) {
+    console.log(school_class)
+    console.log(date)
+    await studentAttendanceAdapter
+      .list({ school_class: school_class, date: date })
+      .then((res) => {
+        console.log(res);
+        setClassAttendance(res)
+      });
+  }
+
   return (
     <Layout>
       <div>
@@ -63,7 +90,14 @@ export default function ReportsHome() {
                 <li
                   key={`class-${classEntity.id}`}
                   onClick={() => {
-                    setSelectedClass(classEntity);
+                    // setClassAttendance(classEntity.class_list);
+                    console.log("class id", classEntity.id);
+                    console.log("date", date);
+
+                    getAttendanceList({
+                      school_class: classEntity.id,
+                      date: formattedDate,
+                    });
                   }}
                   className="cursor-pointer"
                 >
@@ -74,23 +108,54 @@ export default function ReportsHome() {
           </article>
           <article className="hidden place-items-center sm:grid">{`->`}</article>
           <article className="col-span-4 grid gap-4 rounded border-2 p-4 shadow">
-            <p>
-              {selectedClass?.name} (teacher id:{selectedClass?.teacher})
-            </p>
-            <div className="flex justify-between">
-              <span>Student B</span>
-              <div className="flex gap-2">
-                <span onClick={() => {
-                  toast.success('On Time')
-                }}>On Time</span>
-                <span onClick={() => {
-                  toast.success('Late')
-                }}>Late</span>
-                <span onClick={() => {
-                  toast.success('Absent')
-                }}>Absent</span>
-              </div>
-            </div>
+            <ul className="grid gap-2 p-2">
+              {classAttendance?.map((studentAttendance) => (
+                <li
+                  key={`studentAttendance-${studentAttendance.id}`}
+                  className="flex justify-between"
+                >
+                  <span>Student ID: {studentAttendance.student_id}</span>
+                  <div className="flex gap-2">
+                    <span
+                      onClick={() => {
+                        toast.success(
+                          `Student ${studentAttendance.student_id} On Time`,
+                        );
+                      }}
+                      className={`${
+                        studentAttendance.status === 0 && "bg-green-300"
+                      }`}
+                    >
+                      On Time
+                    </span>
+                    <span
+                      onClick={() => {
+                        toast.success(
+                          `Student ${studentAttendance.student_id} Late`,
+                        );
+                      }}
+                      className={`${
+                        studentAttendance.status === 1 && "bg-orange-300"
+                      }`}
+                    >
+                      Late
+                    </span>
+                    <span
+                      onClick={() => {
+                        toast.success(
+                          `Student ${studentAttendance.student_id} Absent`,
+                        );
+                      }}
+                      className={`${
+                        studentAttendance.status === 2 && "bg-red-300"
+                      }`}
+                    >
+                      Absent
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </article>
         </section>
         <DailyReportOverview date={date} />
