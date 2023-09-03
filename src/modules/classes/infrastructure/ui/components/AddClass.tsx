@@ -108,18 +108,23 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
 					</p>
 				)}
 			</div>
+
+
 			<div className="flex flex-col mb-4">
 				<label>Level</label>
+				<div className="grid grid-cols-6 gap-4">
 				{levels?.map((level: Level, index: number) => (
-					<div className="flex flex-col" key={index}>
-						<label className="text-center">{level.name}</label>
-						<input
-							type="checkbox"
-							{...register("level", { required: true })}
-							value={level.id}
-						/>
-					</div>
+						<label key={index} className="text-center">
+							<input
+								type="radio"
+								className="sr-only peer"
+								{...register("level", { required: true })}
+								value={level.id}
+							/>
+							<span className="w-full hover:bg-gray-300 ease-in-out duration-200 bg-gray-100 peer-checked:bg-gray-500 peer-checked:text-white p-2 border shadow-inner rounded">{level.name}</span>
+						</label>
 				))}
+				</div>
 				{errors.level?.type === "required" && (
 					<p role="alert" className="text-red-500 mt-2">
 						Level is required

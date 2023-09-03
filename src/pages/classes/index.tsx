@@ -3,6 +3,7 @@ import { Class } from "@/src/modules/classes/domain/entities/Class";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import AddClass from "@/src/modules/classes/infrastructure/ui/components/AddClass";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import { Dialog, Transition } from "@headlessui/react";
@@ -50,72 +51,50 @@ export default function ClassHome() {
     )
   }
 
+  function handleClose() {
+    setIsAddClass(false)
+  }
+
   return (
     <Layout>
       <div>
-        <section>
-          <SchoolHeader />
-          <div className="flex justify-between items-baseline mb-4">
-            <h2 className='text-3xl'>Your Classes</h2>
+        <SchoolHeader />
+        <section className="grid grid-cols-2">
+          <div className="border-2 shadow rounded p-4">
+            <div className="flex justify-between items-baseline mb-4">
+              <h2 className='text-3xl'>Your Classes</h2>
+              <button 
+                onClick={() => {
+                setIsAddClass(true);
+                }}
+              >
+                <i className="fa-solid fa-plus"></i>
+              </button>
+            </div>
+            {classes.length === 0 ? (
+              <article>
+                <p>You have not created any classes for your school.</p>
+              </article>
+            ) : (
+              <article>
+                <ul className="flex flex-col divide-y">
+                  {classes?.map((currentClass: Class, index: number) => (
+                    <li 
+                      key={index}
+                      className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
+                    >
+                      <Link href={`/classes/${currentClass.id}`} className="w-full">
+                        {currentClass.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            )}
           </div>
-          {classes.length === 0 ? (
-            <article className="p-2 bg-gray-100 shadow-inner mb-4">
-              <p>You have not created any classes for your school.</p>
-            </article>
-          ) : (
-            <article className="p-2 bg-gray-100 shadow-inner mb-4">
-
-              <ul className="flex flex-col divide-y mb-8 ">
-                {classes?.map((currentClass: Class, index: number) => (
-                  <li 
-                    key={index}
-                    className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
-                  >
-                    <Link href={`/classes/${currentClass.id}`} className="w-full">
-                      {currentClass.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          )}
-          <button 
-            onClick={() => {
-            setIsAddClass(true);
-            }}
-            className="bg-blue-300 p-2 rounded"
-          >
-            New Class
-          </button>
-          <Transition
-            show={isAddClass}
-            enter="transition ease-in duration-100"
-            enterFrom="transform opacity-0 scale-90"
-            enterTo="opacity-100 scale-100"
-            leave="transition ease-out duration-150"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-90"
-          >
-            <Dialog
-              onClose={() => setIsAddClass(false)}
-              className="fixed inset-0 flex items-center justify-center"
-            >
-              <div className="fixed inset-0 bg-blue-900/25" />
-              <Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
-                <Dialog.Title>Add Class</Dialog.Title>
-                <AddClass setClasses={setClasses}/>
-                <div className="flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => setIsAddClass(false)}
-                    className="bg-gray-300 text-gray-900 hover:bg-gray-500 hover:text-white px-4 py-1 rounded"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </Dialog.Panel>
-            </Dialog>
-          </Transition>
+          <Modal show={isAddClass} close={handleClose} title="Add Class">
+            <AddClass setClasses={setClasses} />
+          </Modal>
         </section>
       </div>
     </Layout>
