@@ -9,6 +9,7 @@ import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/l
 import PaginationButtons from "@/src/modules/core/infrastructure/ui/components/PaginationButtons";
 import { schoolDayAdapter } from "@/src/modules/schedule/infrastructure/ui/adapters/schoolDayAdapter";
 import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
+import { LevelListResponse } from "@/src/modules/curriculum/domain/entities/LevelListResponse";
 
 type Inputs = {
   className: string;

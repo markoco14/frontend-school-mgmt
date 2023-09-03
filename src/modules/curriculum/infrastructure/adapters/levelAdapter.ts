@@ -3,7 +3,21 @@ import { LevelListResponse } from "../../domain/entities/LevelListResponse";
 
 class LevelAdapter {
 
-	public async listSchoolLevels({school_id, page, per_page}: {school_id?: number; page?: number; per_page?: number}): Promise<Level[]> {
+	public async listSchoolLevels({school_id,}: {school_id?: number;}): Promise<Level[]> {
+		let url;
+		if (school_id) {
+			url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/levels/`;
+		} else {
+			url = `${process.env.NEXT_PUBLIC_API_URL}/levels/`;
+		}
+
+		const res = await fetch(url);
+		const levels: Level[] = await res.json();
+
+		return levels
+	}
+
+	public async paginatedList({school_id, page, per_page}: {school_id?: number; page: number; per_page?: number}): Promise<LevelListResponse> {
 		let url;
 		if (school_id) {
 			url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/levels/`;
@@ -20,7 +34,7 @@ class LevelAdapter {
     }
 
 		const res = await fetch(url);
-		const levels: Level[] = await res.json();
+		const levels: LevelListResponse = await res.json();
 
 		return levels
 	}
