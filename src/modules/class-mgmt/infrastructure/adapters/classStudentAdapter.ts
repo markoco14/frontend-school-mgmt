@@ -8,8 +8,8 @@ class ClassStudentAdapter {
 		return ClassStudent
 	}
 
-	public async addClassStudent({class_id, student_id}: {class_id: number, student_id: number}): Promise<ClassStudent> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/students/add/`, { 
+	public async add({class_id, student_id}: {class_id: number, student_id: number}): Promise<ClassStudent> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/class-students/`, { 
 			method: 'POST', 
 			headers: {
 				"Content-Type": "application/json",
@@ -21,7 +21,7 @@ class ClassStudentAdapter {
 		return newClassStudent
 	}
 
-	public async deleteClassStudent({class_id, student_id}: {class_id: number, student_id: number}): Promise<ClassStudent> {
+	public async delete({class_id, student_id}: {class_id: number, student_id: number}): Promise<ClassStudent> {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${class_id}/students/${student_id}/delete/`, { 
 			method: 'DELETE', 
 		});

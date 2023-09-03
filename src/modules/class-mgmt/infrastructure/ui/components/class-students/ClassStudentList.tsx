@@ -1,23 +1,21 @@
-import { useRouter } from "next/router";
-import { ClassStudent } from "../../../domain/entities/ClassStudent";
-import { useEffect, useState } from "react";
-import { classStudentAdapter } from "../../adapters/classStudentAdapter";
 
-export default function ClassStudentList() {
-	
-  const router = useRouter();
-  const [classStudentList, setClassStudentList] = useState<ClassStudent[]>([]);
-  useEffect(() => {
-    async function getClassList() {
-      await classStudentAdapter.list({class_id: Number(router?.query.class_id)})
-      .then((res) => {
-        setClassStudentList(res);
-      })
-    }
-    if (router) {
-      getClassList();
-    }
-  }, [router])
+import { ClassStudent } from "../../../../domain/entities/ClassStudent";
+
+export default function ClassStudentList({classStudentList}: {classStudentList: ClassStudent[]}) {
+	// async function removeStudentFromClassList(
+  //   classId: number,
+  //   studentId: number
+  // ) {
+  //   await classStudentAdapter
+  //     .delete({ class_id: classId, student_id: studentId })
+  //     .then((res) => {
+  //       toast.success("student removed from class");
+  //     });
+  //   setClassList((prevClassList) =>
+  //     prevClassList?.filter((student) => student.id !== studentId)
+  //   );
+  // }
+  
   return (
     <>
       {classStudentList?.length === 0 && (

@@ -1,50 +1,19 @@
 import AuthContext from "@/src/AuthContext";
 import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
-import { ClassStudent } from "@/src/modules/class-mgmt/domain/entities/ClassStudent";
 import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
-import { classStudentAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classStudentAdapter";
-import ClassStudentList from "@/src/modules/class-mgmt/infrastructure/ui/components/ClassStudentList";
-import DeleteClass from "@/src/modules/class-mgmt/infrastructure/ui/components/DeleteClass";
 import ManageClassTeacher from "@/src/modules/class-mgmt/infrastructure/ui/components/ManageClassTeacher";
+import ManageClassStudents from "@/src/modules/class-mgmt/infrastructure/ui/components/class-students/ManageClassStudents";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
-import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
-import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
-import { Teacher } from "@/src/modules/user-mgmt/domain/entities/Teacher";
-import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import toast from "react-hot-toast";
-
-
-
-
-
-
 
 export default function ManageClassDetails() {
-  const [isAddingStudent, setIsAddingStudent] = useState<boolean>(false);
-  const [classList, setClassList] = useState<Student[]>();
   const [selectedClass, setSelectedClass] = useState<Class>();
-  const { user, selectedSchool } = useContext(AuthContext);
-  const [teachers, setTeachers] = useState<Teacher[]>()
+  const { user } = useContext(AuthContext);
   
   const router = useRouter();
-
-  async function removeStudentFromClassList(
-    classId: number,
-    studentId: number
-  ) {
-    await classStudentAdapter
-      .deleteClassStudent({ class_id: classId, student_id: studentId })
-      .then((res) => {
-        toast.success("student removed from class");
-      });
-    setClassList((prevClassList) =>
-      prevClassList?.filter((student) => student.id !== studentId)
-    );
-  }
 
   useEffect(() => {
     async function getClassData() {
@@ -81,21 +50,7 @@ export default function ManageClassDetails() {
                 <p className="text-xl">{selectedClass.day[0] === 1 ? "Monday" : "Wednesday"} & {selectedClass.day[1] === 4 ? "Thursday" : "Friday"}</p>
               )}
             </section>
-            <section>
-
-              <div className="flex justify-between items-baseline gap-4 mb-4">
-                <h3 className="text-xl">Student List</h3>
-                <button
-                className="bg-blue-300 p-2 rounded"
-                  onClick={() => {
-                    setIsAddingStudent(!isAddingStudent);
-                  }}
-                >
-                  {isAddingStudent ? <span><i className="fa-solid fa-check"></i></span> : <span><i className="fa-solid fa-plus"></i> <i className="fa-solid fa-user"></i></span>}
-                </button>
-              </div>
-              <ClassStudentList />
-            </section>
+            <ManageClassStudents selectedClass={selectedClass}/>
             <ManageClassTeacher selectedClass={selectedClass} setSelectedClass={setSelectedClass}/>
             {/* <DeleteClass
               selectedClass={selectedClass}
