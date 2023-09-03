@@ -57,7 +57,12 @@ export default function LevelSection() {
 
   async function handleDeleteLevel(levelId: number) {
     if (levels) {
-      await levelAdapter.deleteLevel({id: levelId}).then((res) => {
+      await levelAdapter.deleteLevel({id: levelId})
+      .then((res) => {
+        if (res.status === 500) {
+          toast.error('Cannot delete. There may be Classes assigned to this level.')
+          return
+        }
         if (levels?.length === 1 && page > 1) {
           setPage((prevPage: number) => prevPage - 1)
           return
