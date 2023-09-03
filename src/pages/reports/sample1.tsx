@@ -1,6 +1,6 @@
 import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
+import { Student } from "@/src/modules/students/domain/entities/Student";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";

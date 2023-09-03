@@ -1,9 +1,9 @@
-import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
+import { Student } from "@/src/modules/students/domain/entities/Student";
 import { Class } from "../../../../domain/entities/Class";
 import { useContext, useEffect, useState } from "react";
 import { classStudentAdapter } from "../../../adapters/classStudentAdapter";
 import toast from "react-hot-toast";
-import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
+import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
 import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
 import AuthContext from "@/src/AuthContext";
 

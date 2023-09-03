@@ -80,9 +80,9 @@ export default function Navbar() {
               Classes
             </Link>
             <Link
-              href="/student-mgmt/"
+              href="/students/"
               className={`${
-                router.pathname.includes("student-mgmt")
+                router.pathname.includes("students")
                   ? "underline underline-offset-4 decoration-2 text-blue-700"
                   : ""
               }`}
@@ -191,9 +191,9 @@ export default function Navbar() {
                 Classes
               </Link>
               <Link
-                href="/student-mgmt/"
+                href="/students/"
                 className={`${
-                  router.pathname.includes("student-mgmt")
+                  router.pathname.includes("students")
                     ? "underline underline-offset-4 decoration-2 text-blue-700"
                     : ""
                 }`}

@@ -2,10 +2,10 @@ import AuthContext from '@/src/AuthContext';
 import Layout from '@/src/modules/core/infrastructure/ui/components/Layout';
 import PermissionDenied from '@/src/modules/core/infrastructure/ui/components/PermissionDenied';
 import SchoolHeader from '@/src/modules/core/infrastructure/ui/components/SchoolHeader';
-import { PaginatedStudentResponse } from '@/src/modules/student-mgmt/domain/entities/PaginatedStudentResponse';
-import { Student } from '@/src/modules/student-mgmt/domain/entities/Student';
-import { studentAdapter } from '@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter';
-import RegisterNewStudentModal from '@/src/modules/student-mgmt/infrastructure/ui/RegisterNewStudentModal';
+import { PaginatedStudentResponse } from '@/src/modules/students/domain/entities/PaginatedStudentResponse';
+import { Student } from '@/src/modules/students/domain/entities/Student';
+import { studentAdapter } from '@/src/modules/students/infrastructure/adapters/studentAdapter';
+import RegisterNewStudentModal from '@/src/modules/students/infrastructure/ui/RegisterNewStudentModal';
 import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
@@ -95,7 +95,7 @@ export default function StudentsHome() {
                   {students?.map((student: Student, index) => (
                     <li key={index} className="flex justify-between gap-4">
                       <Link
-                        href={`/student-mgmt/students/${student.id}`}
+                        href={`/students/students/${student.id}`}
                         className="hover:bg-blue-300 p-2 rounded w-full"
                       >
                         {student.first_name} {student.last_name}
