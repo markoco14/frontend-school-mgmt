@@ -1,4 +1,4 @@
-import { ClassList } from "./ClassList";
+import { ClassStudent } from "./ClassStudent";
 
 export class Class {
   constructor(
@@ -6,7 +6,7 @@ export class Class {
     public school: number,
     public name: string,
     public teacher: number,
-		public class_list?: ClassList[],
+		public class_list?: ClassStudent[],
     public day?: number[],
   ) {}
 }
