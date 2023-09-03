@@ -118,7 +118,7 @@ export const ReportList = () => {
 							<div className="flex gap-4">
 								{thisClass.class_list?.length === 0 ? (
 									<Link
-										href={`/class-mgmt/${thisClass.id}`}
+										href={`/classes/${thisClass.id}`}
 										className="bg-gray-300 py-1 px-2 rounded disabled:cursor-not-allowed"
 									>
 										Add Students

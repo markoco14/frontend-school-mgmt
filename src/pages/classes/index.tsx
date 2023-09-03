@@ -71,7 +71,7 @@ export default function ClassHome() {
                     key={index}
                     className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
                   >
-                    <Link href={`/class-mgmt/${currentClass.id}`} className="w-full">
+                    <Link href={`/classes/${currentClass.id}`} className="w-full">
                       {currentClass.name}
                     </Link>
                   </li>

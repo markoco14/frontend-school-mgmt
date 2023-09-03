@@ -44,7 +44,7 @@ export default function ManageClassDetails() {
             <section className="mb-4">
               <div className="flex justify-between items-baseline mb-2">
                 <h2 className="text-3xl">{selectedClass?.name}</h2>
-                <Link href="/class-mgmt">Back</Link>
+                <Link href="/classes">Back</Link>
               </div>
               {selectedClass.day && (
                 <p className="text-xl">{selectedClass.day[0] === 1 ? "Monday" : "Wednesday"} & {selectedClass.day[1] === 4 ? "Thursday" : "Friday"}</p>
@@ -61,7 +61,7 @@ export default function ManageClassDetails() {
         {/* {!selectedClass && (
           <div className="flex flex-col xs:flex-row xs:justify-between xs:gap-2 items-baseline mb-4 bg-gray-100 shadow-inner p-2 rounded">
             <h2 className="text-3xl">This class was deleted.</h2>
-            <Link href="/class-mgmt">Back</Link>
+            <Link href="/classes">Back</Link>
           </div>
         )} */}
       </>
