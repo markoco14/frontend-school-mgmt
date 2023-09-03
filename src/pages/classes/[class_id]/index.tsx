@@ -1,8 +1,8 @@
 import AuthContext from "@/src/AuthContext";
-import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
-import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
-import ManageClassTeacher from "@/src/modules/class-mgmt/infrastructure/ui/components/ManageClassTeacher";
-import ManageClassStudents from "@/src/modules/class-mgmt/infrastructure/ui/components/class-students/ManageClassStudents";
+import { Class } from "@/src/modules/classes/domain/entities/Class";
+import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
+import ManageClassTeacher from "@/src/modules/classes/infrastructure/ui/components/ManageClassTeacher";
+import ManageClassStudents from "@/src/modules/classes/infrastructure/ui/components/class-students/ManageClassStudents";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import Link from "next/link";

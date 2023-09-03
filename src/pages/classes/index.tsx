@@ -1,7 +1,7 @@
 import AuthContext from "@/src/AuthContext";
-import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
-import { classAdapter } from "@/src/modules/class-mgmt/infrastructure/adapters/classAdapter";
-import AddClass from "@/src/modules/class-mgmt/infrastructure/ui/components/AddClass";
+import { Class } from "@/src/modules/classes/domain/entities/Class";
+import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
+import AddClass from "@/src/modules/classes/infrastructure/ui/components/AddClass";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";

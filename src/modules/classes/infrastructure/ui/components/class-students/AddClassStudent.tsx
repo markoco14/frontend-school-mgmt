@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { classStudentAdapter } from "../../../adapters/classStudentAdapter";
 import toast from "react-hot-toast";
 import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
-import { ClassStudent } from "@/src/modules/class-mgmt/domain/entities/ClassStudent";
+import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
 import AuthContext from "@/src/AuthContext";
 
 export default function AddStudentToClassSection ({

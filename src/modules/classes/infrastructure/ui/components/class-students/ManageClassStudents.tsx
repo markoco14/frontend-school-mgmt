@@ -1,10 +1,10 @@
-import { ClassStudent } from "@/src/modules/class-mgmt/domain/entities/ClassStudent";
+import { Class } from "@/src/modules/classes/domain/entities/Class";
+import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { classStudentAdapter } from "../../../adapters/classStudentAdapter";
 import AddClassStudent from "./AddClassStudent";
 import ClassStudentList from "./ClassStudentList";
-import { Class } from "@/src/modules/class-mgmt/domain/entities/Class";
 
 export default function ManageClassStudents({selectedClass}: {selectedClass: Class;}) {
 	const router = useRouter();
