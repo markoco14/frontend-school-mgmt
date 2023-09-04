@@ -1,6 +1,6 @@
 import AuthContext from "@/src/AuthContext";
-import { Student } from "@/src/modules/student-mgmt/domain/entities/Student";
-import { studentAdapter } from "@/src/modules/student-mgmt/infrastructure/adapters/studentAdapter";
+import { Student } from "@/src/modules/students/domain/entities/Student";
+import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
 import { useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";

@@ -1,6 +1,31 @@
 import { Class } from "../../domain/entities/Class";
 
 class ClassAdapter {
+	public async list({school_id, day}: {school_id: number; day: string}): Promise<Class[]> {
+		let url;
+
+		if (school_id) {
+			url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/classes/`;
+		} else {
+			url = `${process.env.NEXT_PUBLIC_API_URL}/classes/`;
+		}
+
+		const queryParams: string[] = [];
+    if (day)
+      queryParams.push(`day=${encodeURIComponent(day)}`);
+   
+
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
+    }
+
+
+		const res = await fetch(url);
+    const classEntity: Class[] = await res.json();
+
+    return classEntity;
+	}
+
 	public async getClassById({class_id}: {class_id: number}): Promise<Class> {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/${class_id}/`);
 		const thisClass: Class = await res.json();
