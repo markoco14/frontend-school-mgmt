@@ -75,7 +75,7 @@ const AttendanceStatusButton = ({
             studentAttendance.status === 0
               ? `bg-green-300 hover:bg-green-500`
               : "hover:bg-gray-300"
-          } grid aspect-square w-8 cursor-pointer place-items-center rounded-full`}
+          } grid aspect-square w-8 cursor-pointer place-items-center rounded border`}
         >
           <i className="fa-solid fa-check" />
         </span>
@@ -101,9 +101,9 @@ const AttendanceStatusButton = ({
             studentAttendance.status === 1
               ? `bg-orange-300 hover:bg-orange-500`
               : "hover:bg-gray-300"
-          } grid aspect-square w-8 cursor-pointer place-items-center rounded-full`}
+          } grid aspect-square w-8 cursor-pointer place-items-center rounded border`}
         >
-          <i className="fa-solid fa-check" />
+          <span>L</span>
         </span>
       )}
       {status === 2 && (
@@ -127,9 +127,9 @@ const AttendanceStatusButton = ({
             studentAttendance.status === 2
               ? `bg-red-300 hover:bg-red-500`
               : "hover:bg-gray-300"
-          } grid aspect-square w-8 cursor-pointer place-items-center rounded-full`}
+          } grid aspect-square w-8 cursor-pointer place-items-center rounded border`}
         >
-          <i className="fa-solid fa-check" />
+          <span>A</span>
         </span>
       )}
     </>
