@@ -2,11 +2,13 @@ import AuthContext from "@/src/AuthContext";
 import { Class } from "@/src/modules/classes/domain/entities/Class";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import DailyReportOverview from "@/src/modules/reports/infrastructure/ui/components/DailyReportOverview";
 import { StudentAttendance } from "@/src/modules/students/domain/entities/StudentAttendance";
 import { studentAttendanceAdapter } from "@/src/modules/students/infrastructure/adapters/studentAttendanceAdapter";
+import AttendanceReasonForm from "@/src/modules/students/infrastructure/ui/attendance/AttendanceReasonForm";
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -39,6 +41,9 @@ export default function ReportsHome() {
     [],
   );
   const [selectedClass, setSelectedClass] = useState<Class>();
+  const [isWriteNote, setIsWriteNote] = useState<boolean>(false);
+  const [selectedAttendance, setSelectedAttendance] =
+    useState<StudentAttendance>();
 
   useEffect(() => {
     async function getClasses() {
@@ -95,6 +100,11 @@ export default function ReportsHome() {
     // Update the state
     setClassAttendance(updatedAttendance);
   };
+
+  function handleClose() {
+    setIsWriteNote(false);
+    setSelectedAttendance(undefined);
+  }
 
   return (
     <Layout>
@@ -157,13 +167,25 @@ export default function ReportsHome() {
                     </div>
                     <span>
                       {studentAttendance.student?.first_name}{" "}
-                      {studentAttendance.student?.last_name}
+                      <span className="hidden sm:block">{studentAttendance.student?.last_name}</span>
                     </span>
                   </div>
-                  <div className="flex gap-2">
-                    {/* {studentAttendance.status === 1 || studentAttendance.status === 2 && (
-
-                    )} */}
+                  <div className="flex items-center gap-2">
+                    {studentAttendance.status !== 0 && (
+                      <span
+                        onClick={() => {
+                          setIsWriteNote(true);
+                          setSelectedAttendance(studentAttendance);
+                        }}
+                        className={`${
+                          studentAttendance.status === 1
+                            ? "hover:text-orange-300"
+                            : "hover:text-red-700"
+                        } cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-2`}
+                      >
+                        Note
+                      </span>
+                    )}
                     <span
                       onClick={async () => {
                         if (studentAttendance.status === 0) {
@@ -255,6 +277,18 @@ export default function ReportsHome() {
           </article>
         </section>
         <DailyReportOverview date={date} />
+        <Modal
+          show={isWriteNote}
+          close={handleClose}
+          title={"Student Attendance Reason"}
+        >
+          {selectedAttendance && (
+            <AttendanceReasonForm
+              selectedAttendance={selectedAttendance}
+              handleUpdateAttendance={handleUpdateAttendance}
+            />
+          )}
+        </Modal>
       </div>
     </Layout>
   );
