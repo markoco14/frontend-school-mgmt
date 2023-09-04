@@ -1,6 +1,5 @@
 import AuthContext from "@/src/AuthContext";
 import { Class } from "@/src/modules/classes/domain/entities/Class";
-import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
@@ -16,7 +15,7 @@ export default function ReportsHome() {
 
   const { user } = useContext(AuthContext);
   const date = new Date();
-  date.setDate(date.getDate() + 1); 
+  // date.setDate(date.getDate() + 1);
   const dayNumber = date.getDay();
   const year = date.getFullYear(); // Get the year
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Get the month and pad with 0 if needed
@@ -35,20 +34,24 @@ export default function ReportsHome() {
   const dayName = days[dayNumber];
 
   const [todayClasses, setTodayClasses] = useState<Class[]>([]);
-  const [classAttendance, setClassAttendance] = useState<StudentAttendance[]>();
+  const [classAttendance, setClassAttendance] = useState<StudentAttendance[]>(
+    [],
+  );
+  const [selectedClass, setSelectedClass] = useState<Class>();
 
   useEffect(() => {
     async function getClasses() {
       await classAdapter
         .list({ school_id: selectedSchool.id, day: "Monday" })
         .then((res) => {
-          console.log(res);
+          setSelectedClass(res[0])
+          getAttendanceList({school_class: res[0].id, date: formattedDate});
           setTodayClasses(res);
         });
     }
 
     selectedSchool && getClasses();
-  }, [selectedSchool]);
+  }, [selectedSchool, formattedDate]);
 
   if (user?.role !== "OWNER") {
     return (
@@ -65,13 +68,10 @@ export default function ReportsHome() {
     school_class: number | undefined;
     date: string | undefined;
   }) {
-    console.log(school_class)
-    console.log(date)
     await studentAttendanceAdapter
       .list({ school_class: school_class, date: date })
       .then((res) => {
-        console.log(res);
-        setClassAttendance(res)
+        setClassAttendance(res);
       });
   }
 
@@ -79,40 +79,45 @@ export default function ReportsHome() {
     <Layout>
       <div>
         <SchoolHeader />
-        <section className="grid gap-4 sm:grid-cols-9 sm:gap-0">
-          <article className="col-span-4 grid gap-4 rounded border-2 p-4 shadow">
-            <h2 className="text-2xl">
-              Classes {dayName} {date.toDateString()}
-            </h2>
-            <p>Click a class to see the student list on the right.</p>
-            <ul className="grid gap-2 p-2">
+        <section className="grid gap-4 sm:grid-cols-8 sm:gap-2">
+          <article className="col-span-4 flex flex-col gap-4 rounded border-2 p-4 shadow">
+            <div>
+              <h2 className="mb-2 text-2xl">
+                Classes {dayName} {date.toDateString()}
+              </h2>
+              <p>Click a class to see the student list on the right.</p>
+            </div>
+            <ul className="grid divide-y">
               {todayClasses?.map((classEntity) => (
                 <li
                   key={`class-${classEntity.id}`}
                   onClick={() => {
                     // setClassAttendance(classEntity.class_list);
-                    console.log("class id", classEntity.id);
-                    console.log("date", date);
-
+                    setSelectedClass(classEntity);
                     getAttendanceList({
                       school_class: classEntity.id,
                       date: formattedDate,
                     });
                   }}
-                  className="cursor-pointer"
+                  className="flex cursor-pointer items-center justify-between py-2"
                 >
                   {classEntity.name} (teacher id:{classEntity.teacher})
                 </li>
               ))}
             </ul>
           </article>
-          <article className="hidden place-items-center sm:grid">{`->`}</article>
           <article className="col-span-4 grid gap-4 rounded border-2 p-4 shadow">
-            <ul className="grid gap-2 p-2">
+            <div>
+              <h2 className="mb-2 text-2xl">
+                Class: {selectedClass?.name} Teacher {selectedClass?.teacher}
+              </h2>
+              <p>Track student attendance below.</p>
+            </div>
+            <ul className="grid divide-y">
               {classAttendance?.map((studentAttendance) => (
                 <li
                   key={`studentAttendance-${studentAttendance.id}`}
-                  className="flex justify-between"
+                  className="flex items-center justify-between py-2"
                 >
                   <span>Student ID: {studentAttendance.student_id}</span>
                   <div className="flex gap-2">
@@ -124,9 +129,9 @@ export default function ReportsHome() {
                       }}
                       className={`${
                         studentAttendance.status === 0 && "bg-green-300"
-                      }`}
+                      } px-1`}
                     >
-                      On Time
+                      <i className="fa-solid fa-check" />
                     </span>
                     <span
                       onClick={() => {
@@ -136,9 +141,9 @@ export default function ReportsHome() {
                       }}
                       className={`${
                         studentAttendance.status === 1 && "bg-orange-300"
-                      }`}
+                      } px-1`}
                     >
-                      Late
+                      <i className="fa-solid fa-minus" />
                     </span>
                     <span
                       onClick={() => {
@@ -148,9 +153,9 @@ export default function ReportsHome() {
                       }}
                       className={`${
                         studentAttendance.status === 2 && "bg-red-300"
-                      }`}
+                      } px-1`}
                     >
-                      Absent
+                      <i className="fa-solid fa-close" />
                     </span>
                   </div>
                 </li>
