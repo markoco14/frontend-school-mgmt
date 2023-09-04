@@ -7,6 +7,7 @@ import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/School
 import DailyReportOverview from "@/src/modules/reports/infrastructure/ui/components/DailyReportOverview";
 import { StudentAttendance } from "@/src/modules/students/domain/entities/StudentAttendance";
 import { studentAttendanceAdapter } from "@/src/modules/students/infrastructure/adapters/studentAttendanceAdapter";
+import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -69,7 +70,7 @@ export default function ReportsHome() {
     date: string | undefined;
   }) {
     await studentAttendanceAdapter
-      .list({ school_class: school_class, date: date })
+      .list({ school_class: school_class, date: date, details: true })
       .then((res) => {
         setClassAttendance(res);
       });
@@ -135,7 +136,22 @@ export default function ReportsHome() {
                   key={`studentAttendance-${studentAttendance.id}`}
                   className="flex items-center justify-between py-2"
                 >
-                  <span>Student ID: {studentAttendance.student_id}</span>
+                  <div className="flex gap-4 items-center">
+                    <div className="relative col-span-1 flex justify-center">
+                      <Image
+                        src={studentAttendance.student ? studentAttendance.student?.photo_url : ""}
+                        alt={`An image of ${studentAttendance.student?.first_name}`}
+                        width={50}
+                        height={50}
+                        style={{ objectFit: "cover" }}
+                        className="rounded-full"
+                      />
+                    </div>
+                    <span>
+                      {studentAttendance.student?.first_name}{" "}
+                      {studentAttendance.student?.last_name}
+                    </span>
+                  </div>
                   <div className="flex gap-2">
                     <span
                       onClick={async () => {
@@ -145,10 +161,14 @@ export default function ReportsHome() {
                           );
                           return;
                         }
-                        await studentAttendanceAdapter.patch({ attendance_id: studentAttendance.id, status: 0 })
-                        .then((res) => {
-                          handleUpdateAttendance({newAttendance: res})
-                        })
+                        await studentAttendanceAdapter
+                          .patch({
+                            attendance_id: studentAttendance.id,
+                            status: 0,
+                          })
+                          .then((res) => {
+                            handleUpdateAttendance({ newAttendance: res });
+                          });
                         toast.success(
                           `Student ${studentAttendance.student_id} On Time`,
                         );
@@ -167,10 +187,14 @@ export default function ReportsHome() {
                           );
                           return;
                         }
-                        await studentAttendanceAdapter.patch({ attendance_id: studentAttendance.id, status: 1 })
-                        .then((res) => {
-                          handleUpdateAttendance({newAttendance: res})
-                        })
+                        await studentAttendanceAdapter
+                          .patch({
+                            attendance_id: studentAttendance.id,
+                            status: 1,
+                          })
+                          .then((res) => {
+                            handleUpdateAttendance({ newAttendance: res });
+                          });
                         toast.success(
                           `Student ${studentAttendance.student_id} Late`,
                         );
@@ -189,10 +213,14 @@ export default function ReportsHome() {
                           );
                           return;
                         }
-                        await studentAttendanceAdapter.patch({ attendance_id: studentAttendance.id, status: 2 })
-                        .then((res) => {
-                          handleUpdateAttendance({newAttendance: res})
-                        })
+                        await studentAttendanceAdapter
+                          .patch({
+                            attendance_id: studentAttendance.id,
+                            status: 2,
+                          })
+                          .then((res) => {
+                            handleUpdateAttendance({ newAttendance: res });
+                          });
                         toast.success(
                           `Student ${studentAttendance.student_id} Absent`,
                         );

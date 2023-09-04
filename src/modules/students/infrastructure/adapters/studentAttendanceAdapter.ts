@@ -5,10 +5,12 @@ class StudentAttendanceAdapter {
     school_id,
     school_class,
     date,
+    details,
   }: {
     school_id?: number;
     school_class?: number;
     date?: string;
+    details?: boolean
   }): Promise<StudentAttendance[]> {
     let url;
 
@@ -21,6 +23,7 @@ class StudentAttendanceAdapter {
     const queryParams: string[] = [];
     if (school_class) queryParams.push(`school_class=${encodeURIComponent(school_class)}`);
     if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
+    if (details) queryParams.push(`details=${encodeURIComponent(details)}`);
 
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;
