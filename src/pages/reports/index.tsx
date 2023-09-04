@@ -45,8 +45,8 @@ export default function ReportsHome() {
       await classAdapter
         .list({ school_id: selectedSchool.id, day: "Monday" })
         .then((res) => {
-          setSelectedClass(res[0])
-          getAttendanceList({school_class: res[0].id, date: formattedDate});
+          setSelectedClass(res[0]);
+          getAttendanceList({ school_class: res[0].id, date: formattedDate });
           setTodayClasses(res);
         });
     }
@@ -76,21 +76,25 @@ export default function ReportsHome() {
       });
   }
 
-   const handleUpdateAttendance = ({newAttendance}: {newAttendance: StudentAttendance}) => {
-     // Use map to create a new array
-     const updatedAttendance = classAttendance.map((attendance) => {
-       // Find the attendance object that matches the ID of the newAttendance
-       if (attendance.id === newAttendance.id) {
-         // Replace it with newAttendance
-         return newAttendance;
-       }
-       // Leave all other objects unchanged
-       return attendance;
-     });
+  const handleUpdateAttendance = ({
+    newAttendance,
+  }: {
+    newAttendance: StudentAttendance;
+  }) => {
+    // Use map to create a new array
+    const updatedAttendance = classAttendance.map((attendance) => {
+      // Find the attendance object that matches the ID of the newAttendance
+      if (attendance.id === newAttendance.id) {
+        // Replace it with newAttendance
+        return newAttendance;
+      }
+      // Leave all other objects unchanged
+      return attendance;
+    });
 
-     // Update the state
-     setClassAttendance(updatedAttendance);
-   };
+    // Update the state
+    setClassAttendance(updatedAttendance);
+  };
 
   return (
     <Layout>
@@ -134,12 +138,16 @@ export default function ReportsHome() {
               {classAttendance?.map((studentAttendance) => (
                 <li
                   key={`studentAttendance-${studentAttendance.id}`}
-                  className="flex items-center justify-between py-2"
+                  className="flex items-center justify-between py-1"
                 >
-                  <div className="flex gap-4 items-center">
+                  <div className="flex items-center gap-4">
                     <div className="relative col-span-1 flex justify-center">
                       <Image
-                        src={studentAttendance.student ? studentAttendance.student?.photo_url : ""}
+                        src={
+                          studentAttendance.student
+                            ? studentAttendance.student?.photo_url
+                            : ""
+                        }
                         alt={`An image of ${studentAttendance.student?.first_name}`}
                         width={50}
                         height={50}
@@ -153,6 +161,9 @@ export default function ReportsHome() {
                     </span>
                   </div>
                   <div className="flex gap-2">
+                    {/* {studentAttendance.status === 1 || studentAttendance.status === 2 && (
+
+                    )} */}
                     <span
                       onClick={async () => {
                         if (studentAttendance.status === 0) {
@@ -174,8 +185,10 @@ export default function ReportsHome() {
                         );
                       }}
                       className={`${
-                        studentAttendance.status === 0 && "bg-green-300"
-                      } px-1`}
+                        studentAttendance.status === 0
+                          ? "bg-green-300 hover:bg-green-500"
+                          : "hover:bg-gray-300"
+                      } grid aspect-square w-8 cursor-pointer place-items-center rounded-full`}
                     >
                       <i className="fa-solid fa-check" />
                     </span>
@@ -200,8 +213,10 @@ export default function ReportsHome() {
                         );
                       }}
                       className={`${
-                        studentAttendance.status === 1 && "bg-orange-300"
-                      } px-1`}
+                        studentAttendance.status === 1
+                          ? "bg-orange-300 hover:bg-orange-500"
+                          : "hover:bg-gray-300"
+                      } grid aspect-square w-8 cursor-pointer place-items-center rounded-full`}
                     >
                       <i className="fa-solid fa-minus" />
                     </span>
@@ -226,8 +241,10 @@ export default function ReportsHome() {
                         );
                       }}
                       className={`${
-                        studentAttendance.status === 2 && "bg-red-300"
-                      } px-1`}
+                        studentAttendance.status === 2
+                          ? "bg-red-300 hover:bg-red-500"
+                          : "hover:bg-gray-300"
+                      }  grid aspect-square w-8 cursor-pointer place-items-center rounded-full`}
                     >
                       <i className="fa-solid fa-close" />
                     </span>
