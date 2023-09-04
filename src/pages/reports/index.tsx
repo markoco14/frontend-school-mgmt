@@ -13,6 +13,129 @@ import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+const AttendanceNoteButton = ({
+  studentAttendance,
+  setIsWriteNote,
+  setSelectedAttendance,
+}: {
+  studentAttendance: StudentAttendance;
+  setIsWriteNote: Function;
+  setSelectedAttendance: Function;
+}) => {
+  return (
+    <>
+      {studentAttendance.status !== 0 && (
+        <span
+          onClick={() => {
+            setIsWriteNote(true);
+            setSelectedAttendance(studentAttendance);
+          }}
+          className={`${
+            studentAttendance.status === 1
+              ? "hover:text-orange-300"
+              : "hover:text-red-700"
+          } cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-2`}
+        >
+          Note
+        </span>
+      )}
+    </>
+  );
+};
+
+const AttendanceStatusButton = ({
+  studentAttendance,
+  status,
+  handleUpdateAttendance,
+}: {
+  studentAttendance: StudentAttendance;
+  status: number;
+  handleUpdateAttendance: Function;
+}) => {
+  return (
+    <>
+      {status === 0 && (
+        <span
+          onClick={async () => {
+            if (studentAttendance.status === status) {
+              toast(`Student ${studentAttendance.student_id} already checked`);
+              return;
+            }
+            await studentAttendanceAdapter
+              .patch({
+                attendance_id: studentAttendance.id,
+                status: 0,
+              })
+              .then((res) => {
+                handleUpdateAttendance({ newAttendance: res });
+              });
+            toast.success(`Student ${studentAttendance.student_id} updated`);
+          }}
+          className={`${
+            studentAttendance.status === 0
+              ? `bg-green-300 hover:bg-green-500`
+              : "hover:bg-gray-300"
+          } grid aspect-square w-8 cursor-pointer place-items-center rounded-full`}
+        >
+          <i className="fa-solid fa-check" />
+        </span>
+      )}
+      {status === 1 && (
+        <span
+          onClick={async () => {
+            if (studentAttendance.status === status) {
+              toast(`Student ${studentAttendance.student_id} already checked`);
+              return;
+            }
+            await studentAttendanceAdapter
+              .patch({
+                attendance_id: studentAttendance.id,
+                status: 1,
+              })
+              .then((res) => {
+                handleUpdateAttendance({ newAttendance: res });
+              });
+            toast.success(`Student ${studentAttendance.student_id} updated`);
+          }}
+          className={`${
+            studentAttendance.status === 1
+              ? `bg-orange-300 hover:bg-orange-500`
+              : "hover:bg-gray-300"
+          } grid aspect-square w-8 cursor-pointer place-items-center rounded-full`}
+        >
+          <i className="fa-solid fa-check" />
+        </span>
+      )}
+      {status === 2 && (
+        <span
+          onClick={async () => {
+            if (studentAttendance.status === status) {
+              toast(`Student ${studentAttendance.student_id} already checked`);
+              return;
+            }
+            await studentAttendanceAdapter
+              .patch({
+                attendance_id: studentAttendance.id,
+                status: 2,
+              })
+              .then((res) => {
+                handleUpdateAttendance({ newAttendance: res });
+              });
+            toast.success(`Student ${studentAttendance.student_id} updated`);
+          }}
+          className={`${
+            studentAttendance.status === 2
+              ? `bg-red-300 hover:bg-red-500`
+              : "hover:bg-gray-300"
+          } grid aspect-square w-8 cursor-pointer place-items-center rounded-full`}
+        >
+          <i className="fa-solid fa-check" />
+        </span>
+      )}
+    </>
+  );
+};
+
 export default function ReportsHome() {
   const { selectedSchool } = useContext(AuthContext);
 
@@ -167,109 +290,32 @@ export default function ReportsHome() {
                     </div>
                     <span>
                       {studentAttendance.student?.first_name}{" "}
-                      <span className="hidden sm:block">{studentAttendance.student?.last_name}</span>
+                      <span className="hidden sm:block">
+                        {studentAttendance.student?.last_name}
+                      </span>
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {studentAttendance.status !== 0 && (
-                      <span
-                        onClick={() => {
-                          setIsWriteNote(true);
-                          setSelectedAttendance(studentAttendance);
-                        }}
-                        className={`${
-                          studentAttendance.status === 1
-                            ? "hover:text-orange-300"
-                            : "hover:text-red-700"
-                        } cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-2`}
-                      >
-                        Note
-                      </span>
-                    )}
-                    <span
-                      onClick={async () => {
-                        if (studentAttendance.status === 0) {
-                          toast(
-                            `Student ${studentAttendance.student_id} already marked 'On Time'`,
-                          );
-                          return;
-                        }
-                        await studentAttendanceAdapter
-                          .patch({
-                            attendance_id: studentAttendance.id,
-                            status: 0,
-                          })
-                          .then((res) => {
-                            handleUpdateAttendance({ newAttendance: res });
-                          });
-                        toast.success(
-                          `Student ${studentAttendance.student_id} On Time`,
-                        );
-                      }}
-                      className={`${
-                        studentAttendance.status === 0
-                          ? "bg-green-300 hover:bg-green-500"
-                          : "hover:bg-gray-300"
-                      } grid aspect-square w-8 cursor-pointer place-items-center rounded-full`}
-                    >
-                      <i className="fa-solid fa-check" />
-                    </span>
-                    <span
-                      onClick={async () => {
-                        if (studentAttendance.status === 1) {
-                          toast(
-                            `Student ${studentAttendance.student_id} already marked 'Late'`,
-                          );
-                          return;
-                        }
-                        await studentAttendanceAdapter
-                          .patch({
-                            attendance_id: studentAttendance.id,
-                            status: 1,
-                          })
-                          .then((res) => {
-                            handleUpdateAttendance({ newAttendance: res });
-                          });
-                        toast.success(
-                          `Student ${studentAttendance.student_id} Late`,
-                        );
-                      }}
-                      className={`${
-                        studentAttendance.status === 1
-                          ? "bg-orange-300 hover:bg-orange-500"
-                          : "hover:bg-gray-300"
-                      } grid aspect-square w-8 cursor-pointer place-items-center rounded-full`}
-                    >
-                      <i className="fa-solid fa-minus" />
-                    </span>
-                    <span
-                      onClick={async () => {
-                        if (studentAttendance.id === 2) {
-                          toast(
-                            `Student ${studentAttendance.student_id} already marked 'Absent'`,
-                          );
-                          return;
-                        }
-                        await studentAttendanceAdapter
-                          .patch({
-                            attendance_id: studentAttendance.id,
-                            status: 2,
-                          })
-                          .then((res) => {
-                            handleUpdateAttendance({ newAttendance: res });
-                          });
-                        toast.success(
-                          `Student ${studentAttendance.student_id} Absent`,
-                        );
-                      }}
-                      className={`${
-                        studentAttendance.status === 2
-                          ? "bg-red-300 hover:bg-red-500"
-                          : "hover:bg-gray-300"
-                      }  grid aspect-square w-8 cursor-pointer place-items-center rounded-full`}
-                    >
-                      <i className="fa-solid fa-close" />
-                    </span>
+                    <AttendanceNoteButton
+                      studentAttendance={studentAttendance}
+                      setIsWriteNote={setIsWriteNote}
+                      setSelectedAttendance={setSelectedAttendance}
+                    />
+                    <AttendanceStatusButton
+                      studentAttendance={studentAttendance}
+                      status={0}
+                      handleUpdateAttendance={handleUpdateAttendance}
+                    />
+                    <AttendanceStatusButton
+                      studentAttendance={studentAttendance}
+                      status={1}
+                      handleUpdateAttendance={handleUpdateAttendance}
+                    />
+                    <AttendanceStatusButton
+                      studentAttendance={studentAttendance}
+                      status={2}
+                      handleUpdateAttendance={handleUpdateAttendance}
+                    />
                   </div>
                 </li>
               ))}
