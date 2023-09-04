@@ -75,6 +75,22 @@ export default function ReportsHome() {
       });
   }
 
+   const handleUpdateAttendance = ({newAttendance}: {newAttendance: StudentAttendance}) => {
+     // Use map to create a new array
+     const updatedAttendance = classAttendance.map((attendance) => {
+       // Find the attendance object that matches the ID of the newAttendance
+       if (attendance.id === newAttendance.id) {
+         // Replace it with newAttendance
+         return newAttendance;
+       }
+       // Leave all other objects unchanged
+       return attendance;
+     });
+
+     // Update the state
+     setClassAttendance(updatedAttendance);
+   };
+
   return (
     <Layout>
       <div>
@@ -122,7 +138,17 @@ export default function ReportsHome() {
                   <span>Student ID: {studentAttendance.student_id}</span>
                   <div className="flex gap-2">
                     <span
-                      onClick={() => {
+                      onClick={async () => {
+                        if (studentAttendance.status === 0) {
+                          toast(
+                            `Student ${studentAttendance.student_id} already marked 'On Time'`,
+                          );
+                          return;
+                        }
+                        await studentAttendanceAdapter.patch({ attendance_id: studentAttendance.id, status: 0 })
+                        .then((res) => {
+                          handleUpdateAttendance({newAttendance: res})
+                        })
                         toast.success(
                           `Student ${studentAttendance.student_id} On Time`,
                         );
@@ -134,7 +160,17 @@ export default function ReportsHome() {
                       <i className="fa-solid fa-check" />
                     </span>
                     <span
-                      onClick={() => {
+                      onClick={async () => {
+                        if (studentAttendance.status === 1) {
+                          toast(
+                            `Student ${studentAttendance.student_id} already marked 'Late'`,
+                          );
+                          return;
+                        }
+                        await studentAttendanceAdapter.patch({ attendance_id: studentAttendance.id, status: 1 })
+                        .then((res) => {
+                          handleUpdateAttendance({newAttendance: res})
+                        })
                         toast.success(
                           `Student ${studentAttendance.student_id} Late`,
                         );
@@ -146,7 +182,17 @@ export default function ReportsHome() {
                       <i className="fa-solid fa-minus" />
                     </span>
                     <span
-                      onClick={() => {
+                      onClick={async () => {
+                        if (studentAttendance.id === 2) {
+                          toast(
+                            `Student ${studentAttendance.student_id} already marked 'Absent'`,
+                          );
+                          return;
+                        }
+                        await studentAttendanceAdapter.patch({ attendance_id: studentAttendance.id, status: 2 })
+                        .then((res) => {
+                          handleUpdateAttendance({newAttendance: res})
+                        })
                         toast.success(
                           `Student ${studentAttendance.student_id} Absent`,
                         );
