@@ -43,7 +43,7 @@ export default function AssessmentSection() {
           status: data.status,
         })
         .then((res) => {
-          // toast.success("Assessment saved successfully!");
+          // toast.success("Content saved successfully!");
           // setModules((prevTypes: Module[]) => [...prevTypes, res]);
         }));
     reset();
@@ -75,10 +75,10 @@ export default function AssessmentSection() {
 
   return (
     <section>
-      <h2 className="text-3xl mb-4">Assessments</h2>
+      <h2 className="text-3xl mb-4">Content</h2>
       <div className="grid sm:grid-cols-2 gap-4">
         <article className="border rounded shadow mb-4 p-4 flex flex-col gap-6 text-gray-700">
-          <h3 className="text-xl">{selectedSchool.name} Assessments</h3>
+          <h3 className="text-xl">{selectedSchool.name} Content</h3>
           {modules?.length === 0 ? (
             <p>There are no modules.</p>
           ) : (
@@ -127,7 +127,7 @@ export default function AssessmentSection() {
 					{selectedModule && (
 						<>
 							<div className="flex justify-between items-baseline">
-								<h3 className="text-xl text-gray-500">New {selectedModule.subject_level.subject.name} L{selectedModule.subject_level.level.order} {selectedModule.name} Assessment</h3>
+								<h3 className="text-xl text-gray-500">New {selectedModule.subject_level.subject.name} L{selectedModule.subject_level.level.order} {selectedModule.name} Content</h3>
 								<button onClick={() => setSelectedModule(null)}><i className="fa-solid fa-xmark" /></button>
 							</div>
 							<NewAssessmentForm selectedModule={selectedModule}/>
@@ -135,7 +135,7 @@ export default function AssessmentSection() {
 					)}
         </article>
       </div>
-      {/* <Modal show={isManageType} close={handleClose} title={"Manage Assessment Type"}>
+      {/* <Modal show={isManageType} close={handleClose} title={"Manage Content Type"}>
 				<ManageAssessmentType 
 					types={assessmentTypes}
           setTypes={setAssessmentTypes}
