@@ -2,6 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import { StudentAttendance } from "../../../domain/entities/StudentAttendance";
 import { studentAttendanceAdapter } from "../../adapters/studentAttendanceAdapter";
+import toast from "react-hot-toast";
 
 type Inputs = {
   reason: string;
@@ -30,6 +31,7 @@ export default function AttendanceReasonForm({
         reason: data.reason,
       })
       .then((res) => {
+        toast.success('Reason updated successfully!')
         console.log(res);
         handleUpdateAttendance({newAttendance: res});
       });
