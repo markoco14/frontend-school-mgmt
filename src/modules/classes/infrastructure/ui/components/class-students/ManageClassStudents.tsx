@@ -1,3 +1,4 @@
+import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
 import { Class } from "@/src/modules/classes/domain/entities/Class";
 import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
 import { useRouter } from "next/router";
@@ -5,48 +6,74 @@ import { useEffect, useState } from "react";
 import { classStudentAdapter } from "../../../adapters/classStudentAdapter";
 import AddClassStudent from "./AddClassStudent";
 import ClassStudentList from "./ClassStudentList";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 
-export default function ManageClassStudents({selectedClass}: {selectedClass: Class;}) {
-	const router = useRouter();
+export default function ManageClassStudents({
+  selectedClass,
+}: {
+  selectedClass: Class;
+}) {
+  const router = useRouter();
   const [classStudentList, setClassStudentList] = useState<ClassStudent[]>([]);
-	const [isAddingStudent, setIsAddingStudent] = useState<boolean>(false);
+  const [isAddingStudent, setIsAddingStudent] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  function handleClose() {
+    setIsAddingStudent(false);
+  }
+
   useEffect(() => {
     async function getClassList() {
-      await classStudentAdapter.list({
-        class_id: Number(router?.query.class_id),
-        details: true,
-        order: 'last_name'
-      })
-      .then((res) => {
-        setClassStudentList(res);
-      })
+      setLoading(true);
+      await classStudentAdapter
+        .list({
+          class_id: Number(router?.query.class_id),
+          details: true,
+          order: "last_name",
+        })
+        .then((res) => {
+          setLoading(false);
+          setClassStudentList(res);
+        });
     }
     if (router) {
       getClassList();
     }
-  }, [router])
-	
-	return (
-		<div className="border-2 p-4 rounded">
-      <div className="flex justify-between items-baseline gap-4 mb-4">
+  }, [router]);
+
+  return (
+    <div className="rounded border-2 p-4">
+      <div className="mb-4 flex items-baseline justify-between gap-4">
         <h3 className="text-xl">Student List</h3>
         <button
           onClick={() => {
             setIsAddingStudent(!isAddingStudent);
           }}
         >
-          {isAddingStudent ? <span><i className="fa-solid fa-check"></i></span> : <span><i className="fa-solid fa-plus"></i> <i className="fa-solid fa-user"></i></span>}
+          {isAddingStudent ? (
+            <span>
+              <i className="fa-solid fa-check"></i>
+            </span>
+          ) : (
+            <span>
+              <i className="fa-solid fa-plus"></i>{" "}
+              <i className="fa-solid fa-user"></i>
+            </span>
+          )}
         </button>
       </div>
-      {isAddingStudent ? (
+      <Modal show={isAddingStudent} close={handleClose} title={`Add Student to ${selectedClass.name}`}>
         <AddClassStudent
-          selectedClass={selectedClass} 
+          selectedClass={selectedClass}
           classStudentList={classStudentList}
           setClassStudentList={setClassStudentList}
-        />
+          />
+      </Modal>
+      {!loading ? (
+        <ClassStudentList classStudentList={classStudentList} />
       ) : (
-        <ClassStudentList classStudentList={classStudentList}/>
+        <StudentListSkeletonProps studentQuantity={10}/>
       )}
     </div>
-	);
+  );
 }

@@ -1,4 +1,6 @@
 import AuthContext from "@/src/AuthContext";
+import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
+import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import { Class } from "@/src/modules/classes/domain/entities/Class";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import AddClass from "@/src/modules/classes/infrastructure/ui/components/AddClass";
@@ -6,7 +8,6 @@ import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
-import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 
@@ -15,18 +16,23 @@ export default function ClassHome() {
   const [classes, setClasses] = useState<Class[]>([]);
   const { user } = useContext(AuthContext);
   const [isAddClass, setIsAddClass] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     async function getData() {
       if (selectedSchool) {
-        await classAdapter.listSchoolClasses({id: selectedSchool.id}).then((res) => {
-          setClasses(res);
-        });
+        setLoading(true);
+        await classAdapter
+          .listSchoolClasses({ id: selectedSchool.id })
+          .then((res) => {
+            setClasses(res);
+            setLoading(false);
+          });
       }
     }
 
     getData();
-  }, [selectedSchool])
+  }, [selectedSchool]);
 
   if (!selectedSchool) {
     return (
@@ -34,8 +40,8 @@ export default function ClassHome() {
         <div>
           <section>
             <SchoolHeader />
-            <div className="flex justify-between items-baseline mb-4">
-              <Link href='/'>Click here to choose a school</Link>
+            <div className="mb-4 flex items-baseline justify-between">
+              <Link href="/">Click here to choose a school</Link>
             </div>
           </section>
         </div>
@@ -48,30 +54,35 @@ export default function ClassHome() {
       <Layout>
         <PermissionDenied />
       </Layout>
-    )
+    );
   }
 
   function handleClose() {
-    setIsAddClass(false)
+    setIsAddClass(false);
   }
 
   return (
     <Layout>
       <div>
         <SchoolHeader />
-        <section className="grid grid-cols-2">
-          <div className="border-2 shadow rounded p-4">
-            <div className="flex justify-between items-baseline mb-4">
-              <h2 className='text-3xl'>Your Classes</h2>
-              <button 
+        <section className="grid sm:grid-cols-2">
+          <div className="rounded border-2 p-4 shadow">
+            <div className="mb-4 flex items-baseline justify-between">
+              <h2 className="text-3xl">Your Classes</h2>
+              <button
                 onClick={() => {
-                setIsAddClass(true);
+                  setIsAddClass(true);
                 }}
               >
                 <i className="fa-solid fa-plus"></i>
               </button>
             </div>
-            {classes.length === 0 ? (
+            {loading && (
+              <Skeleton>
+                <ClassListSkeletonProps />
+              </Skeleton>
+            )}
+            {(!loading && classes.length === 0) ? (
               <article>
                 <p>You have not created any classes for your school.</p>
               </article>
@@ -79,11 +90,14 @@ export default function ClassHome() {
               <article>
                 <ul className="flex flex-col divide-y">
                   {classes?.map((currentClass: Class, index: number) => (
-                    <li 
+                    <li
                       key={index}
-                      className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
+                      className="flex justify-between rounded-md p-2 hover:bg-blue-200"
                     >
-                      <Link href={`/classes/${currentClass.id}`} className="w-full">
+                      <Link
+                        href={`/classes/${currentClass.id}`}
+                        className="w-full"
+                      >
                         {currentClass.name}
                       </Link>
                     </li>

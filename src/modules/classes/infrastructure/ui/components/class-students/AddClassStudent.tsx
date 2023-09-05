@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
 import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
 import AuthContext from "@/src/AuthContext";
+import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
+import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
 
 export default function AddStudentToClassSection ({
   selectedClass,
@@ -59,12 +61,13 @@ export default function AddStudentToClassSection ({
 
   return (
     <>
-      {loading && (
-        <article className="bg-gray-100 shadow-inner p-2 rounded">
-          <p className="min-h-[480px]">loading...</p>
-        </article>
-      )}
-      {!loading && (
+      {loading ? (
+        <Skeleton>
+          <StudentListSkeletonProps studentQuantity={15}/>
+        </Skeleton>
+      )
+      : 
+      (
         <article className="bg-gray-100 shadow-inner p-2 rounded">
           <ul className="divide-y items-baseline">
             {allStudents?.map((student, index) => (

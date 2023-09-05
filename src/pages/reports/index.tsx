@@ -1,5 +1,7 @@
 import AuthContext from "@/src/AuthContext";
-import { Skeleton } from "@/src/components/ui/Skeleton";
+import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
+import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
+import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
 import { Class } from "@/src/modules/classes/domain/entities/Class";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import DateChangeButtons from "@/src/modules/core/infrastructure/ui/components/DateChangeButtons";
@@ -138,41 +140,41 @@ const AttendanceStatusButton = ({
   );
 };
 
-const StudentListSkeletonProps = () => {
-  return (
-    <div className="grid gap-2">
-      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
-        <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
-        <div className="h-[40px] w-full rounded bg-gray-300"></div>
-      </div>
-      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
-        <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
-        <div className="h-[40px] w-full rounded bg-gray-300"></div>
-      </div>
-      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
-        <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
-        <div className="h-[40px] w-full rounded bg-gray-300"></div>
-      </div>
-      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
-        <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
-        <div className="h-[40px] w-full rounded bg-gray-300"></div>
-      </div>
-      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
-        <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
-        <div className="h-[40px] w-full rounded bg-gray-300"></div>
-      </div>
-    </div>
-  );
-}
+// const StudentListSkeletonProps = () => {
+//   return (
+//     <div className="grid gap-2">
+//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
+//         <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
+//         <div className="h-[40px] w-full rounded bg-gray-300"></div>
+//       </div>
+//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
+//         <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
+//         <div className="h-[40px] w-full rounded bg-gray-300"></div>
+//       </div>
+//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
+//         <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
+//         <div className="h-[40px] w-full rounded bg-gray-300"></div>
+//       </div>
+//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
+//         <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
+//         <div className="h-[40px] w-full rounded bg-gray-300"></div>
+//       </div>
+//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
+//         <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
+//         <div className="h-[40px] w-full rounded bg-gray-300"></div>
+//       </div>
+//     </div>
+//   );
+// };
 
-const ClassListSkeletonProps = () => {
-  return (
-    <div className="grid gap-2">
-      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-300 px-2 py-1"></div>
-      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-300 px-2 py-1"></div>
-    </div>
-  );
-}
+// const ClassListSkeletonProps = () => {
+//   return (
+//     <div className="grid gap-2">
+//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-300 px-2 py-1"></div>
+//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-300 px-2 py-1"></div>
+//     </div>
+//   );
+// };
 
 export default function ReportsHome() {
   const { selectedSchool } = useContext(AuthContext);
@@ -211,7 +213,7 @@ export default function ReportsHome() {
 
   useEffect(() => {
     async function getClasses() {
-      setLoading(true)
+      setLoading(true);
       await classAdapter
         .list({ school_id: selectedSchool.id, day: dayName })
         .then((res) => {
@@ -324,7 +326,7 @@ export default function ReportsHome() {
             </div>
             {loading || loadingAttendance ? (
               <Skeleton>
-                <StudentListSkeletonProps />
+                <StudentListSkeletonProps studentQuantity={10}/>
               </Skeleton>
             ) : (
               <ul className="grid divide-y">
