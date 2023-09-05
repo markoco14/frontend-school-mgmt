@@ -2,7 +2,7 @@ import AuthContext from "@/src/AuthContext";
 import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
-import { Class } from "@/src/modules/classes/domain/entities/Class";
+import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import DateChangeButtons from "@/src/modules/core/infrastructure/ui/components/DateChangeButtons";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
@@ -202,11 +202,11 @@ export default function ReportsHome() {
   ];
   const dayName = days[dayNumber];
 
-  const [todayClasses, setTodayClasses] = useState<Class[]>([]);
+  const [todayClasses, setTodayClasses] = useState<ClassEntity[]>([]);
   const [classAttendance, setClassAttendance] = useState<StudentAttendance[]>(
     [],
   );
-  const [selectedClass, setSelectedClass] = useState<Class>();
+  const [selectedClass, setSelectedClass] = useState<ClassEntity>();
   const [isWriteNote, setIsWriteNote] = useState<boolean>(false);
   const [selectedAttendance, setSelectedAttendance] =
     useState<StudentAttendance>();
@@ -326,7 +326,7 @@ export default function ReportsHome() {
             </div>
             {loading || loadingAttendance ? (
               <Skeleton>
-                <StudentListSkeletonProps studentQuantity={10}/>
+                <StudentListSkeletonProps studentQuantity={10} />
               </Skeleton>
             ) : (
               <ul className="grid divide-y">

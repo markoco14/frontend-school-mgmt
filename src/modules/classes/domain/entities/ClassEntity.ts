@@ -1,6 +1,6 @@
 import { ClassStudent } from "./ClassStudent";
 
-export class Class {
+export class ClassEntity {
   constructor(
     public id: number,
     public school: number,

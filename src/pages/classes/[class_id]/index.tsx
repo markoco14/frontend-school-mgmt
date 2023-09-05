@@ -1,8 +1,8 @@
 import AuthContext from "@/src/AuthContext";
 import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
-import { Class } from "@/src/modules/classes/domain/entities/Class";
 import { ClassAssessment } from "@/src/modules/classes/domain/entities/ClassAssessment";
+import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import { classAssessmentAdapter } from "@/src/modules/classes/infrastructure/adapters/classAssessmentAdapter";
 import ManageClassTeacher from "@/src/modules/classes/infrastructure/ui/components/ManageClassTeacher";
@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps<{
-  classEntity: Class;
+  classEntity: ClassEntity;
 }> = async (context) => {
   const id = Number(context.query.class_id);
   const classEntity = await classAdapter.getClassById({ class_id: id });
@@ -23,24 +23,29 @@ export const getServerSideProps: GetServerSideProps<{
   return { props: { classEntity } };
 };
 
-export default function ManageClassDetails({classEntity}: {classEntity: Class}) {
-  console.log(classEntity)
-  const [selectedClass, setSelectedClass] = useState<Class>(classEntity);
-  const [assessments, setAssessments] = useState<ClassAssessment[]>([])
+export default function ManageClassDetails({
+  classEntity,
+}: {
+  classEntity: ClassEntity;
+}) {
+  console.log(classEntity);
+  const [selectedClass, setSelectedClass] = useState<ClassEntity>(classEntity);
+  const [assessments, setAssessments] = useState<ClassAssessment[]>([]);
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
 
   useEffect(() => {
-    async function getAssessments(){
+    async function getAssessments() {
       setLoading(true);
-      await classAssessmentAdapter.list({class_id: classEntity.id, details: true})
-      .then((res) => {
-        console.log(res)
-        setAssessments(res);
-        setLoading(false);
-      })
+      await classAssessmentAdapter
+        .list({ class_id: classEntity.id, details: true })
+        .then((res) => {
+          console.log(res);
+          setAssessments(res);
+          setLoading(false);
+        });
     }
 
     getAssessments();
@@ -95,7 +100,9 @@ export default function ManageClassDetails({classEntity}: {classEntity: Class}) 
                 ) : (
                   <ul>
                     {assessments?.map((assessment, index) => (
-                      <li key={`assessment-${assessment.id}`}>{assessment.assessment.name}</li>
+                      <li key={`assessment-${assessment.id}`}>
+                        {assessment.assessment.name}
+                      </li>
                     ))}
                   </ul>
                 )}

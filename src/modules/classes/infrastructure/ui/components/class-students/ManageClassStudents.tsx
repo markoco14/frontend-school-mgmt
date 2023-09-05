@@ -1,17 +1,17 @@
 import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
-import { Class } from "@/src/modules/classes/domain/entities/Class";
+import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { classStudentAdapter } from "../../../adapters/classStudentAdapter";
 import AddClassStudent from "./AddClassStudent";
 import ClassStudentList from "./ClassStudentList";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 
 export default function ManageClassStudents({
   selectedClass,
 }: {
-  selectedClass: Class;
+  selectedClass: ClassEntity;
 }) {
   const router = useRouter();
   const [classStudentList, setClassStudentList] = useState<ClassStudent[]>([]);
@@ -62,17 +62,21 @@ export default function ManageClassStudents({
           )}
         </button>
       </div>
-      <Modal show={isAddingStudent} close={handleClose} title={`Add Student to ${selectedClass.name}`}>
+      <Modal
+        show={isAddingStudent}
+        close={handleClose}
+        title={`Add Student to ${selectedClass.name}`}
+      >
         <AddClassStudent
           selectedClass={selectedClass}
           classStudentList={classStudentList}
           setClassStudentList={setClassStudentList}
-          />
+        />
       </Modal>
       {!loading ? (
         <ClassStudentList classStudentList={classStudentList} />
       ) : (
-        <StudentListSkeletonProps studentQuantity={10}/>
+        <StudentListSkeletonProps studentQuantity={10} />
       )}
     </div>
   );
