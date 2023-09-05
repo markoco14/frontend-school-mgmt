@@ -1,5 +1,5 @@
 import AuthContext from "@/src/AuthContext";
-import { Class } from "@/src/modules/classes/domain/entities/Class";
+import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -10,7 +10,7 @@ import { reportAdapter } from "../../adapters/reportAdapter";
 export const ReportList = () => {
   const router = useRouter();
   const { selectedSchool } = useContext(AuthContext);
-  const [classes, setClasses] = useState<Class[]>();
+  const [classes, setClasses] = useState<ClassEntity[]>();
   const [date, setDate] = useState<Date>(new Date());
 
   const dates = [
@@ -39,7 +39,7 @@ export const ReportList = () => {
     }
   }, [date, selectedSchool]);
 
-  async function checkOrCreateReports(thisClass: Class, date: string) {
+  async function checkOrCreateReports(thisClass: ClassEntity, date: string) {
     await reportAdapter
       .getReportByClassAndDate({ class_id: thisClass.id, date: date })
       .then((res) => {
@@ -114,7 +114,7 @@ export const ReportList = () => {
         {classes?.length === 0 ? (
           <p>There are no classes today</p>
         ) : (
-          classes?.map((thisClass: Class, index: number) => (
+          classes?.map((thisClass: ClassEntity, index: number) => (
             <li
               key={index}
               className="flex items-baseline justify-between rounded-md p-2 hover:bg-blue-200"

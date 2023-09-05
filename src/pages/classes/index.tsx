@@ -1,7 +1,7 @@
 import AuthContext from "@/src/AuthContext";
 import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
-import { Class } from "@/src/modules/classes/domain/entities/Class";
+import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import AddClass from "@/src/modules/classes/infrastructure/ui/components/AddClass";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
@@ -13,7 +13,7 @@ import { useContext, useEffect, useState } from "react";
 
 export default function ClassHome() {
   const { selectedSchool } = useContext(AuthContext);
-  const [classes, setClasses] = useState<Class[]>([]);
+  const [classes, setClasses] = useState<ClassEntity[]>([]);
   const { user } = useContext(AuthContext);
   const [isAddClass, setIsAddClass] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -82,14 +82,14 @@ export default function ClassHome() {
                 <ClassListSkeletonProps />
               </Skeleton>
             )}
-            {(!loading && classes.length === 0) ? (
+            {!loading && classes.length === 0 ? (
               <article>
                 <p>You have not created any classes for your school.</p>
               </article>
             ) : (
               <article>
                 <ul className="flex flex-col divide-y">
-                  {classes?.map((currentClass: Class, index: number) => (
+                  {classes?.map((currentClass: ClassEntity, index: number) => (
                     <li
                       key={index}
                       className="flex justify-between rounded-md p-2 hover:bg-blue-200"

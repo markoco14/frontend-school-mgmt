@@ -1,24 +1,24 @@
-import { Student } from "@/src/modules/students/domain/entities/Student";
-import { Class } from "../../../../domain/entities/Class";
-import { useContext, useEffect, useState } from "react";
-import { classStudentAdapter } from "../../../adapters/classStudentAdapter";
-import toast from "react-hot-toast";
-import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
-import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
 import AuthContext from "@/src/AuthContext";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
+import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
+import { Student } from "@/src/modules/students/domain/entities/Student";
+import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
+import { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { ClassEntity } from "../../../../domain/entities/ClassEntity";
+import { classStudentAdapter } from "../../../adapters/classStudentAdapter";
 
-export default function AddStudentToClassSection ({
+export default function AddStudentToClassSection({
   selectedClass,
   classStudentList,
-  setClassStudentList
+  setClassStudentList,
 }: {
-  selectedClass: Class;
+  selectedClass: ClassEntity;
   classStudentList: ClassStudent[];
   setClassStudentList: Function;
 }) {
-  const {selectedSchool} =useContext(AuthContext)
+  const { selectedSchool } = useContext(AuthContext);
   const [allStudents, setAllStudents] = useState<Student[]>([]);
   const [page, setPage] = useState<number>(1);
   const [next, setNext] = useState<boolean>(false);
@@ -53,38 +53,42 @@ export default function AddStudentToClassSection ({
         });
     }
     selectedSchool && getData();
-  }, [selectedSchool,  page]);
+  }, [selectedSchool, page]);
 
-  function checkStudentInClassList({student}: {student: Student}) {
-    return classStudentList.some((classListStudent) => student.id === classListStudent.id)
-	}
+  function checkStudentInClassList({ student }: { student: Student }) {
+    return classStudentList.some(
+      (classListStudent) => student.id === classListStudent.id,
+    );
+  }
 
   return (
     <>
       {loading ? (
         <Skeleton>
-          <StudentListSkeletonProps studentQuantity={15}/>
+          <StudentListSkeletonProps studentQuantity={15} />
         </Skeleton>
-      )
-      : 
-      (
-        <article className="bg-gray-100 shadow-inner p-2 rounded">
-          <ul className="divide-y items-baseline">
+      ) : (
+        <article className="rounded bg-gray-100 p-2 shadow-inner">
+          <ul className="items-baseline divide-y">
             {allStudents?.map((student, index) => (
               <li
                 key={index}
-                className={`${classStudentList.find((classListStudent) => {
+                className={`${
+                  classStudentList.find((classListStudent) => {
                     if (student.id === classListStudent.id) {
                       return true;
                     }
                     return false;
-                  }) ? '' : 'bg-white rounded'} items-baseline p-2 flex justify-between`}
+                  })
+                    ? ""
+                    : "rounded bg-white"
+                } flex items-baseline justify-between p-2`}
               >
                 {student.first_name} {student.last_name}{" "}
                 <button
-                  disabled={checkStudentInClassList({student: student})}
+                  disabled={checkStudentInClassList({ student: student })}
                   onClick={() => addClassStudent(student)}
-                  className="px-2 py-1 rounded bg-blue-300 disabled:hover:cursor-not-allowed disabled:bg-gray-300"
+                  className="rounded bg-blue-300 px-2 py-1 disabled:bg-gray-300 disabled:hover:cursor-not-allowed"
                 >
                   <i className="fa-solid fa-plus"></i>
                 </button>
@@ -93,7 +97,7 @@ export default function AddStudentToClassSection ({
           </ul>
           <div className="flex justify-evenly gap-2">
             <button
-              className="disabled:cursor-not-allowed bg-blue-300 disabled:bg-gray-300 px-2 py-1 w-full rounded"
+              className="w-full rounded bg-blue-300 px-2 py-1 disabled:cursor-not-allowed disabled:bg-gray-300"
               disabled={page === 1}
               onClick={() => {
                 setPage((prevPage) => prevPage - 1);
@@ -102,7 +106,7 @@ export default function AddStudentToClassSection ({
               <i className="fa-solid fa-arrow-left"></i>
             </button>
             <button
-              className="disabled:cursor-not-allowed bg-blue-300 disabled:bg-gray-300 px-2 py-1 w-full rounded"
+              className="w-full rounded bg-blue-300 px-2 py-1 disabled:cursor-not-allowed disabled:bg-gray-300"
               disabled={!next}
               onClick={() => {
                 setPage((prevPage) => prevPage + 1);
@@ -115,4 +119,4 @@ export default function AddStudentToClassSection ({
       )}
     </>
   );
-};
+}
