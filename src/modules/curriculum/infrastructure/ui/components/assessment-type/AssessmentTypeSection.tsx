@@ -57,10 +57,10 @@ export default function AssessmentTypeSection() {
 
 	return (
 		<section>
-			<h2 className="text-3xl mb-4">Assessment Types</h2>
+			<h2 className="text-3xl mb-4">Content Types</h2>
 				<div className="grid sm:grid-cols-2 gap-4">
 				<article className="border rounded shadow mb-4 p-4 flex flex-col gap-6 text-gray-700">
-					<h3 className="text-xl">Your Assessment Types</h3>
+					<h3 className="text-xl">Your Content Types</h3>
 					{assessmentTypes?.length === 0 ? (
 						<p>There are no module types.</p>
 					) : (
@@ -80,7 +80,7 @@ export default function AssessmentTypeSection() {
 					)}
 				</article>
 				<article className="border rounded shadow mb-4 p-4 flex flex-col gap-6 text-gray-700">
-					<h3 className="text-xl">New Assessment Type</h3>
+					<h3 className="text-xl">New Content Type</h3>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
 						className="flex flex-col gap-4"
@@ -105,7 +105,7 @@ export default function AssessmentTypeSection() {
 					</form>
 				</article>
 			</div>
-			<Modal show={isManageType} close={handleClose} title={"Manage Assessment Type"}>
+			<Modal show={isManageType} close={handleClose} title={"Manage Content Type"}>
 				<ManageAssessmentType 
 					types={assessmentTypes}
           setTypes={setAssessmentTypes}
