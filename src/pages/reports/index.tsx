@@ -180,7 +180,7 @@ export default function ReportsHome() {
     }
 
     selectedSchool && getClasses();
-  }, [selectedSchool, formattedDate]);
+  }, [selectedSchool, formattedDate, dayName]);
 
   if (user?.role !== "OWNER") {
     return (
