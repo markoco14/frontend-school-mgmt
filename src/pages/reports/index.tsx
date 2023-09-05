@@ -171,7 +171,7 @@ export default function ReportsHome() {
   useEffect(() => {
     async function getClasses() {
       await classAdapter
-        .list({ school_id: selectedSchool.id, day: "Monday" })
+        .list({ school_id: selectedSchool.id, day: dayName })
         .then((res) => {
           setSelectedClass(res[0]);
           getAttendanceList({ school_class: res[0].id, date: formattedDate });
