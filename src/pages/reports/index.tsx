@@ -1,6 +1,8 @@
 import AuthContext from "@/src/AuthContext";
+import { Skeleton } from "@/src/components/ui/Skeleton";
 import { Class } from "@/src/modules/classes/domain/entities/Class";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
+import DateChangeButtons from "@/src/modules/core/infrastructure/ui/components/DateChangeButtons";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
@@ -136,11 +138,50 @@ const AttendanceStatusButton = ({
   );
 };
 
+const StudentListSkeletonProps = () => {
+  return (
+    <div className="grid gap-2">
+      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
+        <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
+        <div className="h-[40px] w-full rounded bg-gray-300"></div>
+      </div>
+      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
+        <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
+        <div className="h-[40px] w-full rounded bg-gray-300"></div>
+      </div>
+      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
+        <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
+        <div className="h-[40px] w-full rounded bg-gray-300"></div>
+      </div>
+      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
+        <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
+        <div className="h-[40px] w-full rounded bg-gray-300"></div>
+      </div>
+      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
+        <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
+        <div className="h-[40px] w-full rounded bg-gray-300"></div>
+      </div>
+    </div>
+  );
+}
+
+const ClassListSkeletonProps = () => {
+  return (
+    <div className="grid gap-2">
+      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-300 px-2 py-1"></div>
+      <div className="flex h-[48px] items-center gap-2 rounded bg-gray-300 px-2 py-1"></div>
+    </div>
+  );
+}
+
 export default function ReportsHome() {
   const { selectedSchool } = useContext(AuthContext);
+  const [date, setDate] = useState<Date>(new Date());
+  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingAttendance, setLoadingAttendance] = useState<boolean>(false);
 
   const { user } = useContext(AuthContext);
-  const date = new Date();
+  // const date = new Date();
   // date.setDate(date.getDate() + 1);
   const dayNumber = date.getDay();
   const year = date.getFullYear(); // Get the year
@@ -170,12 +211,14 @@ export default function ReportsHome() {
 
   useEffect(() => {
     async function getClasses() {
+      setLoading(true)
       await classAdapter
         .list({ school_id: selectedSchool.id, day: dayName })
         .then((res) => {
           setSelectedClass(res[0]);
           getAttendanceList({ school_class: res[0].id, date: formattedDate });
           setTodayClasses(res);
+          setLoading(false);
         });
     }
 
@@ -197,10 +240,12 @@ export default function ReportsHome() {
     school_class: number | undefined;
     date: string | undefined;
   }) {
+    setLoadingAttendance(true);
     await studentAttendanceAdapter
       .list({ school_class: school_class, date: date, details: true })
       .then((res) => {
         setClassAttendance(res);
+        setLoadingAttendance(false);
       });
   }
 
@@ -233,6 +278,7 @@ export default function ReportsHome() {
     <Layout>
       <div>
         <SchoolHeader />
+        <DateChangeButtons loading={loading} date={date} setDate={setDate} />
         <section className="grid gap-4 sm:grid-cols-8 sm:gap-2">
           <article className="col-span-4 flex flex-col gap-4 rounded border-2 p-4 shadow">
             <div>
@@ -241,24 +287,33 @@ export default function ReportsHome() {
               </h2>
               <p>Click a class to see the student list on the right.</p>
             </div>
-            <ul className="grid divide-y">
-              {todayClasses?.map((classEntity) => (
-                <li
-                  key={`class-${classEntity.id}`}
-                  onClick={() => {
-                    // setClassAttendance(classEntity.class_list);
-                    setSelectedClass(classEntity);
-                    getAttendanceList({
-                      school_class: classEntity.id,
-                      date: formattedDate,
-                    });
-                  }}
-                  className="flex cursor-pointer items-center justify-between py-2"
-                >
-                  {classEntity.name} (teacher id:{classEntity.teacher})
-                </li>
-              ))}
-            </ul>
+            {loading ? (
+              <Skeleton>
+                <ClassListSkeletonProps />
+              </Skeleton>
+            ) : (
+              <ul className="grid divide-y">
+                {todayClasses?.map((classEntity) => (
+                  <li
+                    key={`class-${classEntity.id}`}
+                    onClick={() => {
+                      setSelectedClass(classEntity);
+                      getAttendanceList({
+                        school_class: classEntity.id,
+                        date: formattedDate,
+                      });
+                    }}
+                    className={`${
+                      classEntity.id === selectedClass?.id ? "bg-blue-300" : ""
+                    } flex w-full cursor-pointer items-center justify-between rounded p-2`}
+                  >
+                    <span>
+                      {classEntity.name} (teacher id:{classEntity.teacher})
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </article>
           <article className="col-span-4 grid gap-4 rounded border-2 p-4 shadow">
             <div>
@@ -267,59 +322,65 @@ export default function ReportsHome() {
               </h2>
               <p>Track student attendance below.</p>
             </div>
-            <ul className="grid divide-y">
-              {classAttendance?.map((studentAttendance) => (
-                <li
-                  key={`studentAttendance-${studentAttendance.id}`}
-                  className="flex items-center justify-between py-1"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="relative col-span-1 flex justify-center">
-                      <Image
-                        src={
-                          studentAttendance.student
-                            ? studentAttendance.student?.photo_url
-                            : ""
-                        }
-                        alt={`An image of ${studentAttendance.student?.first_name}`}
-                        width={50}
-                        height={50}
-                        style={{ objectFit: "cover" }}
-                        className="rounded-full"
+            {loading || loadingAttendance ? (
+              <Skeleton>
+                <StudentListSkeletonProps />
+              </Skeleton>
+            ) : (
+              <ul className="grid divide-y">
+                {classAttendance?.map((studentAttendance) => (
+                  <li
+                    key={`studentAttendance-${studentAttendance.id}`}
+                    className="flex items-center justify-between py-1"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="relative col-span-1 flex justify-center">
+                        <Image
+                          src={
+                            studentAttendance.student
+                              ? studentAttendance.student?.photo_url
+                              : ""
+                          }
+                          alt={`An image of ${studentAttendance.student?.first_name}`}
+                          width={50}
+                          height={50}
+                          style={{ objectFit: "cover" }}
+                          className="rounded-full"
+                        />
+                      </div>
+                      <span>
+                        {studentAttendance.student?.first_name}{" "}
+                        <span className="hidden sm:block">
+                          {studentAttendance.student?.last_name}
+                        </span>
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <AttendanceNoteButton
+                        studentAttendance={studentAttendance}
+                        setIsWriteNote={setIsWriteNote}
+                        setSelectedAttendance={setSelectedAttendance}
+                      />
+                      <AttendanceStatusButton
+                        studentAttendance={studentAttendance}
+                        status={0}
+                        handleUpdateAttendance={handleUpdateAttendance}
+                      />
+                      <AttendanceStatusButton
+                        studentAttendance={studentAttendance}
+                        status={1}
+                        handleUpdateAttendance={handleUpdateAttendance}
+                      />
+                      <AttendanceStatusButton
+                        studentAttendance={studentAttendance}
+                        status={2}
+                        handleUpdateAttendance={handleUpdateAttendance}
                       />
                     </div>
-                    <span>
-                      {studentAttendance.student?.first_name}{" "}
-                      <span className="hidden sm:block">
-                        {studentAttendance.student?.last_name}
-                      </span>
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <AttendanceNoteButton
-                      studentAttendance={studentAttendance}
-                      setIsWriteNote={setIsWriteNote}
-                      setSelectedAttendance={setSelectedAttendance}
-                    />
-                    <AttendanceStatusButton
-                      studentAttendance={studentAttendance}
-                      status={0}
-                      handleUpdateAttendance={handleUpdateAttendance}
-                    />
-                    <AttendanceStatusButton
-                      studentAttendance={studentAttendance}
-                      status={1}
-                      handleUpdateAttendance={handleUpdateAttendance}
-                    />
-                    <AttendanceStatusButton
-                      studentAttendance={studentAttendance}
-                      status={2}
-                      handleUpdateAttendance={handleUpdateAttendance}
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+            )}
           </article>
         </section>
         <DailyReportOverview date={date} />
