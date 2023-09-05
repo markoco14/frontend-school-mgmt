@@ -326,7 +326,7 @@ export default function ReportsHome() {
             </div>
             {loading || loadingAttendance ? (
               <Skeleton>
-                <StudentListSkeletonProps />
+                <StudentListSkeletonProps studentQuantity={10}/>
               </Skeleton>
             ) : (
               <ul className="grid divide-y">

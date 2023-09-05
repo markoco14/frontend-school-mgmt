@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { classStudentAdapter } from "../../../adapters/classStudentAdapter";
 import AddClassStudent from "./AddClassStudent";
 import ClassStudentList from "./ClassStudentList";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 
 export default function ManageClassStudents({
   selectedClass,
@@ -16,6 +17,11 @@ export default function ManageClassStudents({
   const [classStudentList, setClassStudentList] = useState<ClassStudent[]>([]);
   const [isAddingStudent, setIsAddingStudent] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
+  function handleClose() {
+    setIsAddingStudent(false);
+  }
+
   useEffect(() => {
     async function getClassList() {
       setLoading(true);
@@ -56,16 +62,17 @@ export default function ManageClassStudents({
           )}
         </button>
       </div>
-      {isAddingStudent ? (
+      <Modal show={isAddingStudent} close={handleClose} title={`Add Student to ${selectedClass.name}`}>
         <AddClassStudent
           selectedClass={selectedClass}
           classStudentList={classStudentList}
           setClassStudentList={setClassStudentList}
-        />
-      ) : !loading ? (
+          />
+      </Modal>
+      {!loading ? (
         <ClassStudentList classStudentList={classStudentList} />
       ) : (
-        <StudentListSkeletonProps />
+        <StudentListSkeletonProps studentQuantity={10}/>
       )}
     </div>
   );
