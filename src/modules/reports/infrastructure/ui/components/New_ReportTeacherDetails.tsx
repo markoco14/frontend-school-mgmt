@@ -488,36 +488,36 @@ const CategoryButtons = ({
   return (
     <div className="mb-4 flex gap-8 overflow-x-scroll rounded border p-4 shadow">
       <button
-        onClick={() => setCategory("previous")}
+        onClick={() => setCategory("homework")}
         className={`${
-          category === "previous" &&
+          category === "homework" &&
           "underline decoration-blue-500 decoration-4 underline-offset-2"
         } duration-200 ease-in-out hover:underline hover:decoration-blue-300 hover:decoration-4 hover:underline-offset-2`}
       >
-        Exercise 1 Done?
+        Exercise 1?
       </button>
       <button
-        onClick={() => setCategory("previous")}
+        onClick={() => setCategory("test-corrs")}
         className={`${
-          category === "previous" &&
+          category === "test-corrs" &&
           "underline decoration-blue-500 decoration-4 underline-offset-2"
         } duration-200 ease-in-out hover:underline hover:decoration-blue-300 hover:decoration-4 hover:underline-offset-2`}
       >
-        Exercise Corrections Done?
+        Test Corrections?
       </button>
       <button
-        onClick={() => setCategory("previous")}
+        onClick={() => setCategory("hw-corrs")}
         className={`${
-          category === "previous" &&
+          category === "hw-corrs" &&
           "underline decoration-blue-500 decoration-4 underline-offset-2"
         } duration-200 ease-in-out hover:underline hover:decoration-blue-300 hover:decoration-4 hover:underline-offset-2`}
       >
-        Test Corrections Done?
+        Exercise Corrections?
       </button>
       <button
-        onClick={() => setCategory("previous")}
+        onClick={() => setCategory("test")}
         className={`${
-          category === "previous" &&
+          category === "test" &&
           "underline decoration-blue-500 decoration-4 underline-offset-2"
         } duration-200 ease-in-out hover:underline hover:decoration-blue-300 hover:decoration-4 hover:underline-offset-2`}
       >
@@ -581,10 +581,16 @@ export default function ReportTeacherDetails({
           {/* <StudentSummary selectedStudent={selectedStudent} /> */}
 
           {/* HOMEWORK SECTION */}
-          {category === "previous" && (
+          {category === "homework" && (
             <HomeworkSection scores={scores} reportData={reportData} />
           )}
-          {category === "inclass" && (
+          {category === "hw-corrs" && (
+            <HomeworkSection scores={scores} reportData={reportData} />
+          )}
+          {category === "test-corrs" && (
+            <HomeworkSection scores={scores} reportData={reportData} />
+          )}
+          {category === "test" && (
             <InClassSection scores={scores} reportData={reportData} />
           )}
           {category === "evaluation" && (

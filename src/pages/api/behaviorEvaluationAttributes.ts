@@ -1,5 +1,3 @@
-// pages/api/behaviorEvaluations.js
-
 interface Description {
   [key: number]: string;
 }
@@ -24,7 +22,7 @@ type BehaviorEvaluationAttribute = RangeAttribute | StringAttribute;
 import { NextApiResponse, NextApiRequest } from "next";
 
 
-export default function handler(req: NextApiRequest, res: NextApiResponse	) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<BehaviorEvaluationAttribute[]>) {
   if (req.method === "GET") {
     const behaviorEvaluationAttributes: BehaviorEvaluationAttribute[] = [
       {

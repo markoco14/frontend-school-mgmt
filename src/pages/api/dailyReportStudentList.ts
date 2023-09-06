@@ -1,5 +1,3 @@
-// pages/api/behaviorEvaluations.js
-
 type ApiStudent = {
   id: number;
   first_name: string;
@@ -12,9 +10,8 @@ type ApiStudent = {
 };
 
 import { NextApiResponse, NextApiRequest } from "next";
-import StudentsHome from "../students";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<ApiStudent[]>) {
   if (req.method === "GET") {
 		const students: ApiStudent[] = [
       {
