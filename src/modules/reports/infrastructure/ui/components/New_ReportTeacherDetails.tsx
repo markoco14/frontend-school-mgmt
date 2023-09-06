@@ -183,29 +183,33 @@ const EvaluationRangeAttribute = ({ attribute }: { attribute: any }) => {
     attribute.maxValue,
   );
   return (
-    <div className={`grid grid-cols-${attribute.maxValue} gap-4`}>
-      {Array.from(
-        { length: attribute.maxValue - attribute.minValue + 1 },
-        (_, i) => i + attribute.minValue,
-      ).map((value) => (
-        <button
-          onClick={() => {
-            setSelectedValue(value);
-          }}
-          key={value}
-          className={`${
-            selectedValue === value ? "bg-green-500" : ""
-          } rounded border p-4 text-center shadow-inner`}
-        >
-          {value}
-        </button>
-      ))}
+    <div className="grid gap-2">
+      <label>{attribute.title}</label>
+
+      <div className={`grid grid-cols-${attribute.maxValue} gap-4`}>
+        {Array.from(
+          { length: attribute.maxValue - attribute.minValue + 1 },
+          (_, i) => i + attribute.minValue,
+        ).map((value) => (
+          <button
+            onClick={() => {
+              setSelectedValue(value);
+            }}
+            key={value}
+            className={`${
+              selectedValue === value ? "bg-green-500" : ""
+            } rounded border p-4 text-center shadow-inner`}
+          >
+            {value}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
 const EvaluationTextAttribute = ({ attribute }: { attribute: any }) => {
   return (
-    <div className="flex gap-4">
+    <div className="grid gap-2">
       <label>{attribute.title}</label>
       <TextareaAutosize
         minRows={2}
@@ -218,7 +222,6 @@ const EvaluationTextAttribute = ({ attribute }: { attribute: any }) => {
 const EvaluationAttribute = ({ attribute }: { attribute: any }) => {
   return (
     <div key={`attribute-${attribute.id}`}>
-      <label>{attribute.title}</label>
       {attribute.type === "range" && (
         <EvaluationRangeAttribute attribute={attribute} />
       )}
@@ -233,12 +236,10 @@ const SetStudentButtons = ({
   students,
   selectedStudent,
   setSelectedStudent,
-  children,
 }: {
   students: any[];
   selectedStudent: any;
   setSelectedStudent: Function;
-  children: any;
 }) => {
   const currentIndex = students.findIndex((s) => s === selectedStudent);
 
@@ -263,7 +264,7 @@ const SetStudentButtons = ({
       >
         {students[currentIndex - 1]?.first_name
           ? students[currentIndex - 1]?.first_name
-          : "X"}
+          : ""}
       </button>
       <button
         disabled={currentIndex + 1 === students.length}
@@ -282,7 +283,7 @@ const SetStudentButtons = ({
       >
         {students[currentIndex + 1]?.first_name
           ? students[currentIndex + 1]?.first_name
-          : "X"}
+          : ""}
       </button>
     </div>
   );
@@ -317,22 +318,29 @@ const EvaluationSection = ({
   return (
     <>
       <article className="grid grid-cols-8 gap-4">
-        <div className="col-span-1">
+        <div className="relative col-span-8 sm:col-span-1">
           <VerticalPhotoBar
             students={students}
             selectedStudent={selectedStudent}
             setSelectedStudent={setSelectedStudent}
           />
+          <PhotoBar
+            students={students}
+            selectedStudent={selectedStudent}
+            setSelectedStudent={setSelectedStudent}
+          />
         </div>
-        <div className="col-span-7 mb-4">
-          <div>{selectedStudent?.first_name}</div>
+        <div className="col-span-8 mb-4 flex flex-col gap-4 sm:col-span-7">
+          <div className="text-xl">
+            {selectedStudent?.first_name} {selectedStudent?.last_name}
+          </div>
           <div className="grid gap-4 sm:grid-cols-3">
             {evaluationAttributes?.map((attribute: any, index: number) => (
               <div
                 key={`attribute-${attribute.id}`}
                 className={`${
                   attribute.type === "text" ? "col-span-3" : "col-span-1"
-                } grid gap-2 rounded p-4 shadow`}
+                } grid gap-2`}
               >
                 <EvaluationAttribute attribute={attribute} />
               </div>
@@ -375,7 +383,7 @@ const VerticalPhotoBar = ({
   }, [selectedStudent, students]);
 
   return (
-    <ul className="no-scrollbar sticky top-0 z-10 mb-4 grid max-h-[75vh] gap-1 overflow-y-scroll rounded border bg-white p-2 sm:gap-8">
+    <ul className="no-scrollbar sticky top-0 z-10 mb-4 hidden max-h-[75vh] grid-cols-6 gap-1 overflow-y-scroll border-r bg-white sm:grid sm:grid-cols-1 sm:flex-col sm:gap-8">
       {students?.map((student, index) => (
         <li key={index} ref={(el) => (studentRefs.current[index] = el)}>
           <div className={`relative aspect-square`}>
@@ -388,7 +396,7 @@ const VerticalPhotoBar = ({
               className={`${
                 selectedStudent?.id === student.id
                   ? "border-4 border-green-500"
-                  : "shadow-inner-xl opacity-50 grayscale"
+                  : "opacity-50 grayscale"
               } rounded-full duration-200 ease-in-out`}
               onClick={() => {
                 setSelectedStudent(student);
@@ -416,31 +424,28 @@ const PhotoBar = ({
   setSelectedStudent: Function;
 }) => {
   return (
-    <ul className="sticky top-0 z-10 mb-4 grid grid-cols-6 gap-2 rounded bg-white p-2 sm:gap-8">
-      {students?.map(
-        (student, index) =>
-          !student.absent && (
-            <li key={index}>
-              <div className={`relative aspect-square`}>
-                <Image
-                  src={student.photo_url}
-                  alt="An image of a student"
-                  fill={true}
-                  sizes="(max-width: 768px) 25vw, (max-width: 1200px) 20vw"
-                  style={{ objectFit: "cover" }}
-                  className={`${
-                    selectedStudent?.id === student.id
-                      ? "border-2 border-green-300 shadow-xl shadow-green-100"
-                      : "shadow-inner-xl"
-                  } rounded-full`}
-                  onClick={() => {
-                    setSelectedStudent(student);
-                  }}
-                />
-              </div>
-            </li>
-          ),
-      )}
+    <ul className="sticky top-0 z-10 mb-4 grid grid-cols-6 gap-2 rounded bg-white p-2 sm:hidden sm:gap-8">
+      {students?.map((student, index) => (
+        <li key={index}>
+          <div className={`relative aspect-square`}>
+            <Image
+              src={student.photo_url}
+              alt="An image of a student"
+              fill={true}
+              sizes="(max-width: 768px) 25vw, (max-width: 1200px) 20vw"
+              style={{ objectFit: "cover" }}
+              className={`${
+                selectedStudent?.id === student.id
+                  ? "border-2 border-green-300 shadow-xl shadow-green-100"
+                  : "opacity-50 grayscale"
+              } rounded-full duration-200 ease-in-out`}
+              onClick={() => {
+                setSelectedStudent(student);
+              }}
+            />
+          </div>
+        </li>
+      ))}
       <div
         className={`relative grid aspect-square place-items-center rounded-full bg-blue-100`}
       >
@@ -571,10 +576,10 @@ export default function ReportTeacherDetails({
           selectedStudent={selectedStudent}
           setSelectedStudent={setSelectedStudent}
         /> */}
-        <div className="col-span-7 rounded border shadow">
+        <CategoryButtons category={category} setCategory={setCategory} />
+        <div className="col-span-7 rounded sm:border sm:shadow">
           {/* <StudentSummary selectedStudent={selectedStudent} /> */}
 
-          <CategoryButtons category={category} setCategory={setCategory} />
           {/* HOMEWORK SECTION */}
           {category === "previous" && (
             <HomeworkSection scores={scores} reportData={reportData} />
