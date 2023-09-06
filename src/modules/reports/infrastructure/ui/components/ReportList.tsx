@@ -12,8 +12,9 @@ export const ReportList = () => {
   const { selectedSchool } = useContext(AuthContext);
   const [classes, setClasses] = useState<ClassEntity[]>();
   const [date, setDate] = useState<Date>(new Date());
-
-  const dates = [
+  const dayNumber = date.getDay();
+  
+  const days = [
     "Sunday",
     "Monday",
     "Tuesday",
@@ -22,22 +23,25 @@ export const ReportList = () => {
     "Friday",
     "Saturday",
   ];
+  
+  const dayName = days[dayNumber];
 
   useEffect(() => {
     async function getData() {
       await classAdapter
-        .listSchoolTodayClasses({
+        .list({
           school_id: selectedSchool?.id,
-          date: date.getDay(),
+          day: dayName,
         })
         .then((res) => {
+          console.log(res)
           setClasses(() => res);
         });
     }
     if (selectedSchool) {
       getData();
     }
-  }, [date, selectedSchool]);
+  }, [date, selectedSchool, dayName]);
 
   async function checkOrCreateReports(thisClass: ClassEntity, date: string) {
     await reportAdapter
@@ -70,7 +74,7 @@ export const ReportList = () => {
   return (
     <>
       <h2 className="mb-4 flex flex-col items-baseline text-3xl xs:mb-0 xs:flex-row xs:justify-between xs:gap-2">
-        <span>Reports for {dates[date.getDay()]} </span>
+        <span>Reports for {days[date.getDay()]} </span>
         <span>
           <input
             type="date"
@@ -119,7 +123,7 @@ export const ReportList = () => {
               key={index}
               className="flex items-baseline justify-between rounded-md p-2 hover:bg-blue-200"
             >
-              <span>{thisClass.name}</span>
+              <span>{thisClass.name} {thisClass.teacher}</span>
               <div className="flex gap-4">
                 {thisClass.class_list?.length === 0 ? (
                   <Link
