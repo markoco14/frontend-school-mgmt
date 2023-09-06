@@ -255,34 +255,48 @@ const SetStudentButtons = ({
   };
 
   return (
-    <div>
-      <button onClick={selectPrevious}>Previous</button>
-      {children}
-      <button onClick={selectNext}>Next</button>
+    <div className="grid grid-cols-3 gap-2">
+      <button
+        disabled={currentIndex === 0}
+        onClick={selectPrevious}
+        className="min-w-12 disabled:cursor-not-allowed"
+      >
+        {students[currentIndex - 1]?.first_name
+          ? students[currentIndex - 1]?.first_name
+          : "X"}
+      </button>
+      <button
+        disabled={currentIndex + 1 === students.length}
+        onClick={() => {
+          toast.success(`${selectedStudent?.first_name}'s report saved!`);
+          setSelectedStudent(students[currentIndex + 1]);
+        }}
+        className="rounded bg-blue-500 px-2 py-1 text-white shadow disabled:bg-gray-300 "
+      >
+        Save and Next
+      </button>
+      <button
+        disabled={currentIndex + 1 === students.length}
+        onClick={selectNext}
+        className="min-w-12 disabled:cursor-not-allowed"
+      >
+        {students[currentIndex + 1]?.first_name
+          ? students[currentIndex + 1]?.first_name
+          : "X"}
+      </button>
     </div>
   );
 };
 
-const SaveStudentEvaluationButton = ({
+const EvaluationSection = ({
+  students,
   selectedStudent,
-  SetselectedStudent,
+  setSelectedStudent,
 }: {
+  students: any;
   selectedStudent: any;
-  SetselectedStudent: Function;
+  setSelectedStudent: Function;
 }) => {
-  return (
-    <button
-      onClick={() => {
-        toast.success(`${selectedStudent.first_name}'s report saved!`);
-      }}
-      className="rounded bg-blue-500 px-2 py-1 text-white shadow"
-    >
-      Complete
-    </button>
-  );
-};
-
-const EvaluationSection = ({students, selectedStudent, setSelectedStudent}: {students: any, selectedStudent: any, setSelectedStudent: Function}) => {
   const scale = [1, 2, 3, 4, 5];
   const [evaluationAttributes, setEvaluationAttributes] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -302,7 +316,7 @@ const EvaluationSection = ({students, selectedStudent, setSelectedStudent}: {stu
 
   return (
     <>
-      <article className="grid grid-cols-8">
+      <article className="grid grid-cols-8 gap-4">
         <div className="col-span-1">
           <VerticalPhotoBar
             students={students}
@@ -311,6 +325,7 @@ const EvaluationSection = ({students, selectedStudent, setSelectedStudent}: {stu
           />
         </div>
         <div className="col-span-7 mb-4">
+          <div>{selectedStudent?.first_name}</div>
           <div className="grid gap-4 sm:grid-cols-3">
             {evaluationAttributes?.map((attribute: any, index: number) => (
               <div
@@ -328,9 +343,7 @@ const EvaluationSection = ({students, selectedStudent, setSelectedStudent}: {stu
               students={students}
               selectedStudent={selectedStudent}
               setSelectedStudent={setSelectedStudent}
-            >
-              <SaveStudentEvaluationButton selectedStudent={selectedStudent} setSelectedStudent={setSelectedStudent}/>
-            </SetStudentButtons>
+            />
           </div>
         </div>
       </article>
@@ -347,7 +360,6 @@ const VerticalPhotoBar = ({
   selectedStudent: Student;
   setSelectedStudent: Function;
 }) => {
-
   const studentRefs: any = useRef([]);
 
   useEffect(() => {
@@ -364,30 +376,27 @@ const VerticalPhotoBar = ({
 
   return (
     <ul className="no-scrollbar sticky top-0 z-10 mb-4 grid max-h-[75vh] gap-1 overflow-y-scroll rounded border bg-white p-2 sm:gap-8">
-      {students?.map(
-        (student, index) =>
-          (
-            <li key={index} ref={(el) => (studentRefs.current[index] = el)}>
-              <div className={`relative aspect-square`}>
-                <Image
-                  src={student.photo_url}
-                  alt="An image of a student"
-                  fill={true}
-                  sizes="(max-width: 768px) 25vw, (max-width: 1200px) 20vw"
-                  style={{ objectFit: "cover" }}
-                  className={`${
-                    selectedStudent?.id === student.id
-                      ? "border-4 border-green-500"
-                      : "shadow-inner-xl grayscale opacity-50"
-                  } rounded-full ease-in-out duration-200`}
-                  onClick={() => {
-                    setSelectedStudent(student);
-                  }}
-                />
-              </div>
-            </li>
-          ),
-      )}
+      {students?.map((student, index) => (
+        <li key={index} ref={(el) => (studentRefs.current[index] = el)}>
+          <div className={`relative aspect-square`}>
+            <Image
+              src={student.photo_url}
+              alt="An image of a student"
+              fill={true}
+              sizes="(max-width: 768px) 25vw, (max-width: 1200px) 20vw"
+              style={{ objectFit: "cover" }}
+              className={`${
+                selectedStudent?.id === student.id
+                  ? "border-4 border-green-500"
+                  : "shadow-inner-xl opacity-50 grayscale"
+              } rounded-full duration-200 ease-in-out`}
+              onClick={() => {
+                setSelectedStudent(student);
+              }}
+            />
+          </div>
+        </li>
+      ))}
       <div
         className={`relative grid aspect-square place-items-center rounded-full bg-blue-100`}
       >
@@ -441,13 +450,7 @@ const PhotoBar = ({
   );
 };
 
-
-
-const StudentSummary = ({
-  selectedStudent,
-}: {
-  selectedStudent: any;
-}) => {
+const StudentSummary = ({ selectedStudent }: { selectedStudent: any }) => {
   const { user } = useContext(AuthContext);
   return (
     <div className="mb-4 grid grid-cols-4 items-center gap-4 rounded border p-4 shadow">
@@ -478,7 +481,7 @@ const CategoryButtons = ({
   setCategory: Function;
 }) => {
   return (
-    <div className="mb-4 flex gap-8 rounded border p-4 shadow overflow-x-scroll">
+    <div className="mb-4 flex gap-8 overflow-x-scroll rounded border p-4 shadow">
       <button
         onClick={() => setCategory("previous")}
         className={`${
@@ -570,7 +573,7 @@ export default function ReportTeacherDetails({
         /> */}
         <div className="col-span-7 rounded border shadow">
           {/* <StudentSummary selectedStudent={selectedStudent} /> */}
-          
+
           <CategoryButtons category={category} setCategory={setCategory} />
           {/* HOMEWORK SECTION */}
           {category === "previous" && (
