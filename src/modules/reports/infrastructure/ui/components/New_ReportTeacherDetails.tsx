@@ -256,30 +256,31 @@ const SetStudentButtons = ({
   };
 
   return (
-    <div className="grid grid-cols-3 gap-2">
+    <div className="flex gap-2">
       <button
         disabled={currentIndex === 0}
         onClick={selectPrevious}
-        className="min-w-12 disabled:cursor-not-allowed"
+        className="w-24 sm:w-32 rounded border border-blue-500 hover:bg-blue-300 disabled:cursor-not-allowed disabled:border-gray-500 disabled:hover:bg-gray-300"
       >
         {students[currentIndex - 1]?.first_name
           ? students[currentIndex - 1]?.first_name
           : ""}
       </button>
       <button
-        disabled={currentIndex + 1 === students.length}
         onClick={() => {
           toast.success(`${selectedStudent?.first_name}'s report saved!`);
-          setSelectedStudent(students[currentIndex + 1]);
+          if (currentIndex + 1 !== students.length) {
+            setSelectedStudent(students[currentIndex + 1]);
+          }
         }}
-        className="rounded bg-blue-500 px-2 py-1 text-white shadow disabled:bg-gray-300 "
+        className="w-24 sm:w-32 rounded bg-blue-500 px-2 py-1 text-white shadow hover:bg-blue-600 disabled:bg-gray-300 "
       >
-        Save and Next
+        Save
       </button>
       <button
         disabled={currentIndex + 1 === students.length}
         onClick={selectNext}
-        className="min-w-12 disabled:cursor-not-allowed"
+        className="w-24 sm:w-32 rounded border border-blue-500 hover:bg-blue-300 disabled:cursor-not-allowed disabled:border-gray-500 disabled:hover:bg-gray-300"
       >
         {students[currentIndex + 1]?.first_name
           ? students[currentIndex + 1]?.first_name
@@ -317,7 +318,7 @@ const EvaluationSection = ({
 
   return (
     <>
-      <article className="grid grid-cols-8 gap-4">
+      <article className="grid grid-cols-8 gap-4 sm:pr-4">
         <div className="relative col-span-8 sm:col-span-1">
           <VerticalPhotoBar
             students={students}
@@ -330,7 +331,7 @@ const EvaluationSection = ({
             setSelectedStudent={setSelectedStudent}
           />
         </div>
-        <div className="col-span-8 mb-4 flex flex-col gap-4 sm:col-span-7">
+        <div className="col-span-8 flex flex-col gap-4 sm:col-span-7">
           <div className="text-xl">
             {selectedStudent?.first_name} {selectedStudent?.last_name}
           </div>
@@ -383,7 +384,7 @@ const VerticalPhotoBar = ({
   }, [selectedStudent, students]);
 
   return (
-    <ul className="no-scrollbar sticky top-0 z-10 mb-4 hidden max-h-[75vh] grid-cols-6 gap-1 overflow-y-scroll border-r bg-white sm:grid sm:grid-cols-1 sm:flex-col sm:gap-8">
+    <ul className="no-scrollbar sticky top-0 z-10 hidden max-h-[75vh] grid-cols-6 gap-1 overflow-y-scroll border-r bg-white px-4 sm:grid sm:grid-cols-1 sm:flex-col sm:gap-8">
       {students?.map((student, index) => (
         <li key={index} ref={(el) => (studentRefs.current[index] = el)}>
           <div className={`relative aspect-square`}>
