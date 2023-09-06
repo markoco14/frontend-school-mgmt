@@ -184,7 +184,7 @@ const EvaluationRangeAttribute = ({ attribute }: { attribute: any }) => {
   );
   return (
     <div className="grid gap-2">
-      <label>{attribute.title}</label>
+      <label>{attribute.name}</label>
 
       <div className={`grid grid-cols-${attribute.maxValue} gap-4`}>
         {Array.from(
@@ -210,7 +210,7 @@ const EvaluationRangeAttribute = ({ attribute }: { attribute: any }) => {
 const EvaluationTextAttribute = ({ attribute }: { attribute: any }) => {
   return (
     <div className="grid gap-2">
-      <label>{attribute.title}</label>
+      <label>{attribute.name}</label>
       <TextareaAutosize
         minRows={2}
         className="w-full rounded border p-2 shadow-inner"

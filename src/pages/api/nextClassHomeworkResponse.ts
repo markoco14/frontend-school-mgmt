@@ -1,6 +1,6 @@
 type NextClassHomework = {
   id: number;
-  title: string;
+  name: string;
   subject: string;
   level: number;
   unit: number;
@@ -17,7 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<NextCl
     const nextClassHomework: NextClassHomework[] = [
       {
         id: 4,
-        title: "Grammar 9 U5 E2",
+        name: "Grammar 9 U5 E2",
         subject: "Grammar",
         level: 9,
         unit: 5,
@@ -28,7 +28,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<NextCl
       },
       {
         id: 5,
-        title: "Grammar 9 U5 T1",
+        name: "Grammar 9 U5 T1",
         subject: "Grammar",
         level: 9,
         unit: 5,

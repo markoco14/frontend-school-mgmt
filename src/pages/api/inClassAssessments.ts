@@ -1,6 +1,6 @@
 type InClassAssessments = {
   id: number;
-  title: string;
+  name: string;
   subject: string;
   level: number;
   unit: number;
@@ -17,7 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<InClas
     const inClassAssessments: InClassAssessments[] = [
       {
         id: 4,
-        title: "Grammar 9 U5 T2",
+        name: "Grammar 9 U5 T2",
         subject: "Grammar",
         level: 9,
         unit: 5,

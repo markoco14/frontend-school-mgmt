@@ -4,7 +4,7 @@ interface Description {
 
 interface RangeAttribute {
   id: number;
-  title: string;
+  name: string;
   type: "range";
   minValue: number;
   maxValue: number;
@@ -13,7 +13,7 @@ interface RangeAttribute {
 
 interface StringAttribute {
   id: number;
-  title: string;
+  name: string;
   type: "text";
 }
 
@@ -27,7 +27,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Behavi
     const behaviorEvaluationAttributes: BehaviorEvaluationAttribute[] = [
       {
         id: 1,
-        title: "Participation",
+        name: "Participation",
         type: "range",
         minValue: 1,
         maxValue: 3,
@@ -39,7 +39,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Behavi
       },
       {
         id: 2,
-        title: "Attitude",
+        name: "Attitude",
         type: "range",
         minValue: 1,
         maxValue: 3,
@@ -51,7 +51,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Behavi
       },
       {
         id: 3,
-        title: "Teacher's Comment",
+        name: "Teacher's Comment",
         type: "text",
       },
     ];

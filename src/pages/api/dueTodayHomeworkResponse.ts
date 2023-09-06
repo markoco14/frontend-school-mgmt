@@ -1,6 +1,6 @@
 type DueTodayHomework = {
   id: number;
-  title: string;
+  name: string;
   subject: string;
   level: number;
   unit: number;
@@ -17,7 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<DueTod
     const dueTodayHomework: DueTodayHomework[] = [
       {
         id: 1,
-        title: "Grammar 9 U5 E1",
+        name: "Grammar 9 U5 E1",
         subject: "Grammar",
         level: 9,
         unit: 5,
@@ -28,7 +28,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<DueTod
       },
       {
         id: 2,
-        title: "Grammar 9 U4 E2",
+        name: "Grammar 9 U4 E2",
         subject: "Grammar",
         level: 9,
         unit: 4,
@@ -39,7 +39,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<DueTod
       },
       {
         id: 3,
-        title: "Grammar 9 U4 T2",
+        name: "Grammar 9 U4 T2",
         subject: "Grammar",
         level: 9,
         unit: 4,
