@@ -260,11 +260,13 @@ const SetStudentButtons = ({
       <button
         disabled={currentIndex === 0}
         onClick={selectPrevious}
-        className="w-24 sm:w-32 rounded border border-blue-500 hover:bg-blue-300 disabled:cursor-not-allowed disabled:border-gray-500 disabled:hover:bg-gray-300"
+        className="grid w-24 place-items-center rounded border border-blue-500 hover:bg-blue-300 disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-300 disabled:hover:bg-gray-400 sm:w-32"
       >
-        {students[currentIndex - 1]?.first_name
-          ? students[currentIndex - 1]?.first_name
-          : ""}
+        {students[currentIndex - 1]?.first_name ? (
+          students[currentIndex - 1]?.first_name
+        ) : (
+          <i className="fa-solid fa-xmark"></i>
+        )}
       </button>
       <button
         onClick={() => {
@@ -273,18 +275,20 @@ const SetStudentButtons = ({
             setSelectedStudent(students[currentIndex + 1]);
           }
         }}
-        className="w-24 sm:w-32 rounded bg-blue-500 px-2 py-1 text-white shadow hover:bg-blue-600 disabled:bg-gray-300 "
+        className="w-24 rounded bg-blue-500 px-2 py-1 text-white shadow hover:bg-blue-600 disabled:bg-gray-300 sm:w-32 "
       >
         Save
       </button>
       <button
         disabled={currentIndex + 1 === students.length}
         onClick={selectNext}
-        className="w-24 sm:w-32 rounded border border-blue-500 hover:bg-blue-300 disabled:cursor-not-allowed disabled:border-gray-500 disabled:hover:bg-gray-300"
+        className="grid w-24 place-items-center rounded border border-blue-500 hover:bg-blue-300 disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-300 disabled:hover:bg-gray-400 sm:w-32"
       >
-        {students[currentIndex + 1]?.first_name
-          ? students[currentIndex + 1]?.first_name
-          : ""}
+        {students[currentIndex + 1]?.first_name ? (
+          students[currentIndex + 1]?.first_name
+        ) : (
+          <i className="fa-solid fa-xmark items-center"></i>
+        )}
       </button>
     </div>
   );
