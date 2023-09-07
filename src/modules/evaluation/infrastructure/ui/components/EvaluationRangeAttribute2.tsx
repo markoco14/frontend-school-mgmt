@@ -20,7 +20,7 @@ const EvaluationRangeAttribute2 = ({ attribute }: { attribute: any }) => {
             key={value}
             className={`${
               selectedValue === value ? "bg-green-500" : ""
-            } rounded border p-4 text-center shadow`}
+            } col-span-1 rounded border p-4 text-center shadow`}
           >
             {value}
           </button>

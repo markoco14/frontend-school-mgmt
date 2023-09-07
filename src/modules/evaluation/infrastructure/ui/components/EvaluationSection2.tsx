@@ -88,19 +88,20 @@ const EvaluationSection2 = ({
           </nav>
         </div>
         {currentAttribute?.data_type_id === 9 ? (
-          <>
+          <div className="grid sm:grid-cols-2">
             {/* <PhotoBar
               students={students}
               selectedStudent={selectedStudent}
               setSelectedStudent={setSelectedStudent}
             /> */}
-            <ul className="no-scrollbar pt-120 overflow-y-scroll">
+            <ul className="divide-y">
               {students?.map((student: Student, index: number) => (
                 <li
                   key={`student-${student.id}`}
-                  className="flex w-full items-center gap-4 rounded p-2 hover:bg-blue-200"
+                  className="grid grid-cols-2 w-full gap-4 rounded p-2 hover:bg-blue-200"
                   ref={(el) => (studentRefs.current[index] = el)}
-                >
+                > 
+                <div className="flex gap-4 items-center">
                   <div className="relative col-span-1 flex justify-center">
                     <Image
                       src={student ? student?.photo_url : ""}
@@ -112,13 +113,14 @@ const EvaluationSection2 = ({
                     />
                   </div>
                   <div className="text-lg">
-                    {student?.first_name} {student?.last_name}
+                    {student?.first_name}
                   </div>
+                </div>
                   <EvaluationAttribute2 attribute={currentAttribute} />
                 </li>
               ))}
             </ul>
-          </>
+          </div>
         ) : (
           <article className="grid grid-cols-8 gap-4 sm:pr-4">
             <div className="relative col-span-8 sm:col-span-1">
