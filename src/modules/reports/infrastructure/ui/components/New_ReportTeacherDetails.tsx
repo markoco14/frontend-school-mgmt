@@ -1,4 +1,5 @@
 import AuthContext from "@/src/AuthContext";
+import { evaluationAttributeAdapter } from "@/src/modules/evaluation/infrastructure/adapters/evaluationAdapter";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
@@ -180,16 +181,16 @@ const InClassSection = ({
 
 const EvaluationRangeAttribute = ({ attribute }: { attribute: any }) => {
   const [selectedValue, setSelectedValue] = useState<number>(
-    attribute.maxValue,
+    attribute.max_value,
   );
   return (
     <div className="grid gap-2">
       <label>{attribute.name}</label>
 
-      <div className={`grid grid-cols-${attribute.maxValue} gap-4`}>
+      <div className={`grid grid-cols-${attribute.max_value} gap-4`}>
         {Array.from(
-          { length: attribute.maxValue - attribute.minValue + 1 },
-          (_, i) => i + attribute.minValue,
+          { length: attribute.max_value - attribute.min_value + 1 },
+          (_, i) => i + attribute.min_value,
         ).map((value) => (
           <button
             onClick={() => {
@@ -198,7 +199,7 @@ const EvaluationRangeAttribute = ({ attribute }: { attribute: any }) => {
             key={value}
             className={`${
               selectedValue === value ? "bg-green-500" : ""
-            } rounded border p-4 text-center shadow-inner`}
+            } rounded border p-4 text-center shadow`}
           >
             {value}
           </button>
@@ -214,7 +215,7 @@ const EvaluationTextAttribute = ({ attribute }: { attribute: any }) => {
       <label>{attribute.name}</label>
       <TextareaAutosize
         minRows={2}
-        className="w-full rounded border p-2 shadow-inner"
+        className="w-full rounded border p-2 shadow"
       />
     </div>
   );
@@ -222,11 +223,14 @@ const EvaluationTextAttribute = ({ attribute }: { attribute: any }) => {
 
 const EvaluationAttribute = ({ attribute }: { attribute: any }) => {
   return (
-    <div key={`attribute-${attribute.id}`}>
-      {attribute.type === "range" && (
+    <div
+      key={`attribute-${attribute.id}`}
+      className="rounded border p-2 shadow-inner"
+    >
+      {attribute.data_type_id === 9 && (
         <EvaluationRangeAttribute attribute={attribute} />
       )}
-      {attribute.type === "text" && (
+      {attribute.data_type_id === 8 && (
         <EvaluationTextAttribute attribute={attribute} />
       )}
     </div>
@@ -304,22 +308,28 @@ const EvaluationSection = ({
   selectedStudent: any;
   setSelectedStudent: Function;
 }) => {
+  const { selectedSchool } = useContext(AuthContext);
   const scale = [1, 2, 3, 4, 5];
   const [evaluationAttributes, setEvaluationAttributes] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch("/api/behaviorEvaluationAttributes")
-      .then((response) => response.json())
-      .then((data) => {
-        setEvaluationAttributes(data);
+    async function getData() {
+      try {
+        await evaluationAttributeAdapter
+          .list({ school_id: selectedSchool?.id })
+          .then((res) => {
+            console.log(res);
+            setLoading(false);
+            setEvaluationAttributes(res);
+          });
+      } catch (error: any) {
+        toast.error(error.details);
         setLoading(false);
-      })
-      .catch((error) => {
-        console.error("There was a problem fetching data:", error);
-        setLoading(false);
-      });
-  }, []);
+      }
+    }
+    getData();
+  }, [selectedSchool]);
 
   return (
     <>
@@ -340,12 +350,14 @@ const EvaluationSection = ({
           <div className="text-xl">
             {selectedStudent?.first_name} {selectedStudent?.last_name}
           </div>
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
             {evaluationAttributes?.map((attribute: any, index: number) => (
               <div
                 key={`attribute-${attribute.id}`}
                 className={`${
-                  attribute.type === "text" ? "col-span-3" : "col-span-1"
+                  attribute.data_type_id === 8
+                    ? "col-span-2 sm:col-span-3"
+                    : "col-span-2 sm:col-span-1"
                 } grid gap-2`}
               >
                 <EvaluationAttribute attribute={attribute} />
