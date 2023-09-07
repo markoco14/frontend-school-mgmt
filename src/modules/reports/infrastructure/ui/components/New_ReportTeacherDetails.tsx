@@ -1,4 +1,5 @@
 import AuthContext from "@/src/AuthContext";
+import { classStudentAdapter } from "@/src/modules/classes/infrastructure/adapters/classStudentAdapter";
 import { evaluationAttributeAdapter } from "@/src/modules/evaluation/infrastructure/adapters/evaluationAdapter";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { Switch } from "@headlessui/react";
@@ -179,6 +180,44 @@ const InClassSection = ({
   );
 };
 
+const EvaluationRangeAttribute2 = ({ attribute }: { attribute: any }) => {
+  const [selectedValue, setSelectedValue] = useState<number>(
+    attribute.max_value,
+  );
+  return (
+    <>
+      {/* <label>{attribute.name}</label> */}
+
+      <div className={`grid grid-cols-${attribute.max_value} gap-4`}>
+        {Array.from(
+          { length: attribute.max_value - attribute.min_value + 1 },
+          (_, i) => i + attribute.min_value,
+        ).map((value) => (
+          <button
+            onClick={() => {
+              setSelectedValue(value);
+            }}
+            key={value}
+            className={`${
+              selectedValue === value ? "bg-green-500" : ""
+            } rounded border p-4 text-center shadow`}
+          >
+            {value}
+          </button>
+        ))}
+      </div>
+      {/* {selectedValue && <p>{attribute.descriptions[selectedValue - 1]}</p>} */}
+    </>
+  );
+};
+
+const EvaluationRangeComment = () => {
+  return (
+    <p>word</p>
+    /* {selectedValue && <p>{attribute.descriptions[selectedValue - 1]}</p>} */
+  );
+} 
+
 const EvaluationRangeAttribute = ({ attribute }: { attribute: any }) => {
   const [selectedValue, setSelectedValue] = useState<number>(
     attribute.max_value,
@@ -205,7 +244,7 @@ const EvaluationRangeAttribute = ({ attribute }: { attribute: any }) => {
           </button>
         ))}
       </div>
-      {selectedValue && <p>{attribute.descriptions[selectedValue]}</p>}
+      {selectedValue && <p>{attribute.descriptions[selectedValue - 1]}</p>}
     </div>
   );
 };
@@ -221,16 +260,29 @@ const EvaluationTextAttribute = ({ attribute }: { attribute: any }) => {
   );
 };
 
+const EvaluationAttribute2 = ({ attribute }: { attribute: any }) => {
+  console.log("in evaluation attribute 2", attribute);
+  return (
+    <div key={`attribute-${attribute?.id}`}>
+      {attribute?.data_type_id === 9 && (
+        <EvaluationRangeAttribute2 attribute={attribute} />
+      )}
+      {attribute?.data_type_id === 8 && (
+        <EvaluationTextAttribute attribute={attribute} />
+      )}
+    </div>
+  );
+};
 const EvaluationAttribute = ({ attribute }: { attribute: any }) => {
   return (
     <div
-      key={`attribute-${attribute.id}`}
+      key={`attribute-${attribute?.id}`}
       className="rounded border p-2 shadow-inner"
     >
-      {attribute.data_type_id === 9 && (
+      {attribute?.data_type_id === 9 && (
         <EvaluationRangeAttribute attribute={attribute} />
       )}
-      {attribute.data_type_id === 8 && (
+      {attribute?.data_type_id === 8 && (
         <EvaluationTextAttribute attribute={attribute} />
       )}
     </div>
@@ -319,7 +371,7 @@ const EvaluationSection = ({
         await evaluationAttributeAdapter
           .list({ school_id: selectedSchool?.id })
           .then((res) => {
-            console.log(res);
+            // console.log(res);
             setLoading(false);
             setEvaluationAttributes(res);
           });
@@ -372,6 +424,189 @@ const EvaluationSection = ({
             />
           </div>
         </div>
+      </article>
+    </>
+  );
+};
+
+const EvaluationSection2 = ({
+  students,
+  selectedStudent,
+  setSelectedStudent,
+}: {
+  students: any;
+  selectedStudent: any;
+  setSelectedStudent: Function;
+}) => {
+  const { selectedSchool } = useContext(AuthContext);
+  const scale = [1, 2, 3, 4, 5];
+  const [evaluationAttributes, setEvaluationAttributes] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [currentSection, setCurrentSection] = useState<any>();
+  const [currentAttribute, setCurrentAttribute] = useState<any>();
+
+  const studentRefs: any = useRef([]);
+
+  useEffect(() => {
+    const selectedIndex = students.findIndex(
+      (s: Student) => s.id === selectedStudent?.id,
+    );
+    if (selectedIndex >= 0 && studentRefs.current[selectedIndex]) {
+      studentRefs.current[selectedIndex].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [selectedStudent, students]);
+
+  useEffect(() => {
+    async function getEvaluationAttributes() {
+      try {
+        await evaluationAttributeAdapter
+          .list({ school_id: selectedSchool?.id })
+          .then((res) => {
+            // console.log('evaluation attributes', res);
+            console.log("first attribute", res[0]);
+            setLoading(false);
+            setEvaluationAttributes(res);
+            setCurrentAttribute(res[0]);
+          });
+      } catch (error: any) {
+        toast.error(error.details);
+        setLoading(false);
+      }
+    }
+
+    getEvaluationAttributes();
+  }, [selectedSchool]);
+
+  return (
+    <>
+      <article className="grid gap-4 sm:pr-4">
+        {/* attribute selector */}
+        <div>
+          {/* 
+            TODO: this needs to come from unique attributes array
+            grab the name of each attribute and stuff them in uniques array.
+            or... just make directly from the attributes and check by name. 
+          */}
+          <nav className="flex gap-4">
+            {evaluationAttributes?.map((attribute: any) => (
+              <button
+                key={`attribute-${attribute.id}`}
+                onClick={() => {
+                  setCurrentAttribute(attribute)
+                  attribute.data_type_id === 8 ? setSelectedStudent(students[0]) : setSelectedStudent()
+                }}
+              >
+                {attribute.name}
+              </button>
+            ))}
+          </nav>
+        </div>
+        {currentAttribute?.data_type_id === 9 ? (
+          <>
+            {/* <PhotoBar
+              students={students}
+              selectedStudent={selectedStudent}
+              setSelectedStudent={setSelectedStudent}
+            /> */}
+            <ul className="no-scrollbar pt-120 overflow-y-scroll">
+              {students?.map((student: Student, index: number) => (
+                <li
+                  key={`student-${student.id}`}
+                  className="flex w-full items-center gap-4 rounded p-2 hover:bg-blue-200"
+                  ref={(el) => (studentRefs.current[index] = el)}
+                >
+                  <div className="relative col-span-1 flex justify-center">
+                    <Image
+                      src={student ? student?.photo_url : ""}
+                      alt={`An image of ${student?.first_name}`}
+                      width={50}
+                      height={50}
+                      style={{ objectFit: "cover" }}
+                      className="rounded-full"
+                    />
+                  </div>
+                  <div className="text-lg">
+                    {student?.first_name} {student?.last_name}
+                  </div>
+                  <EvaluationAttribute2 attribute={currentAttribute} />
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <article className="grid grid-cols-8 gap-4 sm:pr-4">
+            <div className="relative col-span-8 sm:col-span-1">
+              <VerticalPhotoBar
+                students={students}
+                selectedStudent={selectedStudent}
+                setSelectedStudent={setSelectedStudent}
+              />
+              <PhotoBar
+                students={students}
+                selectedStudent={selectedStudent}
+                setSelectedStudent={setSelectedStudent}
+              />
+            </div>
+            <div className="col-span-8 flex flex-col gap-4 sm:col-span-7">
+              <div className="text-xl">
+                {selectedStudent?.first_name} {selectedStudent?.last_name}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
+                
+                    <EvaluationAttribute attribute={currentAttribute} />
+              </div>
+              <div className="flex gap-2">
+                <SetStudentButtons
+                  students={students}
+                  selectedStudent={selectedStudent}
+                  setSelectedStudent={setSelectedStudent}
+                />
+              </div>
+            </div>
+          </article>
+        )}
+
+        {/* <div className="relative col-span-8 sm:col-span-1">
+          <VerticalPhotoBar
+            students={students}
+            selectedStudent={selectedStudent}
+            setSelectedStudent={setSelectedStudent}
+          />
+          <PhotoBar
+            students={students}
+            selectedStudent={selectedStudent}
+            setSelectedStudent={setSelectedStudent}
+          />
+        </div>
+        <div className="col-span-8 flex flex-col gap-4 sm:col-span-7">
+          <div className="text-xl">
+            {selectedStudent?.first_name} {selectedStudent?.last_name}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-4">
+            {evaluationAttributes?.map((attribute: any, index: number) => (
+              <div
+                key={`attribute-${attribute.id}`}
+                className={`${
+                  attribute.data_type_id === 8
+                    ? "col-span-2 sm:col-span-3"
+                    : "col-span-2 sm:col-span-1"
+                } grid gap-2`}
+              >
+                <EvaluationAttribute attribute={attribute} />
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <SetStudentButtons
+              students={students}
+              selectedStudent={selectedStudent}
+              setSelectedStudent={setSelectedStudent}
+            />
+          </div>
+        </div> */}
       </article>
     </>
   );
@@ -550,6 +785,15 @@ const CategoryButtons = ({
       >
         Behavior
       </button>
+      <button
+        onClick={() => setCategory("evaluation2")}
+        className={`${
+          category === "evaluation2" &&
+          "underline decoration-blue-500 decoration-4 underline-offset-2"
+        } duration-200 ease-in-out hover:underline hover:decoration-blue-300 hover:decoration-4 hover:underline-offset-2`}
+      >
+        Behavior2
+      </button>
     </div>
   );
 };
@@ -572,18 +816,38 @@ export default function ReportTeacherDetails({
   const [students, setStudents] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("/api/dailyReportStudentList")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setStudents(data);
-        setSelectedStudent(data[0]);
+    async function getClassList() {
+      setLoading(true);
+      try {
+        await classStudentAdapter
+          .list({ class_id: 35, details: true })
+          .then((res) => {
+            const studentHolder: Student[] = res.map(
+              (entry: any) => entry.student,
+            );
+            // console.log("student holder", studentHolder);
+            setLoading(false);
+            // console.log("class student list", res);
+            setStudents(studentHolder);
+          });
+      } catch (error) {
+        console.error(error);
         setLoading(false);
-      })
-      .catch((error) => {
-        console.error("There was a problem fetching data:", error);
-        setLoading(false);
-      });
+      }
+    }
+    getClassList();
+    // fetch("/api/dailyReportStudentList")
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     setStudents(data);
+    //     setSelectedStudent(data[0]);
+    //     setLoading(false);
+    //   })
+    //   .catch((error) => {
+    //     console.error("There was a problem fetching data:", error);
+    //     setLoading(false);
+    //   });
   }, []);
 
   return (
@@ -613,6 +877,13 @@ export default function ReportTeacherDetails({
           )}
           {category === "evaluation" && (
             <EvaluationSection
+              students={students}
+              selectedStudent={selectedStudent}
+              setSelectedStudent={setSelectedStudent}
+            />
+          )}
+          {category === "evaluation2" && (
+            <EvaluationSection2
               students={students}
               selectedStudent={selectedStudent}
               setSelectedStudent={setSelectedStudent}
