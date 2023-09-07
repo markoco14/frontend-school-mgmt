@@ -204,6 +204,7 @@ const EvaluationRangeAttribute = ({ attribute }: { attribute: any }) => {
           </button>
         ))}
       </div>
+      {selectedValue && <p>{attribute.descriptions[selectedValue]}</p>}
     </div>
   );
 };
@@ -388,7 +389,7 @@ const VerticalPhotoBar = ({
   }, [selectedStudent, students]);
 
   return (
-    <ul className="no-scrollbar sticky top-0 z-10 hidden max-h-[75vh] grid-cols-6 gap-1 overflow-y-scroll border-r bg-white px-4 sm:grid sm:grid-cols-1 sm:flex-col sm:gap-8">
+    <ul className="no-scrollbar sticky top-0 z-10 hidden max-h-[70vh] grid-cols-6 gap-1 overflow-y-scroll border-r bg-white px-4 sm:grid sm:grid-cols-1 sm:flex-col sm:gap-8">
       {students?.map((student, index) => (
         <li key={index} ref={(el) => (studentRefs.current[index] = el)}>
           <div className={`relative aspect-square`}>
