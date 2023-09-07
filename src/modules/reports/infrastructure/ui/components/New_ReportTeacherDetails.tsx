@@ -1,21 +1,16 @@
 import AuthContext from "@/src/AuthContext";
 import { classStudentAdapter } from "@/src/modules/classes/infrastructure/adapters/classStudentAdapter";
+import NoData from "@/src/modules/core/infrastructure/ui/components/NoData";
 import { evaluationAttributeAdapter } from "@/src/modules/evaluation/infrastructure/adapters/evaluationAdapter";
+import EvaluationAttribute from "@/src/modules/evaluation/infrastructure/ui/components/EvaluationAttribute";
+import EvaluationAttribute2 from "@/src/modules/evaluation/infrastructure/ui/components/EvaluationAttribute2";
 import SetStudentButtons from "@/src/modules/evaluation/infrastructure/ui/components/SetStudentButtons";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
 import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import TextareaAutosize from "react-textarea-autosize";
 
-const NoData = ({ text }: { text: string }) => {
-  return (
-    <article className="mb-4 grid gap-2 rounded border p-4 shadow xs:grid-cols-2">
-      <p>{text}</p>
-    </article>
-  );
-};
 
 const HomeworkSection = ({
   scores,
@@ -181,37 +176,6 @@ const InClassSection = ({
   );
 };
 
-const EvaluationRangeAttribute2 = ({ attribute }: { attribute: any }) => {
-  const [selectedValue, setSelectedValue] = useState<number>(
-    attribute.max_value,
-  );
-  return (
-    <>
-      {/* <label>{attribute.name}</label> */}
-
-      <div className={`grid grid-cols-${attribute.max_value} gap-4`}>
-        {Array.from(
-          { length: attribute.max_value - attribute.min_value + 1 },
-          (_, i) => i + attribute.min_value,
-        ).map((value) => (
-          <button
-            onClick={() => {
-              setSelectedValue(value);
-            }}
-            key={value}
-            className={`${
-              selectedValue === value ? "bg-green-500" : ""
-            } rounded border p-4 text-center shadow`}
-          >
-            {value}
-          </button>
-        ))}
-      </div>
-      {/* {selectedValue && <p>{attribute.descriptions[selectedValue - 1]}</p>} */}
-    </>
-  );
-};
-
 const EvaluationRangeComment = () => {
   return (
     <p>word</p>
@@ -219,76 +183,8 @@ const EvaluationRangeComment = () => {
   );
 } 
 
-const EvaluationRangeAttribute = ({ attribute }: { attribute: any }) => {
-  const [selectedValue, setSelectedValue] = useState<number>(
-    attribute.max_value,
-  );
-  return (
-    <div className="grid gap-2">
-      <label>{attribute.name}</label>
 
-      <div className={`grid grid-cols-${attribute.max_value} gap-4`}>
-        {Array.from(
-          { length: attribute.max_value - attribute.min_value + 1 },
-          (_, i) => i + attribute.min_value,
-        ).map((value) => (
-          <button
-            onClick={() => {
-              setSelectedValue(value);
-            }}
-            key={value}
-            className={`${
-              selectedValue === value ? "bg-green-500" : ""
-            } rounded border p-4 text-center shadow`}
-          >
-            {value}
-          </button>
-        ))}
-      </div>
-      {selectedValue && <p>{attribute.descriptions[selectedValue - 1]}</p>}
-    </div>
-  );
-};
-const EvaluationTextAttribute = ({ attribute }: { attribute: any }) => {
-  return (
-    <div className="grid gap-2">
-      <label>{attribute.name}</label>
-      <TextareaAutosize
-        minRows={2}
-        className="w-full rounded border p-2 shadow"
-      />
-    </div>
-  );
-};
 
-const EvaluationAttribute2 = ({ attribute }: { attribute: any }) => {
-  console.log("in evaluation attribute 2", attribute);
-  return (
-    <div key={`attribute-${attribute?.id}`}>
-      {attribute?.data_type_id === 9 && (
-        <EvaluationRangeAttribute2 attribute={attribute} />
-      )}
-      {attribute?.data_type_id === 8 && (
-        <EvaluationTextAttribute attribute={attribute} />
-      )}
-    </div>
-  );
-};
-const EvaluationAttribute = ({ attribute }: { attribute: any }) => {
-  return (
-    <div
-      key={`attribute-${attribute?.id}`}
-      className="rounded border p-2 shadow-inner"
-    >
-      {attribute?.data_type_id === 9 && (
-        <EvaluationRangeAttribute attribute={attribute} />
-      )}
-      {attribute?.data_type_id === 8 && (
-        <EvaluationTextAttribute attribute={attribute} />
-      )}
-    </div>
-  );
-};
 
 const EvaluationSection = ({
   students,
