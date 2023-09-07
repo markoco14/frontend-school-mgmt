@@ -8,8 +8,6 @@ import { Switch } from "@headlessui/react";
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 
-
-
 const HomeworkSection = ({
   scores,
   reportData,
@@ -309,18 +307,6 @@ export default function ReportTeacherDetails({
       }
     }
     getClassList();
-    // fetch("/api/dailyReportStudentList")
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     setStudents(data);
-    //     setSelectedStudent(data[0]);
-    //     setLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error("There was a problem fetching data:", error);
-    //     setLoading(false);
-    //   });
   }, []);
 
   return (

@@ -2,6 +2,10 @@ import AuthContext from "@/src/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import { evaluationAttributeAdapter } from "../../adapters/evaluationAdapter";
 import toast from "react-hot-toast";
+import VerticalPhotoBar from "./VerticalPhotoBar";
+import PhotoBar from "./PhotoBar";
+import EvaluationAttribute from "./EvaluationAttribute";
+import SetStudentButtons from "./SetStudentButtons";
 
 const EvaluationSection = ({
   students,
