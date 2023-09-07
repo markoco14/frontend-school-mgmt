@@ -172,12 +172,7 @@ const InClassSection = ({
   );
 };
 
-const EvaluationRangeComment = () => {
-  return (
-    <p>word</p>
-    /* {selectedValue && <p>{attribute.descriptions[selectedValue - 1]}</p>} */
-  );
-} 
+
 
 const StudentSummary = ({ selectedStudent }: { selectedStudent: any }) => {
   const { user } = useContext(AuthContext);
