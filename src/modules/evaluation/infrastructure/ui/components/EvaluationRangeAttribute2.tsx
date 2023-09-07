@@ -6,8 +6,6 @@ const EvaluationRangeAttribute2 = ({ attribute }: { attribute: any }) => {
   );
   return (
     <>
-      {/* <label>{attribute.name}</label> */}
-
       <div className={`grid grid-cols-${attribute.max_value} gap-4`}>
         {Array.from(
           { length: attribute.max_value - attribute.min_value + 1 },
