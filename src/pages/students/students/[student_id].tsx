@@ -12,8 +12,6 @@ import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 
-
-
 const StudentPhoto = ({ student }: { student: Student }) => {
   return (
     <section className="flex items-center gap-4 border shadow sm:grid">
@@ -57,6 +55,33 @@ const BackButton = () => {
   );
 };
 
+const StudentProfileNav = ({ setTab }: { setTab: Function }) => {
+  const navButtons = [
+    {
+      value: 1,
+      name: "Profile",
+    },
+    {
+      value: 2,
+      name: "Evaluations",
+    },
+  ];
+
+  return (
+    <nav className="flex gap-4 overflow-x-auto rounded border p-2 shadow">
+      {navButtons.map((button) => (
+        <button
+          className={`${button.value}`}
+          key={button.value}
+          onClick={() => setTab(button.value)}
+        >
+          {button.name}
+        </button>
+      ))}
+    </nav>
+  );
+};
+
 export default function Home({
   student,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -97,11 +122,7 @@ export default function Home({
           <StudentPhoto student={student} />
         </div>
         <div className="flex flex-col gap-4 sm:col-span-6">
-          <nav className="flex gap-4 overflow-x-auto rounded border p-2 shadow">
-            <button onClick={() => setTab(1)}>Profile</button>
-            <button onClick={() => setTab(2)}>Evaluations</button>
-            {/* <button onClick={() => setTab(3)}>Assessments</button> */}
-          </nav>
+          <StudentProfileNav setTab={setTab} />
           {tab === 1 && (
             <section className="rounded border p-2 shadow">
               <h2>Profile</h2>
