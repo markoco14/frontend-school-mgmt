@@ -38,9 +38,7 @@ const StudentAttendanceList = ({
             </div>
             <span>
               {studentAttendance.student?.first_name}{" "}
-              <span className="hidden sm:block">
-                {studentAttendance.student?.last_name}
-              </span>
+              {studentAttendance.student?.id}
             </span>
           </div>
           <div className="flex items-center gap-2">
