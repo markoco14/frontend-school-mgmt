@@ -14,27 +14,119 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-const StudentProfile = ({ student }: { student: Student }) => {
+const Assessments = ({ student }: { student: Student }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [assessments, setAssessments] = useState<StudentAssessment[]>([]);
+
+  useEffect(() => {
+    async function getAssessments() {
+      setLoading(true);
+      await studentAssessmentAdapter
+        .list({ student_id: student.id, details: true })
+        .then((res) => {
+          setAssessments(res);
+          setLoading(false);
+        });
+    }
+
+    getAssessments();
+  }, [student]);
+
   return (
-    <section className="flex gap-2 border p-2 shadow">
-      <div className="relative col-span-1">
+    <>
+      <h2>Student Assessments</h2>
+      {loading ? (
+        <Skeleton>
+          <ClassListSkeletonProps />
+        </Skeleton>
+      ) : (
+        <ul>
+          {assessments?.map((assessment, index) => (
+            <li
+              key={`assessment-${assessment.id}`}
+              className="flex justify-between"
+            >
+              <span>{assessment.assessment?.name}</span>
+              <span className={`${!assessment.score && "text-red-500"} `}>
+                {assessment.score
+                  ? assessment.score
+                  : `No score / ${assessment.assessment?.total_marks}`}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
+  );
+};
+
+const StudentPhoto = ({ student }: { student: Student }) => {
+  return (
+    <section className="flex items-center gap-4 border shadow sm:grid">
+      <div className="relative h-24 w-24 sm:aspect-square sm:h-full sm:w-full">
         <Image
           src={student ? student.photo_url : ""}
           alt={`An image of ${student.first_name}`}
-          width={200}
-          height={200}
+          fill={true}
+          sizes="(max-width: 768px) 25vw, (max-width: 1200px) 20vw"
+          // width={200}
+          // height={200}
           style={{ objectFit: "cover" }}
-          className="grow-0"
+          // className="rounded-full"
         />
       </div>
-      <article>
-        <p>
+      <article className="sm:mb-4">
+        <p className="text-center text-2xl">
           {student.first_name} {student.last_name}
         </p>
-        <p>{student.age}</p>
-        <p>{student.gender === 1 ? "Female" : "Male"}</p>
       </article>
     </section>
+  );
+};
+
+const Evaluations = ({ student }: { student: Student }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [evaluations, setEvaluations] = useState<StudentEvaluation[]>([]);
+
+  useEffect(() => {
+    async function getEvaluations() {
+      setLoading(true);
+      // await studentAssessmentAdapter
+      //   .list({ student_id: student.id, details: true })
+      //   .then((res) => {
+      //     setEvaluations(res);
+      //     setLoading(false);
+      //   });
+    }
+
+    getEvaluations();
+  }, [student]);
+
+  return (
+    <>
+      <h2>Evaluations</h2>
+      {loading ? (
+        <Skeleton>
+          <ClassListSkeletonProps />
+        </Skeleton>
+      ) : (
+        <ul>
+          {evaluations?.map((assessment, index) => (
+            <li
+              key={`assessment-${assessment.id}`}
+              className="flex justify-between"
+            >
+              <span>{assessment.assessment?.name}</span>
+              <span className={`${!assessment.score && "text-red-500"} `}>
+                {assessment.score
+                  ? assessment.score
+                  : `No score / ${assessment.assessment?.total_marks}`}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   );
 };
 
@@ -51,9 +143,9 @@ const BackButton = () => {
   const router = useRouter();
 
   return (
-    <div>
-      <button onClick={() => router.back()} className="border rounded p-2">Back</button>
-    </div>
+    <button onClick={() => router.back()} className="rounded border p-2">
+      Back
+    </button>
   );
 };
 
@@ -63,7 +155,7 @@ export default function Home({
   const [loading, setLoading] = useState<boolean>(false);
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
-  const [assessments, setAssessments] = useState<StudentAssessment[]>([]);
+
   const [tab, setTab] = useState<number>(1);
 
   async function handleDeleteStudent(id: number) {
@@ -78,20 +170,6 @@ export default function Home({
     }
   }
 
-  useEffect(() => {
-    async function getAssessments() {
-      setLoading(true);
-      await studentAssessmentAdapter
-        .list({ student_id: student.id, details: true })
-        .then((res) => {
-          setAssessments(res);
-          setLoading(false);
-        });
-    }
-
-    getAssessments();
-  }, [student]);
-
   if (user?.role !== "OWNER") {
     return (
       <Layout>
@@ -103,36 +181,35 @@ export default function Home({
   return (
     <Layout>
       <SchoolHeader />
-      <div className="grid gap-4">
-        <BackButton />
-        <StudentProfile student={student} />
-        <nav className="rounded border p-2 shadow">
-          <button onClick={() => setTab(1)}>Evaluations</button>
-        </nav>
-        <section className="rounded border p-2 shadow">
-          <h2>Student Assessments</h2>
-          {loading ? (
-            <Skeleton>
-              <ClassListSkeletonProps />
-            </Skeleton>
-          ) : (
-            <ul>
-              {assessments?.map((assessment, index) => (
-                <li
-                  key={`assessment-${assessment.id}`}
-                  className="flex justify-between"
-                >
-                  <span>{assessment.assessment?.name}</span>
-                  <span className={`${!assessment.score && "text-red-500"} `}>
-                    {assessment.score
-                      ? assessment.score
-                      : `No score / ${assessment.assessment?.total_marks}`}
-                  </span>
-                </li>
-              ))}
-            </ul>
+      <div className="grid gap-4 sm:grid-cols-8">
+        <div className="sm:col-span-8">
+          <BackButton />
+        </div>
+        <div className="sm:col-span-2">
+          <StudentPhoto student={student} />
+        </div>
+        <div className="flex flex-col gap-4 sm:col-span-6">
+          <nav className="flex gap-4 overflow-x-auto rounded border p-2 shadow">
+            <button onClick={() => setTab(1)}>Profile</button>
+            <button onClick={() => setTab(2)}>Evaluations</button>
+            {/* <button onClick={() => setTab(3)}>Assessments</button> */}
+          </nav>
+          {tab === 1 && (
+            <section className="rounded border p-2 shadow">
+              <h2>Profile</h2>
+            </section>
           )}
-        </section>
+          {tab === 2 && (
+            <section className="rounded border p-2 shadow">
+              <Evaluations student={student} />
+            </section>
+          )}
+          {tab === 3 && (
+            <section className="rounded border p-2 shadow">
+              <Assessments student={student} />
+            </section>
+          )}
+        </div>
       </div>
     </Layout>
   );
