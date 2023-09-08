@@ -2,6 +2,11 @@ import AuthContext from "@/src/AuthContext";
 import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
+import { StudentAttendance } from "@/src/modules/attendance/domain/entities/StudentAttendance";
+import { studentAttendanceAdapter } from "@/src/modules/attendance/infrastructure/adapters/studentAttendanceAdapter";
+import AttendanceReasonForm from "@/src/modules/attendance/infrastructure/ui/components/AttendanceReasonForm";
+import ClassList from "@/src/modules/attendance/infrastructure/ui/components/ClassList";
+import StudentAttendanceList from "@/src/modules/attendance/infrastructure/ui/components/StudentAttendanceList";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import DateChangeButtons from "@/src/modules/core/infrastructure/ui/components/DateChangeButtons";
@@ -10,12 +15,6 @@ import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import PageTabNavigation from "@/src/modules/core/infrastructure/ui/components/PageTabNavigation";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import DailyReportOverview from "@/src/modules/reports/infrastructure/ui/components/DailyReportOverview";
-import { StudentAttendance } from "@/src/modules/students/domain/entities/StudentAttendance";
-import { studentAttendanceAdapter } from "@/src/modules/students/infrastructure/adapters/studentAttendanceAdapter";
-import AttendanceNoteButton from "@/src/modules/students/infrastructure/ui/attendance/AttendanceNoteButton";
-import AttendanceReasonForm from "@/src/modules/students/infrastructure/ui/attendance/AttendanceReasonForm";
-import AttendanceStatusButton from "@/src/modules/students/infrastructure/ui/attendance/AttendanceStatusButton";
-import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 
 export default function ReportsHome() {
@@ -135,6 +134,13 @@ export default function ReportsHome() {
     setSelectedAttendance(undefined);
   }
 
+  function handleChangeClass({ classEntity }: { classEntity: ClassEntity }) {
+    setSelectedClass(classEntity);
+    getAttendanceList({
+      school_class: classEntity.id,
+      date: formattedDate,
+    });
+  }
   return (
     <Layout>
       <div className="grid gap-4">
@@ -161,29 +167,11 @@ export default function ReportsHome() {
                   <ClassListSkeletonProps />
                 </Skeleton>
               ) : (
-                <ul className="grid divide-y">
-                  {todayClasses?.map((classEntity) => (
-                    <li
-                      key={`class-${classEntity.id}`}
-                      onClick={() => {
-                        setSelectedClass(classEntity);
-                        getAttendanceList({
-                          school_class: classEntity.id,
-                          date: formattedDate,
-                        });
-                      }}
-                      className={`${
-                        classEntity.id === selectedClass?.id
-                          ? "bg-blue-300"
-                          : ""
-                      } flex w-full cursor-pointer items-center justify-between rounded p-2`}
-                    >
-                      <span>
-                        {classEntity.name} (teacher id:{classEntity.teacher})
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                <ClassList
+                  todayClasses={todayClasses}
+                  selectedClass={selectedClass}
+                  handleClick={handleChangeClass}
+                />
               )}
             </article>
             <article className="col-span-4 grid gap-4 rounded border p-4 shadow">
@@ -198,59 +186,12 @@ export default function ReportsHome() {
                   <StudentListSkeletonProps studentQuantity={4} />
                 </Skeleton>
               ) : (
-                <ul className="grid divide-y">
-                  {classAttendance?.map((studentAttendance) => (
-                    <li
-                      key={`studentAttendance-${studentAttendance.id}`}
-                      className="flex items-center justify-between py-1"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="relative col-span-1 flex justify-center">
-                          <Image
-                            src={
-                              studentAttendance.student
-                                ? studentAttendance.student?.photo_url
-                                : ""
-                            }
-                            alt={`An image of ${studentAttendance.student?.first_name}`}
-                            width={50}
-                            height={50}
-                            style={{ objectFit: "cover" }}
-                            className="rounded-full"
-                          />
-                        </div>
-                        <span>
-                          {studentAttendance.student?.first_name}{" "}
-                          <span className="hidden sm:block">
-                            {studentAttendance.student?.last_name}
-                          </span>
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <AttendanceNoteButton
-                          studentAttendance={studentAttendance}
-                          setIsWriteNote={setIsWriteNote}
-                          setSelectedAttendance={setSelectedAttendance}
-                        />
-                        <AttendanceStatusButton
-                          studentAttendance={studentAttendance}
-                          status={0}
-                          handleUpdateAttendance={handleUpdateAttendance}
-                        />
-                        <AttendanceStatusButton
-                          studentAttendance={studentAttendance}
-                          status={1}
-                          handleUpdateAttendance={handleUpdateAttendance}
-                        />
-                        <AttendanceStatusButton
-                          studentAttendance={studentAttendance}
-                          status={2}
-                          handleUpdateAttendance={handleUpdateAttendance}
-                        />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                <StudentAttendanceList
+                  classAttendance={classAttendance}
+                  setIsWriteNote={setIsWriteNote}
+                  setSelectedAttendance={setSelectedAttendance}
+                  handleUpdateAttendance={handleUpdateAttendance}
+                />
               )}
             </article>
             <Modal
