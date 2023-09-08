@@ -2,7 +2,7 @@ import AuthContext from "@/src/AuthContext";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { evaluationAttributeAdapter } from "../../adapters/evaluationAdapter";
+import { evaluationAttributeAdapter } from "../../adapters/evaluationAttributeAdapter";
 import EvaluationNav from "./EvaluationNav";
 import EvaluationTextAttribute2 from "./EvaluationTextAttribute2";
 import PhotoBar from "./PhotoBar";
