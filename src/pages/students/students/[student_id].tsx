@@ -1,66 +1,18 @@
 import AuthContext from "@/src/AuthContext";
-import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
-import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
-import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
-import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
 import { Student } from "@/src/modules/students/domain/entities/Student";
-import { StudentAssessment } from "@/src/modules/students/domain/entities/StudentAssessment";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
-import { studentAssessmentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAssessmentAdapter";
+import Assessments from "@/src/modules/students/infrastructure/ui/assessment/Assessment";
+import Evaluations from "@/src/modules/students/infrastructure/ui/evaluation/Evaluations";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 
-const Assessments = ({ student }: { student: Student }) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [assessments, setAssessments] = useState<StudentAssessment[]>([]);
 
-  useEffect(() => {
-    async function getAssessments() {
-      setLoading(true);
-      await studentAssessmentAdapter
-        .list({ student_id: student.id, details: true })
-        .then((res) => {
-          setAssessments(res);
-          setLoading(false);
-        });
-    }
-
-    getAssessments();
-  }, [student]);
-
-  return (
-    <>
-      <h2>Student Assessments</h2>
-      {loading ? (
-        <Skeleton>
-          <ClassListSkeletonProps />
-        </Skeleton>
-      ) : (
-        <ul>
-          {assessments?.map((assessment, index) => (
-            <li
-              key={`assessment-${assessment.id}`}
-              className="flex justify-between"
-            >
-              <span>{assessment.assessment?.name}</span>
-              <span className={`${!assessment.score && "text-red-500"} `}>
-                {assessment.score
-                  ? assessment.score
-                  : `No score / ${assessment.assessment?.total_marks}`}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
-  );
-};
 
 const StudentPhoto = ({ student }: { student: Student }) => {
   return (
@@ -83,47 +35,6 @@ const StudentPhoto = ({ student }: { student: Student }) => {
         </p>
       </article>
     </section>
-  );
-};
-
-const Evaluations = ({ student }: { student: Student }) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [evaluations, setEvaluations] = useState<StudentEvaluation[]>([]);
-
-  useEffect(() => {
-    async function getEvaluations() {
-      setLoading(true);
-      await studentEvaluationAdapter
-        .list({ student_id: student.id })
-        .then((res) => {
-          setEvaluations(res);
-          setLoading(false);
-        });
-    }
-
-    getEvaluations();
-  }, [student]);
-
-  return (
-    <>
-      <h2>Evaluations</h2>
-      {loading ? (
-        <Skeleton>
-          <ClassListSkeletonProps />
-        </Skeleton>
-      ) : (
-        <ul>
-          {evaluations?.map((evaluation, index) => (
-            <li
-              key={`evaluation-${evaluation.id}`}
-              className="flex justify-between"
-            >
-              <p>{evaluation.id}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
   );
 };
 
