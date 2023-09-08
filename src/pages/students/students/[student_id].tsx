@@ -4,6 +4,8 @@ import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
+import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
+import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { StudentAssessment } from "@/src/modules/students/domain/entities/StudentAssessment";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
@@ -91,12 +93,12 @@ const Evaluations = ({ student }: { student: Student }) => {
   useEffect(() => {
     async function getEvaluations() {
       setLoading(true);
-      // await studentAssessmentAdapter
-      //   .list({ student_id: student.id, details: true })
-      //   .then((res) => {
-      //     setEvaluations(res);
-      //     setLoading(false);
-      //   });
+      await studentEvaluationAdapter
+        .list({ student_id: student.id })
+        .then((res) => {
+          setEvaluations(res);
+          setLoading(false);
+        });
     }
 
     getEvaluations();
@@ -111,17 +113,12 @@ const Evaluations = ({ student }: { student: Student }) => {
         </Skeleton>
       ) : (
         <ul>
-          {evaluations?.map((assessment, index) => (
+          {evaluations?.map((evaluation, index) => (
             <li
-              key={`assessment-${assessment.id}`}
+              key={`evaluation-${evaluation.id}`}
               className="flex justify-between"
             >
-              <span>{assessment.assessment?.name}</span>
-              <span className={`${!assessment.score && "text-red-500"} `}>
-                {assessment.score
-                  ? assessment.score
-                  : `No score / ${assessment.assessment?.total_marks}`}
-              </span>
+              <p>{evaluation.id}</p>
             </li>
           ))}
         </ul>
