@@ -8,173 +8,18 @@ import DateChangeButtons from "@/src/modules/core/infrastructure/ui/components/D
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
-import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import DailyReportOverview from "@/src/modules/reports/infrastructure/ui/components/DailyReportOverview";
 import { StudentAttendance } from "@/src/modules/students/domain/entities/StudentAttendance";
 import { studentAttendanceAdapter } from "@/src/modules/students/infrastructure/adapters/studentAttendanceAdapter";
+import AttendanceNoteButton from "@/src/modules/students/infrastructure/ui/attendance/AttendanceNoteButton";
 import AttendanceReasonForm from "@/src/modules/students/infrastructure/ui/attendance/AttendanceReasonForm";
+import AttendanceStatusButton from "@/src/modules/students/infrastructure/ui/attendance/AttendanceStatusButton";
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
-import toast from "react-hot-toast";
 
-const AttendanceNoteButton = ({
-  studentAttendance,
-  setIsWriteNote,
-  setSelectedAttendance,
-}: {
-  studentAttendance: StudentAttendance;
-  setIsWriteNote: Function;
-  setSelectedAttendance: Function;
-}) => {
-  return (
-    <>
-      {studentAttendance.status !== 0 && (
-        <span
-          onClick={() => {
-            setIsWriteNote(true);
-            setSelectedAttendance(studentAttendance);
-          }}
-          className={`${
-            studentAttendance.status === 1
-              ? "hover:text-orange-300"
-              : "hover:text-red-700"
-          } cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-2`}
-        >
-          Note
-        </span>
-      )}
-    </>
-  );
-};
 
-const AttendanceStatusButton = ({
-  studentAttendance,
-  status,
-  handleUpdateAttendance,
-}: {
-  studentAttendance: StudentAttendance;
-  status: number;
-  handleUpdateAttendance: Function;
-}) => {
-  return (
-    <>
-      {status === 0 && (
-        <span
-          onClick={async () => {
-            if (studentAttendance.status === status) {
-              toast(`Student ${studentAttendance.student_id} already checked`);
-              return;
-            }
-            await studentAttendanceAdapter
-              .patch({
-                attendance_id: studentAttendance.id,
-                status: 0,
-              })
-              .then((res) => {
-                handleUpdateAttendance({ newAttendance: res });
-              });
-            toast.success(`Student ${studentAttendance.student_id} updated`);
-          }}
-          className={`${
-            studentAttendance.status === 0
-              ? `bg-green-300 hover:bg-green-500`
-              : "hover:bg-gray-300"
-          } grid aspect-square w-8 cursor-pointer place-items-center rounded border`}
-        >
-          <i className="fa-solid fa-check" />
-        </span>
-      )}
-      {status === 1 && (
-        <span
-          onClick={async () => {
-            if (studentAttendance.status === status) {
-              toast(`Student ${studentAttendance.student_id} already checked`);
-              return;
-            }
-            await studentAttendanceAdapter
-              .patch({
-                attendance_id: studentAttendance.id,
-                status: 1,
-              })
-              .then((res) => {
-                handleUpdateAttendance({ newAttendance: res });
-              });
-            toast.success(`Student ${studentAttendance.student_id} updated`);
-          }}
-          className={`${
-            studentAttendance.status === 1
-              ? `bg-orange-300 hover:bg-orange-500`
-              : "hover:bg-gray-300"
-          } grid aspect-square w-8 cursor-pointer place-items-center rounded border`}
-        >
-          <span>L</span>
-        </span>
-      )}
-      {status === 2 && (
-        <span
-          onClick={async () => {
-            if (studentAttendance.status === status) {
-              toast(`Student ${studentAttendance.student_id} already checked`);
-              return;
-            }
-            await studentAttendanceAdapter
-              .patch({
-                attendance_id: studentAttendance.id,
-                status: 2,
-              })
-              .then((res) => {
-                handleUpdateAttendance({ newAttendance: res });
-              });
-            toast.success(`Student ${studentAttendance.student_id} updated`);
-          }}
-          className={`${
-            studentAttendance.status === 2
-              ? `bg-red-300 hover:bg-red-500`
-              : "hover:bg-gray-300"
-          } grid aspect-square w-8 cursor-pointer place-items-center rounded border`}
-        >
-          <span>A</span>
-        </span>
-      )}
-    </>
-  );
-};
 
-// const StudentListSkeletonProps = () => {
-//   return (
-//     <div className="grid gap-2">
-//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
-//         <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
-//         <div className="h-[40px] w-full rounded bg-gray-300"></div>
-//       </div>
-//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
-//         <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
-//         <div className="h-[40px] w-full rounded bg-gray-300"></div>
-//       </div>
-//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
-//         <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
-//         <div className="h-[40px] w-full rounded bg-gray-300"></div>
-//       </div>
-//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
-//         <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
-//         <div className="h-[40px] w-full rounded bg-gray-300"></div>
-//       </div>
-//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-200 px-2 py-1">
-//         <div className="aspect-square h-[40px] rounded-full bg-gray-300"></div>
-//         <div className="h-[40px] w-full rounded bg-gray-300"></div>
-//       </div>
-//     </div>
-//   );
-// };
 
-// const ClassListSkeletonProps = () => {
-//   return (
-//     <div className="grid gap-2">
-//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-300 px-2 py-1"></div>
-//       <div className="flex h-[48px] items-center gap-2 rounded bg-gray-300 px-2 py-1"></div>
-//     </div>
-//   );
-// };
 
 export default function ReportsHome() {
   const { selectedSchool } = useContext(AuthContext);
@@ -280,6 +125,7 @@ export default function ReportsHome() {
     <Layout>
       <div>
         {/* <SchoolHeader /> */}
+        {/* Attendance */}
         <DateChangeButtons loading={loading} date={date} setDate={setDate} />
         <section className="grid gap-4 sm:grid-cols-8 sm:gap-2">
           <article className="col-span-4 flex flex-col gap-4 rounded border-2 p-4 shadow">
@@ -385,6 +231,8 @@ export default function ReportsHome() {
             )}
           </article>
         </section>
+
+        {/* FAKE TEACHER DATA */}
         <DailyReportOverview date={date} />
         <Modal
           show={isWriteNote}
