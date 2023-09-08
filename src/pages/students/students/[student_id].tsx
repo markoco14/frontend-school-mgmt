@@ -1,5 +1,6 @@
 import AuthContext from "@/src/AuthContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import PageTabNavigation from "@/src/modules/core/infrastructure/ui/components/PageTabNavigation";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import { Student } from "@/src/modules/students/domain/entities/Student";
@@ -55,7 +56,12 @@ const BackButton = () => {
   );
 };
 
-const StudentProfileNav = ({ tab, setTab }: { tab: number; setTab: Function }) => {
+export default function Home({
+  student,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
+  const { user } = useContext(AuthContext);
   const links = [
     {
       value: 1,
@@ -66,28 +72,6 @@ const StudentProfileNav = ({ tab, setTab }: { tab: number; setTab: Function }) =
       name: "Evaluations",
     },
   ];
-
-  return (
-    <nav className="flex gap-4 overflow-x-auto rounded border p-2 shadow">
-      {links.map((button) => (
-        <button
-          className={`${button.value === tab && "underline underline-offset-2 decoration-2 decoration-blue-500 ease-in-out duration"}`}
-          key={button.value}
-          onClick={() => setTab(button.value)}
-        >
-          {button.name}
-        </button>
-      ))}
-    </nav>
-  );
-};
-
-export default function Home({
-  student,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [isDeleted, setIsDeleted] = useState<boolean>(false);
-  const { user } = useContext(AuthContext);
 
   const [tab, setTab] = useState<number>(1);
 
@@ -122,7 +106,7 @@ export default function Home({
           <StudentPhoto student={student} />
         </div>
         <div className="flex flex-col gap-4 sm:col-span-6">
-          <StudentProfileNav tab={tab} setTab={setTab} />
+          <PageTabNavigation links={links} tab={tab} setTab={setTab} />
           {tab === 1 && (
             <section className="rounded border p-2 shadow">
               <h2>Profile</h2>
