@@ -25,19 +25,25 @@ const Evaluations = ({ student }: { student: Student }) => {
 
   return (
     <>
-      <h2>Evaluations</h2>
       {loading ? (
         <Skeleton>
           <ClassListSkeletonProps />
         </Skeleton>
       ) : (
-        <ul>
+        <ul className="divide-y">
           {evaluations?.map((evaluation, index) => (
-            <li
-              key={`evaluation-${evaluation.id}`}
-              className="flex justify-between"
-            >
-              <p>{evaluation.id}</p>
+            <li key={`evaluation-${evaluation.id}`} className="p-2">
+              <p>ID: {evaluation.id}</p>
+              <p>Date: {new Date(evaluation.date).toDateString()}</p>
+              <p>Evaluation Type: {evaluation.evaluation_type === 0 && "Daily"}</p>
+              <p>
+                Evaluation Value:
+                {evaluation.evaluation_value}
+              </p>
+              <p>Author: {evaluation.author_id}</p>
+              <p>Subject: {evaluation.subject_id}</p>
+              <p>Level: {evaluation.level_id}</p>
+              <p>Class: {evaluation.class_id}</p>
             </li>
           ))}
         </ul>
