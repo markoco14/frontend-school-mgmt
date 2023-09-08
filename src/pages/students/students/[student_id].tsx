@@ -55,8 +55,8 @@ const BackButton = () => {
   );
 };
 
-const StudentProfileNav = ({ setTab }: { setTab: Function }) => {
-  const navButtons = [
+const StudentProfileNav = ({ tab, setTab }: { tab: number; setTab: Function }) => {
+  const links = [
     {
       value: 1,
       name: "Profile",
@@ -69,9 +69,9 @@ const StudentProfileNav = ({ setTab }: { setTab: Function }) => {
 
   return (
     <nav className="flex gap-4 overflow-x-auto rounded border p-2 shadow">
-      {navButtons.map((button) => (
+      {links.map((button) => (
         <button
-          className={`${button.value}`}
+          className={`${button.value === tab && "underline underline-offset-2 decoration-2 decoration-blue-500 ease-in-out duration"}`}
           key={button.value}
           onClick={() => setTab(button.value)}
         >
@@ -122,7 +122,7 @@ export default function Home({
           <StudentPhoto student={student} />
         </div>
         <div className="flex flex-col gap-4 sm:col-span-6">
-          <StudentProfileNav setTab={setTab} />
+          <StudentProfileNav tab={tab} setTab={setTab} />
           {tab === 1 && (
             <section className="rounded border p-2 shadow">
               <h2>Profile</h2>
