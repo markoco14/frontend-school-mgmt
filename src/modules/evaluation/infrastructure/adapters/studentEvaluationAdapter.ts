@@ -1,12 +1,15 @@
+import { StudentEvaluationFilters } from "@/src/modules/students/domain/entities/StudentEvaluationFilters";
 import { StudentEvaluation } from "../../domain/entities/StudentEvaluation";
 
 class StudentEvaluationAdapter {
   public async list({
     student_id,
     details,
+    filters,
   }: {
     student_id?: number;
     details?: boolean;
+    filters?: StudentEvaluationFilters;
   }): Promise<StudentEvaluation[]> {
     let url;
 
@@ -19,6 +22,15 @@ class StudentEvaluationAdapter {
     const queryParams: string[] = [];
     if (details) queryParams.push(`details=${encodeURIComponent(details)}`);
 
+    
+    filters && Object.keys(filters).forEach((key) => {
+      // @ts-ignore
+      if (filters[key] !== undefined) {
+        // @ts-ignore
+        queryParams.push(`${key}=${encodeURIComponent(filters[key])}`);
+      }
+    });
+    
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;
     }
