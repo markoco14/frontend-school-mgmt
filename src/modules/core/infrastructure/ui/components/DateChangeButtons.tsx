@@ -30,14 +30,14 @@ export default function DateChangeButtons({
         <button
           className="flex items-center justify-center disabled:cursor-not-allowed"
           onClick={decrementDate}
-          disabled={dayNumber === 1}
+          // disabled={dayNumber === 1}
         >
           <span className="material-symbols-outlined">navigate_before</span>
         </button>
         <button
           className="flex items-center justify-center disabled:cursor-not-allowed"
           onClick={incrementDate}
-          disabled={dayNumber === 5}
+          // disabled={dayNumber === 5}
         >
           <span className="material-symbols-outlined">navigate_next</span>
         </button>
