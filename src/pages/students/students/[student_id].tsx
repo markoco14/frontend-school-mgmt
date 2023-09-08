@@ -75,18 +75,6 @@ export default function Home({
 
   const [tab, setTab] = useState<number>(1);
 
-  async function handleDeleteStudent(id: number) {
-    try {
-      setLoading(true);
-      const response = await studentAdapter.deleteStudentById({ id: id });
-      toast.success("Student deleted.");
-      setLoading(false);
-      setIsDeleted(true);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   if (user?.role !== "OWNER") {
     return (
       <Layout>
