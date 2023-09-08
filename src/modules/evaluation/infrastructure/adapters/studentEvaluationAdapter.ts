@@ -6,10 +6,12 @@ class StudentEvaluationAdapter {
     student_id,
     details,
     filters,
+    date,
   }: {
     student_id?: number;
     details?: boolean;
     filters?: StudentEvaluationFilters;
+    date?: string;
   }): Promise<StudentEvaluation[]> {
     let url;
 
@@ -21,6 +23,7 @@ class StudentEvaluationAdapter {
 
     const queryParams: string[] = [];
     if (details) queryParams.push(`details=${encodeURIComponent(details)}`);
+    if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
 
     
     filters && Object.keys(filters).forEach((key) => {
