@@ -1,9 +1,7 @@
 export default function DateChangeButtons({
-	loading,
   date,
   setDate,
 }: {
-	loading: boolean;
   date: Date;
   setDate: Function;
 }) {
@@ -27,7 +25,6 @@ export default function DateChangeButtons({
     <>
       <div>
         <p>{date.toDateString()}</p>
-        <span className="animate-pulse">{loading && "loading..."}</span>
       </div>
       <div className="mb-2 flex gap-4">
         <button
