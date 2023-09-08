@@ -15,6 +15,7 @@ import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import PageTabNavigation from "@/src/modules/core/infrastructure/ui/components/PageTabNavigation";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import DailyReportOverview from "@/src/modules/reports/infrastructure/ui/components/DailyReportOverview";
+import ReportingEvaluationSection from "@/src/modules/reports/infrastructure/ui/components/evaluation/ReportingEvaluationSection";
 import { useContext, useEffect, useState } from "react";
 
 export default function ReportsHome() {
@@ -76,7 +77,7 @@ export default function ReportsHome() {
         .list({ school_id: selectedSchool.id, day: dayName })
         .then((res) => {
           setSelectedClass(res[0]);
-          getAttendanceList({ school_class: res[0].id, date: formattedDate });
+          getAttendanceList({ school_class: res[0]?.id, date: formattedDate });
           setTodayClasses(res);
           setLoading(false);
         });
@@ -210,10 +211,7 @@ export default function ReportsHome() {
         )}
         {tab === 2 && (
           <section className="rounded border p-2 shadow">
-            <div className="border-b-2 sm:col-span-8">
-              <DateChangeButtons date={date} setDate={setDate} />
-            </div>
-            <p>Evaluations</p>
+            <ReportingEvaluationSection />
           </section>
         )}
         {tab === 3 && (
