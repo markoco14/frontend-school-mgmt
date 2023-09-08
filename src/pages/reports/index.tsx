@@ -15,6 +15,7 @@ import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import PageTabNavigation from "@/src/modules/core/infrastructure/ui/components/PageTabNavigation";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import DailyReportOverview from "@/src/modules/reports/infrastructure/ui/components/DailyReportOverview";
+import AttendanceSection from "@/src/modules/reports/infrastructure/ui/components/attendance/AttendanceSection";
 import ReportingEvaluationSection from "@/src/modules/reports/infrastructure/ui/components/evaluation/ReportingEvaluationSection";
 import { useContext, useEffect, useState } from "react";
 
@@ -144,76 +145,62 @@ export default function ReportsHome() {
   }
   return (
     <Layout>
-      <div className="grid gap-4">
+      <div className="grid gap-4 divide-y">
         {/* <SchoolHeader /> */}
         <h1 className="text-3xl">Reporting</h1>
-        <div>
-          <PageTabNavigation links={links} tab={tab} setTab={setTab} />
+        <div className="border-b-2">
+          <DateChangeButtons date={date} setDate={setDate} />
         </div>
-        {/* Attendance */}
-        {tab === 1 && (
-          <section className="grid gap-4 rounded border p-2 shadow sm:grid-cols-8 sm:gap-2">
-            <div className="border-b-2 sm:col-span-8">
-              <DateChangeButtons date={date} setDate={setDate} />
-            </div>
-            <article className="col-span-4 flex flex-col gap-4 rounded border p-4 shadow">
-              <div>
-                <h2 className="mb-2 text-2xl">
-                  Classes {dayName} {date.toDateString()}
-                </h2>
-                <p>Click a class to see the student list on the right.</p>
-              </div>
-              {loading ? (
-                <Skeleton>
-                  <ClassListSkeletonProps />
-                </Skeleton>
-              ) : (
-                <ClassList
-                  todayClasses={todayClasses}
+
+        <section className="grid gap-4 rounded border bg-gray-100 p-2 shadow-inner sm:grid-cols-8 sm:gap-2">
+          <div className="bg-white sm:col-span-8">
+            <PageTabNavigation links={links} tab={tab} setTab={setTab} />
+          </div>
+          {/* Class Attendance Logic */}
+          {tab !== 3 && (
+            <>
+              <article className="col-span-4 flex flex-col gap-4 rounded border bg-white p-4 shadow">
+                <div>
+                  <h2 className="mb-2 text-2xl">
+                    Classes {dayName} {date.toDateString()}
+                  </h2>
+                  <p>Click a class to see the student list on the right.</p>
+                </div>
+                {loading ? (
+                  <Skeleton>
+                    <ClassListSkeletonProps />
+                  </Skeleton>
+                ) : (
+                  <ClassList
+                    todayClasses={todayClasses}
+                    selectedClass={selectedClass}
+                    handleClick={handleChangeClass}
+                  />
+                )}
+              </article>
+              {tab === 1 && (
+                <AttendanceSection 
                   selectedClass={selectedClass}
-                  handleClick={handleChangeClass}
-                />
-              )}
-            </article>
-            <article className="col-span-4 grid gap-4 rounded border p-4 shadow">
-              <div>
-                <h2 className="mb-2 text-2xl">
-                  Class: {selectedClass?.name} Teacher {selectedClass?.teacher}
-                </h2>
-                <p>Track student attendance below.</p>
-              </div>
-              {loading || loadingAttendance ? (
-                <Skeleton>
-                  <StudentListSkeletonProps studentQuantity={4} />
-                </Skeleton>
-              ) : (
-                <StudentAttendanceList
+                  loading={loading}
+                  loadingAttendance={loadingAttendance}
                   classAttendance={classAttendance}
                   setIsWriteNote={setIsWriteNote}
                   setSelectedAttendance={setSelectedAttendance}
-                  handleUpdateAttendance={handleUpdateAttendance}
-                />
-              )}
-            </article>
-            <Modal
-              show={isWriteNote}
-              close={handleClose}
-              title={"Student Attendance Reason"}
-            >
-              {selectedAttendance && (
-                <AttendanceReasonForm
+                  isWriteNote={isWriteNote}
+                  handleClose={handleClose}
                   selectedAttendance={selectedAttendance}
+                  setClassAttendance={setClassAttendance}
                   handleUpdateAttendance={handleUpdateAttendance}
                 />
               )}
-            </Modal>
-          </section>
-        )}
-        {tab === 2 && (
-          <section className="rounded border p-2 shadow">
-            <ReportingEvaluationSection />
-          </section>
-        )}
+              {tab === 2 && (
+                <article className="col-span-4 grid gap-4 rounded border bg-white p-4 shadow">
+                  <ReportingEvaluationSection date={date} />
+                </article>
+              )}
+            </>
+          )}
+        </section>
         {tab === 3 && (
           <section className="rounded border p-2 shadow">
             <p>daily reports</p>
