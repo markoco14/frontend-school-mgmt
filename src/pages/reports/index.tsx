@@ -121,7 +121,7 @@ export default function ReportsHome() {
               )}
               {tab === 2 && (
                 <article className="col-span-4 grid gap-4 rounded border bg-white p-4 shadow">
-                  <ReportingEvaluationSection date={date} />
+                  <ReportingEvaluationSection date={date} selectedClass={selectedClass} />
                 </article>
               )}
             </>

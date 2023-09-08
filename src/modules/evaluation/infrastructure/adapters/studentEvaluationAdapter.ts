@@ -7,11 +7,13 @@ class StudentEvaluationAdapter {
     details,
     filters,
     date,
+    class_id,
   }: {
     student_id?: number;
     details?: boolean;
     filters?: StudentEvaluationFilters;
     date?: string;
+    class_id?: number;
   }): Promise<StudentEvaluation[]> {
     let url;
 
@@ -24,16 +26,17 @@ class StudentEvaluationAdapter {
     const queryParams: string[] = [];
     if (details) queryParams.push(`details=${encodeURIComponent(details)}`);
     if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
+    if (class_id) queryParams.push(`class_id=${encodeURIComponent(class_id)}`);
 
-    
-    filters && Object.keys(filters).forEach((key) => {
-      // @ts-ignore
-      if (filters[key] !== undefined) {
+    filters &&
+      Object.keys(filters).forEach((key) => {
         // @ts-ignore
-        queryParams.push(`${key}=${encodeURIComponent(filters[key])}`);
-      }
-    });
-    
+        if (filters[key] !== undefined) {
+          // @ts-ignore
+          queryParams.push(`${key}=${encodeURIComponent(filters[key])}`);
+        }
+      });
+
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;
     }
