@@ -279,7 +279,7 @@ export default function ReportsHome() {
   return (
     <Layout>
       <div>
-        <SchoolHeader />
+        {/* <SchoolHeader /> */}
         <DateChangeButtons loading={loading} date={date} setDate={setDate} />
         <section className="grid gap-4 sm:grid-cols-8 sm:gap-2">
           <article className="col-span-4 flex flex-col gap-4 rounded border-2 p-4 shadow">

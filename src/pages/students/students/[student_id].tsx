@@ -85,7 +85,7 @@ export default function Home({
 
   return (
     <Layout>
-      <SchoolHeader />
+      {/* <SchoolHeader /> */}
       <div className="grid gap-4 sm:grid-cols-8">
         <div className="sm:col-span-8">
           <BackButton />

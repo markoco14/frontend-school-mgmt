@@ -19,7 +19,7 @@ export default function Schedule() {
   return (
     <Layout>
       <div className="grid gap-4">
-          <SchoolHeader />
+          {/* <SchoolHeader /> */}
 					<SchoolDaySection />
       </div>
     </Layout>
