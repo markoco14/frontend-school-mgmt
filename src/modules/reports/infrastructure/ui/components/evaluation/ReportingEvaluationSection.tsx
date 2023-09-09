@@ -2,7 +2,7 @@ import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
 import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
 import { StudentEvaluationFilters } from "@/src/modules/students/domain/entities/StudentEvaluationFilters";
-import Image from "next/image";
+import { Dictionary, groupBy } from "lodash";
 import { useEffect, useState } from "react";
 
 const ReportingEvaluationSection = ({
@@ -13,7 +13,8 @@ const ReportingEvaluationSection = ({
   selectedClass: ClassEntity | undefined;
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [evaluations, setEvaluations] = useState<StudentEvaluation[]>([]);
+  const [evaluations, setEvaluations] =
+    useState<Dictionary<StudentEvaluation[]>>();
   const [filters, setFilters] = useState<StudentEvaluationFilters>({});
   // const [date, setDate] = useState<Date>(new Date());
 
@@ -29,8 +30,16 @@ const ReportingEvaluationSection = ({
           filters: filters,
         })
         .then((res) => {
-          console.log(res);
-          setEvaluations(res);
+          const groupedData = groupBy(
+            res,
+            (evaluation) => evaluation.student?.id,
+          );
+          console.log("object entries");
+          Object.entries(groupedData).forEach(([studentId, studentData]) => {
+            console.log("Student ID:", studentId);
+            console.log("Student Data:", studentData);
+          });
+          setEvaluations(groupedData);
           setLoading(false);
         });
     }
@@ -40,42 +49,43 @@ const ReportingEvaluationSection = ({
   return (
     <>
       <section>
-        <ul className="divide-y">
-          {evaluations?.map((evaluation) => (
-            <li key={`evaluation-${evaluation.id}`} className="grid gap-2 py-2">
-              <div className="flex items-center gap-2">
-                <div className="relative col-span-1 flex justify-center">
-                  <Image
-                    src={
-                      evaluation.student ? evaluation.student?.photo_url : ""
-                    }
-                    alt={`An image of ${evaluation.student?.first_name}`}
-                    width={50}
-                    height={50}
-                    style={{ objectFit: "cover" }}
-                    className="rounded-full"
-                  />
+        <ul className="grid gap-8">
+          {evaluations &&
+            Object.entries(evaluations).map(([studentId, studentData]) => (
+              <div key={studentId} className="grid gap-2">
+                <p className="text-xl">
+                  {studentData[0].student?.first_name}{" "}
+                  {studentData[0].student?.last_name}
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {studentData
+                    .sort(
+                      (a: StudentEvaluation, b: StudentEvaluation) =>
+                        a.evaluation_attribute_id - b.evaluation_attribute_id,
+                    )
+                    .map((evaluation: any) => (
+                      <div
+                        key={evaluation.id}
+                        className={`${
+                          evaluation.evaluation_attribute_id !== 3
+                            ? "col-span-1"
+                            : "col-span-2"
+                        }`}
+                      >
+                        {evaluation.evaluation_attribute_id !== 3 ? (
+                          <div className="border p-2 shadow rounded">
+                            <p>{evaluation.evaluation_attribute.name}: {evaluation.evaluation_value}</p> 
+                          </div>
+                        ) : (
+                          <div className="border p-2 shadow rounded">
+                            <p>{evaluation.evaluation_value}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
                 </div>
-                <p>
-                  {evaluation.student?.first_name}{" "}
-                  {evaluation.student?.last_name}
-                </p>
               </div>
-              <div>
-                <p>{evaluation.evaluation_attribute.name}</p>
-                <p>
-                  {evaluation.evaluation_attribute_id !== 3 ? (
-                    <>
-                      {evaluation.evaluation_value} /{" "}
-                      {evaluation.evaluation_attribute.max_value}
-                    </>
-                  ) : (
-                    <>{evaluation.evaluation_value}</>
-                  )}
-                </p>
-              </div>
-            </li>
-          ))}
+            ))}
         </ul>
       </section>
     </>
