@@ -2,15 +2,19 @@ import AuthContext from "@/src/AuthContext";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import { format } from "date-fns";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 
-export const ReportList = () => {
+export const TodayClassList = () => {
   const router = useRouter();
   const { selectedSchool } = useContext(AuthContext);
   const [classEntities, setClasses] = useState<ClassEntity[]>();
   const [date, setDate] = useState<Date>(new Date());
   const dayNumber = date.getDay();
+
+
+  const formattedDateString = date.toISOString().split("T")[0];
 
   const days = [
     "Sunday",
@@ -108,13 +112,13 @@ export const ReportList = () => {
               <span>
                 {classEntity.name} {classEntity.teacher}
               </span>
-              <button
+              <Link href={`reports/evaluations/${classEntity.id}/${formattedDateString}`}
                 onClick={() => {
                   console.log(`writing evaluations for ${classEntity.name}`);
                 }}
               >
                 Evaluations
-              </button>
+              </Link>
               {/* <div className="flex gap-4">
                 {classEntity.class_list?.length === 0 ? (
                   <Link

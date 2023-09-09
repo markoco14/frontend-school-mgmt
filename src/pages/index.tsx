@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import AuthContext from "../AuthContext";
 import Layout from "../modules/core/infrastructure/ui/components/Layout";
 import SchoolHeader from "../modules/core/infrastructure/ui/components/SchoolHeader";
-import { ReportList } from "../modules/reports/infrastructure/ui/components/ReportList";
+import { ReportList, TodayClassList } from "../modules/reports/infrastructure/ui/components/TodayClassList";
 import { School } from "../modules/school-mgmt/domain/entities/School";
 import { schoolAdapter } from "../modules/school-mgmt/infrastructure/adapters/schoolAdapter";
 import Login from "../modules/user-mgmt/infrastructure/ui/Login";
@@ -97,7 +97,7 @@ export default function Home() {
               <Link href='reports/sample3/'>Sample 3</Link>
               <Link href='reports/sample4/'>Sample 4</Link>
             </div>
-            <ReportList />
+            <TodayClassList />
           </section>
         )}
       
