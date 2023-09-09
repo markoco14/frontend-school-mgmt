@@ -1,8 +1,10 @@
+import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
+import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
+import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
 import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
 import { StudentEvaluationFilters } from "@/src/modules/students/domain/entities/StudentEvaluationFilters";
-import _ from "lodash";
 import { Dictionary, groupBy } from "lodash";
 import { useEffect, useState } from "react";
 
@@ -34,6 +36,7 @@ const ReportingEvaluationSection = ({
             res,
             (evaluation) => evaluation.student?.last_name,
           );
+          console.log(groupedData)
           setEvaluations(groupedData);
           setLoading(false);
         });
@@ -41,9 +44,44 @@ const ReportingEvaluationSection = ({
 
     getEvaluations();
   }, [date, filters, selectedClass]);
+
+  function isSatOrSun({ date }: { date: Date }) {
+    if (
+      date.toDateString().split(" ")[0] === "Sat" ||
+      date.toDateString().split(" ")[0] === "Sun"
+    ) {
+      return true;
+    }
+  }
+
+  function isEmpty(obj: Dictionary<StudentEvaluation[]>) {
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+  }
   return (
     <ul className="grid gap-4">
-      {evaluations &&
+      {loading && (
+        <Skeleton>
+          <ClassListSkeletonProps />
+        </Skeleton>
+      )}
+      {!loading &&
+        evaluations &&
+        isEmpty(evaluations) &&
+        isSatOrSun({ date: date }) && (
+          <p className="rounded-lg border bg-white p-4 text-2xl">
+            No school today
+          </p>
+        )}
+      {!loading &&
+        evaluations &&
+        isEmpty(evaluations) &&
+        !isSatOrSun({ date: date }) && (
+          <p className="rounded-lg border bg-white p-4 text-2xl">
+            No evaluations yet
+          </p>
+        )}
+      {!loading &&
+        evaluations &&
         Object.entries(evaluations).map(([studentId, studentData]) => (
           <li
             key={studentId}
