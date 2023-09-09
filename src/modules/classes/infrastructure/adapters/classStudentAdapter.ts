@@ -1,7 +1,7 @@
 import { ClassStudent } from "../../domain/entities/ClassStudent";
 
 class ClassStudentAdapter {
-	public async list({class_id, details, order}: {class_id: number, details?: boolean, order: string}): Promise<ClassStudent[]> {
+	public async list({class_id, details, order}: {class_id: number, details?: boolean, order?: string}): Promise<ClassStudent[]> {
 		let url = `${process.env.NEXT_PUBLIC_API_URL}/class-students/`;
 
 		const queryParams: string[] = [];

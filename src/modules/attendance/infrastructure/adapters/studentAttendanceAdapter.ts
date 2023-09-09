@@ -10,7 +10,7 @@ class StudentAttendanceAdapter {
     school_id?: number;
     school_class?: number;
     date?: string;
-    details?: boolean
+    details?: boolean;
   }): Promise<StudentAttendance[]> {
     let url;
 
@@ -21,7 +21,8 @@ class StudentAttendanceAdapter {
     }
 
     const queryParams: string[] = [];
-    if (school_class) queryParams.push(`school_class=${encodeURIComponent(school_class)}`);
+    if (school_class)
+      queryParams.push(`school_class=${encodeURIComponent(school_class)}`);
     if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
     if (details) queryParams.push(`details=${encodeURIComponent(details)}`);
 
@@ -44,7 +45,13 @@ class StudentAttendanceAdapter {
     return student;
   }
 
-  public async patch({ attendance_id, status }: { attendance_id: number; status: number;}): Promise<StudentAttendance> {
+  public async patch({
+    attendance_id,
+    status,
+  }: {
+    attendance_id: number;
+    status: number;
+  }): Promise<StudentAttendance> {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/${attendance_id}/`,
       {
@@ -59,7 +66,13 @@ class StudentAttendanceAdapter {
 
     return updatedAttendance;
   }
-  public async patchReason({ attendance_id, reason }: { attendance_id: number; reason: string;}): Promise<StudentAttendance> {
+  public async patchReason({
+    attendance_id,
+    reason,
+  }: {
+    attendance_id: number;
+    reason: string;
+  }): Promise<StudentAttendance> {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/${attendance_id}/`,
       {
@@ -74,7 +87,6 @@ class StudentAttendanceAdapter {
 
     return updatedAttendance;
   }
-
 }
 
 export const studentAttendanceAdapter = new StudentAttendanceAdapter();

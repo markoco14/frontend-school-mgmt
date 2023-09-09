@@ -19,7 +19,7 @@ export default function Teachers() {
   return (
     <Layout>
       <div className="grid gap-4">
-        <SchoolHeader />
+        {/* <SchoolHeader /> */}
         <TeacherSection />
       </div>
     </Layout>

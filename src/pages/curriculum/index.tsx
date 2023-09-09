@@ -43,7 +43,7 @@ export default function CurriculumHome() {
 
   return (
     <Layout>
-      <SchoolHeader />
+      {/* <SchoolHeader /> */}
       <CurriculumNav tab={tab} setTab={setTab}/>
       {tab === 1 && (
         <SubjectSection subjectLevels={subjectLevels} setSubjectLevels={setSubjectLevels}/>

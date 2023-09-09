@@ -91,10 +91,11 @@ export default function Home() {
         {user && selectedSchool && (
           <section>
             <SchoolHeader />
-            <div className="text-3xl mb-4 grid grid-cols-3">
+            <div className="text-3xl mb-4 grid sm:grid-cols-4">
               <Link href='reports/sample1/'>Sample 1</Link>
               <Link href='reports/sample2/'>Sample 2</Link>
               <Link href='reports/sample3/'>Sample 3</Link>
+              <Link href='reports/sample4/'>Sample 4</Link>
             </div>
             <ReportList />
           </section>

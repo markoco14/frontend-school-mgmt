@@ -67,7 +67,7 @@ export default function StudentsHome() {
   return (
     <Layout>
       <div>
-          <SchoolHeader />
+          {/* <SchoolHeader /> */}
         <section>
           <div className='flex justify-between items-baseline mb-4'>
             <h2 className='text-3xl'>Students</h2>

@@ -39,7 +39,7 @@ export default function ClassHome() {
       <Layout>
         <div>
           <section>
-            <SchoolHeader />
+            {/* <SchoolHeader /> */}
             <div className="mb-4 flex items-baseline justify-between">
               <Link href="/">Click here to choose a school</Link>
             </div>
@@ -64,7 +64,7 @@ export default function ClassHome() {
   return (
     <Layout>
       <div>
-        <SchoolHeader />
+        {/* <SchoolHeader /> */}
         <section className="grid sm:grid-cols-2">
           <div className="rounded border-2 p-4 shadow">
             <div className="mb-4 flex items-baseline justify-between">
