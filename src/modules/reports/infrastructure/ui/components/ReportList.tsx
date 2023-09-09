@@ -2,10 +2,8 @@ import AuthContext from "@/src/AuthContext";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import { format } from "date-fns";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import { reportAdapter } from "../../adapters/reportAdapter";
 
 export const ReportList = () => {
   const router = useRouter();
@@ -13,7 +11,7 @@ export const ReportList = () => {
   const [classEntities, setClasses] = useState<ClassEntity[]>();
   const [date, setDate] = useState<Date>(new Date());
   const dayNumber = date.getDay();
-  
+
   const days = [
     "Sunday",
     "Monday",
@@ -23,7 +21,7 @@ export const ReportList = () => {
     "Friday",
     "Saturday",
   ];
-  
+
   const dayName = days[dayNumber];
 
   useEffect(() => {
@@ -37,26 +35,24 @@ export const ReportList = () => {
           setClasses(() => res);
         });
     }
-    if (selectedSchool) {
-      getData();
-    }
+    selectedSchool && getData();
   }, [date, selectedSchool, dayName]);
 
-  async function checkOrCreateReports(classEntity: ClassEntity, date: string) {
-    await reportAdapter
-      .getReportByClassAndDate({ class_id: classEntity.id, date: date })
-      .then((res) => {
-        if (res.id) {
-          router.push(`reports/report-details/${res.id}/`);
-        } else {
-          reportAdapter
-            .createReportForClassAndDate({ class_id: classEntity.id, date: date })
-            .then((res) => {
-              router.push(`reports/report-details/${res.id}/`);
-            });
-        }
-      });
-  }
+  // async function checkOrCreateReports(classEntity: ClassEntity, date: string) {
+  //   await reportAdapter
+  //     .getReportByClassAndDate({ class_id: classEntity.id, date: date })
+  //     .then((res) => {
+  //       if (res.id) {
+  //         router.push(`reports/report-details/${res.id}/`);
+  //       } else {
+  //         reportAdapter
+  //           .createReportForClassAndDate({ class_id: classEntity.id, date: date })
+  //           .then((res) => {
+  //             router.push(`reports/report-details/${res.id}/`);
+  //           });
+  //       }
+  //     });
+  // }
 
   const incrementDate = () => {
     const currentDate = new Date(date);
@@ -72,46 +68,33 @@ export const ReportList = () => {
 
   return (
     <>
-      <h2 className="mb-4 flex flex-col items-baseline text-3xl xs:mb-0 xs:flex-row xs:justify-between xs:gap-2">
-        <span>Reports for {days[date.getDay()]} </span>
-        <span>
+      <h2 className="mb-4 flex flex-col items-baseline text-3xl xs:gap-2">
+        <span>Reports for {date.toDateString()} </span>
+        <span className="flex gap-2">
           <input
             type="date"
-            className="rounded text-left text-xl xs:mb-4 xs:text-right"
+            className="rounded border-2 text-left text-xl shadow xs:text-right"
             value={format(date, "yyyy-MM-dd")}
             onChange={async (e) => {
               const newDate = new Date(e.target.value);
-
-              if (selectedSchool) {
-                await classAdapter
-                  .listSchoolTodayClasses({
-                    school_id: selectedSchool?.id,
-                    date: newDate.getDay(),
-                  })
-                  .then((res) => {
-                    setClasses(res);
-                  });
-              }
-
               setDate(newDate);
             }}
           />
+          <button
+            className="flex items-center justify-center"
+            onClick={decrementDate}
+          >
+            <span className="material-symbols-outlined">navigate_before</span>
+          </button>
+          <button
+            className="flex items-center justify-center"
+            onClick={incrementDate}
+          >
+            <span className="material-symbols-outlined">navigate_next</span>
+          </button>
         </span>
       </h2>
-      <div className="mb-2 flex justify-between gap-4 xs:justify-center">
-        <button
-          className="flex w-full items-center justify-center"
-          onClick={decrementDate}
-        >
-          <span className="material-symbols-outlined">navigate_before</span>
-        </button>
-        <button
-          className="flex w-full items-center justify-center"
-          onClick={incrementDate}
-        >
-          <span className="material-symbols-outlined">navigate_next</span>
-        </button>
-      </div>
+      <div className="mb-2 flex gap-4"></div>
       <hr className="mb-2"></hr>
       <ul className="flex flex-col gap-2 divide-y">
         {!classEntities?.length ? (
@@ -122,10 +105,16 @@ export const ReportList = () => {
               key={index}
               className="flex items-baseline justify-between rounded-md p-2 hover:bg-blue-200"
             >
-              <span>{classEntity.name} {classEntity.teacher}</span>
-              <button onClick={() => {
-                console.log(`writing evaluations for ${classEntity.name}`)
-              }}>Evaluations</button>
+              <span>
+                {classEntity.name} {classEntity.teacher}
+              </span>
+              <button
+                onClick={() => {
+                  console.log(`writing evaluations for ${classEntity.name}`);
+                }}
+              >
+                Evaluations
+              </button>
               {/* <div className="flex gap-4">
                 {classEntity.class_list?.length === 0 ? (
                   <Link
