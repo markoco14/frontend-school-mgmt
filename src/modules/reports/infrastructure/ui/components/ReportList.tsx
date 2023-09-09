@@ -10,7 +10,7 @@ import { reportAdapter } from "../../adapters/reportAdapter";
 export const ReportList = () => {
   const router = useRouter();
   const { selectedSchool } = useContext(AuthContext);
-  const [classes, setClasses] = useState<ClassEntity[]>();
+  const [classEntities, setClasses] = useState<ClassEntity[]>();
   const [date, setDate] = useState<Date>(new Date());
   const dayNumber = date.getDay();
   
@@ -42,15 +42,15 @@ export const ReportList = () => {
     }
   }, [date, selectedSchool, dayName]);
 
-  async function checkOrCreateReports(thisClass: ClassEntity, date: string) {
+  async function checkOrCreateReports(classEntity: ClassEntity, date: string) {
     await reportAdapter
-      .getReportByClassAndDate({ class_id: thisClass.id, date: date })
+      .getReportByClassAndDate({ class_id: classEntity.id, date: date })
       .then((res) => {
         if (res.id) {
           router.push(`reports/report-details/${res.id}/`);
         } else {
           reportAdapter
-            .createReportForClassAndDate({ class_id: thisClass.id, date: date })
+            .createReportForClassAndDate({ class_id: classEntity.id, date: date })
             .then((res) => {
               router.push(`reports/report-details/${res.id}/`);
             });
@@ -114,30 +114,33 @@ export const ReportList = () => {
       </div>
       <hr className="mb-2"></hr>
       <ul className="flex flex-col gap-2 divide-y">
-        {classes?.length === 0 ? (
+        {!classEntities?.length ? (
           <p>There are no classes today</p>
         ) : (
-          classes?.map((thisClass: ClassEntity, index: number) => (
+          classEntities?.map((classEntity: ClassEntity, index: number) => (
             <li
               key={index}
               className="flex items-baseline justify-between rounded-md p-2 hover:bg-blue-200"
             >
-              <span>{thisClass.name} {thisClass.teacher}</span>
-              <div className="flex gap-4">
-                {thisClass.class_list?.length === 0 ? (
+              <span>{classEntity.name} {classEntity.teacher}</span>
+              <button onClick={() => {
+                console.log(`writing evaluations for ${classEntity.name}`)
+              }}>Evaluations</button>
+              {/* <div className="flex gap-4">
+                {classEntity.class_list?.length === 0 ? (
                   <Link
-                    href={`/classes/${thisClass.id}`}
+                    href={`/classes/${classEntity.id}`}
                     className="rounded bg-gray-300 px-2 py-1 disabled:cursor-not-allowed"
                   >
                     Add Students
                   </Link>
                 ) : (
                   <button
-                    disabled={thisClass.class_list?.length === 0}
+                    disabled={classEntity.class_list?.length === 0}
                     className="rounded bg-blue-300 px-2 py-1 disabled:cursor-not-allowed"
                     onClick={() => {
                       checkOrCreateReports(
-                        thisClass,
+                        classEntity,
                         format(date, "yyyy-MM-dd"),
                       );
                     }}
@@ -145,7 +148,7 @@ export const ReportList = () => {
                     Write reports
                   </button>
                 )}
-              </div>
+              </div> */}
             </li>
           ))
         )}
