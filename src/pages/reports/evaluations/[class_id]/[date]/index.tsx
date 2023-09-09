@@ -1,4 +1,5 @@
 import AuthContext from "@/src/AuthContext";
+import BackButton from "@/src/components/ui/utils/BackButton";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import { ReportDetail } from "@/src/modules/reports/domain/entities/ReportDetail";
 import { reportDetailAdapter } from "@/src/modules/reports/infrastructure/adapters/reportDetailAdapter";
@@ -27,6 +28,7 @@ export default function ReportDate({
 	const { user, selectedSchool } = useContext(AuthContext);
   return (
     <Layout>
+			<BackButton />
       <div>
         <section className="pb-[48px] xs:pb-0">
           
