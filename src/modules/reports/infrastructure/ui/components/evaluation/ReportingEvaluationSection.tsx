@@ -48,46 +48,50 @@ const ReportingEvaluationSection = ({
   }, [date, filters, selectedClass]);
   return (
     <>
-      <section>
-        <ul className="grid gap-8">
-          {evaluations &&
-            Object.entries(evaluations).map(([studentId, studentData]) => (
-              <div key={studentId} className="grid gap-2">
-                <p className="text-xl">
-                  {studentData[0].student?.first_name}{" "}
-                  {studentData[0].student?.last_name}
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {studentData
-                    .sort(
-                      (a: StudentEvaluation, b: StudentEvaluation) =>
-                        a.evaluation_attribute_id - b.evaluation_attribute_id,
-                    )
-                    .map((evaluation: any) => (
-                      <div
-                        key={evaluation.id}
-                        className={`${
-                          evaluation.evaluation_attribute_id !== 3
-                            ? "col-span-1"
-                            : "col-span-2"
-                        }`}
-                      >
-                        {evaluation.evaluation_attribute_id !== 3 ? (
-                          <div className="border p-2 shadow rounded">
-                            <p>{evaluation.evaluation_attribute.name}: {evaluation.evaluation_value}</p> 
-                          </div>
-                        ) : (
-                          <div className="border p-2 shadow rounded">
-                            <p>{evaluation.evaluation_value}</p>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                </div>
+      <ul className="grid gap-4">
+        {evaluations &&
+          Object.entries(evaluations).map(([studentId, studentData]) => (
+            <li
+              key={studentId}
+              className="grid gap-2 rounded-lg border bg-white p-4"
+            >
+              <p className="text-xl">
+                {studentData[0].student?.first_name}{" "}
+                {studentData[0].student?.last_name}
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {studentData
+                  .sort(
+                    (a: StudentEvaluation, b: StudentEvaluation) =>
+                      a.evaluation_attribute_id - b.evaluation_attribute_id,
+                  )
+                  .map((evaluation: any) => (
+                    <div
+                      key={evaluation.id}
+                      className={`${
+                        evaluation.evaluation_attribute_id !== 3
+                          ? "col-span-1"
+                          : "col-span-2"
+                      }`}
+                    >
+                      {evaluation.evaluation_attribute_id !== 3 ? (
+                        <div className="rounded border p-2 shadow">
+                          <p>
+                            {evaluation.evaluation_attribute.name}:{" "}
+                            {evaluation.evaluation_value}
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="rounded border p-2 shadow">
+                          <p>{evaluation.evaluation_value}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
               </div>
-            ))}
-        </ul>
-      </section>
+            </li>
+          ))}
+      </ul>
     </>
   );
 };

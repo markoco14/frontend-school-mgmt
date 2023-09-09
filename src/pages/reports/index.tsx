@@ -115,12 +115,12 @@ export default function ReportsHome() {
                 )}
               </article>
               {tab === 1 && (
-                <article className="col-span-4 grid gap-4 rounded border bg-white p-4 shadow">
+                <article className="col-span-4 grid gap-4 rounded-lg border bg-white p-4 shadow">
                   <AttendanceSection date={date} selectedClass={selectedClass} />
                 </article>
               )}
               {tab === 2 && (
-                <article className="col-span-4 grid gap-4 rounded border bg-white p-4 shadow">
+                <article className="col-span-4">
                   <ReportingEvaluationSection date={date} selectedClass={selectedClass} />
                 </article>
               )}
