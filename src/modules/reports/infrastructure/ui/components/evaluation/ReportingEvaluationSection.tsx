@@ -1,4 +1,5 @@
 import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
+import EvaluationListSkeletonProps from "@/src/components/ui/skeleton/EvaluationListSkeletonProps";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
@@ -61,7 +62,7 @@ const ReportingEvaluationSection = ({
     <ul className="grid gap-4">
       {loading && (
         <Skeleton>
-          <ClassListSkeletonProps />
+          <EvaluationListSkeletonProps />
         </Skeleton>
       )}
       {!loading &&
