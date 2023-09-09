@@ -21,7 +21,7 @@ const AttendanceSection = ({
   const [classAttendance, setClassAttendance] = useState<StudentAttendance[]>(
     [],
   );
-
+  console.log(date.toDateString().split(" ")[0]);
   function handleClose() {
     setIsWriteNote(false);
     setSelectedAttendance(undefined);
@@ -75,6 +75,7 @@ const AttendanceSection = ({
           details: true,
         })
         .then((res) => {
+          console.log(res);
           setClassAttendance(res);
           setLoadingAttendance(false);
         });
@@ -83,38 +84,61 @@ const AttendanceSection = ({
     getAttendance();
   }, [setClassAttendance, date, selectedClass?.id]);
 
+  function isSatOrSun({ date }: { date: Date }) {
+    if (
+      date.toDateString().split(" ")[0] === "Sat" ||
+      date.toDateString().split(" ")[0] === "Sun"
+    ) {
+      return true;
+    }
+  }
+
   return (
     <>
-      <div>
-        <h2 className="mb-2 text-2xl">
-          Class: {selectedClass?.name} Teacher {selectedClass?.teacher}
-        </h2>
-        <p>Track student attendance below.</p>
-      </div>
-      {loadingAttendance ? (
+      {loadingAttendance && (
         <Skeleton>
           <StudentListSkeletonProps studentQuantity={8} />
         </Skeleton>
-      ) : (
-        <StudentAttendanceList
-          classAttendance={classAttendance}
-          setIsWriteNote={setIsWriteNote}
-          setSelectedAttendance={setSelectedAttendance}
-          handleUpdateAttendance={handleUpdateAttendance}
-        />
       )}
-      <Modal
-        show={isWriteNote}
-        close={handleClose}
-        title={"Student Attendance Reason"}
-      >
-        {selectedAttendance && (
-          <AttendanceReasonForm
-            selectedAttendance={selectedAttendance}
+      {!loadingAttendance && isSatOrSun({ date: date }) && (
+        <p className="text-2xl">No school today</p>
+      )}
+      {!loadingAttendance &&
+        !classAttendance.length &&
+        !isSatOrSun({ date: date }) && (
+          <div>
+            <h2 className="mb-4 text-2xl">Attendance not ready</h2>
+            <button className="rounded-lg bg-blue-700 p-2 text-white">
+              Get Attendance
+            </button>
+          </div>
+        )}
+      {!loadingAttendance && classAttendance.length !== 0 && (
+        <>
+          <h2 className="mb-4 text-2xl">
+            Class: {selectedClass?.name} Teacher {selectedClass?.teacher}
+          </h2>
+          <p className="mb-2">Track student attendance below.</p>
+          <StudentAttendanceList
+            classAttendance={classAttendance}
+            setIsWriteNote={setIsWriteNote}
+            setSelectedAttendance={setSelectedAttendance}
             handleUpdateAttendance={handleUpdateAttendance}
           />
-        )}
-      </Modal>
+          <Modal
+            show={isWriteNote}
+            close={handleClose}
+            title={"Student Attendance Reason"}
+          >
+            {selectedAttendance && (
+              <AttendanceReasonForm
+                selectedAttendance={selectedAttendance}
+                handleUpdateAttendance={handleUpdateAttendance}
+              />
+            )}
+          </Modal>
+        </>
+      )}
     </>
   );
 };

@@ -101,29 +101,34 @@ export default function ReportsHome() {
           </div>
           {tab !== 3 && (
             <div className="col-span-8 grid grid-cols-8 gap-2">
-              <article className="relative col-span-4 flex min-h-[300px] flex-col gap-4">
+              <article className="relative col-span-4 flex flex-col gap-4">
                 <div className="sticky top-4 rounded-lg border bg-white p-4 shadow">
                   <div>
-                    <h2 className="mb-2 text-2xl">
+                    <h2 className="mb-4 text-2xl">
                       Classes {dayName} {date.toDateString()}
                     </h2>
-                    <p>Click a class to see the student list on the right.</p>
                   </div>
-                  {loading ? (
+                  {loading && (
                     <Skeleton>
                       <ClassListSkeletonProps />
                     </Skeleton>
+                  )}
+                  {!loading && !todayClasses.length ? (
+                    <p>There are no classes today</p>
                   ) : (
+                    <>
+                    <p className="mb-2">Click a class to see the student {tab === 1 ? "Attendance" : "Evaluations"} on the right.</p>
                     <ClassList
                       todayClasses={todayClasses}
                       selectedClass={selectedClass}
                       handleClick={handleChangeClass}
                     />
+                    </>
                   )}
                 </div>
               </article>
               {tab === 1 && (
-                <article className="col-span-4 grid gap-4 rounded-lg border bg-white p-4 shadow">
+                <article className="col-span-4 rounded-lg border bg-white p-4">
                   <AttendanceSection
                     date={date}
                     selectedClass={selectedClass}
