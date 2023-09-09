@@ -11,7 +11,7 @@ import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/Pe
 import DailyReportOverview from "@/src/modules/reports/infrastructure/ui/components/DailyReportOverview";
 import AttendanceSection from "@/src/modules/reports/infrastructure/ui/components/attendance/AttendanceSection";
 import ReportingEvaluationSection from "@/src/modules/reports/infrastructure/ui/components/evaluation/ReportingEvaluationSection";
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function ReportsHome() {
   const { selectedSchool } = useContext(AuthContext);
@@ -52,8 +52,6 @@ export default function ReportsHome() {
   const [todayClasses, setTodayClasses] = useState<ClassEntity[]>([]);
   const [selectedClass, setSelectedClass] = useState<ClassEntity>();
 
-  const behaviorBarRef: any = useRef(null)
-
   useEffect(() => {
     async function getClasses() {
       setLoading(true);
@@ -80,10 +78,6 @@ export default function ReportsHome() {
 
   function handleChangeClass({ classEntity }: { classEntity: ClassEntity }) {
     setSelectedClass(classEntity);
-    behaviorBarRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      })
   }
 
   return (
@@ -136,7 +130,7 @@ export default function ReportsHome() {
                 </article>
               )}
               {tab === 2 && (
-                <article className="col-span-4" ref={behaviorBarRef}>
+                <article className="col-span-4">
                   <ReportingEvaluationSection
                     date={date}
                     selectedClass={selectedClass}
