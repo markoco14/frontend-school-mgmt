@@ -11,7 +11,7 @@ import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/Pe
 import DailyReportOverview from "@/src/modules/reports/infrastructure/ui/components/DailyReportOverview";
 import AttendanceSection from "@/src/modules/reports/infrastructure/ui/components/attendance/AttendanceSection";
 import ReportingEvaluationSection from "@/src/modules/reports/infrastructure/ui/components/evaluation/ReportingEvaluationSection";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 
 export default function ReportsHome() {
   const { selectedSchool } = useContext(AuthContext);
@@ -52,6 +52,8 @@ export default function ReportsHome() {
   const [todayClasses, setTodayClasses] = useState<ClassEntity[]>([]);
   const [selectedClass, setSelectedClass] = useState<ClassEntity>();
 
+  const behaviorBarRef: any = useRef(null)
+
   useEffect(() => {
     async function getClasses() {
       setLoading(true);
@@ -78,6 +80,10 @@ export default function ReportsHome() {
 
   function handleChangeClass({ classEntity }: { classEntity: ClassEntity }) {
     setSelectedClass(classEntity);
+    behaviorBarRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      })
   }
 
   return (
@@ -94,37 +100,45 @@ export default function ReportsHome() {
             <PageTabNavigation links={links} tab={tab} setTab={setTab} />
           </div>
           {tab !== 3 && (
-            <>
-              <article className="col-span-4 flex flex-col gap-4 rounded border bg-white p-4 shadow">
-                <div>
-                  <h2 className="mb-2 text-2xl">
-                    Classes {dayName} {date.toDateString()}
-                  </h2>
-                  <p>Click a class to see the student list on the right.</p>
+            <div className="col-span-8 grid grid-cols-8 gap-2">
+              <article className="relative col-span-4 flex min-h-[300px] flex-col gap-4">
+                <div className="sticky top-4 rounded-lg border bg-white p-4 shadow">
+                  <div>
+                    <h2 className="mb-2 text-2xl">
+                      Classes {dayName} {date.toDateString()}
+                    </h2>
+                    <p>Click a class to see the student list on the right.</p>
+                  </div>
+                  {loading ? (
+                    <Skeleton>
+                      <ClassListSkeletonProps />
+                    </Skeleton>
+                  ) : (
+                    <ClassList
+                      todayClasses={todayClasses}
+                      selectedClass={selectedClass}
+                      handleClick={handleChangeClass}
+                    />
+                  )}
                 </div>
-                {loading ? (
-                  <Skeleton>
-                    <ClassListSkeletonProps />
-                  </Skeleton>
-                ) : (
-                  <ClassList
-                    todayClasses={todayClasses}
-                    selectedClass={selectedClass}
-                    handleClick={handleChangeClass}
-                  />
-                )}
               </article>
               {tab === 1 && (
                 <article className="col-span-4 grid gap-4 rounded-lg border bg-white p-4 shadow">
-                  <AttendanceSection date={date} selectedClass={selectedClass} />
+                  <AttendanceSection
+                    date={date}
+                    selectedClass={selectedClass}
+                  />
                 </article>
               )}
               {tab === 2 && (
-                <article className="col-span-4">
-                  <ReportingEvaluationSection date={date} selectedClass={selectedClass} />
+                <article className="col-span-4" ref={behaviorBarRef}>
+                  <ReportingEvaluationSection
+                    date={date}
+                    selectedClass={selectedClass}
+                  />
                 </article>
               )}
-            </>
+            </div>
           )}
         </section>
         {tab === 3 && (
