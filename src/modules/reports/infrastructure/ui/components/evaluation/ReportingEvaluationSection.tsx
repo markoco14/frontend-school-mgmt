@@ -21,7 +21,6 @@ const ReportingEvaluationSection = ({
 
   useEffect(() => {
     async function getEvaluations() {
-      console.log(date.toISOString().split("T")[0]);
       const preparedDate = date?.toISOString().split("T")[0];
       setLoading(true);
       await studentEvaluationAdapter
@@ -33,13 +32,8 @@ const ReportingEvaluationSection = ({
         .then((res) => {
           const groupedData = groupBy(
             res,
-            (evaluation) => evaluation.student?.id,
+            (evaluation) => evaluation.student?.last_name,
           );
-          console.log("object entries");
-          Object.entries(groupedData).forEach(([studentId, studentData]) => {
-            console.log("Student ID:", studentId);
-            console.log("Student Data:", studentData);
-          });
           setEvaluations(groupedData);
           setLoading(false);
         });
@@ -57,7 +51,7 @@ const ReportingEvaluationSection = ({
           >
             <p className="text-xl">
               {studentData[0].student?.first_name}{" "}
-              {studentData[0].student?.last_name}
+              {studentData[0].student?.last_name}{" "}
             </p>
             <div className="grid grid-cols-2 gap-2">
               {studentData
