@@ -37,7 +37,6 @@ const ReportingEvaluationSection = ({
             res,
             (evaluation) => evaluation.student?.last_name,
           );
-          console.log(groupedData)
           setEvaluations(groupedData);
           setLoading(false);
         });

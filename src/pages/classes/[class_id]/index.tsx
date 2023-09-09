@@ -28,7 +28,6 @@ export default function ManageClassDetails({
 }: {
   classEntity: ClassEntity;
 }) {
-  console.log(classEntity);
   const [selectedClass, setSelectedClass] = useState<ClassEntity>(classEntity);
   const [assessments, setAssessments] = useState<ClassAssessment[]>([]);
   const { user } = useContext(AuthContext);
@@ -42,7 +41,6 @@ export default function ManageClassDetails({
       await classAssessmentAdapter
         .list({ class_id: classEntity.id, details: true })
         .then((res) => {
-          console.log(res);
           setAssessments(res);
           setLoading(false);
         });

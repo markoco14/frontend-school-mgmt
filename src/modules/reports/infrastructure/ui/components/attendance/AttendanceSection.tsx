@@ -21,7 +21,6 @@ const AttendanceSection = ({
   const [classAttendance, setClassAttendance] = useState<StudentAttendance[]>(
     [],
   );
-  console.log(date.toDateString().split(" ")[0]);
   function handleClose() {
     setIsWriteNote(false);
     setSelectedAttendance(undefined);
@@ -75,7 +74,6 @@ const AttendanceSection = ({
           details: true,
         })
         .then((res) => {
-          console.log(res);
           setClassAttendance(res);
           setLoadingAttendance(false);
         });

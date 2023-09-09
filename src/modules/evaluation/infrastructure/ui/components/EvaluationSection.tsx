@@ -27,7 +27,6 @@ const EvaluationSection = ({
         await evaluationAttributeAdapter
           .list({ school_id: selectedSchool?.id })
           .then((res) => {
-            // console.log(res);
             setLoading(false);
             setEvaluationAttributes(res);
           });

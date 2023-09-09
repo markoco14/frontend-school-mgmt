@@ -23,8 +23,6 @@ export default function AttendanceReasonForm({
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
-    console.log(selectedAttendance.id);
     await studentAttendanceAdapter
       .patchReason({
         attendance_id: selectedAttendance.id,
@@ -32,7 +30,6 @@ export default function AttendanceReasonForm({
       })
       .then((res) => {
         toast.success('Reason updated successfully!')
-        console.log(res);
         handleUpdateAttendance({newAttendance: res});
       });
     return;

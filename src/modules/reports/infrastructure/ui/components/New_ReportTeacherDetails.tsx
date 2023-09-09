@@ -291,9 +291,7 @@ export default function ReportTeacherDetails({
             const studentHolder: Student[] = res.map(
               (entry: any) => entry.student,
             );
-            // console.log("student holder", studentHolder);
             setLoading(false);
-            // console.log("class student list", res);
             setStudents(studentHolder);
           });
       } catch (error) {

@@ -34,7 +34,6 @@ export const ReportList = () => {
           day: dayName,
         })
         .then((res) => {
-          console.log(res)
           setClasses(() => res);
         });
     }
