@@ -1,3 +1,4 @@
+import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
 import { StudentAttendance } from "../../domain/entities/StudentAttendance";
 
 class StudentAttendanceAdapter {
@@ -43,6 +44,26 @@ class StudentAttendanceAdapter {
     const student: StudentAttendance = await res.json();
 
     return student;
+  }
+
+  public async batchCreate({classList, date, userId}: {classList: ClassStudent[], date: string, userId: number}): Promise<StudentAttendance[]> {
+    console.log('class list in adapter', classList)
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/batch-student-attendances/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          class_list: classList,
+          date: date,
+          user_id: userId,
+        }),
+      },
+    );
+
+    return [];
   }
 
   public async patch({

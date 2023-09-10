@@ -1,11 +1,13 @@
+import AuthContext from "@/src/AuthContext";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
 import { StudentAttendance } from "@/src/modules/attendance/domain/entities/StudentAttendance";
 import { studentAttendanceAdapter } from "@/src/modules/attendance/infrastructure/adapters/studentAttendanceAdapter";
 import AttendanceReasonForm from "@/src/modules/attendance/infrastructure/ui/components/AttendanceReasonForm";
 import StudentAttendanceList from "@/src/modules/attendance/infrastructure/ui/components/StudentAttendanceList";
+import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const AttendanceSection = ({
   selectedClass,
@@ -14,6 +16,7 @@ const AttendanceSection = ({
   selectedClass: any;
   date: Date;
 }) => {
+  const {user} = useContext(AuthContext)
   const [isWriteNote, setIsWriteNote] = useState<boolean>(false);
   const [selectedAttendance, setSelectedAttendance] =
     useState<StudentAttendance>();
@@ -91,6 +94,19 @@ const AttendanceSection = ({
     }
   }
 
+  async function createAttendanceRecords({selectedClass, date}: {selectedClass: ClassEntity, date: Date}) {
+    console.log(`creating attendance records for ${selectedClass.name}`)
+    console.log(`selected class class list:`, selectedClass.class_list)
+    console.log("date", date.toISOString().split("T")[0]);
+    selectedClass && user && await studentAttendanceAdapter
+      .batchCreate({
+        classList: selectedClass.class_list,
+        date: date.toISOString().split("T")[0],
+        userId: user?.user_id
+      })
+      .then((res) => console.log(res));
+  }
+
   return (
     <>
       {loadingAttendance && (
@@ -106,7 +122,10 @@ const AttendanceSection = ({
         !isSatOrSun({ date: date }) && (
           <div>
             <h2 className="mb-4 text-2xl">Attendance not ready</h2>
-            <button className="rounded-lg bg-blue-700 p-2 text-white">
+            <button className="rounded-lg bg-blue-700 p-2 text-white"
+            onClick={() => {
+              createAttendanceRecords({selectedClass: selectedClass, date: date});
+            }}>
               Get Attendance
             </button>
           </div>
