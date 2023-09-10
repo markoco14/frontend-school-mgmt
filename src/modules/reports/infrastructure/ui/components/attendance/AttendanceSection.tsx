@@ -104,7 +104,7 @@ const AttendanceSection = ({
     selectedClass.class_list &&
       user &&
       (await studentAttendanceAdapter
-        .batchCreate({
+        .batchCreateAttendance({
           classList: selectedClass.class_list,
           date: date.toISOString().split("T")[0],
           userId: user?.user_id,
