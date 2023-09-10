@@ -1,4 +1,5 @@
 import AuthContext from "@/src/AuthContext";
+import BackButton from "@/src/components/ui/utils/BackButton";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PageTabNavigation from "@/src/modules/core/infrastructure/ui/components/PageTabNavigation";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
@@ -44,16 +45,6 @@ export const getServerSideProps: GetServerSideProps<{
   const student = await studentAdapter.getStudent({ id: id });
 
   return { props: { student } };
-};
-
-const BackButton = () => {
-  const router = useRouter();
-
-  return (
-    <button onClick={() => router.back()} className="rounded border p-2">
-      Back
-    </button>
-  );
 };
 
 export default function Home({

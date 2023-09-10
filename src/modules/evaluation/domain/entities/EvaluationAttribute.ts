@@ -1,10 +1,12 @@
 export class EvaluationAttribute {
   constructor(
     public id: number,
+    public school_id: number,
     public name: string,
     public type: string,
-    public minValue?: number,
-    public maxValue?: number,
+    public data_type_id: number,
+    public min_value?: number,
+    public max_value?: number,
     public descriptions?: string[],
   ) {}
 }
