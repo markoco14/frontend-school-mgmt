@@ -111,12 +111,15 @@ export default function ReportsHome() {
                     <p>There are no classes today</p>
                   ) : (
                     <>
-                    <p className="mb-2">Click a class to see the student {tab === 1 ? "Attendance" : "Evaluations"} on the right.</p>
-                    <ClassList
-                      todayClasses={todayClasses}
-                      selectedClass={selectedClass}
-                      handleClick={handleChangeClass}
-                    />
+                      <p className="mb-2">
+                        Click a class to see the student{" "}
+                        {tab === 1 ? "Attendance" : "Evaluations"} on the right.
+                      </p>
+                      <ClassList
+                        todayClasses={todayClasses}
+                        selectedClass={selectedClass}
+                        handleClick={handleChangeClass}
+                      />
                     </>
                   )}
                 </div>
