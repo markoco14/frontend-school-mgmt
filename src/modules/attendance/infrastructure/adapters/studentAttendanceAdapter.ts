@@ -63,7 +63,9 @@ class StudentAttendanceAdapter {
       },
     );
 
-    return [];
+    const attendanceRecords: StudentAttendance[] = await res.json();
+
+    return attendanceRecords;
   }
 
   public async patch({
