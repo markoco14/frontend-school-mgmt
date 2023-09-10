@@ -18,7 +18,7 @@ const StudentAttendanceList = ({
     <ul className="grid divide-y">
       {classAttendance?.map((studentAttendance) => (
         <li
-          key={`studentAttendance-${studentAttendance.id}`}
+          key={`studentAttendance-${studentAttendance?.id}`}
           className="flex items-center justify-between py-1"
         >
           <div className="flex items-center gap-4">

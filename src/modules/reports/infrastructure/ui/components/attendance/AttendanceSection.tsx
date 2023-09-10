@@ -98,13 +98,15 @@ const AttendanceSection = ({
     console.log(`creating attendance records for ${selectedClass.name}`)
     console.log(`selected class class list:`, selectedClass.class_list)
     console.log("date", date.toISOString().split("T")[0]);
-    selectedClass && user && await studentAttendanceAdapter
+    selectedClass.class_list && user && await studentAttendanceAdapter
       .batchCreate({
         classList: selectedClass.class_list,
         date: date.toISOString().split("T")[0],
         userId: user?.user_id
       })
-      .then((res) => console.log(res));
+      .then((res) => {
+        setClassAttendance(res)
+      });
   }
 
   return (
