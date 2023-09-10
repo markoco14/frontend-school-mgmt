@@ -13,9 +13,6 @@ class StudentAdapter {
     attendance?: boolean;
     schoolId?: number;
   }): Promise<Student[]> {
-    console.log(classEntityId)
-    console.log(date)
-    console.log(attendance)
     let url;
 
     if (schoolId) {
