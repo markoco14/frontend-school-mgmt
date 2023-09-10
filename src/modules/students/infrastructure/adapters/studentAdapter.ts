@@ -2,6 +2,45 @@ import { PaginatedStudentResponse } from "../../domain/entities/PaginatedStudent
 import { Student } from "./../../domain/entities/Student";
 
 class StudentAdapter {
+  public async list({
+    classEntityId,
+    date,
+    attendance,
+    schoolId,
+  }: {
+    classEntityId?: number;
+    date?: string;
+    attendance?: boolean;
+    schoolId?: number;
+  }): Promise<Student[]> {
+    console.log(classEntityId)
+    console.log(date)
+    console.log(attendance)
+    let url;
+
+    if (schoolId) {
+      url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/students/`;
+    } else {
+      url = `${process.env.NEXT_PUBLIC_API_URL}/students/`;
+    }
+
+    const queryParams: string[] = [];
+    if (classEntityId)
+      queryParams.push(`class_entity=${encodeURIComponent(classEntityId)}`);
+    if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
+    if (attendance)
+      queryParams.push(`attendance=${encodeURIComponent(attendance)}`);
+
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
+    }
+
+    const res = await fetch(url);
+    const students: Student[] = await res.json();
+
+    return students;
+  }
+
   public async listSchoolStudents({
     id,
     page,
@@ -10,7 +49,7 @@ class StudentAdapter {
     page: number;
   }): Promise<PaginatedStudentResponse> {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/students/?page=${page}`
+      `${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/students/?page=${page}`,
     );
     const students: PaginatedStudentResponse = await res.json();
 
@@ -19,7 +58,7 @@ class StudentAdapter {
 
   public async listClassStudents({ id }: { id: number }): Promise<Student[]> {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/students/`
+      `${process.env.NEXT_PUBLIC_API_URL}/classes/${id}/students/`,
     );
     const students: Student[] = await res.json();
 
@@ -28,7 +67,7 @@ class StudentAdapter {
 
   public async getStudent({ id }: { id: number }): Promise<Student> {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/students/${id}/`
+      `${process.env.NEXT_PUBLIC_API_URL}/students/${id}/`,
     );
     const student: Student = await res.json();
 
@@ -62,10 +101,10 @@ class StudentAdapter {
           last_name: lastName,
           age: age,
           school_id: schoolId,
-					gender: gender,
-					photo_url: photo_url
+          gender: gender,
+          photo_url: photo_url,
         }),
-      }
+      },
     );
     const student: Student = await response.json();
 
@@ -77,7 +116,7 @@ class StudentAdapter {
       `${process.env.NEXT_PUBLIC_API_URL}/students/${id}/`,
       {
         method: "DELETE",
-      }
+      },
     );
 
     return response;
