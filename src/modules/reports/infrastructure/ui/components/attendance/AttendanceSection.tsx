@@ -16,7 +16,7 @@ const AttendanceSection = ({
   selectedClass: any;
   date: Date;
 }) => {
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
   const [isWriteNote, setIsWriteNote] = useState<boolean>(false);
   const [selectedAttendance, setSelectedAttendance] =
     useState<StudentAttendance>();
@@ -94,45 +94,53 @@ const AttendanceSection = ({
     }
   }
 
-  async function createAttendanceRecords({selectedClass, date}: {selectedClass: ClassEntity, date: Date}) {
-    console.log(`creating attendance records for ${selectedClass.name}`)
-    console.log(`selected class class list:`, selectedClass.class_list)
-    console.log("date", date.toISOString().split("T")[0]);
-    selectedClass.class_list && user && await studentAttendanceAdapter
-      .batchCreate({
-        classList: selectedClass.class_list,
-        date: date.toISOString().split("T")[0],
-        userId: user?.user_id
-      })
-      .then((res) => {
-        setClassAttendance(res)
-      });
+  async function createAttendanceRecords({
+    selectedClass,
+    date,
+  }: {
+    selectedClass: ClassEntity;
+    date: Date;
+  }) {
+    selectedClass.class_list &&
+      user &&
+      (await studentAttendanceAdapter
+        .batchCreate({
+          classList: selectedClass.class_list,
+          date: date.toISOString().split("T")[0],
+          userId: user?.user_id,
+        })
+        .then((res) => {
+          setClassAttendance(res);
+        }));
   }
 
   return (
     <>
-      {loadingAttendance && (
+      {/* 1) loading */}
+      {loadingAttendance ? (
         <Skeleton>
           <StudentListSkeletonProps studentQuantity={8} />
         </Skeleton>
-      )}
-      {!loadingAttendance && isSatOrSun({ date: date }) && (
-        <p className="text-2xl">No school today</p>
-      )}
-      {!loadingAttendance &&
-        !classAttendance.length &&
-        !isSatOrSun({ date: date }) && (
-          <div>
-            <h2 className="mb-4 text-2xl">Attendance not ready</h2>
-            <button className="rounded-lg bg-blue-700 p-2 text-white"
+      ) : !selectedClass ? (
+        <p>No classes selected</p>
+      ) : !selectedClass.class_list.length ? (
+        <p>No students in class. Go add some!</p>
+      ) : !classAttendance.length ? (
+        <div>
+          <h2 className="mb-4 text-2xl">Attendance not ready</h2>
+          <button
+            className="rounded-lg bg-blue-700 p-2 text-white"
             onClick={() => {
-              createAttendanceRecords({selectedClass: selectedClass, date: date});
-            }}>
-              Get Attendance
-            </button>
-          </div>
-        )}
-      {!loadingAttendance && classAttendance.length !== 0 && (
+              createAttendanceRecords({
+                selectedClass: selectedClass,
+                date: date,
+              });
+            }}
+          >
+            Get Attendance
+          </button>
+        </div>
+      ) : (
         <>
           <h2 className="mb-4 text-2xl">
             Class: {selectedClass?.name} Teacher {selectedClass?.teacher}
