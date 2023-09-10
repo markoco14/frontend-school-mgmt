@@ -1,38 +1,47 @@
 import AuthContext from "@/src/AuthContext";
 import BackButton from "@/src/components/ui/utils/BackButton";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import { ReportDetail } from "@/src/modules/reports/domain/entities/ReportDetail";
-import { reportDetailAdapter } from "@/src/modules/reports/infrastructure/adapters/reportDetailAdapter";
-import { format } from "date-fns";
-import debounce from 'lodash.debounce';
+import { Student } from "@/src/modules/students/domain/entities/Student";
+import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import TextareaAutosize from 'react-textarea-autosize';
+import { useContext } from "react";
 
 export const getServerSideProps: GetServerSideProps<{
-  reportDetails: string;
+  students: Student[] | undefined;
 }> = async (context) => {
-	console.log(context)
-	const reportDetails = 'Hello world'; 
+  console.log(context);
+  let students;
+  await studentAdapter
+    .list({
+      classEntityId: Number(context.query.class_id),
+      date: context.query.date?.toString(),
+      attendance: true,
+    })
+    .then((res) => {
+      students = res;
+    });
 
-  return { props: { reportDetails } };
+  return { props: { students } };
 };
 
 export default function ReportDate({
-  reportDetails,
+  students,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-	console.log('report details', reportDetails)
-	const { user, selectedSchool } = useContext(AuthContext);
+  const { user, selectedSchool } = useContext(AuthContext);
   return (
     <Layout>
-			<BackButton />
+      <BackButton />
       <div>
         <section className="pb-[48px] xs:pb-0">
-          
-         
+          <ul className="grid divide-y border shadow">
+            {students?.map((student) => (
+              <li key={student.id} className="p-2 hover:bg-gray-100">
+                <p>
+                  {student.first_name} {student.last_name}
+                </p>
+              </li>
+            ))}
+          </ul>
         </section>
       </div>
     </Layout>
