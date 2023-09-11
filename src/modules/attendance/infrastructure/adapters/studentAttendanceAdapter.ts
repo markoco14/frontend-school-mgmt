@@ -80,16 +80,15 @@ class StudentAttendanceAdapter {
 
   public async batchCreateAttendance({
     classId,
-    classList,
+    classAttendance,
     date,
     userId,
   }: {
     classId: number;
-    classList: ClassStudent[];
+    classAttendance: Student[];
     date: string;
     userId: number;
   }): Promise<Student[]> {
-    console.log("class list in adapter", classList);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/batch-student-attendances/`,
       {
@@ -99,7 +98,7 @@ class StudentAttendanceAdapter {
         },
         body: JSON.stringify({
           class_id: classId,
-          class_list: classList,
+          students: classAttendance,
           date: date,
           user_id: userId,
         }),
