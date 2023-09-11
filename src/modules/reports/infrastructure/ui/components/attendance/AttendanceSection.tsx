@@ -23,8 +23,7 @@ const AttendanceSection = ({
   const [isWriteNote, setIsWriteNote] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [classAttendance, setClassAttendance] = useState<Student[]>([]);
-  const [selectedStudent, setSelectedStudent] =
-    useState<Student>();
+  const [selectedStudent, setSelectedStudent] = useState<Student>();
 
   function handleClose() {
     setIsWriteNote(false);
@@ -63,7 +62,7 @@ const AttendanceSection = ({
           setLoading(false);
         });
     }
-
+    
     getAttendance();
   }, [setClassAttendance, date, selectedClass?.id]);
 
@@ -76,7 +75,6 @@ const AttendanceSection = ({
   //     return true;
   //   }
   // }
-
 
   // NEEDS REFACTOR FOR NEW STUDENT FIRST RESPONSE
   async function createAttendanceRecords({
@@ -115,7 +113,7 @@ const AttendanceSection = ({
           <ul className="divide-y">
             {classAttendance?.map((student) => (
               <li key={student.id}>
-                <div className="flex justify-between p-1">
+                <div className="flex items-center justify-between p-1">
                   <div className="flex items-center gap-4">
                     <div className="relative col-span-1 flex justify-center">
                       <Image
@@ -127,26 +125,25 @@ const AttendanceSection = ({
                         className="rounded-full"
                       />
                     </div>
-                    <p>{student.first_name}</p>
+                    <p>
+                      {student.first_name}{" "}
+                      {student.last_name}
+                    </p>
                   </div>
                   {!student.attendance_for_day ? (
-                    <>
-                      <p>No attendance, sorry!</p>
-                      <div>
-                        <h2 className="mb-4 text-2xl">Attendance not ready</h2>
-                        <button
-                          className="rounded-lg bg-blue-700 p-2 text-white"
-                          onClick={() => {
-                            createAttendanceRecords({
-                              selectedClass: selectedClass,
-                              date: date,
-                            });
-                          }}
-                        >
-                          Get Attendance
-                        </button>
-                      </div>
-                    </>
+                    <div>
+                      <button
+                        className="rounded-lg text-blue-500"
+                        onClick={() => {
+                          createAttendanceRecords({
+                            selectedClass: selectedClass,
+                            date: date,
+                          });
+                        }}
+                      >
+                        Get Attendance
+                      </button>
+                    </div>
                   ) : (
                     <div className="flex items-center gap-2">
                       <AttendanceNoteButton
