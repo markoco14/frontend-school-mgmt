@@ -29,7 +29,7 @@ class StudentEvaluationAdapter {
     if (class_id) queryParams.push(`class_id=${encodeURIComponent(class_id)}`);
 
     filters &&
-      Object.keys(filters).forEach((key) => {
+      Object.keys(filters)?.forEach((key) => {
         // @ts-ignore
         if (filters[key] !== undefined) {
           // @ts-ignore

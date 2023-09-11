@@ -42,7 +42,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const days: number[] = [];
-    data.daysOfWeek.forEach((day) => days.push(Number(day)));
+    data.daysOfWeek?.forEach((day) => days.push(Number(day)));
 
     try {
       const newClass: ClassEntity = await classAdapter.addClass({
