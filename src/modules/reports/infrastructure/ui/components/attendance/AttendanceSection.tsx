@@ -79,26 +79,26 @@ const AttendanceSection = ({
 
 
   // NEEDS REFACTOR FOR NEW STUDENT FIRST RESPONSE
-  // async function createAttendanceRecords({
-  //   selectedClass,
-  //   date,
-  // }: {
-  //   selectedClass: ClassEntity;
-  //   date: Date;
-  // }) {
-  //   selectedClass.class_list &&
-  //     user &&
-  //     (await studentAttendanceAdapter
-  //       .batchCreateAttendance({
-  //         classId: selectedClass.id,
-  //         classList: selectedClass.class_list,
-  //         date: date.toISOString().split("T")[0],
-  //         userId: user?.user_id,
-  //       })
-  //       .then((res) => {
-  //         setClassAttendance(res);
-  //       }));
-  // }
+  async function createAttendanceRecords({
+    selectedClass,
+    date,
+  }: {
+    selectedClass: ClassEntity;
+    date: Date;
+  }) {
+    selectedClass.class_list &&
+      user &&
+      (await studentAttendanceAdapter
+        .batchCreateAttendance({
+          classId: selectedClass.id,
+          classList: selectedClass.class_list,
+          date: date.toISOString().split("T")[0],
+          userId: user?.user_id,
+        })
+        .then((res) => {
+          setClassAttendance(res);
+        }));
+  }
 
   return (
     <>
@@ -130,7 +130,23 @@ const AttendanceSection = ({
                     <p>{student.first_name}</p>
                   </div>
                   {!student.attendance_for_day ? (
-                    <p>No attendance, sorry!</p>
+                    <>
+                      <p>No attendance, sorry!</p>
+                      <div>
+                        <h2 className="mb-4 text-2xl">Attendance not ready</h2>
+                        <button
+                          className="rounded-lg bg-blue-700 p-2 text-white"
+                          onClick={() => {
+                            createAttendanceRecords({
+                              selectedClass: selectedClass,
+                              date: date,
+                            });
+                          }}
+                        >
+                          Get Attendance
+                        </button>
+                      </div>
+                    </>
                   ) : (
                     <div className="flex items-center gap-2">
                       <AttendanceNoteButton

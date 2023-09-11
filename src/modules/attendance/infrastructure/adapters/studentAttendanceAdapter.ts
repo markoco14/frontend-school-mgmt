@@ -88,7 +88,7 @@ class StudentAttendanceAdapter {
     classList: ClassStudent[];
     date: string;
     userId: number;
-  }): Promise<StudentAttendance[]> {
+  }): Promise<Student[]> {
     console.log("class list in adapter", classList);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/batch-student-attendances/`,
@@ -106,9 +106,9 @@ class StudentAttendanceAdapter {
       },
     );
 
-    const attendanceRecords: StudentAttendance[] = await res.json();
+    const studentsWithAttendance: Student[] = await res.json();
 
-    return attendanceRecords;
+    return studentsWithAttendance;
   }
 
   public async patch({
