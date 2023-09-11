@@ -1,24 +1,25 @@
+import { Student } from "@/src/modules/students/domain/entities/Student";
 import { StudentAttendance } from "../../../domain/entities/StudentAttendance";
 
 const AttendanceNoteButton = ({
-  studentAttendance,
+  student,
+  setSelectedStudent,
   setIsWriteNote,
-  setSelectedAttendance,
 }: {
-  studentAttendance: StudentAttendance;
+  student: Student;
+  setSelectedStudent: Function;
   setIsWriteNote: Function;
-  setSelectedAttendance: Function;
 }) => {
   return (
     <>
-      {studentAttendance?.status !== 0 && (
+      {student?.attendance_for_day?.status !== 0 && (
         <span
           onClick={() => {
             setIsWriteNote(true);
-            setSelectedAttendance(studentAttendance);
+            setSelectedStudent(student);
           }}
           className={`${
-            studentAttendance?.status === 1
+            student?.attendance_for_day?.status === 1
               ? "hover:text-orange-300"
               : "hover:text-red-700"
           } cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-2`}

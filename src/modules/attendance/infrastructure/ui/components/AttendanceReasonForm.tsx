@@ -1,19 +1,21 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
-import { StudentAttendance } from "../../../domain/entities/StudentAttendance";
 import { studentAttendanceAdapter } from "../../adapters/studentAttendanceAdapter";
 import toast from "react-hot-toast";
+import { Student } from "@/src/modules/students/domain/entities/Student";
 
 type Inputs = {
   reason: string;
 };
 
 export default function AttendanceReasonForm({
-  selectedAttendance,
+  selectedStudent,
   handleUpdateAttendance,
+  handleClose,
 }: {
-  selectedAttendance: StudentAttendance;
+  selectedStudent: Student;
   handleUpdateAttendance: Function;
+  handleClose: Function;
 }) {
   const {
     register,
@@ -25,12 +27,15 @@ export default function AttendanceReasonForm({
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await studentAttendanceAdapter
       .patchReason({
-        attendance_id: selectedAttendance.id,
+        attendance_id: Number(selectedStudent?.attendance_for_day?.id),
         reason: data.reason,
       })
       .then((res) => {
-        toast.success('Reason updated successfully!')
-        handleUpdateAttendance({newAttendance: res});
+        toast.success("Reason updated successfully!");
+        handleUpdateAttendance({ newAttendance: res });
+        setTimeout(() => {
+          handleClose();
+        }, 250);
       });
     return;
   };
@@ -39,9 +44,9 @@ export default function AttendanceReasonForm({
     <article className="grid gap-2">
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
         <label>
-          {selectedAttendance?.status === 1 ? (
+          {selectedStudent?.attendance_for_day?.status === 1 ? (
             <span>
-              Why is the {selectedAttendance.student?.first_name}{" "}
+              Why is {selectedStudent?.first_name}{" "}
               <span className="underline decoration-orange-500 decoration-2 underline-offset-2">
                 Late
               </span>
@@ -49,7 +54,7 @@ export default function AttendanceReasonForm({
             </span>
           ) : (
             <span>
-              Why is the {selectedAttendance.student?.first_name}{" "}
+              Why is {selectedStudent?.first_name}{" "}
               <span className="underline decoration-red-500 decoration-2 underline-offset-2">
                 Absent
               </span>
@@ -61,7 +66,7 @@ export default function AttendanceReasonForm({
         <TextareaAutosize
           minRows={2}
           className="rounded border p-2 shadow-inner"
-          defaultValue={selectedAttendance.reason}
+          defaultValue={selectedStudent?.attendance_for_day?.reason}
           {...register("reason", {
             minLength: 2,
             maxLength: 50,
