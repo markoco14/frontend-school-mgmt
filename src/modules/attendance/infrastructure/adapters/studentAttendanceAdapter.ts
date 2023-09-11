@@ -1,7 +1,39 @@
 import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
+import { Student } from "@/src/modules/students/domain/entities/Student";
 import { StudentAttendance } from "../../domain/entities/StudentAttendance";
 
+// students-with-attendance/?class_entity=36&date=2023-09-11
 class StudentAttendanceAdapter {
+  public async listStudentsWithAttendance({
+    classId,
+    date,
+  }: {
+    classId: number;
+    date: string;
+  }): Promise<Student[]> {
+    let url;
+
+    url = `${process.env.NEXT_PUBLIC_API_URL}/students-with-attendance/`;
+    // if (school_id) {
+    //   url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/student-attendances/`;
+    // } else {
+    //   url = `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/`;
+    // }
+    const queryParams: string[] = [];
+    if (classId)
+      queryParams.push(`class_entity=${encodeURIComponent(classId)}`);
+    if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
+
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
+    }
+
+    const res = await fetch(url);
+    const studentsWithAttendance: Student[] = await res.json();
+
+    return studentsWithAttendance;
+  }
+
   public async list({
     school_id,
     school_class,
