@@ -73,14 +73,17 @@ const RangeAttribute = ({
 
 const TextAttribute = ({
   student,
+  evaluation,
   attribute,
 }: {
   student: Student;
+  evaluation: StudentEvaluation;
   attribute: EvaluationAttribute;
 }) => {
   return (
     <TextareaAutosize
       rows={2}
+      defaultValue={evaluation.evaluation_value}
       className="col-span-3 w-full rounded border p-2"
     />
   );
@@ -162,16 +165,16 @@ export default function ReportDate({
                         />
                       </div>
                     ) : (
-                      <p key={evaluation.id}>comment goes here</p>
-                      // <div
-                      //   key={attribute.id}
-                      //   className="col-span-3 grid items-center"
-                      // >
-                      //   <TextAttribute
-                      //     student={student}
-                      //     attribute={attribute}
-                      //   />
-                      // </div>
+                      <div
+                        key={evaluation.id}
+                        className="col-span-3 grid items-center"
+                      >
+                        <TextAttribute
+                          student={student}
+                          evaluation={evaluation}
+                          attribute={evaluation.evaluation_attribute}
+                        />
+                      </div>
                     ),
                   )}
 
