@@ -1,8 +1,8 @@
+import { Student } from "@/src/modules/students/domain/entities/Student";
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";
 import { studentAttendanceAdapter } from "../../adapters/studentAttendanceAdapter";
-import toast from "react-hot-toast";
-import { Student } from "@/src/modules/students/domain/entities/Student";
 
 type Inputs = {
   reason: string;
@@ -19,10 +19,14 @@ export default function AttendanceReasonForm({
 }) {
   const {
     register,
-    reset,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+
+  function setReason({ suggestion }: { suggestion: string }) {
+    setValue("reason", suggestion);
+  }
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await studentAttendanceAdapter
@@ -41,8 +45,8 @@ export default function AttendanceReasonForm({
   };
 
   return (
-    <article className="grid gap-2">
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
+    <article className="grid grid-cols-3 gap-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="col-span-2 grid gap-2">
         <label>
           {selectedStudent?.attendance_for_day?.status === 1 ? (
             <span>
@@ -72,10 +76,39 @@ export default function AttendanceReasonForm({
             maxLength: 50,
           })}
         />
-        <button className="w-full rounded bg-blue-600 p-2  text-white shadow duration-200 ease-in-out hover:bg-blue-900">
-          Submit
-        </button>
+        <div>
+          <button className="w-1/4 rounded bg-blue-600 p-2  text-white shadow duration-200 ease-in-out hover:bg-blue-900">
+            Save
+          </button>
+        </div>
       </form>
+      <div className="grid divide-y border p-4 rounded-lg">
+        <p className="text-xl mb-4">Quick reasons</p>
+        <button
+          className="py-1 text-left"
+          onClick={() => setReason({ suggestion: "Doctor appointment." })}
+        >
+          Doctor appointment.
+        </button>
+        <button
+          className="py-1 text-left"
+          onClick={() => setReason({ suggestion: "School photos." })}
+        >
+          School photos.
+        </button>
+        <button
+          className="py-1 text-left"
+          onClick={() => setReason({ suggestion: "Too much rain." })}
+        >
+          Too much rain.
+        </button>
+        <button
+          className="py-1 text-left"
+          onClick={() => setReason({ suggestion: "School detention." })}
+        >
+          School detention.
+        </button>
+      </div>
     </article>
   );
 }
