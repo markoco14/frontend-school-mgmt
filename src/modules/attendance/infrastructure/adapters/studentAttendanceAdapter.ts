@@ -114,31 +114,22 @@ class StudentAttendanceAdapter {
   public async patch({
     attendance_id,
     status,
-  }: {
-    attendance_id: number;
-    status: number;
-  }): Promise<StudentAttendance> {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/${attendance_id}/`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: status }),
-      },
-    );
-    const updatedAttendance: StudentAttendance = await res.json();
-
-    return updatedAttendance;
-  }
-  public async patchReason({
-    attendance_id,
     reason,
   }: {
     attendance_id: number;
-    reason: string;
+    status?: number;
+    reason?: string | null;
   }): Promise<StudentAttendance> {
+    const requestBody: { [key: string]: any } = {};
+
+    if (status !== undefined) {
+      requestBody.status = status;
+    }
+
+    if (reason !== undefined) {
+      requestBody.reason = reason;
+    }
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/${attendance_id}/`,
       {
@@ -146,7 +137,7 @@ class StudentAttendanceAdapter {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ reason: reason }),
+        body: JSON.stringify(requestBody),
       },
     );
     const updatedAttendance: StudentAttendance = await res.json();

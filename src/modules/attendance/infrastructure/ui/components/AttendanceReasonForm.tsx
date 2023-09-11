@@ -26,7 +26,7 @@ export default function AttendanceReasonForm({
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await studentAttendanceAdapter
-      .patchReason({
+      .patch({
         attendance_id: Number(selectedStudent?.attendance_for_day?.id),
         reason: data.reason,
       })

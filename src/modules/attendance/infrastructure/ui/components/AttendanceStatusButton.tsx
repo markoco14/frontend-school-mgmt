@@ -29,6 +29,7 @@ const AttendanceStatusButton = ({
               .patch({
                 attendance_id: Number(student.attendance_for_day?.id),
                 status: 0,
+                reason : null,
               })
               .then((res) => {
                 handleUpdateAttendance({ newAttendance: res });
