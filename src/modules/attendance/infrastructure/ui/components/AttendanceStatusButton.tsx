@@ -16,22 +16,22 @@ const AttendanceStatusButton = ({
       {status === 0 && (
         <span
           onClick={async () => {
-            if (studentAttendance.status === status) {
-              toast(`Student ${studentAttendance.student_id} already checked`);
+            if (studentAttendance?.status === status) {
+              toast(`Student ${studentAttendance?.student_id} already present`);
               return;
             }
             await studentAttendanceAdapter
               .patch({
-                attendance_id: studentAttendance.id,
+                attendance_id: studentAttendance?.id,
                 status: 0,
               })
               .then((res) => {
                 handleUpdateAttendance({ newAttendance: res });
               });
-            toast.success(`Student ${studentAttendance.student_id} updated`);
+            toast.success(`Student ${studentAttendance?.student_id} updated`);
           }}
           className={`${
-            studentAttendance.status === 0
+            studentAttendance?.status === 0
               ? `bg-green-300 hover:bg-green-500`
               : "hover:bg-gray-300"
           } grid aspect-square w-8 cursor-pointer place-items-center rounded border`}
@@ -42,22 +42,22 @@ const AttendanceStatusButton = ({
       {status === 1 && (
         <span
           onClick={async () => {
-            if (studentAttendance.status === status) {
-              toast(`Student ${studentAttendance.student_id} already checked`);
+            if (studentAttendance?.status === status) {
+              toast(`Student ${studentAttendance?.student_id} already late`);
               return;
             }
             await studentAttendanceAdapter
               .patch({
-                attendance_id: studentAttendance.id,
+                attendance_id: studentAttendance?.id,
                 status: 1,
               })
               .then((res) => {
                 handleUpdateAttendance({ newAttendance: res });
               });
-            toast.success(`Student ${studentAttendance.student_id} updated`);
+            toast.success(`Student ${studentAttendance?.student_id} updated`);
           }}
           className={`${
-            studentAttendance.status === 1
+            studentAttendance?.status === 1
               ? `bg-orange-300 hover:bg-orange-500`
               : "hover:bg-gray-300"
           } grid aspect-square w-8 cursor-pointer place-items-center rounded border`}
@@ -68,22 +68,22 @@ const AttendanceStatusButton = ({
       {status === 2 && (
         <span
           onClick={async () => {
-            if (studentAttendance.status === status) {
-              toast(`Student ${studentAttendance.student_id} already checked`);
+            if (studentAttendance?.status === status) {
+              toast(`Student ${studentAttendance?.student_id} already absent`);
               return;
             }
             await studentAttendanceAdapter
               .patch({
-                attendance_id: studentAttendance.id,
+                attendance_id: studentAttendance?.id,
                 status: 2,
               })
               .then((res) => {
                 handleUpdateAttendance({ newAttendance: res });
               });
-            toast.success(`Student ${studentAttendance.student_id} updated`);
+            toast.success(`Student ${studentAttendance?.student_id} updated`);
           }}
           className={`${
-            studentAttendance.status === 2
+            studentAttendance?.status === 2
               ? `bg-red-300 hover:bg-red-500`
               : "hover:bg-gray-300"
           } grid aspect-square w-8 cursor-pointer place-items-center rounded border`}
