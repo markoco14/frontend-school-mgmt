@@ -2,6 +2,7 @@ import AuthContext from "@/src/AuthContext";
 import BackButton from "@/src/components/ui/utils/BackButton";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
+import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
 import { evaluationAttributeAdapter } from "@/src/modules/evaluation/infrastructure/adapters/evaluationAttributeAdapter";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
@@ -14,11 +15,10 @@ export const getServerSideProps: GetServerSideProps<{
   students: Student[] | undefined;
 }> = async (context) => {
   let students;
-  await studentAdapter
-    .listStudentsPresentToday({
-      classEntityId: Number(context.query.class_id),
-      date: context.query.date?.toString(),
-      attendance: true,
+  context.query.date && await studentAdapter
+    .listPresentStudentsWithEvaluations({
+      classId: Number(context.query.class_id),
+      date: context.query.date.toString(),
     })
     .then((res) => {
       students = res;
@@ -29,11 +29,14 @@ export const getServerSideProps: GetServerSideProps<{
 
 const RangeAttribute = ({
   student,
+  evaluation,
   attribute,
 }: {
   student: Student;
+  evaluation: StudentEvaluation;
   attribute: EvaluationAttribute;
 }) => {
+  console.log(evaluation)
   const maxValue = attribute.max_value;
   const minValue = attribute.min_value;
   const valueArray = maxValue && minValue && new Array(maxValue - minValue);
@@ -44,7 +47,7 @@ const RangeAttribute = ({
     (_, i) => i + minValue,
   );
 
-  const [selectedValue, setSelectedValue] = useState<number>(3);
+  const [selectedValue, setSelectedValue] = useState<number>(Number(evaluation.evaluation_value));
   const length = 3;
   return (
     <p>
@@ -92,6 +95,7 @@ export default function ReportDate({
     EvaluationAttribute[]
   >([]);
   const [tab, setTab] = useState<number>(1);
+  console.log(students);
 
   const tabLinks = [
     {
@@ -144,7 +148,34 @@ export default function ReportDate({
                     {student.first_name} {student.last_name} {student.id}
                   </p>
 
-                  {evaluationAttributes?.map((attribute) =>
+                  {student.evaluations_for_day?.map((evaluation) =>
+                    evaluation.evaluation_attribute.max_value &&
+                    evaluation.evaluation_attribute.min_value ? (
+                      <div
+                        key={evaluation.id}
+                        className="col-span-1 text-center"
+                      >
+                        <RangeAttribute
+                          student={student}
+                          evaluation={evaluation}
+                          attribute={evaluation.evaluation_attribute}
+                        />
+                      </div>
+                    ) : (
+                      <p key={evaluation.id}>comment goes here</p>
+                      // <div
+                      //   key={attribute.id}
+                      //   className="col-span-3 grid items-center"
+                      // >
+                      //   <TextAttribute
+                      //     student={student}
+                      //     attribute={attribute}
+                      //   />
+                      // </div>
+                    ),
+                  )}
+
+                  {/* {evaluationAttributes?.map((attribute) =>
                     attribute.max_value && attribute.min_value ? (
                       <div
                         key={attribute.id}
@@ -166,7 +197,7 @@ export default function ReportDate({
                         />
                       </div>
                     ),
-                  )}
+                  )} */}
                 </li>
               ))}
             </ul>
