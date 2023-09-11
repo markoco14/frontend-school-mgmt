@@ -46,8 +46,18 @@ class StudentAttendanceAdapter {
     return student;
   }
 
-  public async batchCreateAttendance({classList, date, userId}: {classList: ClassStudent[], date: string, userId: number}): Promise<StudentAttendance[]> {
-    console.log('class list in adapter', classList)
+  public async batchCreateAttendance({
+    classId,
+    classList,
+    date,
+    userId,
+  }: {
+    classId: number;
+    classList: ClassStudent[];
+    date: string;
+    userId: number;
+  }): Promise<StudentAttendance[]> {
+    console.log("class list in adapter", classList);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/batch-student-attendances/`,
       {
@@ -56,6 +66,7 @@ class StudentAttendanceAdapter {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          class_id: classId,
           class_list: classList,
           date: date,
           user_id: userId,
