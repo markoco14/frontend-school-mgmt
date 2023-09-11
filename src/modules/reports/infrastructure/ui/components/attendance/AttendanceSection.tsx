@@ -16,21 +16,19 @@ const AttendanceSection = ({
   selectedClass,
   date,
 }: {
-  selectedClass: any;
+  selectedClass: ClassEntity;
   date: Date;
 }) => {
   const { user } = useContext(AuthContext);
   const [isWriteNote, setIsWriteNote] = useState<boolean>(false);
-  const [selectedAttendance, setSelectedAttendance] =
-    useState<StudentAttendance>();
-  const [loadingAttendance, setLoadingAttendance] = useState<boolean>(false);
-  const [classAttendance, setClassAttendance] = useState<StudentAttendance[]>(
-    [],
-  );
-  const [classAttendance2, setClassAttendance2] = useState<Student[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [classAttendance, setClassAttendance] = useState<Student[]>([]);
+  const [selectedStudent, setSelectedStudent] =
+    useState<Student>();
+
   function handleClose() {
     setIsWriteNote(false);
-    setSelectedAttendance(undefined);
+    setSelectedStudent(undefined);
   }
 
   const handleUpdateAttendance = ({
@@ -38,31 +36,7 @@ const AttendanceSection = ({
   }: {
     newAttendance: StudentAttendance;
   }) => {
-    // Use map to create a new array
-    const updatedAttendance = classAttendance.map(
-      (attendance: StudentAttendance) => {
-        // Find the attendance object that matches the ID of the newAttendance
-        if (attendance.id === newAttendance.id) {
-          // Replace it with newAttendance
-          return newAttendance;
-        }
-        // Leave all other objects unchanged
-        return attendance;
-      },
-    );
-
-    // Update the state
-    setClassAttendance(updatedAttendance);
-  };
-  const handleUpdateAttendance2 = ({
-    newAttendance,
-  }: {
-    newAttendance: StudentAttendance;
-  }) => {
-    console.log(newAttendance);
-    // return
-    // Use map to create a new array
-    const updatedAttendance = classAttendance2.map((student: Student) => {
+    const updatedAttendance = classAttendance.map((student: Student) => {
       // Find the attendance object that matches the ID of the newAttendance
       if (student.attendance_for_day?.id === newAttendance.id) {
         // Replace it with newAttendance
@@ -73,88 +47,58 @@ const AttendanceSection = ({
     });
 
     // Update the state
-    setClassAttendance2(updatedAttendance);
+    setClassAttendance(updatedAttendance);
   };
-
-  async function getAttendanceList({
-    school_class,
-    date,
-  }: {
-    school_class: number | undefined;
-    date: string | undefined;
-  }) {
-    setLoadingAttendance(true);
-    await studentAttendanceAdapter
-      .list({ school_class: school_class, date: date, details: true })
-      .then((res) => {
-        setClassAttendance(res);
-        setLoadingAttendance(false);
-      });
-  }
 
   useEffect(() => {
     async function getAttendance() {
-      setLoadingAttendance(true);
+      setLoading(true);
       await studentAttendanceAdapter
-        .list({
-          school_class: selectedClass?.id,
+        .listStudentsWithAttendance({
+          classId: selectedClass?.id,
           date: date.toISOString().split("T")[0],
-          details: true,
         })
         .then((res) => {
           setClassAttendance(res);
-          setLoadingAttendance(false);
-        });
-    }
-    async function getAttendance2() {
-      setLoadingAttendance(true);
-      await studentAttendanceAdapter
-        .listStudentsWithAttendance({
-          // school_class: selectedClass?.id,
-          classId: selectedClass?.id,
-          date: date.toISOString().split("T")[0],
-          // details: true,
-        })
-        .then((res) => {
-          console.log(res);
-          setClassAttendance2(res);
-          setLoadingAttendance(false);
+          setLoading(false);
         });
     }
 
     getAttendance();
-    getAttendance2();
   }, [setClassAttendance, date, selectedClass?.id]);
 
-  function isSatOrSun({ date }: { date: Date }) {
-    if (
-      date.toDateString().split(" ")[0] === "Sat" ||
-      date.toDateString().split(" ")[0] === "Sun"
-    ) {
-      return true;
-    }
-  }
+  // NEED A WAY TO STOP THE REQUEST WHEN NOT EXIST
+  // function isSatOrSun({ date }: { date: Date }) {
+  //   if (
+  //     date.toDateString().split(" ")[0] === "Sat" ||
+  //     date.toDateString().split(" ")[0] === "Sun"
+  //   ) {
+  //     return true;
+  //   }
+  // }
 
-  async function createAttendanceRecords({
-    selectedClass,
-    date,
-  }: {
-    selectedClass: ClassEntity;
-    date: Date;
-  }) {
-    selectedClass.class_list &&
-      user &&
-      (await studentAttendanceAdapter
-        .batchCreateAttendance({
-          classId: selectedClass.id,
-          classList: selectedClass.class_list,
-          date: date.toISOString().split("T")[0],
-          userId: user?.user_id,
-        })
-        .then((res) => {
-          setClassAttendance(res);
-        }));
-  }
+
+  // NEEDS REFACTOR FOR NEW STUDENT FIRST RESPONSE
+  // async function createAttendanceRecords({
+  //   selectedClass,
+  //   date,
+  // }: {
+  //   selectedClass: ClassEntity;
+  //   date: Date;
+  // }) {
+  //   selectedClass.class_list &&
+  //     user &&
+  //     (await studentAttendanceAdapter
+  //       .batchCreateAttendance({
+  //         classId: selectedClass.id,
+  //         classList: selectedClass.class_list,
+  //         date: date.toISOString().split("T")[0],
+  //         userId: user?.user_id,
+  //       })
+  //       .then((res) => {
+  //         setClassAttendance(res);
+  //       }));
+  // }
 
   return (
     <>
@@ -162,15 +106,14 @@ const AttendanceSection = ({
         Class: {selectedClass?.name} Teacher {selectedClass?.teacher}
       </h2>
       <p className="mb-2">Track student attendance below.</p>
-      {/* 1) loading */}
-      {loadingAttendance ? (
+      {loading ? (
         <Skeleton>
           <StudentListSkeletonProps studentQuantity={8} />
         </Skeleton>
       ) : (
         <>
           <ul className="divide-y">
-            {classAttendance2?.map((student) => (
+            {classAttendance?.map((student) => (
               <li key={student.id}>
                 <div className="flex justify-between p-1">
                   <div className="flex items-center gap-4">
@@ -191,24 +134,30 @@ const AttendanceSection = ({
                   ) : (
                     <div className="flex items-center gap-2">
                       <AttendanceNoteButton
-                        studentAttendance={student.attendance_for_day}
+                        student={student}
+                        setSelectedStudent={setSelectedStudent}
                         setIsWriteNote={setIsWriteNote}
-                        setSelectedAttendance={setSelectedAttendance}
                       />
                       <AttendanceStatusButton
-                        studentAttendance={student.attendance_for_day}
+                        student={student}
                         status={0}
-                        handleUpdateAttendance={handleUpdateAttendance2}
+                        handleUpdateAttendance={handleUpdateAttendance}
+                        setIsWriteNote={setIsWriteNote}
+                        setSelectedStudent={setSelectedStudent}
                       />
                       <AttendanceStatusButton
-                        studentAttendance={student.attendance_for_day}
+                        student={student}
                         status={1}
-                        handleUpdateAttendance={handleUpdateAttendance2}
+                        handleUpdateAttendance={handleUpdateAttendance}
+                        setIsWriteNote={setIsWriteNote}
+                        setSelectedStudent={setSelectedStudent}
                       />
                       <AttendanceStatusButton
-                        studentAttendance={student.attendance_for_day}
+                        student={student}
                         status={2}
-                        handleUpdateAttendance={handleUpdateAttendance2}
+                        handleUpdateAttendance={handleUpdateAttendance}
+                        setIsWriteNote={setIsWriteNote}
+                        setSelectedStudent={setSelectedStudent}
                       />
                     </div>
                   )}
@@ -221,65 +170,16 @@ const AttendanceSection = ({
             close={handleClose}
             title={"Student Attendance Reason"}
           >
-            {selectedAttendance && (
+            {selectedStudent && (
               <AttendanceReasonForm
-                selectedAttendance={selectedAttendance}
+                selectedStudent={selectedStudent}
                 handleUpdateAttendance={handleUpdateAttendance}
+                handleClose={handleClose}
               />
             )}
           </Modal>
         </>
       )}
-      {/* {loadingAttendance ? (
-        <Skeleton>
-          <StudentListSkeletonProps studentQuantity={8} />
-        </Skeleton>
-      ) : !selectedClass ? (
-        <p>No classes selected</p>
-      ) : !selectedClass.class_list.length ? (
-        <p>No students in class. Go add some!</p>
-      ) : !classAttendance.length ? (
-        <div>
-          <h2 className="mb-4 text-2xl">Attendance not ready</h2>
-          <button
-            className="rounded-lg bg-blue-700 p-2 text-white"
-            onClick={() => {
-              createAttendanceRecords({
-                selectedClass: selectedClass,
-                date: date,
-              });
-            }}
-          >
-            Get Attendance
-          </button>
-        </div>
-      ) : (
-        <>
-          <h2 className="mb-4 text-2xl">
-            Class: {selectedClass?.name} Teacher {selectedClass?.teacher}
-          </h2>
-          <p className="mb-2">Track student attendance below.</p>
-
-          <StudentAttendanceList
-            classAttendance={classAttendance}
-            setIsWriteNote={setIsWriteNote}
-            setSelectedAttendance={setSelectedAttendance}
-            handleUpdateAttendance={handleUpdateAttendance}
-          />
-          <Modal
-            show={isWriteNote}
-            close={handleClose}
-            title={"Student Attendance Reason"}
-          >
-            {selectedAttendance && (
-              <AttendanceReasonForm
-                selectedAttendance={selectedAttendance}
-                handleUpdateAttendance={handleUpdateAttendance}
-              />
-            )}
-          </Modal>
-        </>
-      )} */}
     </>
   );
 };

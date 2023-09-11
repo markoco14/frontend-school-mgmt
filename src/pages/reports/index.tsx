@@ -124,7 +124,7 @@ export default function ReportsHome() {
                   )}
                 </div>
               </article>
-              {tab === 1 && (
+              {tab === 1 && selectedClass && (
                 <article className="col-span-4 rounded-lg border bg-white p-4">
                   <AttendanceSection
                     date={date}
@@ -132,7 +132,7 @@ export default function ReportsHome() {
                   />
                 </article>
               )}
-              {tab === 2 && (
+              {tab === 2 && selectedClass && (
                 <article className="col-span-4">
                   <ReportingEvaluationSection
                     date={date}
