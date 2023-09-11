@@ -15,7 +15,7 @@ export const getServerSideProps: GetServerSideProps<{
 }> = async (context) => {
   let students;
   await studentAdapter
-    .list({
+    .listStudentsPresentToday({
       classEntityId: Number(context.query.class_id),
       date: context.query.date?.toString(),
       attendance: true,
@@ -141,7 +141,7 @@ export default function ReportDate({
                   className="grid grid-cols-6 items-center p-2 hover:bg-gray-100"
                 >
                   <p className="col-span-1">
-                    {student.first_name} {student.last_name}
+                    {student.first_name} {student.last_name} {student.id}
                   </p>
 
                   {evaluationAttributes?.map((attribute) =>

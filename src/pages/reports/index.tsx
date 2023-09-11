@@ -111,17 +111,20 @@ export default function ReportsHome() {
                     <p>There are no classes today</p>
                   ) : (
                     <>
-                    <p className="mb-2">Click a class to see the student {tab === 1 ? "Attendance" : "Evaluations"} on the right.</p>
-                    <ClassList
-                      todayClasses={todayClasses}
-                      selectedClass={selectedClass}
-                      handleClick={handleChangeClass}
-                    />
+                      <p className="mb-2">
+                        Click a class to see the student{" "}
+                        {tab === 1 ? "Attendance" : "Evaluations"} on the right.
+                      </p>
+                      <ClassList
+                        todayClasses={todayClasses}
+                        selectedClass={selectedClass}
+                        handleClick={handleChangeClass}
+                      />
                     </>
                   )}
                 </div>
               </article>
-              {tab === 1 && (
+              {tab === 1 && selectedClass && (
                 <article className="col-span-4 rounded-lg border bg-white p-4">
                   <AttendanceSection
                     date={date}
@@ -129,7 +132,7 @@ export default function ReportsHome() {
                   />
                 </article>
               )}
-              {tab === 2 && (
+              {tab === 2 && selectedClass && (
                 <article className="col-span-4">
                   <ReportingEvaluationSection
                     date={date}

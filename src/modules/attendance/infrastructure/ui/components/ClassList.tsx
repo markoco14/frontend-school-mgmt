@@ -20,7 +20,7 @@ const ClassList = ({
           } flex w-full cursor-pointer items-center justify-between rounded p-2`}
         >
           <span>
-            {classEntity.name} (teacher id:{classEntity.teacher})
+            {classEntity.name} ({classEntity.id})
           </span>
         </li>
       ))}

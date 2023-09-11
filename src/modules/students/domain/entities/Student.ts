@@ -1,3 +1,5 @@
+import { StudentAttendance } from "@/src/modules/attendance/domain/entities/StudentAttendance";
+
 export class Student {
   constructor(
     public id: number,
@@ -7,5 +9,6 @@ export class Student {
     public gender: number,
     public photo_url: string,
     public school_id: number,
+    public attendance_for_day?: StudentAttendance,
   ) {}
 }

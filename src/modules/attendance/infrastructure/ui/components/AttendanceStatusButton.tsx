@@ -1,37 +1,43 @@
+import { Student } from "@/src/modules/students/domain/entities/Student";
 import toast from "react-hot-toast";
 import { StudentAttendance } from "../../../domain/entities/StudentAttendance";
 import { studentAttendanceAdapter } from "../../adapters/studentAttendanceAdapter";
 
 const AttendanceStatusButton = ({
-  studentAttendance,
+  student,
   status,
   handleUpdateAttendance,
+  setIsWriteNote,
+  setSelectedStudent,
 }: {
-  studentAttendance: StudentAttendance;
+  student: Student;
   status: number;
   handleUpdateAttendance: Function;
+  setIsWriteNote: Function;
+  setSelectedStudent: Function;
 }) => {
   return (
     <>
       {status === 0 && (
         <span
           onClick={async () => {
-            if (studentAttendance.status === status) {
-              toast(`Student ${studentAttendance.student_id} already checked`);
+            if (student.attendance_for_day?.status === status) {
+              toast(`Student ${student?.first_name} already present`);
               return;
             }
             await studentAttendanceAdapter
               .patch({
-                attendance_id: studentAttendance.id,
+                attendance_id: Number(student.attendance_for_day?.id),
                 status: 0,
+                reason : null,
               })
               .then((res) => {
                 handleUpdateAttendance({ newAttendance: res });
               });
-            toast.success(`Student ${studentAttendance.student_id} updated`);
+            toast.success(`${student?.first_name}'s attendance set to on time`);
           }}
           className={`${
-            studentAttendance.status === 0
+            student.attendance_for_day?.status === 0
               ? `bg-green-300 hover:bg-green-500`
               : "hover:bg-gray-300"
           } grid aspect-square w-8 cursor-pointer place-items-center rounded border`}
@@ -42,22 +48,24 @@ const AttendanceStatusButton = ({
       {status === 1 && (
         <span
           onClick={async () => {
-            if (studentAttendance.status === status) {
-              toast(`Student ${studentAttendance.student_id} already checked`);
+            if (student.attendance_for_day?.status === status) {
+              toast(`Student ${student?.first_name} already late`);
               return;
             }
             await studentAttendanceAdapter
               .patch({
-                attendance_id: studentAttendance.id,
+                attendance_id: Number(student.attendance_for_day?.id),
                 status: 1,
               })
               .then((res) => {
+                setIsWriteNote(true);
+                setSelectedStudent(student);
                 handleUpdateAttendance({ newAttendance: res });
               });
-            toast.success(`Student ${studentAttendance.student_id} updated`);
+            toast.success(`${student?.first_name}'s attendance set to late`);
           }}
           className={`${
-            studentAttendance.status === 1
+            student.attendance_for_day?.status === 1
               ? `bg-orange-300 hover:bg-orange-500`
               : "hover:bg-gray-300"
           } grid aspect-square w-8 cursor-pointer place-items-center rounded border`}
@@ -68,22 +76,24 @@ const AttendanceStatusButton = ({
       {status === 2 && (
         <span
           onClick={async () => {
-            if (studentAttendance.status === status) {
-              toast(`Student ${studentAttendance.student_id} already checked`);
+            if (student.attendance_for_day?.status === status) {
+              toast(`Student ${student?.first_name} already absent`);
               return;
             }
             await studentAttendanceAdapter
               .patch({
-                attendance_id: studentAttendance.id,
+                attendance_id: Number(student.attendance_for_day?.id),
                 status: 2,
               })
               .then((res) => {
+                setIsWriteNote(true);
+                setSelectedStudent(student);
                 handleUpdateAttendance({ newAttendance: res });
               });
-            toast.success(`Student ${studentAttendance.student_id} updated`);
+            toast.success(`${student?.first_name}'s attendance set to absent`);
           }}
           className={`${
-            studentAttendance.status === 2
+            student.attendance_for_day?.status === 2
               ? `bg-red-300 hover:bg-red-500`
               : "hover:bg-gray-300"
           } grid aspect-square w-8 cursor-pointer place-items-center rounded border`}
