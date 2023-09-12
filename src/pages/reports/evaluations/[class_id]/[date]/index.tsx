@@ -89,27 +89,35 @@ export default function ReportDate({
                   <p className="col-span-1">
                     {student.first_name} {student.last_name} {student.id}
                   </p>
-
-                  {student.evaluations_for_day?.map((evaluation) =>
-                    evaluation.evaluation_attribute.max_value &&
-                    evaluation.evaluation_attribute.min_value ? (
-                      <div
-                        key={evaluation.id}
-                        className="col-span-1 text-center"
-                      >
-                        <RangeAttributeForm
-                          student={student}
-                          evaluation={evaluation}
-                        />
-                      </div>
-                    ) : (
-                      <div
-                        key={evaluation.id}
-                        className="col-span-3 grid items-center"
-                      >
-                        <TextAttributeForm evaluation={evaluation} />
-                      </div>
-                    ),
+                  {!student.evaluations_for_day ? (
+                    <p className="col-span-3">
+                      Student evaluations not prepared.{" "}
+                      <button className="underline underline-offset-2">Click to prepare them now.</button>
+                    </p>
+                  ) : (
+                    <>
+                      {student.evaluations_for_day?.map((evaluation) =>
+                        evaluation.evaluation_attribute.max_value &&
+                        evaluation.evaluation_attribute.min_value ? (
+                          <div
+                            key={evaluation.id}
+                            className="col-span-1 text-center"
+                          >
+                            <RangeAttributeForm
+                              student={student}
+                              evaluation={evaluation}
+                            />
+                          </div>
+                        ) : (
+                          <div
+                            key={evaluation.id}
+                            className="col-span-3 grid items-center"
+                          >
+                            <TextAttributeForm evaluation={evaluation} />
+                          </div>
+                        ),
+                      )}
+                    </>
                   )}
                 </li>
               ))}
