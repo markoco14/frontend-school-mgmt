@@ -2,34 +2,11 @@ import { PaginatedStudentResponse } from "../../domain/entities/PaginatedStudent
 import { Student } from "./../../domain/entities/Student";
 
 class StudentAdapter {
-  public async listStudentsPresentToday({
-    classEntityId,
-    date,
-    attendance,
-  }: {
-    classEntityId: number;
-    date?: string;
-    attendance?: boolean;
-  }): Promise<Student[]> {
-    let url;
-    url = `${process.env.NEXT_PUBLIC_API_URL}/students-here-today/`;
-
-    const queryParams: string[] = [];
-    if (classEntityId)
-      queryParams.push(`class_entity=${encodeURIComponent(classEntityId)}`);
-    if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
-    if (attendance)
-      queryParams.push(`attendance=${encodeURIComponent(attendance)}`);
-
-    if (queryParams.length) {
-      url += `?${queryParams.join("&")}`;
-    }
-
-    const res = await fetch(url);
-    const students: Student[] = await res.json();
-
-    return students;
-  }
+  //
+  //
+  // BASIC CRUD
+  //
+  //
 
   public async list({
     classEntityId,
@@ -146,6 +123,66 @@ class StudentAdapter {
     );
 
     return response;
+  }
+
+  //
+  //
+  // SPECIALIZED ROUTES
+
+  public async listStudentsPresentToday({
+    classEntityId,
+    date,
+    attendance,
+  }: {
+    classEntityId: number;
+    date?: string;
+    attendance?: boolean;
+  }): Promise<Student[]> {
+    let url;
+    url = `${process.env.NEXT_PUBLIC_API_URL}/students-here-today/`;
+
+    const queryParams: string[] = [];
+    if (classEntityId)
+      queryParams.push(`class_entity=${encodeURIComponent(classEntityId)}`);
+    if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
+    if (attendance)
+      queryParams.push(`attendance=${encodeURIComponent(attendance)}`);
+
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
+    }
+
+    const res = await fetch(url);
+    const students: Student[] = await res.json();
+
+    return students;
+  }
+
+  public async listPresentStudentsWithEvaluations({
+    classId,
+    date,
+  }: {
+    classId: number;
+    date: string;
+  }): Promise<Student[]> {
+    let url;
+    url = `${process.env.NEXT_PUBLIC_API_URL}/students-with-evaluations/`;
+
+    const queryParams: string[] = [];
+    if (classId)
+      queryParams.push(`class_entity=${encodeURIComponent(classId)}`);
+    if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
+    // if (attendance)
+    //   queryParams.push(`attendance=${encodeURIComponent(attendance)}`);
+
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
+    }
+
+    const res = await fetch(url);
+    const students: Student[] = await res.json();
+
+    return students;
   }
 }
 
