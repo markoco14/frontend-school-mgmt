@@ -4,13 +4,13 @@ import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
 import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
 import { evaluationAttributeAdapter } from "@/src/modules/evaluation/infrastructure/adapters/evaluationAttributeAdapter";
+import RangeAttributeForm from "@/src/modules/reports/infrastructure/ui/components/evaluation/RangeAttributeForm";
 import TextAttributeForm from "@/src/modules/reports/infrastructure/ui/components/evaluation/TextAttributeForm";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import TextareaAutosize from "react-textarea-autosize";
 
 export const getServerSideProps: GetServerSideProps<{
   students: Student[] | undefined;
@@ -144,10 +144,9 @@ export default function ReportDate({
                         key={evaluation.id}
                         className="col-span-1 text-center"
                       >
-                        <RangeAttribute
+                        <RangeAttributeForm
                           student={student}
                           evaluation={evaluation}
-                          attribute={evaluation.evaluation_attribute}
                         />
                       </div>
                     ) : (
@@ -155,9 +154,7 @@ export default function ReportDate({
                         key={evaluation.id}
                         className="col-span-3 grid items-center"
                       >
-                        <TextAttributeForm
-                          evaluation={evaluation}
-                        />
+                        <TextAttributeForm evaluation={evaluation} />
                       </div>
                     ),
                   )}
