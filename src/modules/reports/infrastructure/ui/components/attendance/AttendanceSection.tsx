@@ -24,6 +24,7 @@ const AttendanceSection = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [classAttendance, setClassAttendance] = useState<Student[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<Student>();
+  const [nullAttendanceCount, setNullAttendanceCount] = useState<number>(0);
 
   function handleClose() {
     setIsWriteNote(false);
@@ -58,11 +59,18 @@ const AttendanceSection = ({
           date: date.toISOString().split("T")[0],
         })
         .then((res) => {
+          let nullAttendanceCount = 0;
+          res.forEach((student) => {
+            if (student.attendance_for_day === null) {
+              nullAttendanceCount += 1;
+            }
+          });
+          setNullAttendanceCount(nullAttendanceCount);
           setClassAttendance(res);
           setLoading(false);
         });
     }
-    
+
     getAttendance();
   }, [setClassAttendance, date, selectedClass?.id]);
 
@@ -95,6 +103,9 @@ const AttendanceSection = ({
         })
         .then((res) => {
           setClassAttendance(res);
+          if (nullAttendanceCount) {
+            setNullAttendanceCount(0);
+          } 
         }));
   }
 
@@ -103,11 +114,26 @@ const AttendanceSection = ({
       <h2 className="mb-4 text-2xl">
         Class: {selectedClass?.name} Teacher {selectedClass?.teacher}
       </h2>
-      <p className="mb-2">Track student attendance below.</p>
+      {nullAttendanceCount !== classAttendance.length && (
+        <p className="mb-2">Track student attendance below.</p>
+      )}
+
       {loading ? (
         <Skeleton>
           <StudentListSkeletonProps studentQuantity={8} />
         </Skeleton>
+      ) : nullAttendanceCount === classAttendance.length ? (
+        <button
+          className="underline underline-offset-2"
+          onClick={() => {
+            createAttendanceRecords({
+              selectedClass: selectedClass,
+              date: date,
+            });
+          }}
+        >
+          Create student attendance records
+        </button>
       ) : (
         <>
           <ul className="divide-y">
@@ -126,8 +152,7 @@ const AttendanceSection = ({
                       />
                     </div>
                     <p>
-                      {student.first_name}{" "}
-                      {student.last_name}
+                      {student.first_name} {student.last_name}
                     </p>
                   </div>
                   {!student.attendance_for_day ? (
