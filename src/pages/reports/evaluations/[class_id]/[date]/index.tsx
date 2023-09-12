@@ -1,6 +1,7 @@
 import AuthContext from "@/src/AuthContext";
 import BackButton from "@/src/components/ui/utils/BackButton";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import { Subject } from "@/src/modules/curriculum/domain/entities/Subject";
 import { subjectAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectAdapter";
 import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
@@ -47,6 +48,8 @@ export default function ReportDate({
     });
     return nullEvaluationCount;
   });
+
+  const [isBatchCreate, setIsBatchCreate] = useState<boolean>(false);
   const router = useRouter();
 
   const tabLinks = [
@@ -77,11 +80,16 @@ export default function ReportDate({
           if (nullEvaluationCount) {
             setNullEvaluationCount(0);
           }
+          setIsBatchCreate(false);
         }));
   }
 
   function handleSelectSubject({ subjectId }: { subjectId: number }) {
     setSelectedSubject(subjectId);
+  }
+
+  function handleClose() {
+    setIsBatchCreate(false);
   }
 
   useEffect(() => {
@@ -106,22 +114,6 @@ export default function ReportDate({
         <div>
           <BackButton />
         </div>
-        {nullEvaluationCount === presentStudents.length && (
-          <div>
-            <select
-              defaultValue={subjects[0]?.id}
-              onChange={(e) =>
-                handleSelectSubject({ subjectId: Number(e.target.value) })
-              }
-            >
-              {subjects.map((subject) => (
-                <option key={subject.id} value={subject.id}>
-                  {subject.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
         {/* <PageTabNavigation links={tabLinks} tab={tab} setTab={setTab} /> */}
         {!presentStudents?.length ? (
           <p>
@@ -132,7 +124,7 @@ export default function ReportDate({
           <button
             className="text-left underline underline-offset-2"
             onClick={() => {
-              batchCreateEvaluations({ students: presentStudents });
+              setIsBatchCreate(true);
             }}
           >
             Create student evaluations
@@ -153,7 +145,7 @@ export default function ReportDate({
                       Student evaluations not prepared.{" "}
                       <button
                         onClick={() => {
-                          batchCreateEvaluations({ students: presentStudents });
+                          setIsBatchCreate(true);
                         }}
                         className="underline underline-offset-2"
                       >
@@ -191,6 +183,30 @@ export default function ReportDate({
           </div>
         )}
       </section>
+      <Modal
+        show={isBatchCreate}
+        close={handleClose}
+        title={`Create Evaluation Reports`}
+      >
+        <p>Confirm the subject before creating the evaluations</p>
+        <div>
+          <select
+            defaultValue={subjects[0]?.id}
+            onChange={(e) =>
+              handleSelectSubject({ subjectId: Number(e.target.value) })
+            }
+          >
+            {subjects.map((subject) => (
+              <option key={subject.id} value={subject.id}>
+                {subject.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button disabled={!selectedSubject} onClick={() => {
+          batchCreateEvaluations({ students: presentStudents });
+        }}>Create Evaluations</button>
+      </Modal>
     </Layout>
   );
 }
