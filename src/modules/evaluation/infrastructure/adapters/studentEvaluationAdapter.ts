@@ -49,12 +49,41 @@ class StudentEvaluationAdapter {
 
   // public async get({ id }: { id: number }): Promise<EvaluationAttribute> {
   //   const res = await fetch(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/${id}/`,
+  //     `${process.env.NEXT_PUBLIC_API_URL}/student-evaluations/${id}/`,
   //   );
   //   const student: EvaluationAttribute = await res.json();
 
   //   return student;
   // }
+
+  public async patch({
+    evaluation_id,
+    evaluation_value,
+
+  }: {
+    evaluation_id: number;
+    evaluation_value?: string;
+  }): Promise<StudentEvaluation> {
+    const requestBody: { [key: string]: any } = {};
+
+    if (evaluation_value !== undefined) {
+      requestBody.evaluation_value = evaluation_value;
+    }
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/daily-evaluations/${evaluation_id}/`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      },
+    );
+    const updatedAttendance: StudentEvaluation = await res.json();
+
+    return updatedAttendance;
+  }
 }
 
 export const studentEvaluationAdapter = new StudentEvaluationAdapter();
