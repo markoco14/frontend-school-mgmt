@@ -44,8 +44,9 @@ const RangeAttributeForm = ({
     Number(evaluation.evaluation_value),
   );
   const length = 3;
+
   return (
-    <div className="grid">
+    <div>
       <div>
         {values.map((value) => (
           <button
@@ -67,6 +68,13 @@ const RangeAttributeForm = ({
             {value}
           </button>
         ))}
+      </div>
+      <div>
+        {
+          evaluation.evaluation_attribute.descriptions[
+            selectedValue
+          ]
+        }
       </div>
     </div>
   );
