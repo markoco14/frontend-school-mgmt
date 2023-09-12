@@ -1,23 +1,18 @@
-import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
 import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
 import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
-import { Student } from "@/src/modules/students/domain/entities/Student";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";
 
 type Inputs = {
-  comment: string;
+  evaluation_value: string;
 };
 
 const TextAttributeForm = ({
-  student,
   evaluation,
-  attribute,
 }: {
-  student: Student;
   evaluation: StudentEvaluation;
-  attribute: EvaluationAttribute;
 }) => {
   const {
     register,
@@ -25,12 +20,18 @@ const TextAttributeForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-	console.log(data)
+    setLoading(true);
     await studentEvaluationAdapter
       .patch({
         evaluation_id: Number(evaluation.id),
+        evaluation_value: data.evaluation_value,
+      })
+      .then((res) => {
+        toast.success("Comment updated successfully!");
+        setLoading(false);
       })
     //   .then((res) => {
     //     toast.success("Reason updated successfully!");
@@ -48,11 +49,11 @@ const TextAttributeForm = ({
         rows={2}
         defaultValue={evaluation?.evaluation_value}
         className="col-span-3 w-full rounded border p-2"
-        {...register("comment")}
+        {...register("evaluation_value")}
       />
       <div>
-        <button className="w-1/4 rounded bg-blue-600 p-2  text-white shadow duration-200 ease-in-out hover:bg-blue-900">
-          Save
+        <button className="w-1/2 rounded bg-blue-600 p-2 text-white shadow duration-200 ease-in-out hover:bg-blue-900">
+          {!loading ? 'Save' : 'Saving'}
         </button>
       </div>
     </form>

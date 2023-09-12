@@ -156,9 +156,7 @@ export default function ReportDate({
                         className="col-span-3 grid items-center"
                       >
                         <TextAttributeForm
-                          student={student}
                           evaluation={evaluation}
-                          attribute={evaluation.evaluation_attribute}
                         />
                       </div>
                     ),
