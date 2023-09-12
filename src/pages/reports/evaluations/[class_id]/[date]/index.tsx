@@ -4,6 +4,7 @@ import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
 import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
 import { evaluationAttributeAdapter } from "@/src/modules/evaluation/infrastructure/adapters/evaluationAttributeAdapter";
+import TextAttributeForm from "@/src/modules/reports/infrastructure/ui/components/evaluation/TextAttributeForm";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
@@ -15,14 +16,15 @@ export const getServerSideProps: GetServerSideProps<{
   students: Student[] | undefined;
 }> = async (context) => {
   let students;
-  context.query.date && await studentAdapter
-    .listPresentStudentsWithEvaluations({
-      classId: Number(context.query.class_id),
-      date: context.query.date.toString(),
-    })
-    .then((res) => {
-      students = res;
-    });
+  context.query.date &&
+    (await studentAdapter
+      .listPresentStudentsWithEvaluations({
+        classId: Number(context.query.class_id),
+        date: context.query.date.toString(),
+      })
+      .then((res) => {
+        students = res;
+      }));
 
   return { props: { students } };
 };
@@ -36,7 +38,7 @@ const RangeAttribute = ({
   evaluation: StudentEvaluation;
   attribute: EvaluationAttribute;
 }) => {
-  console.log(evaluation)
+  // console.log(evaluation);
   const maxValue = attribute.max_value;
   const minValue = attribute.min_value;
   const valueArray = maxValue && minValue && new Array(maxValue - minValue);
@@ -47,7 +49,9 @@ const RangeAttribute = ({
     (_, i) => i + minValue,
   );
 
-  const [selectedValue, setSelectedValue] = useState<number>(Number(evaluation.evaluation_value));
+  const [selectedValue, setSelectedValue] = useState<number>(
+    Number(evaluation.evaluation_value),
+  );
   const length = 3;
   return (
     <p>
@@ -68,24 +72,6 @@ const RangeAttribute = ({
         </button>
       ))}
     </p>
-  );
-};
-
-const TextAttribute = ({
-  student,
-  evaluation,
-  attribute,
-}: {
-  student: Student;
-  evaluation: StudentEvaluation;
-  attribute: EvaluationAttribute;
-}) => {
-  return (
-    <TextareaAutosize
-      rows={2}
-      defaultValue={evaluation.evaluation_value}
-      className="col-span-3 w-full rounded border p-2"
-    />
   );
 };
 
@@ -169,7 +155,7 @@ export default function ReportDate({
                         key={evaluation.id}
                         className="col-span-3 grid items-center"
                       >
-                        <TextAttribute
+                        <TextAttributeForm
                           student={student}
                           evaluation={evaluation}
                           attribute={evaluation.evaluation_attribute}
@@ -177,30 +163,6 @@ export default function ReportDate({
                       </div>
                     ),
                   )}
-
-                  {/* {evaluationAttributes?.map((attribute) =>
-                    attribute.max_value && attribute.min_value ? (
-                      <div
-                        key={attribute.id}
-                        className="col-span-1 text-center"
-                      >
-                        <RangeAttribute
-                          student={student}
-                          attribute={attribute}
-                        />
-                      </div>
-                    ) : (
-                      <div
-                        key={attribute.id}
-                        className="col-span-3 grid items-center"
-                      >
-                        <TextAttribute
-                          student={student}
-                          attribute={attribute}
-                        />
-                      </div>
-                    ),
-                  )} */}
                 </li>
               ))}
             </ul>
