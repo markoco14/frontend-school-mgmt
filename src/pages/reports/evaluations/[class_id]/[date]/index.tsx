@@ -38,6 +38,15 @@ export default function ReportDate({
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<number>();
   const [presentStudents, setPresentStudents] = useState<Student[]>([]);
+  const [nullEvaluationCount, setNullEvaluationCount] = useState<number>(() => {
+    let nullEvaluationCount = 0;
+    students?.forEach((student) => {
+      if (student.evaluations_for_day === null) {
+        nullEvaluationCount += 1;
+      }
+    });
+    return nullEvaluationCount;
+  });
   const router = useRouter();
 
   const tabLinks = [
@@ -52,7 +61,8 @@ export default function ReportDate({
   ];
 
   async function batchCreateEvaluations({ students }: { students: Student[] }) {
-    router.query.date && selectedSubject &&
+    router.query.date &&
+      selectedSubject &&
       (await studentEvaluationAdapter
         .batchCreateEvaluations({
           schoolId: selectedSchool.id,
@@ -63,7 +73,10 @@ export default function ReportDate({
           subjectId: selectedSubject,
         })
         .then((res) => {
-          setPresentStudents(res)
+          setPresentStudents(res);
+          if (nullEvaluationCount) {
+            setNullEvaluationCount(0);
+          }
         }));
   }
 
@@ -93,26 +106,37 @@ export default function ReportDate({
         <div>
           <BackButton />
         </div>
-        <div>
-          <select
-            defaultValue={subjects[0]?.id}
-            onChange={(e) =>
-              handleSelectSubject({ subjectId: Number(e.target.value) })
-            }
-          >
-            {subjects.map((subject) => (
-              <option key={subject.id} value={subject.id}>
-                {subject.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        {nullEvaluationCount === presentStudents.length && (
+          <div>
+            <select
+              defaultValue={subjects[0]?.id}
+              onChange={(e) =>
+                handleSelectSubject({ subjectId: Number(e.target.value) })
+              }
+            >
+              {subjects.map((subject) => (
+                <option key={subject.id} value={subject.id}>
+                  {subject.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         {/* <PageTabNavigation links={tabLinks} tab={tab} setTab={setTab} /> */}
         {!presentStudents?.length ? (
           <p>
             No attendance records found for today. Please check with your
             admins.
           </p>
+        ) : nullEvaluationCount === presentStudents.length ? (
+          <button
+            className="text-left underline underline-offset-2"
+            onClick={() => {
+              batchCreateEvaluations({ students: presentStudents });
+            }}
+          >
+            Create student evaluations
+          </button>
         ) : (
           <div>
             <ul className="divide-y border shadow">
