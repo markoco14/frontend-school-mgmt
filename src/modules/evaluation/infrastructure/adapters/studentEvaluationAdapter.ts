@@ -1,7 +1,14 @@
 import { StudentEvaluationFilters } from "@/src/modules/students/domain/entities/StudentEvaluationFilters";
 import { StudentEvaluation } from "../../domain/entities/StudentEvaluation";
+import { Student } from "@/src/modules/students/domain/entities/Student";
 
 class StudentEvaluationAdapter {
+  //
+  //
+  // BASIC CRUD
+  //
+  //
+
   public async list({
     student_id,
     details,
@@ -59,7 +66,6 @@ class StudentEvaluationAdapter {
   public async patch({
     evaluation_id,
     evaluation_value,
-
   }: {
     evaluation_id: number;
     evaluation_value?: string;
@@ -83,6 +89,54 @@ class StudentEvaluationAdapter {
     const updatedAttendance: StudentEvaluation = await res.json();
 
     return updatedAttendance;
+  }
+
+  //
+  //
+  // SPECIALIZED
+  //
+  //
+
+  // URL: create-student-evaluations/
+
+  public async batchCreateEvaluations({
+    schoolId,
+    students,
+    classId,
+    // classAttendance,
+    date,
+    userId,
+    subjectId,
+  }: {
+    schoolId: number;
+    students: Student[];
+    classId: number;
+    // classAttendance: Student[];
+    date: string;
+    userId: number;
+    subjectId: number;
+  }): Promise<Student[]> {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/create-student-evaluations/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          school_id: schoolId,
+          class_id: classId,
+          students: students,
+          date: date,
+          user_id: userId,
+          subject_id: subjectId,
+        }),
+      },
+    );
+
+    const studentsWithAttendance: Student[] = await res.json();
+
+    return studentsWithAttendance;
   }
 }
 

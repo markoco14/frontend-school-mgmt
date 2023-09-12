@@ -1,15 +1,16 @@
 import AuthContext from "@/src/AuthContext";
 import BackButton from "@/src/components/ui/utils/BackButton";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
-import { evaluationAttributeAdapter } from "@/src/modules/evaluation/infrastructure/adapters/evaluationAttributeAdapter";
+import { Subject } from "@/src/modules/curriculum/domain/entities/Subject";
+import { subjectAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectAdapter";
+import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
 import RangeAttributeForm from "@/src/modules/reports/infrastructure/ui/components/evaluation/RangeAttributeForm";
 import TextAttributeForm from "@/src/modules/reports/infrastructure/ui/components/evaluation/TextAttributeForm";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import toast from "react-hot-toast";
 
 export const getServerSideProps: GetServerSideProps<{
   students: Student[] | undefined;
@@ -33,11 +34,11 @@ export default function ReportDate({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { user, selectedSchool } = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
-  const [evaluationAttributes, setEvaluationAttributes] = useState<
-    EvaluationAttribute[]
-  >([]);
   const [tab, setTab] = useState<number>(1);
-  console.log(students);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [selectedSubject, setSelectedSubject] = useState<number>();
+  const [presentStudents, setPresentStudents] = useState<Student[]>([]);
+  const router = useRouter();
 
   const tabLinks = [
     {
@@ -50,30 +51,64 @@ export default function ReportDate({
     },
   ];
 
+  async function batchCreateEvaluations({ students }: { students: Student[] }) {
+    router.query.date && selectedSubject &&
+      (await studentEvaluationAdapter
+        .batchCreateEvaluations({
+          schoolId: selectedSchool.id,
+          students: students,
+          classId: Number(router.query.class_id),
+          date: router.query.date.toString(),
+          userId: Number(user?.user_id),
+          subjectId: selectedSubject,
+        })
+        .then((res) => {
+          setPresentStudents(res)
+        }));
+  }
+
+  function handleSelectSubject({ subjectId }: { subjectId: number }) {
+    setSelectedSubject(subjectId);
+  }
+
   useEffect(() => {
-    async function getData() {
-      try {
-        await evaluationAttributeAdapter
-          .list({ school_id: selectedSchool?.id })
+    async function getSubjects() {
+      if (selectedSchool) {
+        await subjectAdapter
+          .listSchoolSubjects({ schoolId: selectedSchool.id })
           .then((res) => {
-            setLoading(false);
-            setEvaluationAttributes(res);
+            setSubjects(res.results);
+            setSelectedSubject(res.results[0]?.id);
           });
-      } catch (error: any) {
-        toast.error(error.details);
-        setLoading(false);
       }
     }
-    selectedSchool && getData();
-  }, [selectedSchool]);
+
+    getSubjects();
+    students && setPresentStudents(students);
+  }, [selectedSchool, setSubjects, students]);
+
   return (
     <Layout>
       <section className="grid gap-4">
         <div>
           <BackButton />
         </div>
+        <div>
+          <select
+            defaultValue={subjects[0]?.id}
+            onChange={(e) =>
+              handleSelectSubject({ subjectId: Number(e.target.value) })
+            }
+          >
+            {subjects.map((subject) => (
+              <option key={subject.id} value={subject.id}>
+                {subject.name}
+              </option>
+            ))}
+          </select>
+        </div>
         {/* <PageTabNavigation links={tabLinks} tab={tab} setTab={setTab} /> */}
-        {!students?.length ? (
+        {!presentStudents?.length ? (
           <p>
             No attendance records found for today. Please check with your
             admins.
@@ -81,7 +116,7 @@ export default function ReportDate({
         ) : (
           <div>
             <ul className="divide-y border shadow">
-              {students?.map((student) => (
+              {presentStudents?.map((student) => (
                 <li
                   key={student.id}
                   className="grid grid-cols-6 items-center p-2 hover:bg-gray-100"
@@ -92,7 +127,14 @@ export default function ReportDate({
                   {!student.evaluations_for_day ? (
                     <p className="col-span-3">
                       Student evaluations not prepared.{" "}
-                      <button className="underline underline-offset-2">Click to prepare them now.</button>
+                      <button
+                        onClick={() => {
+                          batchCreateEvaluations({ students: presentStudents });
+                        }}
+                        className="underline underline-offset-2"
+                      >
+                        Click to prepare them now.
+                      </button>
                     </p>
                   ) : (
                     <>
