@@ -2,7 +2,6 @@ import AuthContext from "@/src/AuthContext";
 import BackButton from "@/src/components/ui/utils/BackButton";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
-import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
 import { evaluationAttributeAdapter } from "@/src/modules/evaluation/infrastructure/adapters/evaluationAttributeAdapter";
 import RangeAttributeForm from "@/src/modules/reports/infrastructure/ui/components/evaluation/RangeAttributeForm";
 import TextAttributeForm from "@/src/modules/reports/infrastructure/ui/components/evaluation/TextAttributeForm";
@@ -27,52 +26,6 @@ export const getServerSideProps: GetServerSideProps<{
       }));
 
   return { props: { students } };
-};
-
-const RangeAttribute = ({
-  student,
-  evaluation,
-  attribute,
-}: {
-  student: Student;
-  evaluation: StudentEvaluation;
-  attribute: EvaluationAttribute;
-}) => {
-  // console.log(evaluation);
-  const maxValue = attribute.max_value;
-  const minValue = attribute.min_value;
-  const valueArray = maxValue && minValue && new Array(maxValue - minValue);
-  const values = Array.from(
-    // @ts-ignore
-    { length: maxValue - minValue + 1 },
-    // @ts-ignore
-    (_, i) => i + minValue,
-  );
-
-  const [selectedValue, setSelectedValue] = useState<number>(
-    Number(evaluation.evaluation_value),
-  );
-  const length = 3;
-  return (
-    <p>
-      {values.map((value) => (
-        <button
-          onClick={() => {
-            setSelectedValue(value);
-            toast.success(
-              `Setting ${student.first_name}'s ${attribute.name} at ${value}`,
-            );
-          }}
-          key={value}
-          className={`${
-            selectedValue === value ? "bg-green-500" : ""
-          } rounded border p-2 text-center shadow`}
-        >
-          {value}
-        </button>
-      ))}
-    </p>
-  );
 };
 
 export default function ReportDate({
