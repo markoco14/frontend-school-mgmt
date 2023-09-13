@@ -4,6 +4,7 @@ import { Teacher } from "../../domain/entities/Teacher";
 import { userAdapter } from "../adapters/userAdapter";
 import StaffList from "./StaffList";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import AdminSignup from "./AdminSignup";
 
 export default function AdminSection() {
   const { user, selectedSchool } = useContext(AuthContext);
@@ -38,8 +39,7 @@ export default function AdminSection() {
         Add Admin
       </button>
       <Modal show={isAddAdmin} close={handleClose} title="Add New Admin">
-        {/* <TeacherSignup teachers={teachers} setAdmins={setAdmins} /> */}
-       <div>go go</div>
+        <AdminSignup admins={admins} setAdmins={setAdmins} />
       </Modal>
     </section>
   );
