@@ -1,6 +1,7 @@
 import EvaluationListSkeletonProps from "@/src/components/ui/skeleton/EvaluationListSkeletonProps";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
 import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
 import { Student } from "@/src/modules/students/domain/entities/Student";
@@ -22,6 +23,8 @@ const ReportingEvaluationSection = ({
   const [studentsWithEvaluations, setStudentsWithEvaluations] =
     useState<Student[]>();
   const [filters, setFilters] = useState<StudentEvaluationFilters>({});
+  const [isDeleteEvaluation, setIsDeleteEvaluation] = useState<boolean>(false);
+  const [selectedStudent, setSelectedStudent] = useState<Student>();
   // const [date, setDate] = useState<Date>(new Date());
 
   useEffect(() => {
@@ -61,9 +64,16 @@ const ReportingEvaluationSection = ({
     return Object.keys(obj).length === 0 && obj.constructor === Object;
   }
 
-  
+  function handleClose() {
+    setIsDeleteEvaluation(false);
+    setSelectedStudent(undefined);
+  }
 
-  async function handleDeleteEvaluations({student_id}: {student_id: number}) {
+  async function handleDeleteEvaluations({
+    student_id,
+  }: {
+    student_id: number;
+  }) {
     await studentEvaluationAdapter
       .batchDelete({
         student_id: student_id,
@@ -81,7 +91,7 @@ const ReportingEvaluationSection = ({
             return student;
           },
         );
-        setStudentsWithEvaluations(updatedEvaluations)
+        setStudentsWithEvaluations(updatedEvaluations);
         toast.success("deleted");
       });
   }
@@ -120,10 +130,12 @@ const ReportingEvaluationSection = ({
                     </p>
                   </div>
                   <button
-                    onClick={() =>
-                      handleDeleteEvaluations({
-                        student_id: student.id,
-                      })
+                    onClick={
+                      () => {
+                        setIsDeleteEvaluation(true);
+                        setSelectedStudent(student);
+                      }
+                      
                     }
                   >
                     delete
@@ -152,6 +164,23 @@ const ReportingEvaluationSection = ({
           )}
         </ul>
       )}
+      <Modal
+        show={isDeleteEvaluation}
+        close={handleClose}
+        title={`Delete student's evaluations`}
+      >
+        <p>Are you sure you want to delete this {selectedStudent?.first_name}&apos;s records?</p>
+        <button
+          onClick={() => {
+            selectedStudent && handleDeleteEvaluations({
+              student_id: selectedStudent.id,
+            })
+            setSelectedStudent(undefined);
+          }}
+        >
+          Yes
+        </button>
+      </Modal>
     </>
   );
 };
