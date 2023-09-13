@@ -104,6 +104,19 @@ class UserAdapter {
 
 		return teacher;
 	}
+
+	public async addAdmin({ first_name, email, password, school_id }: {first_name: string, email: string, password: string, school_id: number }): Promise<Teacher> {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/admins/add/`, { 
+			method: 'POST', 
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ first_name: first_name, email: email, password: password, school: school_id }) 
+		});
+		const admin: User = await response.json();
+
+		return admin;
+	}
 }
 
 export const userAdapter = new UserAdapter();
