@@ -63,14 +63,14 @@ export default function Navbar() {
                 Schedule
               </Link>
               <Link
-                href="/teachers/"
+                href="/staff/"
                 className={`${
-                  router.pathname.includes("teachers")
+                  router.pathname.includes("staff")
                     ? "text-blue-700 underline decoration-2 underline-offset-4"
                     : ""
                 }`}
               >
-                Teachers
+                Staff
               </Link>
               <Link
                 href="/classes/"
@@ -177,14 +177,14 @@ export default function Navbar() {
                   Schedule
                 </Link>
                 <Link
-                  href="/teachers/"
+                  href="/staff/"
                   className={`${
-                    router.pathname.includes("teachers")
+                    router.pathname.includes("staff")
                       ? "text-blue-700 underline decoration-2 underline-offset-4"
                       : ""
                   }`}
                 >
-                  Teachers
+                  Staff
                 </Link>
                 <Link
                   href="/classes/"
