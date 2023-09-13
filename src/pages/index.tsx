@@ -81,7 +81,7 @@ export default function Home() {
               </li>
             ))}
           </ul>
-          {user.role === "OWNER" && (
+          {user.permissions.includes(1) && (
             <Link
               href="/school-mgmt/add"
               className="rounded-lg bg-blue-300 p-2 hover:bg-blue-500"
