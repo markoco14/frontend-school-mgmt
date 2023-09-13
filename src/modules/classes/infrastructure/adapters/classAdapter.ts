@@ -46,12 +46,12 @@ class ClassAdapter {
     name,
     school_id,
     level,
-    day,
+    days,
   }: {
     name: string;
     school_id: number;
     level: number;
-    day: number[];
+    days: number[];
   }): Promise<ClassEntity> {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/classes/`, {
       method: "POST",
@@ -62,7 +62,7 @@ class ClassAdapter {
         name: name,
         school: school_id,
         level: level,
-        day: day,
+        days: days,
       }),
     });
     const newClass: ClassEntity = await res.json();
