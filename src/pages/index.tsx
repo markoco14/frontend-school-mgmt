@@ -61,34 +61,36 @@ export default function Home() {
 
       {user && !selectedSchool && (
         <section>
-          <h2 className="mb-4 text-3xl">Welcome back!</h2>
-          <p className="mb-4">
-            <strong>Managing</strong> your school and student{" "}
-            <strong>data</strong> has never been <strong>easier</strong>.
-          </p>
-          <ul className="mb-4 flex flex-col gap-2">
-            {schools?.map((school: School, index: number) => (
-              <li key={index} className="rounded p-2 hover:bg-blue-300">
-                <button
-                  onClick={() => {
-                    if (!selectedSchool) {
-                      handleSelectSchool(school);
-                    }
-                  }}
+          <h2 className="mb-4 text-3xl">Welcome back, {user?.name}!</h2>
+          <article className="w-1/2 border shadow p-4 rounded-lg grid gap-4">
+            <div className="flex justify-between items-baseline">
+              <p className="text-xl">Your schools</p>
+              {user.permissions.includes(1) && (
+                <Link
+                  href="/school-mgmt/add"
+                  className="underline underline-offset-2 hover:text-blue-700"
                 >
-                  {school.name}
-                </button>
-              </li>
-            ))}
-          </ul>
-          {user.role === "OWNER" && (
-            <Link
-              href="/school-mgmt/add"
-              className="rounded-lg bg-blue-300 p-2 hover:bg-blue-500"
-            >
-              Add School
-            </Link>
-          )}
+                  New School
+                </Link>
+              )}
+            </div>
+            <ul className="divide-y">
+              {schools?.map((school: School, index: number) => (
+                <li key={index} className="rounded p-2 hover:bg-blue-300">
+                  <button
+                    onClick={() => {
+                      if (!selectedSchool) {
+                        handleSelectSchool(school);
+                      }
+                    }}
+                    className="w-full text-left"
+                  >
+                    {school.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </article>
         </section>
       )}
 

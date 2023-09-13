@@ -8,6 +8,7 @@ type AuthUser = {
 	user_id: number;
 	role: string;
 	email: string;
+	permissions: number[];
 }
 
 type IAuthContext = {

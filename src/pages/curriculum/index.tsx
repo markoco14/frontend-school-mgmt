@@ -15,7 +15,7 @@ import { useContext, useEffect, useState } from "react";
 
 export default function CurriculumHome() {
   const { user, selectedSchool } = useContext(AuthContext)
-  const [tab, setTab] = useState<number>(6);
+  const [tab, setTab] = useState<number>(1);
 
 
   const [subjectLevels, setSubjectLevels] = useState<SubjectLevel[]>([]);
@@ -57,12 +57,12 @@ export default function CurriculumHome() {
       {tab === 4 && (
         <ModuleTypeSection />
       )}
-      {tab === 5 && (
+      {/* {tab === 5 && (
         <AssessmentTypeSection />
       )}
       {tab === 6 && (
         <AssessmentSection />
-      )}
+      )} */}
     </Layout>
   );
 }

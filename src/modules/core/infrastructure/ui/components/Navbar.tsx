@@ -10,16 +10,16 @@ export default function Navbar() {
   const router = useRouter();
   const [isShowing, setIsShowing] = useState<boolean>(false);
   return (
-    <nav className="xs:relative h-[48px] bg-blue-900 text-white xs:bg-transparent xs:text-black flex justify-between items-center px-2 ">
+    <nav className="flex h-[48px] items-center justify-between bg-blue-900 px-2 text-white xs:relative xs:bg-transparent xs:text-black ">
       {/* desktop nav */}
-      <div className="w-full hidden xs:flex xs:justify-end gap-2">
-        {user  && (
+      <div className="hidden w-full gap-2 xs:flex xs:justify-end">
+        {user && (
           <>
             <Link
               href="/"
               className={`${
                 router.pathname === "/"
-                  ? "underline underline-offset-4 decoration-2 text-blue-700"
+                  ? "text-blue-700 underline decoration-2 underline-offset-4"
                   : ""
               }`}
             >
@@ -29,7 +29,7 @@ export default function Navbar() {
               href={`/profile/${user.user_id}`}
               className={`${
                 router.pathname.includes("profile")
-                  ? "underline underline-offset-4 decoration-2 text-blue-700"
+                  ? "text-blue-700 underline decoration-2 underline-offset-4"
                   : ""
               }`}
             >
@@ -37,70 +37,73 @@ export default function Navbar() {
             </Link>
           </>
         )}
-        {user && user.role === "OWNER" && selectedSchool && user.user_id === selectedSchool.owner_id && (
-          <>
-            <Link
-              href="/curriculum/"
-              className={`${
-                router.pathname.includes("curriculum")
-                  ? "underline underline-offset-4 decoration-2 text-blue-700"
-                  : ""
-              }`}
-            >
-              Curriculum
-            </Link>
-            <Link
-              href="/schedule/"
-              className={`${
-                router.pathname.includes("schedule")
-                  ? "underline underline-offset-4 decoration-2 text-blue-700"
-                  : ""
-              }`}
-            >
-              Schedule
-            </Link>
-            <Link
-              href="/teachers/"
-              className={`${
-                router.pathname.includes("teachers")
-                  ? "underline underline-offset-4 decoration-2 text-blue-700"
-                  : ""
-              }`}
-            >
-              Teachers
-            </Link>
-            <Link
-              href="/classes/"
-              className={`${
-                router.pathname.includes("classes")
-                  ? "underline underline-offset-4 decoration-2 text-blue-700"
-                  : ""
-              }`}
-            >
-              Classes
-            </Link>
-            <Link
-              href="/students/"
-              className={`${
-                router.pathname.includes("students")
-                  ? "underline underline-offset-4 decoration-2 text-blue-700"
-                  : ""
-              }`}
-            >
-              Students
-            </Link>
-            <Link
-              href="/reports/"
-              className={`${
-                router.pathname.includes("reports")
-                  ? "underline underline-offset-4 decoration-2 text-blue-700"
-                  : ""
-              }`}
-            >
-              Reports
-            </Link>
-          </>
-        )}
+        {user &&
+          user.permissions.includes(1) &&
+          selectedSchool &&
+          user.user_id === selectedSchool.owner_id && (
+            <>
+              <Link
+                href="/curriculum/"
+                className={`${
+                  router.pathname.includes("curriculum")
+                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    : ""
+                }`}
+              >
+                Curriculum
+              </Link>
+              <Link
+                href="/schedule/"
+                className={`${
+                  router.pathname.includes("schedule")
+                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    : ""
+                }`}
+              >
+                Schedule
+              </Link>
+              <Link
+                href="/staff/"
+                className={`${
+                  router.pathname.includes("staff")
+                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    : ""
+                }`}
+              >
+                Staff
+              </Link>
+              <Link
+                href="/classes/"
+                className={`${
+                  router.pathname.includes("classes")
+                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    : ""
+                }`}
+              >
+                Classes
+              </Link>
+              <Link
+                href="/students/"
+                className={`${
+                  router.pathname.includes("students")
+                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    : ""
+                }`}
+              >
+                Students
+              </Link>
+              <Link
+                href="/reports/"
+                className={`${
+                  router.pathname.includes("reports")
+                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    : ""
+                }`}
+              >
+                Reports
+              </Link>
+            </>
+          )}
         {user && (
           <button
             onClick={() => {
@@ -115,12 +118,12 @@ export default function Navbar() {
       </div>
       {/* mobile nav */}
       {isShowing && (
-        <div className="z-10 text-3xl absolute top-0 left-0 flex flex-col gap-4 h-screen justify-center w-full items-center text-black bg-blue-300/75 xs:hidden">
+        <div className="absolute left-0 top-0 z-10 flex h-screen w-full flex-col items-center justify-center gap-4 bg-blue-300/75 text-3xl text-black xs:hidden">
           <button
             onClick={() => {
               setIsShowing(false);
             }}
-            className="absolute top-2 left-2 text-3xl"
+            className="absolute left-2 top-2 text-3xl"
           >
             <span className="material-symbols-outlined">close</span>
           </button>
@@ -130,88 +133,91 @@ export default function Navbar() {
                 href="/"
                 className={`${
                   router.pathname === "/"
-                    ? "underline underline-offset-4 decoration-2 text-blue-700"
+                    ? "text-blue-700 underline decoration-2 underline-offset-4"
                     : ""
                 }`}
               >
                 Home
               </Link>
               <Link
-              href={`/profile/${user.user_id}`}
-              className={`${
-                router.pathname.includes("profile")
-                  ? "underline underline-offset-4 decoration-2 text-blue-700"
-                  : ""
-              }`}
-            >
-              Profile
-            </Link>
-            </>
-          )}
-          {user && user.role === "OWNER" && selectedSchool && user.user_id === selectedSchool.owner_id && (
-            <>
-              <Link
-                href="/curriculum/"
+                href={`/profile/${user.user_id}`}
                 className={`${
-                  router.pathname.includes("curriculum")
-                    ? "underline underline-offset-4 decoration-2 text-blue-700"
+                  router.pathname.includes("profile")
+                    ? "text-blue-700 underline decoration-2 underline-offset-4"
                     : ""
                 }`}
               >
-                Curriculum
-              </Link>
-              <Link
-                href="/schedule/"
-                className={`${
-                  router.pathname.includes("schedule")
-                    ? "underline underline-offset-4 decoration-2 text-blue-700"
-                    : ""
-                }`}
-              >
-                Schedule
-              </Link>
-              <Link
-                href="/teachers/"
-                className={`${
-                  router.pathname.includes("teachers")
-                    ? "underline underline-offset-4 decoration-2 text-blue-700"
-                    : ""
-                }`}
-              >
-                Teachers
-              </Link>
-              <Link
-                href="/classes/"
-                className={`${
-                  router.pathname.includes("classes")
-                    ? "underline underline-offset-4 decoration-2 text-blue-700"
-                    : ""
-                }`}
-              >
-                Classes
-              </Link>
-              <Link
-                href="/students/"
-                className={`${
-                  router.pathname.includes("students")
-                    ? "underline underline-offset-4 decoration-2 text-blue-700"
-                    : ""
-                }`}
-              >
-                Students
-              </Link>
-              <Link
-                href="/reports/"
-                className={`${
-                  router.pathname.includes("reports")
-                    ? "underline underline-offset-4 decoration-2 text-blue-700"
-                    : ""
-                }`}
-              >
-                Reports
+                Profile
               </Link>
             </>
           )}
+          {user &&
+            user.permissions.includes(1) &&
+            selectedSchool &&
+            user.user_id === selectedSchool.owner_id && (
+              <>
+                <Link
+                  href="/curriculum/"
+                  className={`${
+                    router.pathname.includes("curriculum")
+                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      : ""
+                  }`}
+                >
+                  Curriculum
+                </Link>
+                <Link
+                  href="/schedule/"
+                  className={`${
+                    router.pathname.includes("schedule")
+                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      : ""
+                  }`}
+                >
+                  Schedule
+                </Link>
+                <Link
+                  href="/staff/"
+                  className={`${
+                    router.pathname.includes("staff")
+                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      : ""
+                  }`}
+                >
+                  Staff
+                </Link>
+                <Link
+                  href="/classes/"
+                  className={`${
+                    router.pathname.includes("classes")
+                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      : ""
+                  }`}
+                >
+                  Classes
+                </Link>
+                <Link
+                  href="/students/"
+                  className={`${
+                    router.pathname.includes("students")
+                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      : ""
+                  }`}
+                >
+                  Students
+                </Link>
+                <Link
+                  href="/reports/"
+                  className={`${
+                    router.pathname.includes("reports")
+                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      : ""
+                  }`}
+                >
+                  Reports
+                </Link>
+              </>
+            )}
           {user && (
             <button
               onClick={() => {
