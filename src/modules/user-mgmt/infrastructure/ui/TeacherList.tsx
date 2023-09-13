@@ -1,14 +1,16 @@
 import { Teacher } from "../../domain/entities/Teacher";
 
-export default function TeacherList({teachers}: {teachers: Teacher[]}) {
-
+export default function TeacherList({ teachers }: { teachers: Teacher[] }) {
   return (
-		<ul className="bg-gray-100 rounded shadow-inner mb-4">
-			{teachers?.map((teacher: any, index: number) => (
-				<li key={index}
-				className="p-2 hover:bg-gray-300"
-				>{teacher.first_name ? teacher.first_name : 'no name yet'}</li>
-			))}
-		</ul>
+    <ul className="mb-4 rounded bg-gray-100 shadow-inner">
+      {teachers?.map((teacher: any, index: number) => (
+        <li key={index} className="grid grid-cols-3 p-2 hover:bg-gray-300">
+          <span>{teacher.first_name}</span>
+          <span>{teacher.last_name}</span>
+          <span>{teacher.email}</span>
+          {/* <span>remove</span> */}
+        </li>
+      ))}
+    </ul>
   );
 }
