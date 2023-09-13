@@ -25,7 +25,7 @@ export default function CurriculumNav({tab, setTab}: {tab: number, setTab: Funct
 			>
 				Module Types
 			</button>
-			<button
+			{/* <button
 				className={`${tab === 5 ? "text-blue-500 underline underline-offset-2" : "text-gray-600"} text-lg hover:text-blue-700 ease-in-out duration-200`} 
 				onClick={() => setTab(5)}
 			>
@@ -36,7 +36,7 @@ export default function CurriculumNav({tab, setTab}: {tab: number, setTab: Funct
 				onClick={() => setTab(6)}
 			>
 				Content
-			</button>
+			</button> */}
 		</nav>
 	);
 }
