@@ -1,9 +1,9 @@
 import AuthContext from "@/src/AuthContext";
-import { Dialog, Transition } from "@headlessui/react";
 import { useContext, useEffect, useState } from "react";
 import { Teacher } from "../../domain/entities/Teacher";
 import { userAdapter } from "../adapters/userAdapter";
 import StaffList from "./StaffList";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 
 export default function AdminSection() {
   const { user, selectedSchool } = useContext(AuthContext);
@@ -23,6 +23,10 @@ export default function AdminSection() {
     }
   }, [selectedSchool, user]);
 
+  function handleClose() {
+	setIsAddAdmin(false)
+  }
+
   return (
     <section>
       <h2 className="mb-2 text-3xl">Administrators</h2>
@@ -33,35 +37,10 @@ export default function AdminSection() {
       >
         Add Admin
       </button>
-      <Transition
-        show={isAddAdmin}
-        enter="transition ease-in duration-100"
-        enterFrom="transform opacity-0 scale-90"
-        enterTo="opacity-100 scale-100"
-        leave="transition ease-out duration-150"
-        leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-90"
-      >
-        <Dialog
-          onClose={() => setIsAddAdmin(false)}
-          className="fixed inset-0 flex items-center justify-center"
-        >
-          <div className="fixed inset-0 bg-blue-900/25" />
-          <Dialog.Panel className="z-10 rounded-2xl bg-white p-8 shadow-xl">
-            <Dialog.Title>Add Admin</Dialog.Title>
-            {/* <TeacherSignup teachers={teachers} setAdmins={setAdmins} /> */}
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={() => setIsAddAdmin(false)}
-                className="rounded bg-gray-300 px-4 py-1 text-gray-900 hover:bg-gray-500 hover:text-white"
-              >
-                Cancel
-              </button>
-            </div>
-          </Dialog.Panel>
-        </Dialog>
-      </Transition>
+      <Modal show={isAddAdmin} close={handleClose} title="Add New Admin">
+        {/* <TeacherSignup teachers={teachers} setAdmins={setAdmins} /> */}
+       <div>go go</div>
+      </Modal>
     </section>
   );
 }
