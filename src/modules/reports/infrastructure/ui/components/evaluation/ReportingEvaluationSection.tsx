@@ -130,18 +130,15 @@ const ReportingEvaluationSection = ({
                     </p>
                   </div>
                   <button
-                    onClick={
-                      () => {
-                        setIsDeleteEvaluation(true);
-                        setSelectedStudent(student);
-                      }
-                      
-                    }
+                    onClick={() => {
+                      setIsDeleteEvaluation(true);
+                      setSelectedStudent(student);
+                    }}
                   >
                     delete
                   </button>
                 </div>
-                <div className="grid grid-cols-2">
+                <div className="grid grid-cols-2 gap-2">
                   {!student.evaluations_for_day ? (
                     <p>No student evaluations today.</p>
                   ) : (
@@ -152,9 +149,11 @@ const ReportingEvaluationSection = ({
                           evaluation.evaluation_attribute_id === 3
                             ? "col-span-2"
                             : "col-span-1"
-                        }`}
+                        } rounded border p-2`}
                       >
-                        {evaluation.evaluation_value}
+                        {evaluation.evaluation_attribute?.name !== "Comment" &&
+                          `${evaluation.evaluation_attribute?.name}:`}{" "}
+                        {evaluation.evaluation_value ? (evaluation.evaluation_value) : "Comment not written yet."}
                       </p>
                     ))
                   )}
@@ -169,12 +168,16 @@ const ReportingEvaluationSection = ({
         close={handleClose}
         title={`Delete student's evaluations`}
       >
-        <p>Are you sure you want to delete this {selectedStudent?.first_name}&apos;s records?</p>
+        <p>
+          Are you sure you want to delete this {selectedStudent?.first_name}
+          &apos;s records?
+        </p>
         <button
           onClick={() => {
-            selectedStudent && handleDeleteEvaluations({
-              student_id: selectedStudent.id,
-            })
+            selectedStudent &&
+              handleDeleteEvaluations({
+                student_id: selectedStudent.id,
+              });
             setSelectedStudent(undefined);
           }}
         >
