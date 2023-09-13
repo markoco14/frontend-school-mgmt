@@ -30,16 +30,6 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const dayValues = [
-    { value: 1, day: "Monday" },
-    { value: 2, day: "Tuesday" },
-    { value: 3, day: "Wednesday" },
-    { value: 4, day: "Thursday" },
-    { value: 5, day: "Friday" },
-    { value: 6, day: "Saturday" },
-    { value: 7, day: "Sunday" },
-  ];
-
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const days: number[] = [];
     data.daysOfWeek?.forEach((day) => days.push(Number(day)));
@@ -49,7 +39,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
         name: data.className,
         school_id: selectedSchool.id,
         level: Number(data.level),
-        day: days,
+        days: days,
       });
       toast.success("New class added.");
       setClasses((prevClasses: ClassEntity[]) => [...prevClasses, newClass]);
@@ -72,6 +62,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
       await schoolDayAdapter
         .listSchoolSchoolDays({ schoolId: selectedSchool?.id })
         .then((res) => {
+          console.log(res);
           setDays(res);
         });
     }
@@ -135,6 +126,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
           next={next}
         />
       </div>
+      <p>Days of Week</p>
       <div className="mb-4 grid grid-cols-5">
         {days?.map((day, index) => (
           <div key={index} className="flex flex-col">
@@ -142,9 +134,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
             <input
               type="checkbox"
               {...register("daysOfWeek", { required: true })}
-              value={
-                dayValues.find((dayValue) => dayValue.day === day.day)?.value
-              }
+              value={day.id} // use the ID of the school_day to match school_day_id
             />
           </div>
         ))}

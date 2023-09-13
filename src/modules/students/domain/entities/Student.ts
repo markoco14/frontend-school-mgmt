@@ -11,6 +11,6 @@ export class Student {
     public photo_url: string,
     public school_id: number,
     public attendance_for_day?: StudentAttendance,
-    public evaluations_for_day?: StudentEvaluation[],
+    public evaluations_for_day?: StudentEvaluation[] | null,
   ) {}
 }
