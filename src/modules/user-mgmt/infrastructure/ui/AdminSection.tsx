@@ -1,23 +1,22 @@
-import { useContext, useEffect, useState } from "react";
 import AuthContext from "@/src/AuthContext";
-import TeacherList from "./TeacherList";
-import TeacherSignup from "./TeacherSignup";
-import { Teacher } from "../../domain/entities/Teacher";
 import { Dialog, Transition } from "@headlessui/react";
-import { schoolTeacherAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolTeacherAdapter";
+import { useContext, useEffect, useState } from "react";
+import { Teacher } from "../../domain/entities/Teacher";
 import { userAdapter } from "../adapters/userAdapter";
 import StaffList from "./StaffList";
 
 export default function AdminSection() {
   const { user, selectedSchool } = useContext(AuthContext);
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
-  const [isAddTeacher, setIsAddTeacher] = useState<boolean>(false);
+  const [admins, setAdmins] = useState<Teacher[]>([]);
+  const [isAddAdmin, setIsAddAdmin] = useState<boolean>(false);
 
   useEffect(() => {
     async function getData(school_id: number, user_id: number) {
-      await userAdapter.listSchoolTeachers({ id: school_id }).then((res) => {
-        setTeachers(res);
-      });
+      await userAdapter
+        .listSchoolAdmins({ school_id: school_id })
+        .then((res) => {
+          setAdmins(res);
+        });
     }
     if (user && selectedSchool) {
       getData(selectedSchool.id, user.user_id);
@@ -27,15 +26,15 @@ export default function AdminSection() {
   return (
     <section>
       <h2 className="mb-2 text-3xl">Administrators</h2>
-      <StaffList staffList={teachers} />
+      <StaffList staffList={admins} />
       <button
         className="rounded bg-blue-300 px-4 py-1 text-blue-900 hover:bg-blue-500 hover:text-white"
-        onClick={() => setIsAddTeacher(true)}
+        onClick={() => setIsAddAdmin(true)}
       >
-        Add Teacher
+        Add Admin
       </button>
       <Transition
-        show={isAddTeacher}
+        show={isAddAdmin}
         enter="transition ease-in duration-100"
         enterFrom="transform opacity-0 scale-90"
         enterTo="opacity-100 scale-100"
@@ -44,17 +43,17 @@ export default function AdminSection() {
         leaveTo="opacity-0 scale-90"
       >
         <Dialog
-          onClose={() => setIsAddTeacher(false)}
+          onClose={() => setIsAddAdmin(false)}
           className="fixed inset-0 flex items-center justify-center"
         >
           <div className="fixed inset-0 bg-blue-900/25" />
           <Dialog.Panel className="z-10 rounded-2xl bg-white p-8 shadow-xl">
-            <Dialog.Title>Add Teacher</Dialog.Title>
-            <TeacherSignup teachers={teachers} setTeachers={setTeachers} />
+            <Dialog.Title>Add Admin</Dialog.Title>
+            {/* <TeacherSignup teachers={teachers} setAdmins={setAdmins} /> */}
             <div className="flex justify-end">
               <button
                 type="button"
-                onClick={() => setIsAddTeacher(false)}
+                onClick={() => setIsAddAdmin(false)}
                 className="rounded bg-gray-300 px-4 py-1 text-gray-900 hover:bg-gray-500 hover:text-white"
               >
                 Cancel

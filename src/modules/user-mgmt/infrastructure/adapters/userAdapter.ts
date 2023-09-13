@@ -82,6 +82,14 @@ class UserAdapter {
 
 		return teacherList;
 	}
+	public async listSchoolAdmins({school_id}: {school_id: number}): Promise<User[]> {
+		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/admins/`);
+		const admins = await res.json();
+		
+		const adminList: User[] = admins
+
+		return adminList;
+	}
 
 
 	public async addTeacher({ first_name, email, password, school_id }: {first_name: string, email: string, password: string, school_id: number }): Promise<Teacher> {
