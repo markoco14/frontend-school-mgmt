@@ -27,7 +27,7 @@ export default function AdminSection() {
   return (
     <section>
       <h2 className="mb-2 text-3xl">Administrators</h2>
-      <StaffList teachers={teachers} />
+      <StaffList staffList={teachers} />
       <button
         className="rounded bg-blue-300 px-4 py-1 text-blue-900 hover:bg-blue-500 hover:text-white"
         onClick={() => setIsAddTeacher(true)}
