@@ -95,7 +95,7 @@ export default function StudentsHome() {
                   {students?.map((student: Student, index) => (
                     <li key={index} className="flex justify-between gap-4">
                       <Link
-                        href={`/students/students/${student.id}`}
+                        href={`/students/${student.id}`}
                         className="hover:bg-blue-300 p-2 rounded w-full"
                       >
                         {student.first_name} {student.last_name}
