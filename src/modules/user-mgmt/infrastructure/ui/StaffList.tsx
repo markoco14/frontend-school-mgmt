@@ -1,10 +1,13 @@
-import { Teacher } from "../../domain/entities/Teacher";
+import { User } from "../../domain/entities/User";
 
-const StaffList = ({ staffList }: { staffList: Teacher[] }) => {
+const StaffList = ({ staffList }: { staffList: User[] }) => {
   return (
-    <ul className="mb-4 rounded bg-gray-100 shadow-inner">
+    <ul className="grid gap-2 rounded bg-gray-100 p-2 shadow-inner">
       {staffList?.map((staff: any, index: number) => (
-        <li key={index} className="grid grid-cols-3 p-2 hover:bg-gray-300">
+        <li
+          key={index}
+          className="grid rounded bg-white p-2 shadow hover:bg-gray-300 sm:grid-cols-3"
+        >
           <span>{staff.first_name}</span>
           <span>{staff.last_name}</span>
           <span>{staff.email}</span>

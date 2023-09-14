@@ -2,8 +2,8 @@ import AuthContext from "@/src/AuthContext";
 import { useContext } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Teacher } from "../../domain/entities/Teacher";
 import { userAdapter } from "../adapters/userAdapter";
+import { User } from "../../domain/entities/User";
 
 type Inputs = {
   first_name: string;
@@ -15,7 +15,7 @@ export default function AdminSignup({
   admins,
   setAdmins,
 }: {
-  admins: Teacher[];
+  admins: User[];
   setAdmins: Function;
 }) {
   const { user, selectedSchool } = useContext(AuthContext);
@@ -39,7 +39,7 @@ export default function AdminSignup({
     }
 
     try {
-      const admin: Teacher = await userAdapter.addAdmin({
+      const admin: User = await userAdapter.addAdmin({
         first_name: data.first_name,
         email: data.email,
         password: data.password,
@@ -47,7 +47,7 @@ export default function AdminSignup({
       });
 
       toast.success("School shared with admin.");
-      setAdmins((prevAdmins: Teacher[]) => [...prevAdmins, admin]);
+      setAdmins((prevAdmins: User[]) => [...prevAdmins, admin]);
       reset();
     } catch (error) {
       console.error(error);

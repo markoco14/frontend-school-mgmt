@@ -1,18 +1,14 @@
 import AuthContext from "@/src/AuthContext";
-import BackButton from "@/src/components/ui/utils/BackButton";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import PageTabNavigation from "@/src/modules/core/infrastructure/ui/components/PageTabNavigation";
+import ParamsPageTabNav from "@/src/modules/core/infrastructure/ui/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
-import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
-import Assessments from "@/src/modules/students/infrastructure/ui/assessment/Assessment";
 import Evaluations from "@/src/modules/students/infrastructure/ui/evaluation/Evaluations";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { useContext, useState } from "react";
-import toast from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
+import { useContext } from "react";
 
 const StudentPhoto = ({ student }: { student: Student }) => {
   return (
@@ -23,10 +19,7 @@ const StudentPhoto = ({ student }: { student: Student }) => {
           alt={`An image of ${student.first_name}`}
           fill={true}
           sizes="(max-width: 768px) 25vw, (max-width: 1200px) 20vw"
-          // width={200}
-          // height={200}
           style={{ objectFit: "cover" }}
-          // className="rounded-full"
         />
       </div>
       <article className="sm:mb-4">
@@ -50,23 +43,24 @@ export const getServerSideProps: GetServerSideProps<{
 export default function Home({
   student,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab") || "profile";
+
   const links = [
     {
       value: 1,
       name: "Profile",
+      urlString: "profile",
     },
     {
       value: 2,
       name: "Evaluations",
+      urlString: "evaluations",
     },
   ];
 
-  const [tab, setTab] = useState<number>(1);
-
-  if (user?.role !== "OWNER") {
+  if (!user?.permissions.includes(1)) {
     return (
       <Layout>
         <PermissionDenied />
@@ -78,27 +72,20 @@ export default function Home({
     <Layout>
       {/* <SchoolHeader /> */}
       <div className="grid gap-4 sm:grid-cols-8">
-        <div className="sm:col-span-8">
-          <BackButton />
-        </div>
         <div className="sm:col-span-2">
           <StudentPhoto student={student} />
         </div>
         <div className="flex flex-col gap-4 sm:col-span-6">
-          <PageTabNavigation links={links} tab={tab} setTab={setTab} />
-          {tab === 1 && (
+          <ParamsPageTabNav queryParam={student.id} links={links} tab={tab} />
+          {/* <PageTabNavigation links={links} tab={tab} setTab={setTab} /> */}
+          {tab === "profile" && (
             <section className="rounded border p-2 shadow">
               <h2>Profile</h2>
             </section>
           )}
-          {tab === 2 && (
+          {tab === "evaluations" && (
             <section className="rounded border p-2 shadow">
               <Evaluations student={student} />
-            </section>
-          )}
-          {tab === 3 && (
-            <section className="rounded border p-2 shadow">
-              <Assessments student={student} />
             </section>
           )}
         </div>

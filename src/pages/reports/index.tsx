@@ -4,34 +4,41 @@ import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import ClassList from "@/src/modules/attendance/infrastructure/ui/components/ClassList";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
-import DateChangeButtons from "@/src/modules/core/infrastructure/ui/components/DateChangeButtons";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import PageTabNavigation from "@/src/modules/core/infrastructure/ui/components/PageTabNavigation";
+import ParamsPageTabNav from "@/src/modules/core/infrastructure/ui/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import DailyReportOverview from "@/src/modules/reports/infrastructure/ui/components/DailyReportOverview";
 import AttendanceSection from "@/src/modules/reports/infrastructure/ui/components/attendance/AttendanceSection";
 import ReportingEvaluationSection from "@/src/modules/reports/infrastructure/ui/components/evaluation/ReportingEvaluationSection";
+import { format } from "date-fns";
+import { useSearchParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export default function ReportsHome() {
   const { selectedSchool } = useContext(AuthContext);
-  const [date, setDate] = useState<Date>(new Date());
   const [loading, setLoading] = useState<boolean>(false);
-
-  const [tab, setTab] = useState<number>(1);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab") || "attendance";
+  const dateParam = searchParams.get("date") as string;
+  const date = dateParam ? new Date(dateParam) : new Date();
 
   const links = [
     {
       value: 1,
       name: "Attendance",
+      urlString: "attendance",
     },
     {
       value: 2,
       name: "Evaluations",
+      urlString: "evaluations",
     },
     {
       value: 3,
       name: "Daily Reports",
+      urlString: "daily reports",
     },
   ];
 
@@ -59,7 +66,6 @@ export default function ReportsHome() {
         .list({ school_id: selectedSchool.id, day: dayName })
         .then((res) => {
           setSelectedClass(res[0]);
-          // getAttendanceList({ school_class: res[0]?.id, date: formattedDate });
           setTodayClasses(res);
           setLoading(false);
         });
@@ -80,22 +86,70 @@ export default function ReportsHome() {
     setSelectedClass(classEntity);
   }
 
+  const incrementDate = () => {
+    const currentDate = new Date(date);
+    currentDate.setDate(currentDate.getDate() + 1);
+    router.push(`?${new URLSearchParams({
+      date: currentDate.toISOString().split("T")[0],
+      tab: tab,
+    })}`);
+  };
+
+  const decrementDate = () => {
+    const currentDate = new Date(date);
+    currentDate.setDate(currentDate.getDate() - 1);
+    router.push(
+      `?${new URLSearchParams({
+        date: currentDate.toISOString().split("T")[0],
+        tab: tab,
+      })}`,
+    );
+  };
+
   return (
     <Layout>
-      <div className="grid gap-4 divide-y">
-        {/* <SchoolHeader /> */}
+      <div className="grid gap-4">
         <h1 className="text-3xl">Reporting</h1>
-        <div className="border-b-2">
-          <DateChangeButtons date={date} setDate={setDate} />
+        <div className="flex gap-2">
+          <input
+            type="date"
+            className="rounded border text-left text-xl shadow xs:text-right"
+            value={format(date, "yyyy-MM-dd")}
+            onChange={async (e) => {
+              const newDate = new Date(e.target.value);
+              router.push(
+                `?${new URLSearchParams({
+                  date: newDate.toISOString().split("T")[0],
+                  tab: tab,
+                })}`,
+              );
+            }}
+          />
+          <button
+            className=" flex items-center justify-center rounded border shadow disabled:cursor-not-allowed"
+            onClick={decrementDate}
+          >
+            <span className="material-symbols-outlined">navigate_before</span>
+          </button>
+          <button
+            className=" flex items-center justify-center rounded border shadow disabled:cursor-not-allowed"
+            onClick={incrementDate}
+          >
+            <span className="material-symbols-outlined">navigate_next</span>
+          </button>
         </div>
 
-        <section className="grid gap-4 rounded border bg-gray-100 p-2 shadow-inner sm:grid-cols-8 sm:gap-2">
-          <div className="bg-white sm:col-span-8">
-            <PageTabNavigation links={links} tab={tab} setTab={setTab} />
+        <section className="flex flex-col gap-4 rounded border overflow-x-hidden bg-gray-100 p-2 shadow-inner sm:grid-cols-2 sm:gap-2">
+          <div className="bg-white sm:col-span-2">
+            <ParamsPageTabNav
+              links={links}
+              tab={tab}
+              dateString={date.toISOString().split("T")[0]}
+            />
           </div>
-          {tab !== 3 && (
-            <div className="col-span-8 grid grid-cols-8 gap-2">
-              <article className="relative col-span-4 flex flex-col gap-4">
+          {tab !== "daily reports" && (
+            <div className=" grid sm:grid-cols-2 gap-2">
+              <article className="relative sm:col-span-1 flex flex-col gap-4">
                 <div className="sticky top-4 rounded-lg border bg-white p-4 shadow">
                   <div>
                     <h2 className="mb-4 text-2xl">
@@ -113,7 +167,8 @@ export default function ReportsHome() {
                     <>
                       <p className="mb-2">
                         Click a class to see the student{" "}
-                        {tab === 1 ? "Attendance" : "Evaluations"} on the right.
+                        {tab === "attendance" ? "Attendance" : "Evaluations"} on
+                        the right.
                       </p>
                       <ClassList
                         todayClasses={todayClasses}
@@ -124,16 +179,16 @@ export default function ReportsHome() {
                   )}
                 </div>
               </article>
-              {tab === 1 && selectedClass && (
-                <article className="col-span-4 rounded-lg border bg-white p-4">
+              {tab === "attendance" && selectedClass && (
+                <article className="sm:col-span-1 rounded-lg border bg-white p-4">
                   <AttendanceSection
                     date={date}
                     selectedClass={selectedClass}
                   />
                 </article>
               )}
-              {tab === 2 && selectedClass && (
-                <article className="col-span-4">
+              {tab === "evaluations" && selectedClass && (
+                <article className="sm:col-span-1">
                   <ReportingEvaluationSection
                     date={date}
                     selectedClass={selectedClass}
@@ -143,9 +198,8 @@ export default function ReportsHome() {
             </div>
           )}
         </section>
-        {tab === 3 && (
+        {tab === "daily reports" && (
           <section className="rounded border p-2 shadow">
-            <p>daily reports</p>
             <DailyReportOverview date={date} />
           </section>
         )}
