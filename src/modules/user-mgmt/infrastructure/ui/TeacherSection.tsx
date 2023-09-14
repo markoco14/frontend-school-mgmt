@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "@/src/AuthContext";
-import TeacherList from "./TeacherList";
+
 import TeacherSignup from "./TeacherSignup";
 import { Teacher } from "../../domain/entities/Teacher";
 import { Dialog, Transition } from "@headlessui/react";
 import { schoolTeacherAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolTeacherAdapter";
 import { userAdapter } from "../adapters/userAdapter";
+import StaffList from "./StaffList";
 
 export default function TeacherSection() {
   const { user, selectedSchool } = useContext(AuthContext);
@@ -36,7 +37,8 @@ export default function TeacherSection() {
           Add Teacher
         </button>
       </div>
-      <TeacherList teachers={teachers} />
+      <StaffList staffList={teachers} />
+  
       <Transition
         show={isAddTeacher}
         enter="transition ease-in duration-100"

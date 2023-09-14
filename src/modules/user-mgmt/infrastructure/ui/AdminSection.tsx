@@ -29,15 +29,17 @@ export default function AdminSection() {
   }
 
   return (
-    <section>
-      <h2 className="mb-2 text-3xl">Administrators</h2>
+    <section className="grid gap-4">
+      <div className="flex items-baseline justify-between">
+        <h2 className="text-3xl">Admins</h2>
+        <button
+          className="text-gray-700 underline decoration-2 underline-offset-2 hover:text-blue-700"
+          onClick={() => setIsAddAdmin(true)}
+        >
+          Add Admin
+        </button>
+      </div>
       <StaffList staffList={admins} />
-      <button
-        className="rounded bg-blue-300 px-4 py-1 text-blue-900 hover:bg-blue-500 hover:text-white"
-        onClick={() => setIsAddAdmin(true)}
-      >
-        Add Admin
-      </button>
       <Modal show={isAddAdmin} close={handleClose} title="Add New Admin">
         <AdminSignup admins={admins} setAdmins={setAdmins} />
       </Modal>
