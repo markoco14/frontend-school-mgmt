@@ -26,15 +26,17 @@ export default function TeacherSection() {
   }, [selectedSchool, user]);
 
   return (
-    <section>
-      <h2 className="mb-2 text-3xl">Teachers</h2>
+    <section className="grid gap-4">
+      <div className="flex justify-between items-baseline">
+        <h2 className="text-3xl">Teachers</h2>
+        <button
+          className="text-gray-700 underline underline-offset-2 decoration-2 hover:text-blue-700"
+          onClick={() => setIsAddTeacher(true)}
+        >
+          Add Teacher
+        </button>
+      </div>
       <TeacherList teachers={teachers} />
-      <button
-        className="bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded"
-        onClick={() => setIsAddTeacher(true)}
-      >
-        Add Teacher
-      </button>
       <Transition
         show={isAddTeacher}
         enter="transition ease-in duration-100"
@@ -49,17 +51,14 @@ export default function TeacherSection() {
           className="fixed inset-0 flex items-center justify-center"
         >
           <div className="fixed inset-0 bg-blue-900/25" />
-          <Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
+          <Dialog.Panel className="z-10 rounded-2xl bg-white p-8 shadow-xl">
             <Dialog.Title>Add Teacher</Dialog.Title>
-            <TeacherSignup
-              teachers={teachers}
-              setTeachers={setTeachers}
-            />
+            <TeacherSignup teachers={teachers} setTeachers={setTeachers} />
             <div className="flex justify-end">
               <button
                 type="button"
                 onClick={() => setIsAddTeacher(false)}
-                className="bg-gray-300 text-gray-900 hover:bg-gray-500 hover:text-white px-4 py-1 rounded"
+                className="rounded bg-gray-300 px-4 py-1 text-gray-900 hover:bg-gray-500 hover:text-white"
               >
                 Cancel
               </button>
