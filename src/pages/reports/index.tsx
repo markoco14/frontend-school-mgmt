@@ -13,13 +13,16 @@ import ReportingEvaluationSection from "@/src/modules/reports/infrastructure/ui/
 import { format } from "date-fns";
 import { useSearchParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export default function ReportsHome() {
   const { selectedSchool } = useContext(AuthContext);
-  const [date, setDate] = useState<Date>(new Date());
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab") || "attendance";
+  const dateParam = searchParams.get("date") as string;
+  const date = dateParam ? new Date(dateParam) : new Date();
 
   const links = [
     {
@@ -63,7 +66,6 @@ export default function ReportsHome() {
         .list({ school_id: selectedSchool.id, day: dayName })
         .then((res) => {
           setSelectedClass(res[0]);
-          // getAttendanceList({ school_class: res[0]?.id, date: formattedDate });
           setTodayClasses(res);
           setLoading(false);
         });
@@ -87,19 +89,26 @@ export default function ReportsHome() {
   const incrementDate = () => {
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() + 1);
-    setDate(currentDate);
+    router.push(`?${new URLSearchParams({
+      date: currentDate.toISOString().split("T")[0],
+      tab: tab,
+    })}`);
   };
 
   const decrementDate = () => {
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() - 1);
-    setDate(currentDate);
+    router.push(
+      `?${new URLSearchParams({
+        date: currentDate.toISOString().split("T")[0],
+        tab: tab,
+      })}`,
+    );
   };
 
   return (
     <Layout>
       <div className="grid gap-4">
-        {/* <SchoolHeader /> */}
         <h1 className="text-3xl">Reporting</h1>
         <div className="flex gap-2">
           <input
@@ -108,29 +117,35 @@ export default function ReportsHome() {
             value={format(date, "yyyy-MM-dd")}
             onChange={async (e) => {
               const newDate = new Date(e.target.value);
-              setDate(newDate);
+              router.push(
+                `?${new URLSearchParams({
+                  date: newDate.toISOString().split("T")[0],
+                  tab: tab,
+                })}`,
+              );
             }}
           />
           <button
             className=" flex items-center justify-center rounded border shadow disabled:cursor-not-allowed"
             onClick={decrementDate}
-            // disabled={dayNumber === 1}
           >
             <span className="material-symbols-outlined">navigate_before</span>
           </button>
           <button
             className=" flex items-center justify-center rounded border shadow disabled:cursor-not-allowed"
             onClick={incrementDate}
-            // disabled={dayNumber === 5}
           >
             <span className="material-symbols-outlined">navigate_next</span>
           </button>
-          {/* <DateChangeButtons date={date} setDate={setDate} /> */}
         </div>
 
         <section className="grid gap-4 rounded border bg-gray-100 p-2 shadow-inner sm:grid-cols-8 sm:gap-2">
           <div className="bg-white sm:col-span-8">
-            <ParamsPageTabNav links={links} tab={tab} />
+            <ParamsPageTabNav
+              links={links}
+              tab={tab}
+              dateString={date.toISOString().split("T")[0]}
+            />
           </div>
           {tab !== "daily reports" && (
             <div className="col-span-8 grid grid-cols-8 gap-2">
