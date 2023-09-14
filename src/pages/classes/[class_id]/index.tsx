@@ -4,6 +4,7 @@ import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/clas
 import ManageClassTeacher from "@/src/modules/classes/infrastructure/ui/components/ManageClassTeacher";
 import ManageClassStudents from "@/src/modules/classes/infrastructure/ui/components/class-students/ManageClassStudents";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import ParamsPageTabNav from "@/src/modules/core/infrastructure/ui/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
@@ -62,24 +63,7 @@ export default function ManageClassDetails({
           <h2 className="text-3xl">{selectedClass?.name}</h2>
           <Link href="/classes">Back</Link>
         </div>
-        {/* TODO: convert back to reusable PageTabNavigation component */}
-        <ul className="flex gap-4 overflow-x-auto rounded border p-2 shadow">
-          {links.map((link) => (
-            <Link
-              href={`${classEntity.id}?${new URLSearchParams({
-                tab: link.name.toLowerCase(),
-              })}`}
-              className={`${
-                link.urlString === tab &&
-                "duration underline decoration-blue-500 decoration-2 underline-offset-2 ease-in-out"
-              }`}
-              key={link.value}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </ul>
-        {/* <PageTabNavigation links={links} tab={tab} setTab={setTab} /> */}
+        <ParamsPageTabNav links={links} tab={tab} queryParam={classEntity.id} />
         {tab === "class info" ? (
           <article className="col-span-1 rounded border p-2 shadow md:row-span-2">
             <p>Class info goes here.</p>
