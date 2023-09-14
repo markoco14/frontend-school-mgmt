@@ -4,13 +4,13 @@ import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import ClassList from "@/src/modules/attendance/infrastructure/ui/components/ClassList";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
-import DateChangeButtons from "@/src/modules/core/infrastructure/ui/components/DateChangeButtons";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import ParamsPageTabNav from "@/src/modules/core/infrastructure/ui/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import DailyReportOverview from "@/src/modules/reports/infrastructure/ui/components/DailyReportOverview";
 import AttendanceSection from "@/src/modules/reports/infrastructure/ui/components/attendance/AttendanceSection";
 import ReportingEvaluationSection from "@/src/modules/reports/infrastructure/ui/components/evaluation/ReportingEvaluationSection";
+import { format } from "date-fns";
 import { useSearchParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
@@ -84,13 +84,48 @@ export default function ReportsHome() {
     setSelectedClass(classEntity);
   }
 
+  const incrementDate = () => {
+    const currentDate = new Date(date);
+    currentDate.setDate(currentDate.getDate() + 1);
+    setDate(currentDate);
+  };
+
+  const decrementDate = () => {
+    const currentDate = new Date(date);
+    currentDate.setDate(currentDate.getDate() - 1);
+    setDate(currentDate);
+  };
+
   return (
     <Layout>
-      <div className="grid gap-4 divide-y">
+      <div className="grid gap-4">
         {/* <SchoolHeader /> */}
         <h1 className="text-3xl">Reporting</h1>
-        <div className="border-b-2">
-          <DateChangeButtons date={date} setDate={setDate} />
+        <div className="flex gap-2">
+          <input
+            type="date"
+            className="rounded border text-left text-xl shadow xs:text-right"
+            value={format(date, "yyyy-MM-dd")}
+            onChange={async (e) => {
+              const newDate = new Date(e.target.value);
+              setDate(newDate);
+            }}
+          />
+          <button
+            className=" flex items-center justify-center rounded border shadow disabled:cursor-not-allowed"
+            onClick={decrementDate}
+            // disabled={dayNumber === 1}
+          >
+            <span className="material-symbols-outlined">navigate_before</span>
+          </button>
+          <button
+            className=" flex items-center justify-center rounded border shadow disabled:cursor-not-allowed"
+            onClick={incrementDate}
+            // disabled={dayNumber === 5}
+          >
+            <span className="material-symbols-outlined">navigate_next</span>
+          </button>
+          {/* <DateChangeButtons date={date} setDate={setDate} /> */}
         </div>
 
         <section className="grid gap-4 rounded border bg-gray-100 p-2 shadow-inner sm:grid-cols-8 sm:gap-2">
@@ -117,7 +152,8 @@ export default function ReportsHome() {
                     <>
                       <p className="mb-2">
                         Click a class to see the student{" "}
-                        {tab === "attendance" ? "Attendance" : "Evaluations"} on the right.
+                        {tab === "attendance" ? "Attendance" : "Evaluations"} on
+                        the right.
                       </p>
                       <ClassList
                         todayClasses={todayClasses}
