@@ -35,7 +35,7 @@ export default function Staff() {
 
   return (
     <Layout>
-      <section className="grid gap-4 p-8">
+      <section className="grid gap-4 sm:p-8">
         <ParamsPageTabNav links={links} tab={tab} />
         {tab === "teachers" && <TeacherSection />}
         {tab === "admins" && <AdminSection />}
