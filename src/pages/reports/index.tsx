@@ -139,8 +139,8 @@ export default function ReportsHome() {
           </button>
         </div>
 
-        <section className="grid gap-4 rounded border bg-gray-100 p-2 shadow-inner sm:grid-cols-8 sm:gap-2">
-          <div className="bg-white sm:col-span-8">
+        <section className="flex flex-col gap-4 rounded border overflow-x-hidden bg-gray-100 p-2 shadow-inner sm:grid-cols-2 sm:gap-2">
+          <div className="bg-white sm:col-span-2">
             <ParamsPageTabNav
               links={links}
               tab={tab}
@@ -148,8 +148,8 @@ export default function ReportsHome() {
             />
           </div>
           {tab !== "daily reports" && (
-            <div className="col-span-8 grid grid-cols-8 gap-2">
-              <article className="relative col-span-4 flex flex-col gap-4">
+            <div className=" grid sm:grid-cols-2 gap-2">
+              <article className="relative sm:col-span-1 flex flex-col gap-4">
                 <div className="sticky top-4 rounded-lg border bg-white p-4 shadow">
                   <div>
                     <h2 className="mb-4 text-2xl">
@@ -180,7 +180,7 @@ export default function ReportsHome() {
                 </div>
               </article>
               {tab === "attendance" && selectedClass && (
-                <article className="col-span-4 rounded-lg border bg-white p-4">
+                <article className="sm:col-span-1 rounded-lg border bg-white p-4">
                   <AttendanceSection
                     date={date}
                     selectedClass={selectedClass}
@@ -188,7 +188,7 @@ export default function ReportsHome() {
                 </article>
               )}
               {tab === "evaluations" && selectedClass && (
-                <article className="col-span-4">
+                <article className="sm:col-span-1">
                   <ReportingEvaluationSection
                     date={date}
                     selectedClass={selectedClass}
