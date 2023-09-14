@@ -5,15 +5,18 @@ import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import { format } from "date-fns";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-
 
 export const TodayClassList = () => {
   const router = useRouter();
   const { selectedSchool } = useContext(AuthContext);
   const [classEntities, setClasses] = useState<ClassEntity[]>();
-  const [date, setDate] = useState<Date>(new Date());
+
+  const searchParams = useSearchParams();
+  const dateParam = searchParams.get("date") as string;
+  const date = dateParam ? new Date(dateParam) : new Date();
   const dayNumber = date.getDay();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -45,34 +48,26 @@ export const TodayClassList = () => {
         });
     }
     selectedSchool && getData();
-  }, [date, selectedSchool, dayName]);
-
-  // async function checkOrCreateReports(classEntity: ClassEntity, date: string) {
-  //   await reportAdapter
-  //     .getReportByClassAndDate({ class_id: classEntity.id, date: date })
-  //     .then((res) => {
-  //       if (res.id) {
-  //         router.push(`reports/report-details/${res.id}/`);
-  //       } else {
-  //         reportAdapter
-  //           .createReportForClassAndDate({ class_id: classEntity.id, date: date })
-  //           .then((res) => {
-  //             router.push(`reports/report-details/${res.id}/`);
-  //           });
-  //       }
-  //     });
-  // }
+  }, [selectedSchool, dayName]);
 
   const incrementDate = () => {
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() + 1);
-    setDate(currentDate);
+    router.push(
+      `?${new URLSearchParams({
+        date: currentDate.toISOString().split("T")[0],
+      })}`,
+    );
   };
 
   const decrementDate = () => {
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() - 1);
-    setDate(currentDate);
+    router.push(
+      `?${new URLSearchParams({
+        date: currentDate.toISOString().split("T")[0],
+      })}`,
+    );
   };
 
   return (
@@ -86,17 +81,21 @@ export const TodayClassList = () => {
             value={format(date, "yyyy-MM-dd")}
             onChange={async (e) => {
               const newDate = new Date(e.target.value);
-              setDate(newDate);
+              router.push(
+                `?${new URLSearchParams({
+                  date: newDate.toISOString().split("T")[0],
+                })}`,
+              );
             }}
           />
           <button
-            className="flex items-center justify-center"
+            className="flex items-center justify-center rounded border shadow "
             onClick={decrementDate}
           >
             <span className="material-symbols-outlined">navigate_before</span>
           </button>
           <button
-            className="flex items-center justify-center"
+            className="flex items-center justify-center rounded border shadow "
             onClick={incrementDate}
           >
             <span className="material-symbols-outlined">navigate_next</span>
