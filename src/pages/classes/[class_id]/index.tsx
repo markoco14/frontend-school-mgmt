@@ -7,7 +7,7 @@ import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { useContext, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps<{
@@ -26,20 +26,24 @@ export default function ManageClassDetails({
 }) {
   const [selectedClass, setSelectedClass] = useState<ClassEntity>(classEntity);
   const { user } = useContext(AuthContext);
-  const [tab, setTab] = useState<number>(1);
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab") || "class info";
 
   const links = [
     {
       value: 1,
       name: "Class Info",
+      urlString: "class info",
     },
     {
       value: 2,
       name: "Students",
+      urlString: "students",
     },
     {
       value: 3,
       name: "Teachers",
+      urlString: "teachers",
     },
   ];
 
@@ -58,34 +62,34 @@ export default function ManageClassDetails({
           <h2 className="text-3xl">{selectedClass?.name}</h2>
           <Link href="/classes">Back</Link>
         </div>
-        <nav className="flex gap-4 overflow-x-auto rounded border p-2 shadow">
-          {links.map((button) => (
-            <button
+        {/* TODO: convert back to reusable PageTabNavigation component */}
+        <ul className="flex gap-4 overflow-x-auto rounded border p-2 shadow">
+          {links.map((link) => (
+            <Link
+              href={`${classEntity.id}?${new URLSearchParams({
+                tab: link.name.toLowerCase(),
+              })}`}
               className={`${
-                button.value === tab &&
+                link.urlString === tab &&
                 "duration underline decoration-blue-500 decoration-2 underline-offset-2 ease-in-out"
               }`}
-              key={button.value}
-              onClick={() => {
-                setTab(button.value);
-                // router.push(`/?tab=${button.value}`)
-              }}
+              key={link.value}
             >
-              {button.name}
-            </button>
+              {link.name}
+            </Link>
           ))}
-        </nav>
+        </ul>
         {/* <PageTabNavigation links={links} tab={tab} setTab={setTab} /> */}
-        {tab === 1 ? (
+        {tab === "class info" ? (
           <article className="col-span-1 rounded border p-2 shadow md:row-span-2">
             <p>Class info goes here.</p>
           </article>
-        ) : tab === 2 ? (
+        ) : tab === "students" ? (
           <article className="col-span-1 md:row-span-2">
             <ManageClassStudents selectedClass={selectedClass} />
           </article>
         ) : (
-          tab === 3 && (
+          tab === "teachers" && (
             <article className="col-span-1 row-span-1">
               <ManageClassTeacher
                 selectedClass={selectedClass}
