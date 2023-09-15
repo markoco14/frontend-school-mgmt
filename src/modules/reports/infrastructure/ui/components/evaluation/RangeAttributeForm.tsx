@@ -46,8 +46,10 @@ const RangeAttributeForm = ({
   const length = 3;
 
   return (
-    <div>
-      <div>
+    <>
+      <p>
+        {evaluation.evaluation_attribute.name}
+      </p>
         {values.map((value) => (
           <button
             key={value}
@@ -68,15 +70,14 @@ const RangeAttributeForm = ({
             {value}
           </button>
         ))}
-      </div>
-      <div>
+      <p>
         {
           evaluation.evaluation_attribute.descriptions[
             selectedValue
           ]
         }
-      </div>
-    </div>
+      </p>
+    </>
   );
 };
 

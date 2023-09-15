@@ -78,11 +78,11 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
   }, [user, selectedSchool, page]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-4 flex flex-col">
-        <label className="mb-2">Class Name</label>
+    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+      <div className="flex flex-col gap-2">
+        <label>Class Name</label>
         <input
-          className="rounded px-1 py-2 shadow"
+          className="border rounded px-2 py-1 shadow"
           type="text"
           {...register("className", {
             required: true,
@@ -97,18 +97,18 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
         )}
       </div>
 
-      <div className="mb-4 flex flex-col">
+      <div className="flex flex-col gap-2">
         <label>Level</label>
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-5 gap-2">
           {levels?.map((level: Level, index: number) => (
-            <label key={index} className="text-center">
+            <label key={index} className="cursor-pointer flex w-full">
               <input
                 type="radio"
                 className="peer sr-only"
                 {...register("level", { required: true })}
                 value={level.id}
               />
-              <span className="w-full rounded border bg-gray-100 p-2 shadow-inner duration-200 ease-in-out hover:bg-gray-300 peer-checked:bg-gray-500 peer-checked:text-white">
+              <span className="grid py-1 w-full place-content-center rounded border shadow duration-200 ease-in-out hover:bg-gray-300 peer-checked:bg-gray-500 peer-checked:text-white ">
                 {level.name}
               </span>
             </label>
@@ -126,18 +126,25 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
           next={next}
         />
       </div>
-      <p>Days of Week</p>
-      <div className="mb-4 grid grid-cols-5">
-        {days?.map((day, index) => (
-          <div key={index} className="flex flex-col">
-            <label className="text-center">{day.day}</label>
-            <input
-              type="checkbox"
-              {...register("daysOfWeek", { required: true })}
-              value={day.id} // use the ID of the school_day to match school_day_id
-            />
-          </div>
-        ))}
+      <div className="grid gap-2">
+        <p>Days of Week</p>
+        <div className="grid gap-2">
+          {days?.map((day, index) => (
+            <div key={index} className="flex flex-col">
+              <label className="cursor-pointer text-center">
+                <input
+                  type="checkbox"
+                  className="peer sr-only"
+                  {...register("daysOfWeek", { required: true })}
+                  value={day.id} // use the ID of the school_day to match school_day_id
+                />
+                <span className="grid w-full place-content-center rounded border py-1 shadow duration-200 ease-in-out hover:bg-gray-300 peer-checked:bg-gray-500 peer-checked:text-white ">
+                  {day.day}
+                </span>
+              </label>
+            </div>
+          ))}
+        </div>
         {errors.daysOfWeek?.type === "required" && (
           <p role="alert" className="col-span-5 mt-2 text-red-500">
             Days are required
