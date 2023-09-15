@@ -78,8 +78,8 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
   }, [user, selectedSchool, page]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-4 flex flex-col">
+    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+      <div className="flex flex-col gap-2">
         <label className="mb-2">Class Name</label>
         <input
           className="rounded px-1 py-2 shadow"
@@ -97,18 +97,18 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
         )}
       </div>
 
-      <div className="mb-4 flex flex-col">
+      <div className="flex flex-col gap-2">
         <label>Level</label>
         <div className="grid grid-cols-6 gap-4">
           {levels?.map((level: Level, index: number) => (
-            <label key={index} className="text-center">
+            <label key={index} className="flex w-full">
               <input
                 type="radio"
                 className="peer sr-only"
                 {...register("level", { required: true })}
                 value={level.id}
               />
-              <span className="w-full rounded border bg-gray-100 p-2 shadow-inner duration-200 ease-in-out hover:bg-gray-300 peer-checked:bg-gray-500 peer-checked:text-white">
+              <span className="w-full grid place-content-center aspect-square rounded border shadow duration-200 ease-in-out hover:bg-gray-300 peer-checked:bg-gray-500 peer-checked:text-white ">
                 {level.name}
               </span>
             </label>
