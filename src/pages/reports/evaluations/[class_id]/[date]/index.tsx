@@ -130,57 +130,55 @@ export default function ReportDate({
             Create student evaluations
           </button>
         ) : (
-          <div>
-            <ul className="divide-y border shadow">
-              {presentStudents?.map((student) => (
-                <li
-                  key={student.id}
-                  className="grid grid-cols-6 items-center p-2 hover:bg-gray-100"
-                >
-                  <p className="col-span-1">
-                    {student.first_name} {student.last_name} {student.id}
+          <ul className="grid gap-4 border bg-gray-300 shadow xs:bg-gray-100 xs:p-4">
+            {presentStudents?.map((student) => (
+              <li
+                key={student.id}
+                className="flex flex-col gap-4 bg-white p-2 xs:grid xs:grid-cols-4 xs:border-2 xs:p-4"
+              >
+                <p className="col-span-2 w-full text-xl xs:col-span-4">
+                  {student.first_name} {student.last_name} {student.id}
+                </p>
+                {!student.evaluations_for_day ? (
+                  <p className="xs:col-span-4">
+                    Student evaluations not prepared.{" "}
+                    <button
+                      onClick={() => {
+                        setIsBatchCreate(true);
+                      }}
+                      className="underline underline-offset-2"
+                    >
+                      Click to prepare them now.
+                    </button>
                   </p>
-                  {!student.evaluations_for_day ? (
-                    <p className="col-span-3">
-                      Student evaluations not prepared.{" "}
-                      <button
-                        onClick={() => {
-                          setIsBatchCreate(true);
-                        }}
-                        className="underline underline-offset-2"
-                      >
-                        Click to prepare them now.
-                      </button>
-                    </p>
-                  ) : (
-                    <>
-                      {student.evaluations_for_day?.map((evaluation) =>
-                        evaluation.evaluation_attribute.max_value &&
-                        evaluation.evaluation_attribute.min_value ? (
-                          <div
-                            key={evaluation.id}
-                            className="col-span-1 text-center"
-                          >
-                            <RangeAttributeForm
-                              student={student}
-                              evaluation={evaluation}
-                            />
-                          </div>
-                        ) : (
-                          <div
-                            key={evaluation.id}
-                            className="col-span-3 grid items-center"
-                          >
-                            <TextAttributeForm evaluation={evaluation} />
-                          </div>
-                        ),
-                      )}
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+                ) : (
+                  <>
+                    {student.evaluations_for_day?.map((evaluation) =>
+                      evaluation.evaluation_attribute.max_value &&
+                      evaluation.evaluation_attribute.min_value ? (
+                        <div
+                          key={evaluation.id}
+                          className="col-span-2 rounded border bg-white p-2 text-center shadow xs:col-span-2"
+                        >
+                          <RangeAttributeForm
+                            student={student}
+                            evaluation={evaluation}
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          key={evaluation.id}
+                          className="grid w-full items-center rounded border p-2 shadow xs:col-span-4"
+                        >
+                          <TextAttributeForm evaluation={evaluation} />
+                        </div>
+                      ),
+                    )}
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
         )}
       </section>
       <Modal
@@ -203,9 +201,14 @@ export default function ReportDate({
             ))}
           </select>
         </div>
-        <button disabled={!selectedSubject} onClick={() => {
-          batchCreateEvaluations({ students: presentStudents });
-        }}>Create Evaluations</button>
+        <button
+          disabled={!selectedSubject}
+          onClick={() => {
+            batchCreateEvaluations({ students: presentStudents });
+          }}
+        >
+          Create Evaluations
+        </button>
       </Modal>
     </Layout>
   );

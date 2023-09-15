@@ -9,7 +9,7 @@ type Inputs = {
   evaluation_value: string;
 };
 
-const TextAttributeForm = ({
+const   TextAttributeForm = ({
   evaluation,
 }: {
   evaluation: StudentEvaluation;
