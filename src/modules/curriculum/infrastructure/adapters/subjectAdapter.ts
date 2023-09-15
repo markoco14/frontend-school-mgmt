@@ -2,35 +2,72 @@ import { Subject } from "../../domain/entities/Subject";
 import { SubjectListResponse } from "../../domain/entities/SubjectListResponse";
 
 class SubjectAdapter {
+  public async list({
+    schoolId,
+	class_id,
+  }: {
+    schoolId: number;
+	class_id?: number;
+  }): Promise<Subject[]> {
+	let url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/subjects/`
 
-	public async listSchoolSubjects({schoolId}: {schoolId: number}): Promise<SubjectListResponse> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subjects/?school=${schoolId}`);
-		const subjectListResponse: SubjectListResponse = await res.json();
+	const queryParams: string[] = [];
+    if (class_id)
+      queryParams.push(`class_id=${encodeURIComponent(class_id)}`);
+    // if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
 
-		return subjectListResponse
-	}
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
+    }
 
-	public async addSubject({name, school}: {name: string, school: number}): Promise<Subject> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subjects/`, { 
-			method: 'POST', 
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ name: name, school: school }) 
-		});
-		const level: Subject = await res.json();
+    const res = await fetch(url);
+    const subjects: Subject[] = await res.json();
 
-		return level
+    return subjects;
+  }
 
-	}
+  public async listSchoolSubjects({
+    schoolId,
+  }: {
+    schoolId: number;
+  }): Promise<SubjectListResponse> {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subjects/?school=${schoolId}`,
+    );
+    const subjectListResponse: SubjectListResponse = await res.json();
 
-	public async deleteSubject({id}: {id:number}): Promise<any> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subjects/${id}/`,{
-			method: 'DELETE'
-		});
+    return subjectListResponse;
+  }
 
-		return res
-	}
+  public async addSubject({
+    name,
+    school,
+  }: {
+    name: string;
+    school: number;
+  }): Promise<Subject> {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subjects/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: name, school: school }),
+    });
+    const level: Subject = await res.json();
+
+    return level;
+  }
+
+  public async deleteSubject({ id }: { id: number }): Promise<any> {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subjects/${id}/`,
+      {
+        method: "DELETE",
+      },
+    );
+
+    return res;
+  }
 }
 
 export const subjectAdapter = new SubjectAdapter();
