@@ -37,7 +37,7 @@ export default function ReportDate({
   const [loading, setLoading] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(1);
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [selectedSubject, setSelectedSubject] = useState<number>();
+  const [selectedSubjectId, setSelectedSubjectId] = useState<number>();
   const [presentStudents, setPresentStudents] = useState<Student[]>([]);
   const [nullEvaluationCount, setNullEvaluationCount] = useState<number>(() => {
     let nullEvaluationCount = 0;
@@ -65,7 +65,7 @@ export default function ReportDate({
 
   async function batchCreateEvaluations({ students }: { students: Student[] }) {
     router.query.date &&
-      selectedSubject &&
+      selectedSubjectId &&
       (await studentEvaluationAdapter
         .batchCreateEvaluations({
           schoolId: selectedSchool.id,
@@ -73,7 +73,7 @@ export default function ReportDate({
           classId: Number(router.query.class_id),
           date: router.query.date.toString(),
           userId: Number(user?.user_id),
-          subjectId: selectedSubject,
+          subjectId: selectedSubjectId,
         })
         .then((res) => {
           setPresentStudents(res);
@@ -85,7 +85,7 @@ export default function ReportDate({
   }
 
   function handleSelectSubject({ subjectId }: { subjectId: number }) {
-    setSelectedSubject(subjectId);
+    subjectId === 0 ? setSelectedSubjectId(undefined) : setSelectedSubjectId(subjectId)
   }
 
   function handleClose() {
@@ -99,7 +99,6 @@ export default function ReportDate({
           .listSchoolSubjects({ schoolId: selectedSchool.id })
           .then((res) => {
             setSubjects(res.results);
-            setSelectedSubject(res.results[0]?.id);
           });
       }
     }
@@ -191,11 +190,12 @@ export default function ReportDate({
           <div>
             <select
               className="w-full rounded border bg-white p-2 shadow"
-              defaultValue={subjects[0]?.id}
+              defaultValue={0}
               onChange={(e) =>
-                handleSelectSubject({ subjectId: Number(e.target.value) })
+                handleSelectSubject({ subjectId: Number(e.target.value)})
               }
             >
+              <option value={0}>Please choose a subject</option>
               {subjects.map((subject) => (
                 <option className="p-2" key={subject.id} value={subject.id}>
                   {subject.name}
@@ -205,7 +205,7 @@ export default function ReportDate({
           </div>
           <button
             className="w-1/2 rounded bg-blue-600 px-2 py-1 text-white disabled:bg-gray-600"
-            disabled={!selectedSubject}
+            disabled={!selectedSubjectId}
             onClick={() => {
               batchCreateEvaluations({ students: presentStudents });
             }}
