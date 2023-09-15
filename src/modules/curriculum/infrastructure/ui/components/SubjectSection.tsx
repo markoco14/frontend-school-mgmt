@@ -184,9 +184,9 @@ const SubjectList = ({
     async function getSubjects() {
       if (selectedSchool) {
         await subjectAdapter
-          .listSchoolSubjects({ schoolId: selectedSchool.id })
+          .list({ schoolId: selectedSchool.id })
           .then((res) => {
-            setSubjects(res.results);
+            setSubjects(res);
           });
       }
     }
@@ -253,9 +253,9 @@ export default function SubjectSection({
     async function getSubjects() {
       if (selectedSchool) {
         await subjectAdapter
-          .listSchoolSubjects({ schoolId: selectedSchool.id })
+          .list({ schoolId: selectedSchool.id })
           .then((res) => {
-            setSubjects(res.results);
+            setSubjects(res);
           });
       }
     }
