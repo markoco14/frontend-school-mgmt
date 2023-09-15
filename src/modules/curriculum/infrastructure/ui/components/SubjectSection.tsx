@@ -177,22 +177,7 @@ const SubjectList = ({
 	subjectLevels: SubjectLevel[]
   setSubjectLevels: Function;
 }) => {
-  const { selectedSchool } = useContext(AuthContext);
   const [currentSubject, setCurrentSubject] = useState<Subject>();
-
-  useEffect(() => {
-    async function getSubjects() {
-      if (selectedSchool) {
-        await subjectAdapter
-          .list({ schoolId: selectedSchool.id })
-          .then((res) => {
-            setSubjects(res);
-          });
-      }
-    }
-
-    getSubjects();
-  }, [selectedSchool, setSubjects]);
 
   async function handleDeleteSubject({ subjectId }: { subjectId: number }) {
     await subjectAdapter.deleteSubject({ id: subjectId }).then((res) => {
