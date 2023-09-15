@@ -97,12 +97,12 @@ export default function Home() {
       {user && selectedSchool && (
         <section>
           <SchoolHeader />
-          <div className="mb-4 grid text-3xl sm:grid-cols-4">
+          {/* <div className="mb-4 grid text-3xl sm:grid-cols-4">
             <Link href="reports/sample1/">Sample 1</Link>
             <Link href="reports/sample2/">Sample 2</Link>
             <Link href="reports/sample3/">Sample 3</Link>
             <Link href="reports/sample4/">Sample 4</Link>
-          </div>
+          </div> */}
           <TodayClassList />
         </section>
       )}
