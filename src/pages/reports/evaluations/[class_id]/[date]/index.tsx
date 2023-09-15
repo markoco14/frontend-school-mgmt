@@ -51,6 +51,8 @@ export default function ReportDate({
 
   const [isBatchCreate, setIsBatchCreate] = useState<boolean>(false);
   const router = useRouter();
+  const classId = Number(router.query.class_id?.toString())
+
 
   const tabLinks = [
     {
@@ -96,16 +98,16 @@ export default function ReportDate({
     async function getSubjects() {
       if (selectedSchool) {
         await subjectAdapter
-          .listSchoolSubjects({ schoolId: selectedSchool.id })
+          .list({ schoolId: selectedSchool.id, class_id: classId})
           .then((res) => {
-            setSubjects(res.results);
+            setSubjects(res);
           });
       }
     }
 
     getSubjects();
     students && setPresentStudents(students);
-  }, [selectedSchool, setSubjects, students]);
+  }, [selectedSchool, setSubjects, students, classId]);
 
   return (
     <Layout>
