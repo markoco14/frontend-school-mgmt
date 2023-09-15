@@ -186,29 +186,33 @@ export default function ReportDate({
         close={handleClose}
         title={`Create Evaluation Reports`}
       >
-        <p>Confirm the subject before creating the evaluations</p>
-        <div>
-          <select
-            defaultValue={subjects[0]?.id}
-            onChange={(e) =>
-              handleSelectSubject({ subjectId: Number(e.target.value) })
-            }
+        <div className="flex flex-col gap-4">
+          <p>Confirm the subject before creating the evaluations</p>
+          <div>
+            <select
+              className="w-full rounded border bg-white p-2 shadow"
+              defaultValue={subjects[0]?.id}
+              onChange={(e) =>
+                handleSelectSubject({ subjectId: Number(e.target.value) })
+              }
+            >
+              {subjects.map((subject) => (
+                <option className="p-2" key={subject.id} value={subject.id}>
+                  {subject.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <button
+            className="w-1/2 rounded bg-blue-600 px-2 py-1 text-white disabled:bg-gray-600"
+            disabled={!selectedSubject}
+            onClick={() => {
+              batchCreateEvaluations({ students: presentStudents });
+            }}
           >
-            {subjects.map((subject) => (
-              <option key={subject.id} value={subject.id}>
-                {subject.name}
-              </option>
-            ))}
-          </select>
+            Create Evaluations
+          </button>
         </div>
-        <button
-          disabled={!selectedSubject}
-          onClick={() => {
-            batchCreateEvaluations({ students: presentStudents });
-          }}
-        >
-          Create Evaluations
-        </button>
       </Modal>
     </Layout>
   );
