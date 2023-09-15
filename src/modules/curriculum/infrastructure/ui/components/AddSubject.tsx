@@ -31,7 +31,7 @@ export default function AddSubject({setSubjects}: { setSubjects: Function, }) {
   return (
     <>
       <button
-        className="bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded"
+        className="underline underline-offset-2 hover:bg-blue-500 hover:text-white px-4 py-1 rounded"
         onClick={() => setIsAddSubject(true)}
       >
         Add Subject

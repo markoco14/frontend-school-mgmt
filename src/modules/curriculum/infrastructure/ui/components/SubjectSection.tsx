@@ -195,20 +195,22 @@ const SubjectList = ({
 
   return (
     <>
-      <ul className="bg-gray-100 rounded shadow-inner mb-4">
+      <ul className="rounded bg-gray-100 shadow-inner">
         {subjects?.map((subject, index) => (
           <li
             key={index}
-            className="p-2 hover:bg-gray-300 flex justify-between"
-            onClick={() => setCurrentSubject(subject)}
+            className="flex justify-between p-2 hover:bg-gray-300"
+            // onClick={() => setCurrentSubject(subject)}
           >
-            <span>{subject.name}</span>
-            <button
+            <button onClick={() => setCurrentSubject(subject)}>
+              {subject.name}
+            </button>
+            {/* <button
               onClick={() => handleDeleteSubject({ subjectId: subject.id })}
               className="text-red-500 hover:text-red-600"
             >
               delete
-            </button>
+            </button> */}
           </li>
         ))}
       </ul>
@@ -216,7 +218,7 @@ const SubjectList = ({
         <SubjectLevelModal
           subject={currentSubject}
           setCurrentSubject={setCurrentSubject}
-					subjectLevels={subjectLevels}
+          subjectLevels={subjectLevels}
           setSubjectLevels={setSubjectLevels}
         />
       )}
@@ -249,19 +251,19 @@ export default function SubjectSection({
   }, [selectedSchool]);
 
   return (
-    <section className="border p-4 rounded shadow col-span-2 xs:col-span-1">
-      <article>
-        <div className="mb-2">
-          <h2 className="text-3xl mb-2">Subjects</h2>
-          <p>Click a subject to assign Levels.</p>
+    <section className="col-span-2 rounded border p-4 shadow xs:col-span-1">
+      <article className="w-1/2 grid gap-4">
+        <div className="flex justify-between">
+          <h2 className="mb-2 text-3xl">Subjects</h2>
+          <AddSubject setSubjects={setSubjects} />
         </div>
+        <p>Click a subject to assign Levels.</p>
         <SubjectList
           subjects={subjects}
           setSubjects={setSubjects}
-					subjectLevels={subjectLevels}
+          subjectLevels={subjectLevels}
           setSubjectLevels={setSubjectLevels}
         />
-        <AddSubject setSubjects={setSubjects} />
       </article>
     </section>
   );
