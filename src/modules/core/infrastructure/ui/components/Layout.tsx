@@ -14,16 +14,22 @@ export default function Layout({ children }: LayoutProps) {
   
   return (
     <>
-      <Script async src="https://kit.fontawesome.com/d0c81e3c08.js" crossOrigin="anonymous"/>
+      <Script
+        async
+        src="https://kit.fontawesome.com/d0c81e3c08.js"
+        crossOrigin="anonymous"
+      />
 
-      <main className="min-h-screen bg-white xs:bg-gradient-to-t xs:from-white xs:to-blue-200 pb-32">
-        <div className={`xs:max-w-[1000px] mx-auto ${!user ? 'pt-[48px]' : ''}`}>
+      <main className="box-border min-h-screen bg-white pb-32 xs:bg-gradient-to-t xs:from-white xs:to-blue-200">
+        <div
+          className={`mx-auto xs:max-w-[1000px] ${!user ? "pt-[48px]" : ""}`}
+        >
           {user && <Navbar />}
           <div className="bg-white p-4 xs:rounded-lg xs:drop-shadow-2xl">
             {children}
           </div>
         </div>
-			</main>
+      </main>
     </>
-  )
+  );
 }

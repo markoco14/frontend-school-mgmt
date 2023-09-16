@@ -114,7 +114,7 @@ const NewRangeMetricForm = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 p-8">
         <div className="grid gap-2">
           <label>Name</label>
           <input
@@ -164,7 +164,7 @@ const NewRangeMetricForm = () => {
             onClick={() => setIsWriteDescriptions(true)}
             className="rounded border border-blue-700 bg-blue-100 px-2 py-1 text-blue-900 disabled:cursor-not-allowed disabled:border-0 disabled:bg-gray-300 disabled:text-gray-600"
           >
-            Behavior Descriptions
+            Descriptions
           </button>
           <button className="rounded bg-blue-700 px-2 py-1 text-white disabled:bg-gray-700 ">
             Save

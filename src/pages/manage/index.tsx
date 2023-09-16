@@ -5,6 +5,7 @@ import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/Ev
 import { evaluationAttributeAdapter } from "@/src/modules/evaluation/infrastructure/adapters/evaluationAttributeAdapter";
 import Info from "@/src/modules/evaluation/infrastructure/ui/components/eval-editor/Info";
 import NewRangeMetricForm from "@/src/modules/evaluation/infrastructure/ui/components/eval-editor/NewRangeMetricForm";
+import NewTextMetricForm from "@/src/modules/evaluation/infrastructure/ui/components/eval-editor/newTextMetricForm";
 import { useSearchParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
@@ -14,14 +15,12 @@ import { useContext, useEffect, useState } from "react";
 // button to make new
 // live view of what a report looks like in real time
 
-
-
 export default function Manage() {
   const { selectedSchool } = useContext(AuthContext);
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab") || "info";
   const [attributes, setAttributes] = useState<EvaluationAttribute[]>([]);
-  const [isRange, setIsRange] = useState<boolean>(false);
+  const [isRange, setIsRange] = useState<boolean>(true);
 
   const links = [
     {
@@ -55,7 +54,7 @@ export default function Manage() {
         <ParamsPageTabNav links={links} tab={tab} />
         {tab === "info" && <Info />}
         {tab === "report editor" && (
-          <section className="grid xs:grid-cols-2 gap-8">
+          <section className="grid gap-8 xs:grid-cols-2">
             <article className="rounded border p-8 shadow">
               <p>Your current Student Evaluation metrics</p>
               <ul>
@@ -67,11 +66,37 @@ export default function Manage() {
               </ul>
             </article>
             <article className="rounded border p-8 shadow">
-              <div>
-                <button onClick={() => setIsRange(true)}>Numeric</button>
-                <button onClick={() => setIsRange(false)}>Text</button>
+              <div className="grid grid-cols-2">
+                <button
+                  className={`${
+                    isRange
+                      ? "border-l-2 border-r-2 border-t-2 decoration-2 duration-200 ease-in-out"
+                      : "bg-gray-100 border-b-2 shadow-inner"
+                  } w-full rounded-tl`}
+                  onClick={() => setIsRange(true)}
+                >
+                  Numeric Metric
+                </button>
+                <button
+                  className={`${
+                    isRange
+                      ? "bg-gray-100 border-b-2 shadow-inner"
+                      : "border-l-2 border-r-2 border-t-2 decoration-2 duration-200 ease-in-out"
+                  } w-full  rounded-tr`}
+                  onClick={() => setIsRange(false)}
+                >
+                  Text Metric
+                </button>
               </div>
-              {isRange && <NewRangeMetricForm />}
+              {isRange ? (
+                <div className="border-b-2 border-l-2 border-r-2">
+                  <NewRangeMetricForm />
+                </div>
+              ) : (
+                <div className="border-b-2 border-l-2 border-r-2">
+                  <NewTextMetricForm />
+                </div>
+              )}
             </article>
           </section>
         )}
