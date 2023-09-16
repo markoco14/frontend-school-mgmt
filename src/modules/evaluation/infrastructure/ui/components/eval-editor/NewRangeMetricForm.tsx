@@ -1,14 +1,9 @@
+import AuthContext from "@/src/AuthContext";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-type Inputs = {
-  name: string;
-  min: number;
-  max: number;
-  descriptions: { [key: string]: string }[];
-};
-
+// TODO: make this work. left alone for now because descriptions can be null
 const Descriptions = ({
   maxValue,
   descriptions,
@@ -18,8 +13,25 @@ const Descriptions = ({
   descriptions: { [key: string]: string }[];
   setDescriptions: Function;
 }) => {
-  console.log(maxValue);
-  console.log(descriptions);
+  const [currentDescriptions, setCurrentDescriptions] = useState<
+    { [key: string]: string }[]
+  >([]);
+  const fakeDescriptions = {
+    "1": "Student does not try to be a part of class activities and does not answer any questions.",
+    "2": "Student tries to be a part of class activities, but often loses focus.",
+    "3": "Student is always part of class activities and answers many questions.",
+  };
+  console.log("descriptions", descriptions);
+  console.log("current descriptions", currentDescriptions);
+  //   const arr = Array(maxValue).fill(0);
+  //   const arr2 = Array(maxValue)
+  //     .fill(0)
+  //     .map((_, i) => ({ [i + 1]: "" }));
+  // 	const descriptionObject =Object.keys(arr2)
+
+  //   console.log('arr', arr)
+  //   console.log('arr2', arr2)
+  //   console.log('desc object', descriptionObject)
   return (
     <div className="grid gap-2">
       <p>Descriptions</p>
@@ -57,7 +69,14 @@ const Descriptions = ({
   );
 };
 
+type Inputs = {
+  name: string;
+  max: number;
+  descriptions: { [key: string]: string }[];
+};
+
 const NewRangeMetricForm = () => {
+  const { selectedSchool } = useContext(AuthContext);
   const {
     register,
     setValue,
@@ -67,7 +86,6 @@ const NewRangeMetricForm = () => {
     formState: { errors },
   } = useForm<Inputs>();
   const name = watch("name");
-  const minValue = watch("min");
   const maxValue = watch("max");
   const [descriptions, setDescriptions] = useState<{ [key: string]: string }[]>(
     [],
@@ -77,6 +95,16 @@ const NewRangeMetricForm = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data);
+    const data_type_id = 9;
+    const preparedData = {
+      name: data.name,
+      school_id: selectedSchool?.id,
+      data_type_id: 9,
+      min_value: 1,
+      max_value: data.max,
+      descriptions: null,
+    };
+    console.log("prepared data", preparedData);
     return;
   };
 
@@ -91,11 +119,17 @@ const NewRangeMetricForm = () => {
           <label>Name</label>
           <input
             {...register("name", {
-              minLength: 2,
+              minLength: 1,
               maxLength: 50,
+              required: true,
             })}
             className="rounded border p-2 shadow"
           ></input>
+        {errors.name?.type === "required" && (
+          <p role="alert" className="text-red-500">
+            Metric name is required
+          </p>
+        )}
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-1 grid gap-2">
@@ -104,10 +138,6 @@ const NewRangeMetricForm = () => {
               type="number"
               disabled={true}
               defaultValue={1}
-              {...register("min", {
-                min: 2,
-                valueAsNumber: true,
-              })}
               className="w-full rounded border p-2 shadow"
             ></input>
           </div>
@@ -126,18 +156,17 @@ const NewRangeMetricForm = () => {
           </div>
         </div>
         <hr></hr>
-        <p>You need to choose descriptions for {name} before you can save.</p>
+        {/* <p>You need to choose descriptions for {name} before you can save.</p> */}
         <div className="grid grid-cols-2 gap-4">
           <button
+            disabled={true}
+            type="button"
             onClick={() => setIsWriteDescriptions(true)}
-            className="rounded border border-blue-700 bg-blue-100 px-2 py-1 text-blue-900"
+            className="rounded border border-blue-700 bg-blue-100 px-2 py-1 text-blue-900 disabled:cursor-not-allowed disabled:border-0 disabled:bg-gray-300 disabled:text-gray-600"
           >
             Behavior Descriptions
           </button>
-          <button
-            disabled={true}
-            className="rounded bg-blue-700 px-2 py-1 text-white disabled:bg-gray-700 "
-          >
+          <button className="rounded bg-blue-700 px-2 py-1 text-white disabled:bg-gray-700 ">
             Save
           </button>
         </div>
