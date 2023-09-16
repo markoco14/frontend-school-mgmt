@@ -55,7 +55,7 @@ export default function Manage() {
         <ParamsPageTabNav links={links} tab={tab} />
         {tab === "info" && <Info />}
         {tab === "report editor" && (
-          <section className="grid grid-cols-2 gap-8">
+          <section className="grid xs:grid-cols-2 gap-8">
             <article className="rounded border p-8 shadow">
               <p>Your current Student Evaluation metrics</p>
               <ul>
