@@ -102,6 +102,16 @@ export default function Navbar() {
               >
                 Reports
               </Link>
+              <Link
+                href="/manage"
+                className={`${
+                  router.pathname.includes("manage")
+                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    : ""
+                }`}
+              >
+                Manage
+              </Link>
             </>
           )}
         {user && (
@@ -215,6 +225,16 @@ export default function Navbar() {
                   }`}
                 >
                   Reports
+                </Link>
+                <Link
+                  href="/manage"
+                  className={`${
+                    router.pathname.includes("manage")
+                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      : ""
+                  }`}
+                >
+                  Manage
                 </Link>
               </>
             )}
