@@ -70,9 +70,9 @@ export default function Manage() {
                 <button
                   className={`${
                     isRange
-                      ? "border-l-2 border-r-2 border-t-2 decoration-2 duration-200 ease-in-out"
-                      : "bg-gray-100 border-b-2 shadow-inner"
-                  } w-full rounded-tl`}
+                      ? "border-l-2 border-r-2 border-t-2 decoration-2 "
+                      : "border-b-2 bg-gray-100 shadow-inner"
+                  } w-full rounded-tl duration-200 ease-in-out`}
                   onClick={() => setIsRange(true)}
                 >
                   Numeric Metric
@@ -80,9 +80,9 @@ export default function Manage() {
                 <button
                   className={`${
                     isRange
-                      ? "bg-gray-100 border-b-2 shadow-inner"
-                      : "border-l-2 border-r-2 border-t-2 decoration-2 duration-200 ease-in-out"
-                  } w-full  rounded-tr`}
+                      ? "border-b-2 bg-gray-100 shadow-inner"
+                      : "border-l-2 border-r-2 border-t-2 decoration-2 "
+                  } w-full rounded-tr duration-200 ease-in-out`}
                   onClick={() => setIsRange(false)}
                 >
                   Text Metric
