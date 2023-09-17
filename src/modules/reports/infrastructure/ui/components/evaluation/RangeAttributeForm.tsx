@@ -47,34 +47,31 @@ const RangeAttributeForm = ({
 
   return (
     <>
-      <p>
-        {evaluation.evaluation_attribute.name}
-      </p>
-        {values.map((value) => (
-          <button
-            key={value}
-            onClick={() => {
-              setSelectedValue(value);
-              updateEvaluationValue({
-                evaluation: evaluation,
-                new_value: value,
-              });
-              toast.success(
-                `Setting ${student.first_name}'s ${evaluation.evaluation_attribute?.name} at ${value}`,
-              );
-            }}
-            className={`${
-              selectedValue === value ? "bg-green-500" : ""
-            } rounded border p-2 text-center shadow`}
-          >
-            {value}
-          </button>
-        ))}
+      <p>{evaluation.evaluation_attribute.name}</p>
+      {values.map((value) => (
+        <button
+          key={value}
+          onClick={() => {
+            setSelectedValue(value);
+            updateEvaluationValue({
+              evaluation: evaluation,
+              new_value: value,
+            });
+            toast.success(
+              `Setting ${student.first_name}'s ${evaluation.evaluation_attribute?.name} at ${value}`,
+            );
+          }}
+          className={`${
+            selectedValue === value ? "bg-green-500" : ""
+          } rounded border p-2 text-center shadow`}
+        >
+          {value}
+        </button>
+      ))}
       <p>
         {
-          evaluation.evaluation_attribute.descriptions[
-            selectedValue
-          ]
+          evaluation.evaluation_attribute.descriptions && evaluation
+            .evaluation_attribute.descriptions[selectedValue]
         }
       </p>
     </>

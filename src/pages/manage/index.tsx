@@ -8,6 +8,7 @@ import Info from "@/src/modules/evaluation/infrastructure/ui/components/eval-edi
 import NewEvaluationMetrics from "@/src/modules/evaluation/infrastructure/ui/components/eval-editor/NewEvaluationMetrics";
 import { useSearchParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Manage() {
   const { selectedSchool } = useContext(AuthContext);
@@ -45,6 +46,23 @@ export default function Manage() {
     setIsAddMetric(false);
   }
 
+  async function handleDelete({ attribute_id }: { attribute_id: number }) {
+    try {
+      await evaluationAttributeAdapter
+        .delete({ attribute_id: attribute_id })
+        .then((res) => {
+          const remainingAttributes = attributes.filter((attribute) => {
+            return attribute.id !== attribute_id
+          })
+          setAttributes(remainingAttributes)
+          toast.success("Deleted!")
+        });
+    } catch (error) {
+      // @ts-ignore
+      error.detail ? toast.error(error) : toast.error(error.message);
+    }
+  }
+
   return (
     <Layout>
       <div className="grid gap-4">
@@ -70,9 +88,9 @@ export default function Manage() {
                         >
                           <span>{attribute.name}</span>
                           <button
-                            onClick={() => {
-                              console.log(attribute.id);
-                            }}
+                            onClick={() =>
+                              handleDelete({ attribute_id: attribute.id })
+                            }
                           >
                             delete
                           </button>
@@ -94,9 +112,9 @@ export default function Manage() {
                         >
                           <span>{attribute.name}</span>
                           <button
-                            onClick={() => {
-                              console.log(attribute.id);
-                            }}
+                            onClick={() =>
+                              handleDelete({ attribute_id: attribute.id })
+                            }
                           >
                             delete
                           </button>

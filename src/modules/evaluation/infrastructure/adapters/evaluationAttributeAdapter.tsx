@@ -47,18 +47,26 @@ class EvaluationAttributeAdapter {
     const res = await fetch(url);
     const evaluationAttributes: EvaluationAttribute[] = await res.json();
 
-
     return evaluationAttributes;
   }
 
-  // public async get({ id }: { id: number }): Promise<EvaluationAttribute> {
-  //   const res = await fetch(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/${id}/`,
-  //   );
-  //   const student: EvaluationAttribute = await res.json();
-
-  //   return student;
-  // }
+  public async delete({
+    attribute_id,
+  }: {
+    attribute_id: number;
+  }) {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/evaluation-attributes/${attribute_id}/`,
+      {
+        method: "DELETE",
+      },
+    );
+    
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error); // or handle the error appropriately
+    }
+  }
 }
 
 export const evaluationAttributeAdapter = new EvaluationAttributeAdapter();
