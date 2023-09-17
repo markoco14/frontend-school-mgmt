@@ -1,11 +1,15 @@
 import { useState } from "react";
 import NewRangeMetricForm from "./NewRangeMetricForm";
-import NewTextMetricForm from "./newTextMetricForm";
+import NewTextMetricForm from "./NewTextMetricForm";
 
-const NewEvaluationMetrics = () => {
-	const [isRange, setIsRange] = useState<boolean>(true);
-	
-	return (
+const NewEvaluationMetrics = ({
+  setAttributes,
+}: {
+  setAttributes: Function;
+}) => {
+  const [isRange, setIsRange] = useState<boolean>(true);
+
+  return (
     <article className="min-h-[500px] min-w-[800px]">
       <div className="grid grid-cols-2">
         <button
@@ -31,15 +35,15 @@ const NewEvaluationMetrics = () => {
       </div>
       {isRange ? (
         <div className="border-b-2 border-l-2 border-r-2 border-blue-300">
-          <NewRangeMetricForm />
+          <NewRangeMetricForm setAttributes={setAttributes} />
         </div>
       ) : (
         <div className="border-b-2 border-l-2 border-r-2 border-blue-300">
-          <NewTextMetricForm />
+          <NewTextMetricForm setAttributes={setAttributes} />
         </div>
       )}
     </article>
   );
-}
+};
 
 export default NewEvaluationMetrics;

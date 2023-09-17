@@ -69,7 +69,7 @@ export default function Manage() {
         )}
       </div>
       <Modal show={isAddMetric} close={handleClose} title="Add New Metric">
-        <NewEvaluationMetrics />
+        <NewEvaluationMetrics setAttributes={setAttributes}/>
       </Modal>
     </Layout>
   );

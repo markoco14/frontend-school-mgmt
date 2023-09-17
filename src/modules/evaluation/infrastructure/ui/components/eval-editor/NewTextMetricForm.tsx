@@ -4,12 +4,13 @@ import { useContext } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { textAttributeAdapter } from "../../../adapters/textAttributeAdapter";
+import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
 
 type Inputs = {
   name: string;
 };
 
-const NewTextMetricForm = () => {
+const NewTextMetricForm = ({ setAttributes }: { setAttributes: Function }) => {
   const { selectedSchool } = useContext(AuthContext);
   const {
     register,
@@ -26,6 +27,10 @@ const NewTextMetricForm = () => {
     };
     try {
       await textAttributeAdapter.add({ payload: payload }).then((res) => {
+        setAttributes((prevAttributes: EvaluationAttribute[]) => [
+          ...prevAttributes,
+          res,
+        ]);
         toast.success("Saved!");
         reset();
       });

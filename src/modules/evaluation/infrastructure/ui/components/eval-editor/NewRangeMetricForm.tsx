@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { rangeAttributeAdapter } from "../../../adapters/rangeAttributeAdapter";
 import toast from "react-hot-toast";
+import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
 
 // TODO: make this work. left alone for now because descriptions can be null
 const Descriptions = ({
@@ -78,7 +79,7 @@ type Inputs = {
   descriptions: { [key: string]: string }[];
 };
 
-const NewRangeMetricForm = () => {
+const NewRangeMetricForm = ({ setAttributes }: { setAttributes: Function }) => {
   const { selectedSchool } = useContext(AuthContext);
   const {
     register,
@@ -108,7 +109,11 @@ const NewRangeMetricForm = () => {
     };
     await rangeAttributeAdapter
       .add({ payload: payload })
-      .then((res) => toast.success('Success'));
+      .then((res) => {
+        setAttributes((prevAttributes: EvaluationAttribute[]) => [...prevAttributes, res])
+        toast.success("Success")
+        reset();
+      });
     return;
   };
 
