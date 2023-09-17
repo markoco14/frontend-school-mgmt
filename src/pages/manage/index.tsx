@@ -52,24 +52,65 @@ export default function Manage() {
         {tab === "info" && <Info />}
         {tab === "report editor" && (
           <section className="grid gap-8 xs:grid-cols-2">
-            <article className="rounded border p-8 shadow">
+            <article className="grid gap-4 rounded border p-8 shadow">
               <div className="flex justify-between">
                 <p>Your current Student Evaluation metrics</p>
                 <button onClick={() => setIsAddMetric(true)}>+ Metric</button>
               </div>
-              <ul>
-                {attributes?.map((attribute) => (
-                  <li key={attribute.id} draggable={true}>
-                    {attribute.name}
-                  </li>
-                ))}
-              </ul>
+              <div className="grid gap-2">
+                <p className="text-lg">Numeric Metrics</p>
+                <ul className="grid gap-2 bg-gray-100 p-2 shadow-inner">
+                  {attributes?.map(
+                    (attribute) =>
+                      attribute.data_type_id === 9 && (
+                        <li
+                          className="flex justify-between rounded border bg-white p-2 shadow"
+                          key={attribute.id}
+                          draggable={true}
+                        >
+                          <span>{attribute.name}</span>
+                          <button
+                            onClick={() => {
+                              console.log(attribute.id);
+                            }}
+                          >
+                            delete
+                          </button>
+                        </li>
+                      ),
+                  )}
+                </ul>
+              </div>
+              <div className="grid gap-2">
+                <p className="text-lg">Text Metrics</p>
+                <ul className="grid gap-2 bg-gray-100 p-2 shadow-inner">
+                  {attributes?.map(
+                    (attribute) =>
+                      attribute.data_type_id === 8 && (
+                        <li
+                          className="flex justify-between rounded border bg-white p-2 shadow"
+                          key={attribute.id}
+                          draggable={true}
+                        >
+                          <span>{attribute.name}</span>
+                          <button
+                            onClick={() => {
+                              console.log(attribute.id);
+                            }}
+                          >
+                            delete
+                          </button>
+                        </li>
+                      ),
+                  )}
+                </ul>
+              </div>
             </article>
           </section>
         )}
       </div>
       <Modal show={isAddMetric} close={handleClose} title="Add New Metric">
-        <NewEvaluationMetrics setAttributes={setAttributes}/>
+        <NewEvaluationMetrics setAttributes={setAttributes} />
       </Modal>
     </Layout>
   );
