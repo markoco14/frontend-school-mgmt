@@ -36,7 +36,7 @@ class RangeAttributeAdapter {
     payload: RangeAttributePayload;
   }): Promise<EvaluationAttribute> {
     let url;
-    url = `${process.env.NEXT_PUBLIC_API_URL}/range-attributes/`;
+    url = `${process.env.NEXT_PUBLIC_API_URL}/evaluation-attributes/`;
 
     let requestBody: { [key: string]: any } = {};
     if (payload.name !== undefined) {

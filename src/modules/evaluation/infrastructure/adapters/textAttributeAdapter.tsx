@@ -29,7 +29,7 @@ class TextAttributeAdapter {
     payload: TextAttributePayload;
   }): Promise<EvaluationAttribute> {
     let url;
-    url = `${process.env.NEXT_PUBLIC_API_URL}/text-attributes/`;
+    url = `${process.env.NEXT_PUBLIC_API_URL}/evaluation-attributes/`;
 	const { name, school_id, data_type_id } = payload;
 
 	if (!name) {
