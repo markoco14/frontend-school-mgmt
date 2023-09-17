@@ -1,7 +1,10 @@
 import AuthContext from "@/src/AuthContext";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import { RangeAttributePayload } from "@/src/modules/evaluation/domain/entities/payloads/RangeAttributePayload";
 import { useContext, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { rangeAttributeAdapter } from "../../../adapters/rangeAttributeAdapter";
+import toast from "react-hot-toast";
 
 // TODO: make this work. left alone for now because descriptions can be null
 const Descriptions = ({
@@ -94,9 +97,8 @@ const NewRangeMetricForm = () => {
     useState<boolean>(false);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
     const data_type_id = 9;
-    const preparedData = {
+    const payload: RangeAttributePayload = {
       name: data.name,
       school_id: selectedSchool?.id,
       data_type_id: 9,
@@ -104,7 +106,9 @@ const NewRangeMetricForm = () => {
       max_value: data.max,
       descriptions: null,
     };
-    console.log("prepared data", preparedData);
+    await rangeAttributeAdapter
+      .add({ payload: payload })
+      .then((res) => toast.success('Success'));
     return;
   };
 
@@ -125,11 +129,11 @@ const NewRangeMetricForm = () => {
             })}
             className="rounded border p-2 shadow"
           ></input>
-        {errors.name?.type === "required" && (
-          <p role="alert" className="text-red-500">
-            Metric name is required
-          </p>
-        )}
+          {errors.name?.type === "required" && (
+            <p role="alert" className="text-red-500">
+              Metric name is required
+            </p>
+          )}
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-1 grid gap-2">
