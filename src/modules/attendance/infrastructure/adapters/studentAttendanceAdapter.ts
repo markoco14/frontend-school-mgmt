@@ -11,7 +11,7 @@ class StudentAttendanceAdapter {
   }: {
     classId: number;
     date: string;
-    signal: AbortSignal;
+    signal?: AbortSignal;
   }): Promise<Student[]> {
     let url;
 

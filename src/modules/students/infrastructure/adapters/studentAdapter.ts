@@ -165,7 +165,7 @@ class StudentAdapter {
   }: {
     classId: number;
     date: string;
-    signal: AbortSignal;
+    signal?: AbortSignal;
   }): Promise<Student[]> {
     let url;
     url = `${process.env.NEXT_PUBLIC_API_URL}/students-with-evaluations/`;
