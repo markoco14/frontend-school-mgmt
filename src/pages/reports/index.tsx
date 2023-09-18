@@ -64,6 +64,7 @@ export default function ReportsHome() {
     const signal = controller.signal;
     async function getClasses() {
       setLoading(true);
+      setTodayClasses([])
       try {
         await classAdapter
           .list({ school_id: selectedSchool.id, day: dayName, signal: signal })
