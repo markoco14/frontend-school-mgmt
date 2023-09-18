@@ -37,7 +37,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
     try {
       const newClass: ClassEntity = await classAdapter.addClass({
         name: data.className,
-        school_id: selectedSchool.id,
+        school_id: selectedSchool?.id as number,
         level: Number(data.level),
         days: days,
       });
