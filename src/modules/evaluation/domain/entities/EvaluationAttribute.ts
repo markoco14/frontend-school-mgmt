@@ -1,3 +1,9 @@
+type DataType = {
+  id: number,
+  data_type: number,
+  description: string,
+}
+
 export class EvaluationAttribute {
   constructor(
     public id: number,
@@ -8,6 +14,7 @@ export class EvaluationAttribute {
     public min_value?: number,
     public max_value?: number,
     public descriptions?: string[],
+    public data_type?: DataType,
   ) {}
 }
 
