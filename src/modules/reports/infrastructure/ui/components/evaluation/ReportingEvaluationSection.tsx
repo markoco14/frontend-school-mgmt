@@ -25,7 +25,7 @@ const ReportingEvaluationSection = ({
   const [filters, setFilters] = useState<StudentEvaluationFilters>({});
   const [isDeleteEvaluation, setIsDeleteEvaluation] = useState<boolean>(false);
   const [selectedStudent, setSelectedStudent] = useState<Student>();
-  // const [date, setDate] = useState<Date>(new Date());
+  const [nullEvaluationCount, setNullEvaluationCount] = useState<number>(0);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -43,10 +43,13 @@ const ReportingEvaluationSection = ({
             signal: signal,
           })
           .then((res) => {
-            // const groupedData = groupBy(
-            //   res,
-            //   (evaluation) => evaluation.student?.last_name,
-            // );
+            let nullEvaluationCount = 0;
+            res.forEach((student) => {
+              if (student.evaluations_for_day === null) {
+                nullEvaluationCount += 1;
+              }
+            });
+            setNullEvaluationCount(nullEvaluationCount);
             setStudentsWithEvaluations(res);
             setLoading(false);
           });
@@ -114,7 +117,7 @@ const ReportingEvaluationSection = ({
         </Skeleton>
       ) : (
         <ul className="grid gap-4">
-          {!studentsWithEvaluations?.length ? (
+          {nullEvaluationCount === studentsWithEvaluations?.length ? (
             <p className="grid gap-4 rounded-lg bg-white p-4 shadow">
               Evaluations not created
             </p>
@@ -151,7 +154,7 @@ const ReportingEvaluationSection = ({
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   {!student.evaluations_for_day ? (
-                    <p>No student evaluations today.</p>
+                    <p>Evaluations not yet created.</p>
                   ) : (
                     student.evaluations_for_day.map((evaluation) => (
                       <p
@@ -164,7 +167,9 @@ const ReportingEvaluationSection = ({
                       >
                         {evaluation.evaluation_attribute?.name !== "Comment" &&
                           `${evaluation.evaluation_attribute?.name}:`}{" "}
-                        {evaluation.evaluation_value ? (evaluation.evaluation_value) : "Comment not written yet."}
+                        {evaluation.evaluation_value
+                          ? evaluation.evaluation_value
+                          : "Comment not written yet."}
                       </p>
                     ))
                   )}
