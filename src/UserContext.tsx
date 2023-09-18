@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { School } from "./modules/school-mgmt/domain/entities/School";
-import toast from "react-hot-toast";
 import jwt_decode from "jwt-decode";
+import { createContext, useContext, useEffect, useState } from "react";
+import { jwtAdapter } from "./modules/auth/infrastructure/adapters/jwtAdapter";
+import { School } from "./modules/school-mgmt/domain/entities/School";
 
 type UserContextProviderProps = {
   children: React.ReactNode; // not allowed: React.ReactNode
@@ -31,7 +31,9 @@ export default function UserContextProvider({
 }: UserContextProviderProps) {
   const [authTokens, setAuthTokens] = useState<any>(null);
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [selectedSchool, setSelectedSchool] = useState<School | undefined>(undefined);
+  const [selectedSchool, setSelectedSchool] = useState<School | undefined>(
+    undefined,
+  );
 
   const handleSelectSchool = (school: School) => {
     setSelectedSchool(school);
@@ -44,25 +46,14 @@ export default function UserContextProvider({
   };
 
   let loginUser = async (formData: any) => {
-    let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/token/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: formData.email,
-        password: formData.password,
-      }),
-    });
-
-    let data = await response.json();
-
-    if (response.status === 200) {
-      setAuthTokens(data);
-      setUser(jwt_decode(data.access));
-      localStorage.setItem("authTokens", JSON.stringify(data));
-    } else {
-      toast.error("Unable to authorize. Please refresh the page.");
+    try {
+      await jwtAdapter.get({ payload: formData }).then((res) => {
+        setAuthTokens(res);
+        setUser(jwt_decode(res.access));
+        localStorage.setItem("authTokens", JSON.stringify(res));
+      });
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -76,34 +67,21 @@ export default function UserContextProvider({
 
   useEffect(() => {
     let updateToken = async () => {
-      let response;
       try {
-        response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/token/refresh/`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ refresh: authTokens.refresh }),
-          },
-        );
+        await jwtAdapter
+          .refresh({ refresh: authTokens.refresh })
+          .then((res) => {
+            setAuthTokens(res);
+            setUser(jwt_decode(res.access));
+            localStorage.setItem("authTokens", JSON.stringify(res));
+          });
       } catch (error) {
         console.error(error);
-      }
-
-      let data = await response?.json();
-
-      if (response?.status === 200) {
-        setAuthTokens(data);
-        setUser(jwt_decode(data.access));
-        localStorage.setItem("authTokens", JSON.stringify(data));
-      } else {
-        toast.error("Unable to authorize. Please refresh the page.");
         logout();
       }
     };
-    const fourMinutes = 1000 * 60 * 4;
+
+    const tenMinutes = 1000 * 60 * 10;
     if (!user || !authTokens) {
       const tokens = localStorage.getItem("authTokens");
 
@@ -116,7 +94,7 @@ export default function UserContextProvider({
         if (authTokens) {
           updateToken();
         }
-      }, fourMinutes);
+      }, tenMinutes);
       return () => clearInterval(interval);
     }
   }, [authTokens, user]);
@@ -132,9 +110,6 @@ export default function UserContextProvider({
       }
     }
   }, [selectedSchool]);
-
-  console.log("in new auth context  user", user);
-  console.log("in new auth context school", selectedSchool);
 
   return (
     <UserContext.Provider
