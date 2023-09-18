@@ -33,7 +33,7 @@ export default function Manage() {
   useEffect(() => {
     async function getDate() {
       await evaluationAttributeAdapter
-        .listAll({ school_id: selectedSchool?.id })
+        .listAll({ school_id: selectedSchool?.id, details: true, })
         .then((res) => {
           setAttributes(res);
         });
@@ -59,7 +59,7 @@ export default function Manage() {
         });
     } catch (error) {
       // @ts-ignore
-      error.detail ? toast.error(error) : toast.error(error.message);
+      toast.error(error.message)
     }
   }
 
@@ -80,7 +80,7 @@ export default function Manage() {
                 <ul className="grid gap-2 bg-gray-100 p-2 shadow-inner">
                   {attributes?.map(
                     (attribute) =>
-                      attribute.data_type_id === 9 && (
+                      attribute.data_type?.data_type === 1 && (
                         <li
                           className="flex justify-between rounded border bg-white p-2 shadow"
                           key={attribute.id}
@@ -104,7 +104,7 @@ export default function Manage() {
                 <ul className="grid gap-2 bg-gray-100 p-2 shadow-inner">
                   {attributes?.map(
                     (attribute) =>
-                      attribute.data_type_id === 8 && (
+                      attribute.data_type?.data_type === 0 && (
                         <li
                           className="flex justify-between rounded border bg-white p-2 shadow"
                           key={attribute.id}

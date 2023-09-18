@@ -33,8 +33,10 @@ class EvaluationAttributeAdapter {
 
   public async listAll({
     school_id,
+    details,
   }: {
     school_id: number;
+    details?: boolean;
   }): Promise<EvaluationAttribute[]> {
     let url;
 
@@ -42,6 +44,13 @@ class EvaluationAttributeAdapter {
       url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/evaluation-attributes/`;
     } else {
       url = `${process.env.NEXT_PUBLIC_API_URL}/evaluation-attributes/`;
+    }
+
+    const queryParams: string[] = [];
+    if (details) queryParams.push(`details=${encodeURIComponent(details)}`);
+
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
     }
 
     const res = await fetch(url);
