@@ -64,7 +64,6 @@ export default function ReportsHome() {
     const signal = controller.signal;
     async function getClasses() {
       setLoading(true);
-      setTodayClasses([])
       try {
         await classAdapter
           .list({ school_id: selectedSchool.id, day: dayName, signal: signal })
@@ -97,6 +96,7 @@ export default function ReportsHome() {
   }
 
   const incrementDate = () => {
+    setTodayClasses([]);
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() + 1);
     router.push(`?${new URLSearchParams({
@@ -106,6 +106,7 @@ export default function ReportsHome() {
   };
 
   const decrementDate = () => {
+    setTodayClasses([]);
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() - 1);
     router.push(
@@ -126,6 +127,7 @@ export default function ReportsHome() {
             className="rounded border text-left text-xl shadow xs:text-right"
             value={format(date, "yyyy-MM-dd")}
             onChange={async (e) => {
+              setTodayClasses([]);
               const newDate = new Date(e.target.value);
               router.push(
                 `?${new URLSearchParams({
