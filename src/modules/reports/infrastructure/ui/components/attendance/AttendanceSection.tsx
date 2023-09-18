@@ -1,4 +1,4 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
 import { StudentAttendance } from "@/src/modules/attendance/domain/entities/StudentAttendance";
@@ -10,7 +10,7 @@ import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import Image from "next/image";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const AttendanceSection = ({
   selectedClass,
@@ -19,7 +19,7 @@ const AttendanceSection = ({
   selectedClass: ClassEntity;
   date: Date;
 }) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useUserContext();
   const [isWriteNote, setIsWriteNote] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [classAttendance, setClassAttendance] = useState<Student[]>([]);
@@ -74,9 +74,8 @@ const AttendanceSection = ({
             setLoading(false);
           });
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-      
     }
 
     getAttendance();
@@ -117,7 +116,7 @@ const AttendanceSection = ({
           setClassAttendance(res);
           if (nullAttendanceCount) {
             setNullAttendanceCount(0);
-          } 
+          }
         }));
   }
 

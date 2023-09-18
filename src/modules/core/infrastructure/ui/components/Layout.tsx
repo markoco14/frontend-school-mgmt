@@ -1,4 +1,4 @@
-import { useUserContext } from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import Script from "next/script";
 import { ReactNode } from "react";
 import Navbar from "./Navbar";

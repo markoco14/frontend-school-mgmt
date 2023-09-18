@@ -1,4 +1,4 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import { classStudentAdapter } from "@/src/modules/classes/infrastructure/adapters/classStudentAdapter";
 import NoData from "@/src/modules/core/infrastructure/ui/components/NoData";
 import EvaluationSection from "@/src/modules/evaluation/infrastructure/ui/components/EvaluationSection";
@@ -6,7 +6,7 @@ import EvaluationSection2 from "@/src/modules/evaluation/infrastructure/ui/compo
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const HomeworkSection = ({
   scores,
@@ -172,10 +172,8 @@ const InClassSection = ({
   );
 };
 
-
-
 const StudentSummary = ({ selectedStudent }: { selectedStudent: any }) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useUserContext();
   return (
     <div className="mb-4 grid grid-cols-4 items-center gap-4 rounded border p-4 shadow">
       <div className="relative col-span-1 aspect-square">
@@ -271,7 +269,7 @@ export default function ReportTeacherDetails({
   reportData: any;
   setIsConfirmed: Function;
 }) {
-  const { user } = useContext(AuthContext);
+  const { user } = useUserContext();
 
   const [selectedStudent, setSelectedStudent] = useState<any>();
   const [category, setCategory] = useState<string>("homework");

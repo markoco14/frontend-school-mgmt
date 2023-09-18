@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useUserContext } from "@/src/UserContext";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { Level } from "../../../domain/entities/Level";
 import { Subject } from "../../../domain/entities/Subject";
 import { SubjectLevel } from "../../../domain/entities/SubjectLevel";
-import { Level } from "../../../domain/entities/Level";
 import { levelAdapter } from "../../adapters/levelAdapter";
-import AuthContext from "@/src/AuthContext";
 import { subjectLevelAdapter } from "../../adapters/subjectLevelAdapter";
-import toast from "react-hot-toast";
 
 const AddSubjectLevelForm = ({
   subject,
@@ -16,7 +16,7 @@ const AddSubjectLevelForm = ({
   subjectLevels: SubjectLevel[];
   setSubjectLevels: Function;
 }) => {
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [levels, setLevels] = useState<Level[]>([]);

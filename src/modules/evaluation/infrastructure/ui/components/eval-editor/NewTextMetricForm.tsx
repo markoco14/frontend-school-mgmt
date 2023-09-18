@@ -1,17 +1,16 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
+import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
 import { TextAttributePayload } from "@/src/modules/evaluation/domain/entities/payloads/TextAttributePayload";
-import { useContext } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { textAttributeAdapter } from "../../../adapters/textAttributeAdapter";
-import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
 
 type Inputs = {
   name: string;
 };
 
 const NewTextMetricForm = ({ setAttributes }: { setAttributes: Function }) => {
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
   const {
     register,
     reset,

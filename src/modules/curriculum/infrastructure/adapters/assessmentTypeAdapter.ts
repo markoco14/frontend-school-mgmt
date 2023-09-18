@@ -5,7 +5,7 @@ class AssessmentTypeAdapter {
   public async list({
     schoolId,
   }: {
-    schoolId: number;
+    schoolId?: number;
   }): Promise<AssessmentType[]> {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/assessment-types/`;
 

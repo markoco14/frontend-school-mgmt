@@ -1,4 +1,4 @@
-import { useUserContext } from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type Inputs = {

@@ -2,7 +2,7 @@ import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
 
 class SchoolDayAdapter {
 
-	public async listSchoolSchoolDays({schoolId}: {schoolId: number}): Promise<SchoolDay[]> {
+	public async listSchoolSchoolDays({schoolId}: {schoolId?: number}): Promise<SchoolDay[]> {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/days/`);
 		const schoolDayList: SchoolDay[] = await res.json();
 

@@ -1,11 +1,11 @@
-import AuthContext from "@/src/AuthContext";
-import { useContext, useEffect, useState } from "react";
+import { useUserContext } from "@/src/UserContext";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import { useEffect, useState } from "react";
 import { Level } from "../../../../domain/entities/Level";
 import { Module } from "../../../../domain/entities/Module";
 import { Subject } from "../../../../domain/entities/Subject";
 import { SubjectLevel } from "../../../../domain/entities/SubjectLevel";
 import { moduleAdapter } from "../../../adapters/moduleAdapter";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import AddModule from "./AddModule";
 
 export default function ModuleSection({
@@ -13,7 +13,7 @@ export default function ModuleSection({
 }: {
   subjectLevels: SubjectLevel[];
 }) {
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
   const [isAddModule, setIsAddModule] = useState<boolean>(false);
 
   const [uniqueSubjects, setUniqueSubjects] = useState<Subject[]>([]);
@@ -31,7 +31,7 @@ export default function ModuleSection({
       subjectName,
       levelOrder,
     }: {
-      schoolId: number;
+      schoolId?: number;
       subjectName: string;
       levelOrder: number;
     }) {
@@ -50,14 +50,14 @@ export default function ModuleSection({
       (subjects: Subject[], subjectLevel: SubjectLevel) => {
         if (
           !subjects.find(
-            (subject: Subject) => subject.name === subjectLevel.subject.name
+            (subject: Subject) => subject.name === subjectLevel.subject.name,
           )
         ) {
           subjects.push(subjectLevel.subject);
         }
         return subjects;
       },
-      []
+      [],
     );
 
     const defaultSubject = uniqueSubjects[0];
@@ -66,7 +66,7 @@ export default function ModuleSection({
 
     const filteredLevels = subjectLevels
       .filter(
-        (subjectLevel) => subjectLevel.subject.name === uniqueSubjects[0]?.name
+        (subjectLevel) => subjectLevel.subject.name === uniqueSubjects[0]?.name,
       )
       .map((subjectLevel) => subjectLevel.level)
       .sort((a, b) => a.order - b.order);
@@ -76,7 +76,7 @@ export default function ModuleSection({
     setCurrentLevel(defaultLevel);
 
     fetchModules({
-      schoolId: selectedSchool.id,
+      schoolId: selectedSchool?.id,
       subjectName: defaultSubject?.name,
       levelOrder: defaultLevel?.order,
     });
@@ -87,7 +87,7 @@ export default function ModuleSection({
     subjectName,
     levelOrder,
   }: {
-    schoolId: number;
+    schoolId?: number;
     subjectName: string;
     levelOrder: number;
   }) {
@@ -129,7 +129,7 @@ export default function ModuleSection({
   return (
     <section className="col-span-2">
       <div className="flex justify-between">
-        <h2 className="text-3xl mb-2">Modules</h2>
+        <h2 className="mb-2 text-3xl">Modules</h2>
         <button
           className=""
           onClick={() => {
@@ -143,9 +143,9 @@ export default function ModuleSection({
         <p>there are no levels connected to your subjects</p>
       ) : (
         <article className="grid grid-cols-4 gap-4">
-          <section className="border p-4 rounded shadow col-span-4 xs:col-span-2 sm:col-span-1">
+          <section className="col-span-4 rounded border p-4 shadow xs:col-span-2 sm:col-span-1">
             <h3 className="text-xl">Subjects</h3>
-            <ul className="bg-gray-100 rounded shadow-inner mb-4">
+            <ul className="mb-4 rounded bg-gray-100 shadow-inner">
               {uniqueSubjects?.map((subject: Subject, index) => (
                 <li
                   key={index}
@@ -169,9 +169,9 @@ export default function ModuleSection({
               ))}
             </ul>
           </section>
-          <section className="border p-4 rounded shadow col-span-4 xs:col-span-2 sm:col-span-1">
+          <section className="col-span-4 rounded border p-4 shadow xs:col-span-2 sm:col-span-1">
             <h3 className="text-xl">Levels</h3>
-            <ul className="bg-gray-100 rounded shadow-inner mb-4">
+            <ul className="mb-4 rounded bg-gray-100 shadow-inner">
               {currentSubjectLevels?.map((level, index) => (
                 <li
                   key={index}
@@ -184,7 +184,7 @@ export default function ModuleSection({
                     setCurrentLevel(level);
                     currentSubject &&
                       handleFetchModules({
-                        schoolId: selectedSchool.id,
+                        schoolId: selectedSchool?.id,
                         subjectName: currentSubject?.name,
                         levelOrder: level.order,
                       });
@@ -195,10 +195,10 @@ export default function ModuleSection({
               ))}
             </ul>
           </section>
-          <section className="border p-4 rounded shadow col-span-4 sm:col-span-2">
+          <section className="col-span-4 rounded border p-4 shadow sm:col-span-2">
             <h3 className="text-xl">Modules</h3>
             {modules.length > 0 ? (
-              <ul className="bg-gray-100 rounded shadow-inner">
+              <ul className="rounded bg-gray-100 shadow-inner">
                 {modules.map((module, index) => (
                   <li key={index} className="p-2 hover:bg-gray-300">
                     Unit {module.order} {module.name}
@@ -206,7 +206,7 @@ export default function ModuleSection({
                 ))}
               </ul>
             ) : (
-              <article className="bg-gray-100 rounded shadow-inner p-2">
+              <article className="rounded bg-gray-100 p-2 shadow-inner">
                 <p>There are no modules in this level</p>
               </article>
             )}

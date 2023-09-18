@@ -44,7 +44,7 @@ class SubjectAdapter {
     school,
   }: {
     name: string;
-    school: number;
+    school?: number;
   }): Promise<Subject> {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subjects/`, {
       method: "POST",
