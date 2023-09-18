@@ -65,14 +65,15 @@ const AttendanceSection = ({
               nullAttendanceCount += 1;
             }
           });
+          console.log(res)
           setNullAttendanceCount(nullAttendanceCount);
           setClassAttendance(res);
           setLoading(false);
         });
     }
-
+    
     getAttendance();
-  }, [setClassAttendance, date, selectedClass?.id]);
+  }, [date, selectedClass?.id]);
 
   // NEED A WAY TO STOP THE REQUEST WHEN NOT EXIST
   // function isSatOrSun({ date }: { date: Date }) {
