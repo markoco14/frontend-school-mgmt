@@ -1,4 +1,4 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import BackButton from "@/src/components/ui/utils/BackButton";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
@@ -11,7 +11,7 @@ import { Student } from "@/src/modules/students/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps<{
   students: Student[] | undefined;
@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps<{
 export default function ReportDate({
   students,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { user, selectedSchool } = useContext(AuthContext);
+  const { user, selectedSchool } = useUserContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(1);
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -51,8 +51,7 @@ export default function ReportDate({
 
   const [isBatchCreate, setIsBatchCreate] = useState<boolean>(false);
   const router = useRouter();
-  const classId = Number(router.query.class_id?.toString())
-
+  const classId = Number(router.query.class_id?.toString());
 
   const tabLinks = [
     {
@@ -70,7 +69,7 @@ export default function ReportDate({
       selectedSubjectId &&
       (await studentEvaluationAdapter
         .batchCreateEvaluations({
-          schoolId: selectedSchool.id,
+          schoolId: Number(selectedSchool?.id),
           students: students,
           classId: Number(router.query.class_id),
           date: router.query.date.toString(),
@@ -87,7 +86,9 @@ export default function ReportDate({
   }
 
   function handleSelectSubject({ subjectId }: { subjectId: number }) {
-    subjectId === 0 ? setSelectedSubjectId(undefined) : setSelectedSubjectId(subjectId)
+    subjectId === 0
+      ? setSelectedSubjectId(undefined)
+      : setSelectedSubjectId(subjectId);
   }
 
   function handleClose() {
@@ -98,7 +99,7 @@ export default function ReportDate({
     async function getSubjects() {
       if (selectedSchool) {
         await subjectAdapter
-          .list({ schoolId: selectedSchool.id, class_id: classId})
+          .list({ schoolId: selectedSchool.id, class_id: classId })
           .then((res) => {
             setSubjects(res);
           });
@@ -194,7 +195,7 @@ export default function ReportDate({
               className="w-full rounded border bg-white p-2 shadow"
               defaultValue={0}
               onChange={(e) =>
-                handleSelectSubject({ subjectId: Number(e.target.value)})
+                handleSelectSubject({ subjectId: Number(e.target.value) })
               }
             >
               <option value={0}>Please choose a subject</option>

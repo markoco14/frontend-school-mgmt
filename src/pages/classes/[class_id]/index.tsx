@@ -1,4 +1,4 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import ManageClassTeacher from "@/src/modules/classes/infrastructure/ui/components/ManageClassTeacher";
@@ -9,7 +9,7 @@ import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/Pe
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 export const getServerSideProps: GetServerSideProps<{
   classEntity: ClassEntity;
@@ -26,7 +26,7 @@ export default function ManageClassDetails({
   classEntity: ClassEntity;
 }) {
   const [selectedClass, setSelectedClass] = useState<ClassEntity>(classEntity);
-  const { user } = useContext(AuthContext);
+  const { user } = useUserContext();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab") || "class info";
 

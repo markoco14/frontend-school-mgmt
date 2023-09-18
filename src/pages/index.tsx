@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useUserContext } from "../AuthContext";
+import { useUserContext } from "../UserContext";
 import Layout from "../modules/core/infrastructure/ui/components/Layout";
 import SchoolHeader from "../modules/core/infrastructure/ui/components/SchoolHeader";
 import { TodayClassList } from "../modules/reports/infrastructure/ui/components/TodayClassList";

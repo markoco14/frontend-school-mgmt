@@ -1,4 +1,4 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
@@ -7,7 +7,7 @@ import { Student } from "@/src/modules/students/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
 import RegisterNewStudentModal from "@/src/modules/students/infrastructure/ui/RegisterNewStudentModal";
 import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const NoData = ({ text }: { text: string }) => {
   return (
@@ -20,7 +20,7 @@ const NoData = ({ text }: { text: string }) => {
 export default function StudentsHome() {
   const [isAddStudent, setIsAddStudent] = useState<boolean>(false);
 
-  const { user, selectedSchool } = useContext(AuthContext);
+  const { user, selectedSchool } = useUserContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [studentResponse, setStudentResponse] =
     useState<PaginatedStudentResponse>();

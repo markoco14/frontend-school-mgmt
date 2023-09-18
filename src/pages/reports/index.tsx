@@ -1,4 +1,4 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
 import EvaluationListSkeletonProps from "@/src/components/ui/skeleton/EvaluationListSkeletonProps";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
@@ -15,10 +15,10 @@ import ReportingEvaluationSection from "@/src/modules/reports/infrastructure/ui/
 import { format } from "date-fns";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ReportsHome() {
-  const { selectedSchool } = useContext(AuthContext);
+  const { user, selectedSchool } = useUserContext();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -44,7 +44,6 @@ export default function ReportsHome() {
     },
   ];
 
-  const { user } = useContext(AuthContext);
   const dayNumber = date.getDay();
   const formattedDate = date.toISOString().split("T")[0]; // Format the date
   const days = [
@@ -68,7 +67,7 @@ export default function ReportsHome() {
       setLoading(true);
       try {
         await classAdapter
-          .list({ school_id: selectedSchool.id, day: dayName, signal: signal })
+          .list({ school_id: selectedSchool?.id, day: dayName, signal: signal })
           .then((res) => {
             setSelectedClass(res[0]);
             setTodayClasses(res);
@@ -111,7 +110,7 @@ export default function ReportsHome() {
   };
 
   const decrementDate = () => {
-      setSelectedClass(undefined);
+    setSelectedClass(undefined);
     setTodayClasses([]);
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() - 1);

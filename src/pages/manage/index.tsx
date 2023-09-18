@@ -1,4 +1,4 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import ParamsPageTabNav from "@/src/modules/core/infrastructure/ui/components/ParamsPageTabNav";
@@ -7,11 +7,11 @@ import { evaluationAttributeAdapter } from "@/src/modules/evaluation/infrastruct
 import Info from "@/src/modules/evaluation/infrastructure/ui/components/eval-editor/Info";
 import NewEvaluationMetrics from "@/src/modules/evaluation/infrastructure/ui/components/eval-editor/NewEvaluationMetrics";
 import { useSearchParams } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function Manage() {
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab") || "info";
   const [attributes, setAttributes] = useState<EvaluationAttribute[]>([]);
@@ -33,7 +33,7 @@ export default function Manage() {
   useEffect(() => {
     async function getDate() {
       await evaluationAttributeAdapter
-        .listAll({ school_id: selectedSchool?.id, details: true, })
+        .listAll({ school_id: Number(selectedSchool?.id), details: true })
         .then((res) => {
           setAttributes(res);
         });
@@ -52,14 +52,14 @@ export default function Manage() {
         .delete({ attribute_id: attribute_id })
         .then((res) => {
           const remainingAttributes = attributes.filter((attribute) => {
-            return attribute.id !== attribute_id
-          })
-          setAttributes(remainingAttributes)
-          toast.success("Deleted!")
+            return attribute.id !== attribute_id;
+          });
+          setAttributes(remainingAttributes);
+          toast.success("Deleted!");
         });
     } catch (error) {
       // @ts-ignore
-      toast.error(error.message)
+      toast.error(error.message);
     }
   }
 

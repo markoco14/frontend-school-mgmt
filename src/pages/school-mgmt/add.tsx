@@ -1,13 +1,13 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
 
 export default function Add() {
-  const { user } = useContext(AuthContext);
+  const { user } = useUserContext();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [newSchoolName, setNewSchoolName] = useState<string>("");
@@ -20,7 +20,10 @@ export default function Add() {
     if (user && newSchoolName) {
       try {
         setLoading(true);
-        const response = await schoolAdapter.addSchool({schoolName: newSchoolName, ownerId: user.user_id})
+        const response = await schoolAdapter.addSchool({
+          schoolName: newSchoolName,
+          ownerId: user.user_id,
+        });
         setNewSchoolName("");
         setLoading(false);
         toast.success("School added.");
@@ -28,7 +31,7 @@ export default function Add() {
       } catch (error) {
         console.error(error);
         toast.error(
-          "Something went wrong. Please try again or contact customer support."
+          "Something went wrong. Please try again or contact customer support.",
         );
       }
     }
@@ -39,7 +42,7 @@ export default function Add() {
       <Layout>
         <PermissionDenied />
       </Layout>
-    )
+    );
   }
 
   return (
@@ -47,7 +50,7 @@ export default function Add() {
       <div>
         <section>
           <div className="mb-4">
-            <div className="flex justify-between items-baseline mb-4">
+            <div className="mb-4 flex items-baseline justify-between">
               <h2 className="text-3xl">New School Information</h2>
               <Link href="/">Back</Link>
             </div>
@@ -61,17 +64,17 @@ export default function Add() {
                 handleAddSchool();
               }}
             >
-              <div className="flex flex-col mb-4">
+              <div className="mb-4 flex flex-col">
                 <label className="mb-2">School Name</label>
                 <input
                   onChange={(e) => {
                     setNewSchoolName(e.target.value);
                   }}
                   type="text"
-                  className="shadow-md border p-2 rounded"
+                  className="rounded border p-2 shadow-md"
                 />
               </div>
-              <button className="bg-blue-300 text-blue-900 hover:bg-blue-500 hover:text-white px-4 py-1 rounded">
+              <button className="rounded bg-blue-300 px-4 py-1 text-blue-900 hover:bg-blue-500 hover:text-white">
                 Save
               </button>
             </form>
