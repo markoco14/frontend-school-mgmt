@@ -28,27 +28,38 @@ const ReportingEvaluationSection = ({
   // const [date, setDate] = useState<Date>(new Date());
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
     async function getEvaluations() {
       const preparedDate = date?.toISOString().split("T")[0];
       setLoading(true);
-      await studentAdapter
-        .listPresentStudentsWithEvaluations({
-          date: preparedDate,
-          classId: Number(selectedClass?.id),
-          // filters: filters,
-        })
-        .then((res) => {
-          // const groupedData = groupBy(
-          //   res,
-          //   (evaluation) => evaluation.student?.last_name,
-          // );
-          console.log(res);
-          setStudentsWithEvaluations(res);
-          setLoading(false);
-        });
+      try {
+
+        await studentAdapter
+          .listPresentStudentsWithEvaluations({
+            date: preparedDate,
+            classId: Number(selectedClass?.id),
+            signal: signal,
+            // filters: filters,
+          })
+          .then((res) => {
+            // const groupedData = groupBy(
+            //   res,
+            //   (evaluation) => evaluation.student?.last_name,
+            // );
+            setStudentsWithEvaluations(res);
+            setLoading(false);
+          });
+      } catch (error) {
+        console.error(error)
+      }
     }
 
     getEvaluations();
+
+    return () => {
+      controller.abort();
+    }
   }, [date, filters, selectedClass]);
 
   function isSatOrSun({ date }: { date: Date }) {

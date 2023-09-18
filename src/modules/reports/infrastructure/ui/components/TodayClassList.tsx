@@ -35,22 +35,33 @@ export const TodayClassList = () => {
   const dayName = days[dayNumber];
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
     async function getData() {
       setLoading(true);
-      await classAdapter
-        .list({
-          school_id: selectedSchool?.id,
-          day: dayName,
-        })
-        .then((res) => {
-          setLoading(false);
-          setClasses(() => res);
-        });
+      try {
+        await classAdapter
+          .list({
+            school_id: selectedSchool?.id,
+            day: dayName,
+            signal: signal,
+          })
+          .then((res) => {
+            setLoading(false);
+            setClasses(() => res);
+          });
+      } catch (error) {
+        console.error(error)
+      }
     }
     selectedSchool && getData();
+    return () => {
+      controller.abort();
+    }
   }, [selectedSchool, dayName]);
 
   const incrementDate = () => {
+    setClasses([])
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() + 1);
     router.push(
@@ -61,6 +72,7 @@ export const TodayClassList = () => {
   };
 
   const decrementDate = () => {
+    setClasses([]);
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() - 1);
     router.push(
@@ -80,6 +92,7 @@ export const TodayClassList = () => {
             className="rounded border-2 text-left text-xl shadow xs:text-right"
             value={format(date, "yyyy-MM-dd")}
             onChange={async (e) => {
+              setClasses([]);
               const newDate = new Date(e.target.value);
               router.push(
                 `?${new URLSearchParams({

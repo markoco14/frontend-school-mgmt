@@ -161,9 +161,11 @@ class StudentAdapter {
   public async listPresentStudentsWithEvaluations({
     classId,
     date,
+    signal,
   }: {
     classId: number;
     date: string;
+    signal?: AbortSignal;
   }): Promise<Student[]> {
     let url;
     url = `${process.env.NEXT_PUBLIC_API_URL}/students-with-evaluations/`;
@@ -179,7 +181,7 @@ class StudentAdapter {
       url += `?${queryParams.join("&")}`;
     }
 
-    const res = await fetch(url);
+    const res = await fetch(url, { signal });
     const students: Student[] = await res.json();
 
     return students;

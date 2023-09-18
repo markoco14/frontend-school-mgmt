@@ -1,6 +1,8 @@
 import AuthContext from "@/src/AuthContext";
 import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
+import EvaluationListSkeletonProps from "@/src/components/ui/skeleton/EvaluationListSkeletonProps";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
+import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
 import ClassList from "@/src/modules/attendance/infrastructure/ui/components/ClassList";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
@@ -12,8 +14,8 @@ import AttendanceSection from "@/src/modules/reports/infrastructure/ui/component
 import ReportingEvaluationSection from "@/src/modules/reports/infrastructure/ui/components/evaluation/ReportingEvaluationSection";
 import { format } from "date-fns";
 import { useSearchParams } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
 
 export default function ReportsHome() {
   const { selectedSchool } = useContext(AuthContext);
@@ -60,18 +62,27 @@ export default function ReportsHome() {
   const [selectedClass, setSelectedClass] = useState<ClassEntity>();
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
     async function getClasses() {
       setLoading(true);
-      await classAdapter
-        .list({ school_id: selectedSchool.id, day: dayName })
-        .then((res) => {
-          setSelectedClass(res[0]);
-          setTodayClasses(res);
-          setLoading(false);
-        });
+      try {
+        await classAdapter
+          .list({ school_id: selectedSchool.id, day: dayName, signal: signal })
+          .then((res) => {
+            setSelectedClass(res[0]);
+            setTodayClasses(res);
+            setLoading(false);
+          });
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     selectedSchool && getClasses();
+    return () => {
+      controller.abort();
+    };
   }, [selectedSchool, formattedDate, dayName]);
 
   if (user?.role !== "OWNER") {
@@ -87,15 +98,21 @@ export default function ReportsHome() {
   }
 
   const incrementDate = () => {
+    setSelectedClass(undefined);
+    setTodayClasses([]);
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() + 1);
-    router.push(`?${new URLSearchParams({
-      date: currentDate.toISOString().split("T")[0],
-      tab: tab,
-    })}`);
+    router.push(
+      `?${new URLSearchParams({
+        date: currentDate.toISOString().split("T")[0],
+        tab: tab,
+      })}`,
+    );
   };
 
   const decrementDate = () => {
+      setSelectedClass(undefined);
+    setTodayClasses([]);
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() - 1);
     router.push(
@@ -116,6 +133,7 @@ export default function ReportsHome() {
             className="rounded border text-left text-xl shadow xs:text-right"
             value={format(date, "yyyy-MM-dd")}
             onChange={async (e) => {
+              setTodayClasses([]);
               const newDate = new Date(e.target.value);
               router.push(
                 `?${new URLSearchParams({
@@ -139,7 +157,7 @@ export default function ReportsHome() {
           </button>
         </div>
 
-        <section className="flex flex-col gap-4 rounded border overflow-x-hidden bg-gray-100 p-2 shadow-inner sm:grid-cols-2 sm:gap-2">
+        <section className="flex flex-col gap-4 overflow-x-hidden rounded border bg-gray-100 p-2 shadow-inner sm:grid-cols-2 sm:gap-2">
           <div className="bg-white sm:col-span-2">
             <ParamsPageTabNav
               links={links}
@@ -148,21 +166,20 @@ export default function ReportsHome() {
             />
           </div>
           {tab !== "daily reports" && (
-            <div className=" grid sm:grid-cols-2 gap-2">
-              <article className="relative sm:col-span-1 flex flex-col gap-4">
+            <div className=" grid gap-2 sm:grid-cols-2">
+              <article className="relative flex flex-col gap-4 sm:col-span-1">
                 <div className="sticky top-4 rounded-lg border bg-white p-4 shadow">
                   <div>
                     <h2 className="mb-4 text-2xl">
                       Classes {dayName} {date.toDateString()}
                     </h2>
                   </div>
-                  {loading && (
+                  {loading ? (
                     <Skeleton>
                       <ClassListSkeletonProps />
                     </Skeleton>
-                  )}
-                  {!loading && !todayClasses.length ? (
-                    <p>There are no classes today</p>
+                  ) : !todayClasses.length ? (
+                    <p>No classes today. Please check your school schedule.</p>
                   ) : (
                     <>
                       <p className="mb-2">
@@ -179,22 +196,75 @@ export default function ReportsHome() {
                   )}
                 </div>
               </article>
-              {tab === "attendance" && selectedClass && (
-                <article className="sm:col-span-1 rounded-lg border bg-white p-4">
+              <article className="rounded-lg border bg-white p-4 sm:col-span-1">
+                {/* <h2 className="mb-4 text-2xl">Attendance list</h2> */}
+                {tab === "attendance" ? (
+                  selectedClass ? (
+                    <>
+                      <AttendanceSection
+                        date={date}
+                        selectedClass={selectedClass}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <h2 className="mb-4 text-2xl">
+                        Please wait for attendance
+                      </h2>
+                      {loading && (
+                        <Skeleton>
+                          <StudentListSkeletonProps studentQuantity={8} />
+                        </Skeleton>
+                      )}
+                    </>
+                  )
+                ) : tab === "evaluations" && selectedClass ? (
+                  <>
+                    <h2 className="mb-4 text-2xl">
+                      Class: {selectedClass?.name} Teacher{" "}
+                      {selectedClass?.teacher}
+                    </h2>
+                    <ReportingEvaluationSection
+                      date={date}
+                      selectedClass={selectedClass}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <h2 className="mb-4 text-2xl">
+                      Please wait for evaluations
+                    </h2>
+                    {loading && (
+                      <Skeleton>
+                        <EvaluationListSkeletonProps />
+                      </Skeleton>
+                    )}
+                  </>
+                )}
+                {/* {tab === "attendance" && selectedClass ? (
                   <AttendanceSection
                     date={date}
                     selectedClass={selectedClass}
                   />
-                </article>
-              )}
-              {tab === "evaluations" && selectedClass && (
+                ) : (
+                  <>
+                  <h2 className="mb-4 text-2xl">Please wait for attendance</h2>
+                  {loading && (
+                    <Skeleton>
+                        <StudentListSkeletonProps studentQuantity={8} />
+                      </Skeleton>
+                  )}
+                  </>
+                )} */}
+              </article>
+              {/* {tab === "evaluations" && selectedClass && (
                 <article className="sm:col-span-1">
                   <ReportingEvaluationSection
                     date={date}
                     selectedClass={selectedClass}
                   />
                 </article>
-              )}
+              )} */}
             </div>
           )}
         </section>
