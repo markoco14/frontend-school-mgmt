@@ -1,11 +1,11 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
-import { RangeAttributePayload } from "@/src/modules/evaluation/domain/entities/payloads/RangeAttributePayload";
-import { useContext, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { rangeAttributeAdapter } from "../../../adapters/rangeAttributeAdapter";
-import toast from "react-hot-toast";
 import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
+import { RangeAttributePayload } from "@/src/modules/evaluation/domain/entities/payloads/RangeAttributePayload";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { rangeAttributeAdapter } from "../../../adapters/rangeAttributeAdapter";
 
 // TODO: make this work. left alone for now because descriptions can be null
 const Descriptions = ({
@@ -80,7 +80,7 @@ type Inputs = {
 };
 
 const NewRangeMetricForm = ({ setAttributes }: { setAttributes: Function }) => {
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
   const {
     register,
     setValue,
@@ -107,13 +107,14 @@ const NewRangeMetricForm = ({ setAttributes }: { setAttributes: Function }) => {
       max_value: data.max,
       descriptions: null,
     };
-    await rangeAttributeAdapter
-      .add({ payload: payload })
-      .then((res) => {
-        setAttributes((prevAttributes: EvaluationAttribute[]) => [...prevAttributes, res])
-        toast.success("Success")
-        reset();
-      });
+    await rangeAttributeAdapter.add({ payload: payload }).then((res) => {
+      setAttributes((prevAttributes: EvaluationAttribute[]) => [
+        ...prevAttributes,
+        res,
+      ]);
+      toast.success("Success");
+      reset();
+    });
     return;
   };
 

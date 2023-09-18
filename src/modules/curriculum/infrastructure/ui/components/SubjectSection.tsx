@@ -1,6 +1,6 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Subject } from "../../../domain/entities/Subject";
 import { SubjectLevel } from "../../../domain/entities/SubjectLevel";
@@ -90,7 +90,7 @@ export default function SubjectSection({
   subjectLevels: SubjectLevel[];
   setSubjectLevels: Function;
 }) {
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isAddSubject, setIsAddSubject] = useState<boolean>(false);
 

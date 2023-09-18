@@ -1,9 +1,8 @@
-import AuthContext from "@/src/AuthContext";
-import { useContext } from "react";
+import { useUserContext } from "@/src/UserContext";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { userAdapter } from "../adapters/userAdapter";
 import { User } from "../../domain/entities/User";
+import { userAdapter } from "../adapters/userAdapter";
 
 type Inputs = {
   first_name: string;
@@ -18,7 +17,7 @@ export default function AdminSignup({
   admins: User[];
   setAdmins: Function;
 }) {
-  const { user, selectedSchool } = useContext(AuthContext);
+  const { user, selectedSchool } = useUserContext();
 
   const {
     reset,
@@ -43,7 +42,7 @@ export default function AdminSignup({
         first_name: data.first_name,
         email: data.email,
         password: data.password,
-        school_id: selectedSchool.id,
+        school_id: selectedSchool?.id,
       });
 
       toast.success("School shared with admin.");

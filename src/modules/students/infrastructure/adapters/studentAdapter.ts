@@ -48,7 +48,7 @@ class StudentAdapter {
     id,
     page,
   }: {
-    id: number;
+    id?: number;
     page: number;
   }): Promise<PaginatedStudentResponse> {
     const res = await fetch(

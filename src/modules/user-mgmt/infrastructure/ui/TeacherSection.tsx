@@ -1,5 +1,5 @@
-import AuthContext from "@/src/AuthContext";
-import { useContext, useEffect, useState } from "react";
+import { useUserContext } from "@/src/UserContext";
+import { useEffect, useState } from "react";
 
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import { Teacher } from "../../domain/entities/Teacher";
@@ -8,7 +8,7 @@ import StaffList from "./StaffList";
 import TeacherSignup from "./TeacherSignup";
 
 export default function TeacherSection() {
-  const { user, selectedSchool } = useContext(AuthContext);
+  const { user, selectedSchool } = useUserContext();
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [isAddTeacher, setIsAddTeacher] = useState<boolean>(false);
 

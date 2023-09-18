@@ -1,4 +1,4 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
@@ -7,14 +7,12 @@ import AddClass from "@/src/modules/classes/infrastructure/ui/components/AddClas
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
-import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
 import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ClassHome() {
-  const { selectedSchool } = useContext(AuthContext);
+  const { user, selectedSchool } = useUserContext();
   const [classes, setClasses] = useState<ClassEntity[]>([]);
-  const { user } = useContext(AuthContext);
   const [isAddClass, setIsAddClass] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 

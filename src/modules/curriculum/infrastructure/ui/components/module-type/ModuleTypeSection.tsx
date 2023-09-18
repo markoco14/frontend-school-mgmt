@@ -1,10 +1,10 @@
-import AuthContext from "@/src/AuthContext";
-import { useContext, useEffect, useState } from "react";
+import { useUserContext } from "@/src/UserContext";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { ModuleType } from "../../../../domain/entities/ModuleType";
 import { moduleTypeAdapter } from "../../../adapters/moduleTypeAdapter";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
-import toast from "react-hot-toast";
 import ManageModuleType from "./ManageModuleType";
 
 type Inputs = {
@@ -12,7 +12,7 @@ type Inputs = {
 };
 
 export default function ModuleTypeSection() {
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
   const [isManageType, setIsManageType] = useState<boolean>(false);
 
   const [moduleTypes, setModuleTypes] = useState<ModuleType[]>([]);
@@ -56,9 +56,9 @@ export default function ModuleTypeSection() {
 
   return (
     <section>
-      <h2 className="text-3xl mb-4">Module Types</h2>
-      <div className="grid sm:grid-cols-2 gap-4">
-        <article className="border rounded shadow mb-4 p-4 flex flex-col gap-6 text-gray-700">
+      <h2 className="mb-4 text-3xl">Module Types</h2>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <article className="mb-4 flex flex-col gap-6 rounded border p-4 text-gray-700 shadow">
           <h3 className="text-xl">Your Module Types</h3>
           {moduleTypes.length === 0 ? (
             <p>There are no module types.</p>
@@ -78,7 +78,7 @@ export default function ModuleTypeSection() {
             </ul>
           )}
         </article>
-        <article className="border rounded shadow mb-4 p-4 flex flex-col gap-6 text-gray-700">
+        <article className="mb-4 flex flex-col gap-6 rounded border p-4 text-gray-700 shadow">
           <h3 className="text-xl">New Module Type</h3>
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -90,7 +90,7 @@ export default function ModuleTypeSection() {
                 {errors.name && <span className="text-red-500">required</span>}
               </label>
               <input
-                className="border shadow-inner rounded p-2"
+                className="rounded border p-2 shadow-inner"
                 {...register("name", {
                   required: true,
                   minLength: 2,
@@ -98,7 +98,7 @@ export default function ModuleTypeSection() {
                 })}
               />
             </div>
-            <button className="w-full ease-in-out duration-200 bg-blue-600  hover:bg-blue-900 p-2 rounded shadow text-white">
+            <button className="w-full rounded bg-blue-600 p-2  text-white shadow duration-200 ease-in-out hover:bg-blue-900">
               Submit
             </button>
           </form>

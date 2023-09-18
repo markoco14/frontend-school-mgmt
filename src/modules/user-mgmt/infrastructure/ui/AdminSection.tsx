@@ -1,13 +1,13 @@
-import AuthContext from "@/src/AuthContext";
-import { useContext, useEffect, useState } from "react";
+import { useUserContext } from "@/src/UserContext";
+import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import { useEffect, useState } from "react";
 import { Teacher } from "../../domain/entities/Teacher";
 import { userAdapter } from "../adapters/userAdapter";
-import StaffList from "./StaffList";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import AdminSignup from "./AdminSignup";
+import StaffList from "./StaffList";
 
 export default function AdminSection() {
-  const { user, selectedSchool } = useContext(AuthContext);
+  const { user, selectedSchool } = useUserContext();
   const [admins, setAdmins] = useState<Teacher[]>([]);
   const [isAddAdmin, setIsAddAdmin] = useState<boolean>(false);
 
@@ -25,7 +25,7 @@ export default function AdminSection() {
   }, [selectedSchool, user]);
 
   function handleClose() {
-	setIsAddAdmin(false)
+    setIsAddAdmin(false);
   }
 
   return (

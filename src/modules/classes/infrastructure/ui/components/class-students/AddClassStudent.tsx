@@ -1,10 +1,10 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
 import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { ClassEntity } from "../../../../domain/entities/ClassEntity";
 import { classStudentAdapter } from "../../../adapters/classStudentAdapter";
@@ -18,7 +18,7 @@ export default function AddStudentToClassSection({
   classStudentList: ClassStudent[];
   setClassStudentList: Function;
 }) {
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
   const [allStudents, setAllStudents] = useState<Student[]>([]);
   const [page, setPage] = useState<number>(1);
   const [next, setNext] = useState<boolean>(false);
@@ -41,7 +41,7 @@ export default function AddStudentToClassSection({
     async function getData() {
       setLoading(true);
       await studentAdapter
-        .listSchoolStudents({ id: selectedSchool.id, page: page })
+        .listSchoolStudents({ id: selectedSchool?.id, page: page })
         .then((res) => {
           if (res.next) {
             setNext(true);

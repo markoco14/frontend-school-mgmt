@@ -1,5 +1,5 @@
-import AuthContext from "@/src/AuthContext";
-import { useContext, useEffect, useState } from "react";
+import { useUserContext } from "@/src/UserContext";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Module } from "../../../../domain/entities/Module";
 import { ModuleType } from "../../../../domain/entities/ModuleType";
@@ -8,9 +8,9 @@ import { moduleAdapter } from "../../../adapters/moduleAdapter";
 import { moduleTypeAdapter } from "../../../adapters/moduleTypeAdapter";
 
 type Inputs = {
-name: string;
-type: number;
-order: number;
+  name: string;
+  type: number;
+  order: number;
 };
 
 export default function AddModuleForm({
@@ -20,7 +20,7 @@ export default function AddModuleForm({
   setModules: Function;
   currentSubjectLevel: SubjectLevel;
 }) {
-	const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
   const [moduleTypes, setModuleTypes] = useState<ModuleType[]>([]);
   const {
     register,
@@ -55,13 +55,15 @@ export default function AddModuleForm({
       });
   };
 
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <label className="flex justify-between"><span>Name</span> {errors.name && <span className="text-red-500">required</span>}</label>
+        <label className="flex justify-between">
+          <span>Name</span>{" "}
+          {errors.name && <span className="text-red-500">required</span>}
+        </label>
         <input
-          className="border shadow-inner rounded p-2"
+          className="rounded border p-2 shadow-inner"
           {...register("name", {
             required: true,
             minLength: 2,
@@ -70,39 +72,51 @@ export default function AddModuleForm({
         />
       </div>
       <div className="flex flex-col gap-2">
-        <label className="flex justify-between"><span>Order</span> {errors.order && <span className="text-red-500">required</span>}</label>
+        <label className="flex justify-between">
+          <span>Order</span>{" "}
+          {errors.order && <span className="text-red-500">required</span>}
+        </label>
         <input
-          className="border shadow-inner rounded p-2"
+          className="rounded border p-2 shadow-inner"
           type="number"
           {...register("order", {
             required: true,
             min: 1,
           })}
         />
-        
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-2">
-          <p className="flex justify-between"><span>Type</span> {errors.type && <span className="text-red-500">required</span>}</p>
+          <p className="flex justify-between">
+            <span>Type</span>{" "}
+            {errors.type && <span className="text-red-500">required</span>}
+          </p>
           {moduleTypes?.map((type, index) => (
             <div key={index} className="flex flex-col gap-2">
-            <label key={index} className="relative cursor-pointer w-full flex">
-              <input
-                className="sr-only peer"
-                id={`checkbox-${type.id}`} 
-                type="radio"
-                value={type.id}
-                {...register("type", {
-                  required: true,
-                })}
-              />
-              <span className="w-full hover:bg-gray-300 ease-in-out duration-200 bg-gray-100 peer-checked:bg-gray-500 peer-checked:text-white p-2 border shadow-inner rounded">{type.name}</span>
-            </label>
+              <label
+                key={index}
+                className="relative flex w-full cursor-pointer"
+              >
+                <input
+                  className="peer sr-only"
+                  id={`checkbox-${type.id}`}
+                  type="radio"
+                  value={type.id}
+                  {...register("type", {
+                    required: true,
+                  })}
+                />
+                <span className="w-full rounded border bg-gray-100 p-2 shadow-inner duration-200 ease-in-out hover:bg-gray-300 peer-checked:bg-gray-500 peer-checked:text-white">
+                  {type.name}
+                </span>
+              </label>
             </div>
           ))}
         </div>
       </div>
-      <button className="w-full ease-in-out duration-200 bg-blue-600  hover:bg-blue-900 p-2 rounded shadow text-white">Submit</button>
+      <button className="w-full rounded bg-blue-600 p-2  text-white shadow duration-200 ease-in-out hover:bg-blue-900">
+        Submit
+      </button>
     </form>
   );
-};
+}

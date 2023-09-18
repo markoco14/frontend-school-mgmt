@@ -1,3 +1,8 @@
 export class School {
-  constructor(public name: string, public owner: number, public id: number) {}
+  constructor(
+    public name: string,
+    public id: number,
+    public owner?: number,
+    public owner_id?: number,
+  ) {}
 }

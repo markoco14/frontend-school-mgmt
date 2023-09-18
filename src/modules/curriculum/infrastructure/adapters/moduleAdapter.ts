@@ -6,7 +6,7 @@ class ModuleAdapter {
     subjectName,
     levelOrder,
   }: {
-    schoolId: number;
+    schoolId?: number;
     subjectName?: string;
     levelOrder?: number;
   }): Promise<Module[]> {

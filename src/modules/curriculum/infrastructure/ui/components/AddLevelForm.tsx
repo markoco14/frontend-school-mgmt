@@ -1,5 +1,4 @@
-import AuthContext from "@/src/AuthContext";
-import { useContext } from "react";
+import { useUserContext } from "@/src/UserContext";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type Inputs = {
@@ -12,7 +11,7 @@ export default function AddLevelForm({
 }: {
   handleAddLevel: Function;
 }) {
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
 
   const {
     reset,
@@ -22,18 +21,21 @@ export default function AddLevelForm({
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-		await handleAddLevel({name: data.name, school: selectedSchool?.id, order: data.order})
-		.then(reset());
+    await handleAddLevel({
+      name: data.name,
+      school: selectedSchool?.id,
+      order: data.order,
+    }).then(reset());
   };
 
   return (
     <div className="xs:col-span-1">
       <h2 className="text-2xl">Add new level</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col mb-4">
+        <div className="mb-4 flex flex-col">
           <label>Name</label>
           <input
-            className="shadow p-2"
+            className="p-2 shadow"
             type="text"
             {...register("name", {
               required: true,
@@ -42,25 +44,25 @@ export default function AddLevelForm({
             })}
           />
           {errors.name?.type === "required" && (
-            <p role="alert" className="text-red-500 mt-2">
+            <p role="alert" className="mt-2 text-red-500">
               Level name is required
             </p>
           )}
         </div>
-        <div className="flex flex-col mb-4">
+        <div className="mb-4 flex flex-col">
           <label>Order</label>
           <input
-            className="shadow p-2"
+            className="p-2 shadow"
             type="number"
             {...register("order", { required: true, min: 1 })}
           />
           {errors.order?.type === "required" && (
-            <p role="alert" className="text-red-500 mt-2">
+            <p role="alert" className="mt-2 text-red-500">
               Order is required
             </p>
           )}
         </div>
-        <button className="bg-blue-300 px-2 py-1 rounded text-blue-900">
+        <button className="rounded bg-blue-300 px-2 py-1 text-blue-900">
           Submit
         </button>
       </form>

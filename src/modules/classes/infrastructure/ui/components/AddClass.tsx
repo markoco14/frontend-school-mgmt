@@ -1,9 +1,9 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import PaginationButtons from "@/src/modules/core/infrastructure/ui/components/PaginationButtons";
 import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/levelAdapter";
 import { schoolDayAdapter } from "@/src/modules/schedule/infrastructure/ui/adapters/schoolDayAdapter";
 import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Level } from "../../../../curriculum/domain/entities/Level";
@@ -17,7 +17,7 @@ type Inputs = {
 };
 
 export default function AddClass({ setClasses }: { setClasses: Function }) {
-  const { user, selectedSchool } = useContext(AuthContext);
+  const { user, selectedSchool } = useUserContext();
   const [levels, setLevels] = useState<Level[]>([]);
   const [days, setDays] = useState<SchoolDay[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -37,7 +37,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
     try {
       const newClass: ClassEntity = await classAdapter.addClass({
         name: data.className,
-        school_id: selectedSchool.id,
+        school_id: selectedSchool?.id as number,
         level: Number(data.level),
         days: days,
       });
@@ -82,7 +82,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
       <div className="flex flex-col gap-2">
         <label>Class Name</label>
         <input
-          className="border rounded px-2 py-1 shadow"
+          className="rounded border px-2 py-1 shadow"
           type="text"
           {...register("className", {
             required: true,
@@ -101,14 +101,14 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
         <label>Level</label>
         <div className="grid grid-cols-5 gap-2">
           {levels?.map((level: Level, index: number) => (
-            <label key={index} className="cursor-pointer flex w-full">
+            <label key={index} className="flex w-full cursor-pointer">
               <input
                 type="radio"
                 className="peer sr-only"
                 {...register("level", { required: true })}
                 value={level.id}
               />
-              <span className="grid py-1 w-full place-content-center rounded border shadow duration-200 ease-in-out hover:bg-gray-300 peer-checked:bg-gray-500 peer-checked:text-white ">
+              <span className="grid w-full place-content-center rounded border py-1 shadow duration-200 ease-in-out hover:bg-gray-300 peer-checked:bg-gray-500 peer-checked:text-white ">
                 {level.name}
               </span>
             </label>

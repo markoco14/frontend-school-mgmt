@@ -1,12 +1,10 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import { Student } from "@/src/modules/students/domain/entities/Student";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useContext, useState } from "react";
-import TextareaAutosize from 'react-textarea-autosize';
-
+import { useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 
 const ReportSetup = ({
   subject,
@@ -58,7 +56,7 @@ const ReportSetup = ({
 
   return (
     <>
-      <article className="bg-blue-200 p-4 rounded mb-4">
+      <article className="mb-4 rounded bg-blue-200 p-4">
         <p className="mb-2">Subject</p>
         <ul className="grid grid-cols-3">
           {subjects?.map((this_subject, index) => (
@@ -96,7 +94,7 @@ const ReportSetup = ({
           ))}
         </ul>
       </article>
-      <article className="bg-blue-200 p-4 rounded mb-4">
+      <article className="mb-4 rounded bg-blue-200 p-4">
         <p className="mb-2">Level (Level choices based on subject)</p>
         {subject === "Grammar" || subject === "Reading" ? (
           <ul className="grid grid-cols-6">
@@ -135,7 +133,7 @@ const ReportSetup = ({
         )}
       </article>
 
-      <article className="bg-blue-200 p-4 rounded mb-4">
+      <article className="mb-4 rounded bg-blue-200 p-4">
         <p className="mb-2">Unit (Unit choices based on subject and level)</p>
         {(subject === "Grammar" || subject || "Reading") &&
         level >= 5 &&
@@ -175,7 +173,7 @@ const ReportSetup = ({
           </ul>
         )}
       </article>
-      <article className="bg-blue-200 p-4 rounded mb-4">
+      <article className="mb-4 rounded bg-blue-200 p-4">
         <p className="mb-2">Day (Day choices based on subject)</p>
         {subject === "Grammar" || subject === "Reading" ? (
           <ul className="grid grid-cols-4">
@@ -214,7 +212,7 @@ const ReportSetup = ({
         )}
       </article>
       <button
-        className="w-full p-2 rounded bg-blue-900 text-white"
+        className="w-full rounded bg-blue-900 p-2 text-white"
         onClick={() => {
           setIsConfirmed(true);
         }}
@@ -226,119 +224,131 @@ const ReportSetup = ({
 };
 
 const ReportDetails = ({ setIsConfirmed }: { setIsConfirmed: Function }) => {
-	const students = [
-		{
+  const students = [
+    {
       id: 1,
-      first_name: 'Emily',
-      last_name: 'Chen',
+      first_name: "Emily",
+      last_name: "Chen",
       age: 11,
-      gender: 'Female',
-			photo_url: 'https://storage.googleapis.com/twle-445f4.appspot.com/images/student_1.jpeg',
+      gender: "Female",
+      photo_url:
+        "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_1.jpeg",
       school_id: 1,
-		},
-		{
+    },
+    {
       id: 2,
-      first_name: 'Charlie',
-      last_name: 'Chen',
+      first_name: "Charlie",
+      last_name: "Chen",
       age: 11,
-      gender: 'Male',
-			photo_url: 'https://storage.googleapis.com/twle-445f4.appspot.com/images/student_2.jpeg',
+      gender: "Male",
+      photo_url:
+        "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_2.jpeg",
       school_id: 1,
-		},
-		{
+    },
+    {
       id: 3,
-      first_name: 'Bert',
-      last_name: 'Chen',
+      first_name: "Bert",
+      last_name: "Chen",
       age: 11,
-      gender: 'Male',
-			photo_url: 'https://storage.googleapis.com/twle-445f4.appspot.com/images/student_3.jpeg',
+      gender: "Male",
+      photo_url:
+        "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_3.jpeg",
       school_id: 1,
-		},
-		{
+    },
+    {
       id: 4,
-      first_name: 'Claire',
-      last_name: 'Chen',
+      first_name: "Claire",
+      last_name: "Chen",
       age: 11,
-      gender: 'Female',
-			photo_url: 'https://storage.googleapis.com/twle-445f4.appspot.com/images/student_4.jpeg',
+      gender: "Female",
+      photo_url:
+        "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_4.jpeg",
       school_id: 1,
-		},
-		{
+    },
+    {
       id: 5,
-      first_name: 'Bernice',
-      last_name: 'Chen',
+      first_name: "Bernice",
+      last_name: "Chen",
       age: 11,
-      gender: 'Female',
-			photo_url: 'https://storage.googleapis.com/twle-445f4.appspot.com/images/student_1.jpeg',
+      gender: "Female",
+      photo_url:
+        "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_1.jpeg",
       school_id: 1,
-		},
-		{
+    },
+    {
       id: 6,
-      first_name: 'Kyle',
-      last_name: 'Chen',
+      first_name: "Kyle",
+      last_name: "Chen",
       age: 11,
-      gender: 'Male',
-			photo_url: 'https://storage.googleapis.com/twle-445f4.appspot.com/images/student_2.jpeg',
+      gender: "Male",
+      photo_url:
+        "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_2.jpeg",
       school_id: 1,
-		},
-		{
+    },
+    {
       id: 7,
-      first_name: 'Brad',
-      last_name: 'Chen',
+      first_name: "Brad",
+      last_name: "Chen",
       age: 11,
-      gender: 'Male',
-			photo_url: 'https://storage.googleapis.com/twle-445f4.appspot.com/images/student_3.jpeg',
+      gender: "Male",
+      photo_url:
+        "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_3.jpeg",
       school_id: 1,
-		},
-		{
+    },
+    {
       id: 8,
-      first_name: 'Cynthia',
-      last_name: 'Chen',
+      first_name: "Cynthia",
+      last_name: "Chen",
       age: 11,
-      gender: 'Female',
-			photo_url: 'https://storage.googleapis.com/twle-445f4.appspot.com/images/student_4.jpeg',
+      gender: "Female",
+      photo_url:
+        "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_4.jpeg",
       school_id: 1,
-		},
-		{
+    },
+    {
       id: 9,
-      first_name: 'Louise',
-      last_name: 'Chen',
+      first_name: "Louise",
+      last_name: "Chen",
       age: 11,
-      gender: 'Female',
-			photo_url: 'https://storage.googleapis.com/twle-445f4.appspot.com/images/student_1.jpeg',
+      gender: "Female",
+      photo_url:
+        "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_1.jpeg",
       school_id: 1,
-		},
-		{
+    },
+    {
       id: 10,
-      first_name: 'Cameron',
-      last_name: 'Chen',
+      first_name: "Cameron",
+      last_name: "Chen",
       age: 11,
-      gender: 'Male',
-			photo_url: 'https://storage.googleapis.com/twle-445f4.appspot.com/images/student_2.jpeg',
+      gender: "Male",
+      photo_url:
+        "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_2.jpeg",
       school_id: 1,
-		},
-		{
+    },
+    {
       id: 11,
-      first_name: 'Brock',
-      last_name: 'Chen',
+      first_name: "Brock",
+      last_name: "Chen",
       age: 11,
-      gender: 'Male',
-			photo_url: 'https://storage.googleapis.com/twle-445f4.appspot.com/images/student_3.jpeg',
+      gender: "Male",
+      photo_url:
+        "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_3.jpeg",
       school_id: 1,
-		},
-		{
+    },
+    {
       id: 12,
-      first_name: 'Cindy',
-      last_name: 'Chen',
+      first_name: "Cindy",
+      last_name: "Chen",
       age: 11,
-      gender: 'Female',
-			photo_url: 'https://storage.googleapis.com/twle-445f4.appspot.com/images/student_4.jpeg',
+      gender: "Female",
+      photo_url:
+        "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_4.jpeg",
       school_id: 1,
-		},
-	]
+    },
+  ];
 
   const [selectedStudent, setSelectedStudent] = useState<any>(students[0]);
-  const [absent, setAbsent] = useState<boolean>(false)
+  const [absent, setAbsent] = useState<boolean>(false);
 
   const [homeworkDone, setHomeworkDone] = useState<boolean>(false);
   const [homeworkMistakes, setHomeworkMistakes] = useState<number>(0);
@@ -348,19 +358,24 @@ const ReportDetails = ({ setIsConfirmed }: { setIsConfirmed: Function }) => {
   const scores = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return (
-		<>
-			<button className="w-full text-right mb-4 text-lg text-blue-500" onClick={() => setIsConfirmed(false)}>Edit Report Details</button>
-			<ul className="grid grid-cols-6 gap-2 p-2 mb-4 rounded sticky top-0 bg-white z-10">
-				{students?.map((student, index) => (
-					<li key={index}>
-						<div className="relative aspect-square ">
-							<Image 
-								src={student.photo_url}
-								alt='An image of a student'
-								fill={true}
-								sizes="(max-width: 768px) 50vw, (max-width: 1200px) 20vw"
-								style={{ objectFit: 'cover' }}
-								className="rounded-full"
+    <>
+      <button
+        className="mb-4 w-full text-right text-lg text-blue-500"
+        onClick={() => setIsConfirmed(false)}
+      >
+        Edit Report Details
+      </button>
+      <ul className="sticky top-0 z-10 mb-4 grid grid-cols-6 gap-2 rounded bg-white p-2">
+        {students?.map((student, index) => (
+          <li key={index}>
+            <div className="relative aspect-square ">
+              <Image
+                src={student.photo_url}
+                alt="An image of a student"
+                fill={true}
+                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 20vw"
+                style={{ objectFit: "cover" }}
+                className="rounded-full"
                 onClick={() => {
                   setSelectedStudent(student);
                   setTestScore(0);
@@ -369,43 +384,46 @@ const ReportDetails = ({ setIsConfirmed }: { setIsConfirmed: Function }) => {
                   setTestCorrections(0);
                   setAbsent(false);
                 }}
-							/>
-						</div>
-
-					</li>
-				))}
-			</ul>
+              />
+            </div>
+          </li>
+        ))}
+      </ul>
       {!selectedStudent ? (
-        <article className="p-2 bg-gray-100 shadow-inner mb-4 rounded">
+        <article className="mb-4 rounded bg-gray-100 p-2 shadow-inner">
           <p>Choose a student to start writing reports</p>
         </article>
       ) : (
-        <article className="p-2 bg-gray-100 shadow-inner mb-4 rounded">
-          <div className="grid grid-cols-4 gap-4 items-center mb-4">
-            <div className="relative aspect-square col-span-1">
-							<Image 
-								src={selectedStudent.photo_url}
-								alt='An image of a student'
-								fill={true}
-								sizes="(max-width: 768px) 50vw, (max-width: 1200px) 20vw"
-								style={{ objectFit: 'cover' }}
-								className="rounded-full"
-							/>
-						</div>
+        <article className="mb-4 rounded bg-gray-100 p-2 shadow-inner">
+          <div className="mb-4 grid grid-cols-4 items-center gap-4">
+            <div className="relative col-span-1 aspect-square">
+              <Image
+                src={selectedStudent.photo_url}
+                alt="An image of a student"
+                fill={true}
+                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 20vw"
+                style={{ objectFit: "cover" }}
+                className="rounded-full"
+              />
+            </div>
             <div className="col-span-3">
-              <p className="text-3xl mb-2">{selectedStudent.first_name} {selectedStudent.last_name}</p>
-              <div className="flex gap-4 items-center">
+              <p className="mb-2 text-3xl">
+                {selectedStudent.first_name} {selectedStudent.last_name}
+              </p>
+              <div className="flex items-center gap-4">
                 <p className="text-xl">Absent?</p>
                 <Switch
                   checked={absent}
                   onChange={setAbsent}
-                  className={`${absent ? 'bg-red-700' : 'bg-green-700'}
+                  className={`${absent ? "bg-red-700" : "bg-green-700"}
                     relative inline-flex h-[28px] w-[56px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
                 >
                   <span className="sr-only">Use setting</span>
                   <span
                     aria-hidden="true"
-                    className={`${absent ? 'translate-x-[28px]' : 'translate-x-0'}
+                    className={`${
+                      absent ? "translate-x-[28px]" : "translate-x-0"
+                    }
                       pointer-events-none inline-block h-[24px] w-[24px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                   />
                 </Switch>
@@ -414,33 +432,53 @@ const ReportDetails = ({ setIsConfirmed }: { setIsConfirmed: Function }) => {
           </div>
           {!absent ? (
             <>
-              <div className="grid xs:grid-cols-2 gap-2 mb-4">
-                <div 
+              <div className="mb-4 grid gap-2 xs:grid-cols-2">
+                <div
                   onClick={() => setHomeworkDone(!homeworkDone)}
-                  className={`${homeworkDone ? 'bg-green-300' : 'bg-red-300'} hover:cursor-pointer rounded p-2 flex flex-col items-center  col-span-1`}
+                  className={`${
+                    homeworkDone ? "bg-green-300" : "bg-red-300"
+                  } col-span-1 flex flex-col items-center rounded p-2  hover:cursor-pointer`}
                 >
                   <p>Homework done?</p>
                   <Switch
                     checked={homeworkDone}
                     onChange={setHomeworkDone}
-                    className={`${homeworkDone ? 'bg-green-700' : 'bg-red-700'}
+                    className={`${homeworkDone ? "bg-green-700" : "bg-red-700"}
                       relative inline-flex h-[28px] w-[56px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
                   >
                     <span className="sr-only">Use setting</span>
                     <span
                       aria-hidden="true"
-                      className={`${homeworkDone ? 'translate-x-[28px]' : 'translate-x-0'}
+                      className={`${
+                        homeworkDone ? "translate-x-[28px]" : "translate-x-0"
+                      }
                         pointer-events-none inline-block h-[24px] w-[24px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                     />
                   </Switch>
                 </div>
-                <div className={`${homeworkMistakes >= 7 && 'bg-red-300'} ${homeworkMistakes <= 6 && homeworkMistakes >=4  && 'bg-orange-300'} ${homeworkMistakes < 4 && 'bg-green-300'} rounded p-2 flex flex-col items-center justify-between col-span-1`}>
+                <div
+                  className={`${homeworkMistakes >= 7 && "bg-red-300"} ${
+                    homeworkMistakes <= 6 &&
+                    homeworkMistakes >= 4 &&
+                    "bg-orange-300"
+                  } ${
+                    homeworkMistakes < 4 && "bg-green-300"
+                  } col-span-1 flex flex-col items-center justify-between rounded p-2`}
+                >
                   <p>Homework Corrections?</p>
-                  <ul className='w-full text-center  grid grid-cols-5 gap-2'>
+                  <ul className="grid w-full  grid-cols-5 gap-2 text-center">
                     {scores.map((number, index) => (
-                      <li key={index}
-                      className={`${homeworkMistakes === number ? 'bg-blue-500': 'bg-white'} rounded p-2 block`}
-                      onClick={() => setHomeworkMistakes(number)}>{number}</li>
+                      <li
+                        key={index}
+                        className={`${
+                          homeworkMistakes === number
+                            ? "bg-blue-500"
+                            : "bg-white"
+                        } block rounded p-2`}
+                        onClick={() => setHomeworkMistakes(number)}
+                      >
+                        {number}
+                      </li>
                     ))}
                   </ul>
                   {/* <input 
@@ -455,14 +493,26 @@ const ReportDetails = ({ setIsConfirmed }: { setIsConfirmed: Function }) => {
                   /> */}
                 </div>
               </div>
-              <div className="grid xs:grid-cols-2 gap-2 mb-4">
-                <div className={`${testScore >= 7 && 'bg-green-300'} ${testScore <= 6 && testScore >=4  && 'bg-orange-300'} ${testScore < 6 && 'bg-red-300'} rounded p-2 flex flex-col items-center justify-between col-span-1`}>
+              <div className="mb-4 grid gap-2 xs:grid-cols-2">
+                <div
+                  className={`${testScore >= 7 && "bg-green-300"} ${
+                    testScore <= 6 && testScore >= 4 && "bg-orange-300"
+                  } ${
+                    testScore < 6 && "bg-red-300"
+                  } col-span-1 flex flex-col items-center justify-between rounded p-2`}
+                >
                   <p>Test Score?</p>
-                  <ul className='w-full text-center  grid grid-cols-5 gap-2'>
+                  <ul className="grid w-full  grid-cols-5 gap-2 text-center">
                     {scores.map((number, index) => (
-                      <li key={index}
-                      className={`${testScore === number ? 'bg-blue-500': 'bg-white'} rounded p-2 block`}
-                      onClick={() => setTestScore(number)}>{number}</li>
+                      <li
+                        key={index}
+                        className={`${
+                          testScore === number ? "bg-blue-500" : "bg-white"
+                        } block rounded p-2`}
+                        onClick={() => setTestScore(number)}
+                      >
+                        {number}
+                      </li>
                     ))}
                   </ul>
                   {/* <input 
@@ -476,13 +526,29 @@ const ReportDetails = ({ setIsConfirmed }: { setIsConfirmed: Function }) => {
                     className="hidden xs:block text-3xl text-center"
                   /> */}
                 </div>
-                <div className={`${testCorrections >= 7 && 'bg-red-300'} ${testCorrections <= 6 && testCorrections >=4  && 'bg-orange-300'} ${testCorrections < 4 && 'bg-green-300'} rounded p-2 flex flex-col items-center justify-between col-span-1`}>
+                <div
+                  className={`${testCorrections >= 7 && "bg-red-300"} ${
+                    testCorrections <= 6 &&
+                    testCorrections >= 4 &&
+                    "bg-orange-300"
+                  } ${
+                    testCorrections < 4 && "bg-green-300"
+                  } col-span-1 flex flex-col items-center justify-between rounded p-2`}
+                >
                   <p>Test Corrections?</p>
-                  <ul className='w-full text-center  grid grid-cols-5 gap-2'>
+                  <ul className="grid w-full  grid-cols-5 gap-2 text-center">
                     {scores.map((number, index) => (
-                      <li key={index}
-                      className={`${testCorrections === number ? 'bg-blue-500': 'bg-white'} rounded p-2 block `}
-                      onClick={() => setTestCorrections(number)}>{number}</li>
+                      <li
+                        key={index}
+                        className={`${
+                          testCorrections === number
+                            ? "bg-blue-500"
+                            : "bg-white"
+                        } block rounded p-2 `}
+                        onClick={() => setTestCorrections(number)}
+                      >
+                        {number}
+                      </li>
                     ))}
                   </ul>
                   {/* <input 
@@ -499,32 +565,34 @@ const ReportDetails = ({ setIsConfirmed }: { setIsConfirmed: Function }) => {
               </div>
               <div className="grid">
                 <label>Comment</label>
-                
+
                 <TextareaAutosize
                   minRows={2}
-                  className="border brounded shadow-inner p-2" 
+                  className="brounded border p-2 shadow-inner"
                 />
               </div>
             </>
           ) : (
-            <article className="p-2 bg-white shadow mb-4 rounded">
+            <article className="mb-4 rounded bg-white p-2 shadow">
               <p>No report for {selectedStudent.first_name} today.</p>
             </article>
           )}
         </article>
       )}
-		</>
-	);
+    </>
+  );
 };
 
 export default function WriteReport() {
-  const { user } = useContext(AuthContext);
+  const { user } = useUserContext();
   const [subject, setSubject] = useState<string>("Grammar");
   const [level, setLevel] = useState<number>(5);
   const [unit, setUnit] = useState<number>(1);
   const [day, setDay] = useState<string | number>(1);
 
-  const [isConfirmed, setIsConfirmed] = useState<boolean>(user?.role === "TEACHER" ? true : false);
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(
+    user?.role === "TEACHER" ? true : false,
+  );
 
   const date = new Date();
 
@@ -532,7 +600,7 @@ export default function WriteReport() {
     <Layout>
       <div>
         <section>
-          <div className="flex justify-between items-baseline mb-4">
+          <div className="mb-4 flex items-baseline justify-between">
             <h2>
               <span className="text-lg text-gray-500">
                 {date.toDateString()}
@@ -541,7 +609,7 @@ export default function WriteReport() {
             </h2>
             <Link
               href="/"
-              className="hover:underline hover:underline-offset-2 hover:text-blue-700"
+              className="hover:text-blue-700 hover:underline hover:underline-offset-2"
             >
               Back
             </Link>
@@ -550,7 +618,9 @@ export default function WriteReport() {
         <section>
           {!isConfirmed ? (
             <>
-              <h2 className="text-3xl mb-4">Level 9 Monday/Thursday (Andrew)</h2>
+              <h2 className="mb-4 text-3xl">
+                Level 9 Monday/Thursday (Andrew)
+              </h2>
               <ReportSetup
                 subject={subject}
                 setSubject={setSubject}

@@ -19,7 +19,7 @@ class AssessmentAdapter {
 	public async listWithDetails({
     schoolId,
   }: {
-    schoolId: number;
+    schoolId?: number;
   }): Promise<Module[]> {
 		 let url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/module-assessments/`;
 

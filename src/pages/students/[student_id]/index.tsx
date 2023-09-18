@@ -1,4 +1,4 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import ParamsPageTabNav from "@/src/modules/core/infrastructure/ui/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
@@ -8,7 +8,6 @@ import Evaluations from "@/src/modules/students/infrastructure/ui/evaluation/Eva
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useContext } from "react";
 
 const StudentPhoto = ({ student }: { student: Student }) => {
   return (
@@ -43,7 +42,7 @@ export const getServerSideProps: GetServerSideProps<{
 export default function Home({
   student,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { user } = useContext(AuthContext);
+  const { user } = useUserContext();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab") || "profile";
 

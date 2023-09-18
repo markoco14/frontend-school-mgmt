@@ -1,8 +1,8 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
 const NoData = ({ text }: { text: string }) => {
@@ -277,7 +277,7 @@ const StudentSummary = ({
   setAbsent: Function;
   selectedStudent: any;
 }) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useUserContext();
   return (
     <div className="mb-4 grid grid-cols-4 items-center gap-4 rounded border p-4 shadow">
       <div className="relative col-span-1 aspect-square">
@@ -498,7 +498,7 @@ export default function ReportTeacherDetails({
     },
   ];
 
-  const { user } = useContext(AuthContext);
+  const { user } = useUserContext();
 
   const [selectedStudent, setSelectedStudent] = useState<any>(students[0]);
   const [absent, setAbsent] = useState<boolean>(false);

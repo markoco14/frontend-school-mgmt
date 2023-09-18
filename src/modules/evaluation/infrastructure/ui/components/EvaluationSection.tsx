@@ -1,5 +1,5 @@
-import AuthContext from "@/src/AuthContext";
-import { useContext, useEffect, useState } from "react";
+import { useUserContext } from "@/src/UserContext";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { evaluationAttributeAdapter } from "../../adapters/evaluationAttributeAdapter";
 import EvaluationAttribute from "./EvaluationAttribute";
@@ -16,7 +16,7 @@ const EvaluationSection = ({
   selectedStudent: any;
   setSelectedStudent: Function;
 }) => {
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
   const scale = [1, 2, 3, 4, 5];
   const [evaluationAttributes, setEvaluationAttributes] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);

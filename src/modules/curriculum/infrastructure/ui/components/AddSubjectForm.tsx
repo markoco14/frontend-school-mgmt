@@ -1,6 +1,5 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import { subjectAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectAdapter";
-import { useContext} from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Subject } from "../../../domain/entities/Subject";
@@ -10,7 +9,7 @@ type Inputs = {
 };
 
 const AddSubjectForm = ({ setSubjects }: { setSubjects: Function }) => {
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
 
   const {
     reset,
@@ -22,7 +21,7 @@ const AddSubjectForm = ({ setSubjects }: { setSubjects: Function }) => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       await subjectAdapter
-        .addSubject({ name: data.subjectName, school: selectedSchool.id })
+        .addSubject({ name: data.subjectName, school: selectedSchool?.id })
         .then((res) => {
           setSubjects((prevSubjects: Subject[]) => [...prevSubjects, res]);
           toast.success("Subject added.");
@@ -57,6 +56,6 @@ const AddSubjectForm = ({ setSubjects }: { setSubjects: Function }) => {
       </button>
     </form>
   );
-}
+};
 
 export default AddSubjectForm;

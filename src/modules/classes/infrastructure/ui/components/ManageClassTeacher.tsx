@@ -1,7 +1,7 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/UserContext";
 import { Teacher } from "@/src/modules/user-mgmt/domain/entities/Teacher";
 import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ClassEntity } from "../../../domain/entities/ClassEntity";
 import { classAdapter } from "../../adapters/classAdapter";
 
@@ -12,7 +12,7 @@ export default function ManageClassTeacher({
   selectedClass: ClassEntity;
   setSelectedClass: Function;
 }) {
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
   const [teachers, setTeachers] = useState<Teacher[]>();
   const [isAddTeacher, setIsAddTeacher] = useState<boolean>(false);
 
@@ -41,7 +41,7 @@ export default function ManageClassTeacher({
   useEffect(() => {
     async function getTeachers() {
       await userAdapter
-        .listSchoolTeachers({ id: selectedSchool.id })
+        .listSchoolTeachers({ id: selectedSchool?.id })
         .then((res) => setTeachers(res));
     }
 
