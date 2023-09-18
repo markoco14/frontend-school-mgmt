@@ -4,9 +4,11 @@ class ClassAdapter {
   public async list({
     school_id,
     day,
+    signal,
   }: {
     school_id: number;
     day: string;
+    signal: AbortSignal;
   }): Promise<ClassEntity[]> {
     let url;
 
@@ -23,7 +25,7 @@ class ClassAdapter {
       url += `?${queryParams.join("&")}`;
     }
 
-    const res = await fetch(url);
+    const res = await fetch(url, {signal});
     const classEntity: ClassEntity[] = await res.json();
 
     return classEntity;
@@ -81,7 +83,11 @@ class ClassAdapter {
     return response;
   }
 
-  public async listSchoolClasses({ id }: { id: number }): Promise<ClassEntity[]> {
+  public async listSchoolClasses({
+    id,
+  }: {
+    id: number;
+  }): Promise<ClassEntity[]> {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/classes/`,
     );

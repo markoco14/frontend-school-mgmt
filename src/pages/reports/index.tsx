@@ -60,18 +60,27 @@ export default function ReportsHome() {
   const [selectedClass, setSelectedClass] = useState<ClassEntity>();
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
     async function getClasses() {
       setLoading(true);
-      await classAdapter
-        .list({ school_id: selectedSchool.id, day: dayName })
-        .then((res) => {
-          setSelectedClass(res[0]);
-          setTodayClasses(res);
-          setLoading(false);
-        });
+      try {
+        await classAdapter
+          .list({ school_id: selectedSchool.id, day: dayName, signal: signal })
+          .then((res) => {
+            setSelectedClass(res[0]);
+            setTodayClasses(res);
+            setLoading(false);
+          });
+      } catch (error) {
+        console.error(error)
+      }
     }
 
     selectedSchool && getClasses();
+    return () => {
+      controller.abort()
+    }
   }, [selectedSchool, formattedDate, dayName]);
 
   if (user?.role !== "OWNER") {
