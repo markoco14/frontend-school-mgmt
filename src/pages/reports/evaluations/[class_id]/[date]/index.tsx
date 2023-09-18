@@ -22,6 +22,7 @@ export const getServerSideProps: GetServerSideProps<{
       .listPresentStudentsWithEvaluations({
         classId: Number(context.query.class_id),
         date: context.query.date.toString(),
+        present: true,
       })
       .then((res) => {
         students = res;

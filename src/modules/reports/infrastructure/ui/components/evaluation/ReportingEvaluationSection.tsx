@@ -39,8 +39,8 @@ const ReportingEvaluationSection = ({
           .listPresentStudentsWithEvaluations({
             date: preparedDate,
             classId: Number(selectedClass?.id),
+            present: true,
             signal: signal,
-            // filters: filters,
           })
           .then((res) => {
             // const groupedData = groupBy(

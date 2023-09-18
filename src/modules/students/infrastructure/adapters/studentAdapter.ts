@@ -161,10 +161,12 @@ class StudentAdapter {
   public async listPresentStudentsWithEvaluations({
     classId,
     date,
+    present,
     signal,
   }: {
     classId: number;
     date: string;
+    present?: boolean;
     signal?: AbortSignal;
   }): Promise<Student[]> {
     let url;
@@ -174,6 +176,7 @@ class StudentAdapter {
     if (classId)
       queryParams.push(`class_entity=${encodeURIComponent(classId)}`);
     if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
+    if (present) queryParams.push(`present=${encodeURIComponent(present)}`);
     // if (attendance)
     //   queryParams.push(`attendance=${encodeURIComponent(attendance)}`);
 

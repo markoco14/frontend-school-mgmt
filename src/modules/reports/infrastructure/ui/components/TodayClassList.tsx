@@ -31,7 +31,6 @@ export const TodayClassList = () => {
     "Friday",
     "Saturday",
   ];
-
   const dayName = days[dayNumber];
 
   useEffect(() => {
@@ -58,7 +57,7 @@ export const TodayClassList = () => {
     return () => {
       controller.abort();
     };
-  }, [selectedSchool, dayName]);
+  }, [selectedSchool, formattedDateString, dayName, dayNumber]);
 
   const incrementDate = () => {
     setClasses([]);
