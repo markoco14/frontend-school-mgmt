@@ -7,9 +7,11 @@ class StudentAttendanceAdapter {
   public async listStudentsWithAttendance({
     classId,
     date,
+    signal,
   }: {
     classId: number;
     date: string;
+    signal: AbortSignal;
   }): Promise<Student[]> {
     let url;
 
@@ -28,7 +30,7 @@ class StudentAttendanceAdapter {
       url += `?${queryParams.join("&")}`;
     }
 
-    const res = await fetch(url);
+    const res = await fetch(url, { signal });
     const studentsWithAttendance: Student[] = await res.json();
 
     return studentsWithAttendance;

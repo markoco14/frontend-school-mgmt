@@ -51,28 +51,39 @@ const AttendanceSection = ({
   };
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
     async function getAttendance() {
       setLoading(true);
-      await studentAttendanceAdapter
-        .listStudentsWithAttendance({
-          classId: selectedClass?.id,
-          date: date.toISOString().split("T")[0],
-        })
-        .then((res) => {
-          let nullAttendanceCount = 0;
-          res.forEach((student) => {
-            if (student.attendance_for_day === null) {
-              nullAttendanceCount += 1;
-            }
+      try {
+        await studentAttendanceAdapter
+          .listStudentsWithAttendance({
+            classId: selectedClass?.id,
+            date: date.toISOString().split("T")[0],
+            signal: signal,
+          })
+          .then((res) => {
+            let nullAttendanceCount = 0;
+            res.forEach((student) => {
+              if (student.attendance_for_day === null) {
+                nullAttendanceCount += 1;
+              }
+            });
+            setNullAttendanceCount(nullAttendanceCount);
+            setClassAttendance(res);
+            setLoading(false);
           });
-          console.log(res)
-          setNullAttendanceCount(nullAttendanceCount);
-          setClassAttendance(res);
-          setLoading(false);
-        });
+      } catch (error) {
+        console.error(error)
+      }
+      
     }
-    
+
     getAttendance();
+
+    return () => {
+      controller.abort();
+    };
   }, [date, selectedClass?.id]);
 
   // NEED A WAY TO STOP THE REQUEST WHEN NOT EXIST
