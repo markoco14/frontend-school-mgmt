@@ -1,17 +1,15 @@
-import { ReactNode, useContext } from "react";
-import Navbar from './Navbar'
-import AuthContext from "@/src/AuthContext";
-import Head from "next/head";
+import { useUserContext } from "@/src/AuthContext";
 import Script from "next/script";
+import { ReactNode } from "react";
+import Navbar from "./Navbar";
 
 type LayoutProps = {
   children?: ReactNode;
 };
 
- 
 export default function Layout({ children }: LayoutProps) {
-  const { user } = useContext(AuthContext);
-  
+  const { user } = useUserContext();
+
   return (
     <>
       <Script

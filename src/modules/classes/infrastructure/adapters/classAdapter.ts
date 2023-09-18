@@ -6,8 +6,8 @@ class ClassAdapter {
     day,
     signal,
   }: {
-    school_id: number;
-    day: string;
+    school_id?: number;
+    day?: string;
     signal?: AbortSignal;
   }): Promise<ClassEntity[]> {
     let url;

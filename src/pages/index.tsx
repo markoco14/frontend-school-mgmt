@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
-import AuthContext from "../AuthContext";
+import { useEffect, useState } from "react";
+import { useUserContext } from "../AuthContext";
 import Layout from "../modules/core/infrastructure/ui/components/Layout";
 import SchoolHeader from "../modules/core/infrastructure/ui/components/SchoolHeader";
 import { TodayClassList } from "../modules/reports/infrastructure/ui/components/TodayClassList";
@@ -11,7 +11,7 @@ import Login from "../modules/user-mgmt/infrastructure/ui/Login";
 import Signup from "../modules/user-mgmt/infrastructure/ui/Signup";
 
 export default function Home() {
-  const { user, selectedSchool, handleSelectSchool } = useContext(AuthContext);
+  const { user, selectedSchool, handleSelectSchool } = useUserContext();
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
   const [schools, setSchools] = useState<School[]>([]);
   const router = useRouter();
@@ -62,8 +62,8 @@ export default function Home() {
       {user && !selectedSchool && (
         <section>
           <h2 className="mb-4 text-3xl">Welcome back, {user?.name}!</h2>
-          <article className="xs:w-1/2 border shadow p-4 rounded-lg grid gap-4">
-            <div className="flex justify-between items-baseline">
+          <article className="grid gap-4 rounded-lg border p-4 shadow xs:w-1/2">
+            <div className="flex items-baseline justify-between">
               <p className="text-xl">Your schools</p>
               {user.permissions.includes(1) && (
                 <Link

@@ -1,12 +1,10 @@
-import AuthContext from "@/src/AuthContext";
-import { UserContext } from "@/src/context";
+import { useUserContext } from "@/src/AuthContext";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 export default function Navbar() {
-  const context = useContext(UserContext);
-  const { user, selectedSchool, logout } = useContext(AuthContext);
+  const { user, selectedSchool, logout } = useUserContext();
   const router = useRouter();
   const [isShowing, setIsShowing] = useState<boolean>(false);
   return (
@@ -117,7 +115,6 @@ export default function Navbar() {
         {user && (
           <button
             onClick={() => {
-              context.setUser();
               logout();
               router.push("/");
             }}
@@ -241,7 +238,6 @@ export default function Navbar() {
           {user && (
             <button
               onClick={() => {
-                context.setUser();
                 logout();
                 router.push("/");
               }}

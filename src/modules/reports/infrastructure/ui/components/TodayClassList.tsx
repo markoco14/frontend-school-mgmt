@@ -1,4 +1,4 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/AuthContext";
 import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
@@ -7,11 +7,11 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export const TodayClassList = () => {
   const router = useRouter();
-  const { selectedSchool } = useContext(AuthContext);
+  const { selectedSchool } = useUserContext();
   const [classEntities, setClasses] = useState<ClassEntity[]>();
 
   const searchParams = useSearchParams();
@@ -51,17 +51,17 @@ export const TodayClassList = () => {
             setClasses(() => res);
           });
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     }
     selectedSchool && getData();
     return () => {
       controller.abort();
-    }
+    };
   }, [selectedSchool, dayName]);
 
   const incrementDate = () => {
-    setClasses([])
+    setClasses([]);
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() + 1);
     router.push(

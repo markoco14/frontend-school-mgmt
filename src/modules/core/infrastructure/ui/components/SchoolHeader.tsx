@@ -1,22 +1,23 @@
-import AuthContext from "@/src/AuthContext";
+import { useUserContext } from "@/src/AuthContext";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext } from "react";
 
 export default function SchoolHeader() {
-  const { selectedSchool, setSelectedSchool, handleDeselectSchool } = useContext(AuthContext);
+  const { selectedSchool, handleDeselectSchool } = useUserContext();
   const router = useRouter();
   return (
     <section>
-      <p className=" text-gray-500 mb-4 flex justify-between items-baseline">
+      <p className=" mb-4 flex items-baseline justify-between text-gray-500">
         {selectedSchool ? (
           <>
-            <Link href="/" className="text-2xl">{selectedSchool.name}</Link>
+            <Link href="/" className="text-2xl">
+              {selectedSchool.name}
+            </Link>
             <button
               onClick={() => {
                 handleDeselectSchool();
-                if (router.pathname !== '/') {
-                  router.push('/')
+                if (router.pathname !== "/") {
+                  router.push("/");
                 }
               }}
             >
