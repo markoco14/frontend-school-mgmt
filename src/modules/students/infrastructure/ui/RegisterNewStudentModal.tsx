@@ -26,14 +26,23 @@ export default function RegisterNewStudentModal({
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    let gender = Number(data.gender);
+    let photo_url;
+    let male =
+      "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_3.jpeg";
+    let female =
+      "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_4.jpeg";
+    Number(data.gender) === 1
+      ? console.log("female", female)
+      : console.log("male", male);
+    // return;
     try {
       const student: Student = await studentAdapter.addStudent({
         firstName: data.firstName,
         lastName: data.lastName,
         age: Number(data.age),
         gender: Number(data.gender),
-        photo_url:
-          "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_4.jpeg",
+        photo_url: gender === 1 ? female : male,
         schoolId: Number(selectedSchool?.id),
       });
       toast.success("Student added.");

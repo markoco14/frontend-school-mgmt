@@ -102,7 +102,7 @@ const NewRangeMetricForm = ({ setAttributes }: { setAttributes: Function }) => {
     const payload: RangeAttributePayload = {
       name: data.name,
       school_id: selectedSchool?.id,
-      data_type_id: 9,
+      data_type_id: 2,
       min_value: 1,
       max_value: data.max,
       descriptions: null,

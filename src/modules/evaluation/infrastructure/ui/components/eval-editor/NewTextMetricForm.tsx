@@ -22,7 +22,7 @@ const NewTextMetricForm = ({ setAttributes }: { setAttributes: Function }) => {
     const payload: TextAttributePayload = {
       name: data.name,
       school_id: selectedSchool?.id,
-      data_type_id: 8,
+      data_type_id: 1,
     };
     try {
       await textAttributeAdapter.add({ payload: payload }).then((res) => {
