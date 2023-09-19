@@ -2,6 +2,7 @@ import { useUserContext } from "@/src/UserContext";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
 import ParamsPageTabNav from "@/src/modules/core/infrastructure/ui/components/ParamsPageTabNav";
+import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
 import { evaluationAttributeAdapter } from "@/src/modules/evaluation/infrastructure/adapters/evaluationAttributeAdapter";
 import Info from "@/src/modules/evaluation/infrastructure/ui/components/eval-editor/Info";
@@ -11,7 +12,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function Manage() {
-  const { selectedSchool } = useUserContext();
+  const { user, selectedSchool } = useUserContext();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab") || "info";
   const [attributes, setAttributes] = useState<EvaluationAttribute[]>([]);
@@ -29,6 +30,8 @@ export default function Manage() {
       urlString: "report editor",
     },
   ];
+
+  
 
   useEffect(() => {
     async function getDate() {
@@ -61,6 +64,14 @@ export default function Manage() {
       // @ts-ignore
       toast.error(error.message);
     }
+  }
+
+  if (user?.role !== "OWNER") {
+    return (
+      <Layout>
+        <PermissionDenied />
+      </Layout>
+    );
   }
 
   return (

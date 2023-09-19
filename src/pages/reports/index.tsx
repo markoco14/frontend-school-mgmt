@@ -84,7 +84,7 @@ export default function ReportsHome() {
     };
   }, [selectedSchool, formattedDate, dayName]);
 
-  if (user?.role !== "OWNER") {
+  if (!user?.permissions.some((permission) => [1, 2].includes(permission))) {
     return (
       <Layout>
         <PermissionDenied />
