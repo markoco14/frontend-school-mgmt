@@ -65,7 +65,7 @@ export default function Home() {
           <article className="grid gap-4 rounded-lg border p-4 shadow xs:w-1/2">
             <div className="flex items-baseline justify-between">
               <p className="text-xl">Your schools</p>
-              {user.permissions.includes(1) && (
+              {user.permissions.includes(1) || user.role === "OWNER" && (
                 <Link
                   href="/school-mgmt/add"
                   className="underline underline-offset-2 hover:text-blue-700"
