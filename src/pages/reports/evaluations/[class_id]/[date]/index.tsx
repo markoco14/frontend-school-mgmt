@@ -2,6 +2,7 @@ import { useUserContext } from "@/src/UserContext";
 import BackButton from "@/src/components/ui/utils/BackButton";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import PageTabNavigation from "@/src/modules/core/infrastructure/ui/components/PageTabNavigation";
 import { Subject } from "@/src/modules/curriculum/domain/entities/Subject";
 import { subjectAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectAdapter";
 import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
@@ -22,6 +23,7 @@ export const getServerSideProps: GetServerSideProps<{
       .listPresentStudentsWithEvaluations({
         classId: Number(context.query.class_id),
         date: context.query.date.toString(),
+        present: true,
       })
       .then((res) => {
         students = res;
@@ -33,6 +35,7 @@ export const getServerSideProps: GetServerSideProps<{
 export default function ReportDate({
   students,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(students);
   const { user, selectedSchool } = useUserContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(1);
@@ -53,14 +56,34 @@ export default function ReportDate({
   const router = useRouter();
   const classId = Number(router.query.class_id?.toString());
 
-  const tabLinks = [
+  const links = [
     {
       value: 1,
-      name: "Behavior",
+      name: "All 1",
+    },
+    {
+      value: 6,
+      name: "All 2",
     },
     {
       value: 2,
-      name: "Comments",
+      name: "Numeric",
+    },
+    {
+      value: 7,
+      name: "Numeric 2",
+    },
+    {
+      value: 3,
+      name: "Text",
+    },
+    {
+      value: 4,
+      name: "Participation",
+    },
+    {
+      value: 5,
+      name: "Attitude",
     },
   ];
 
@@ -116,7 +139,7 @@ export default function ReportDate({
         <div>
           <BackButton />
         </div>
-        {/* <PageTabNavigation links={tabLinks} tab={tab} setTab={setTab} /> */}
+
         {!presentStudents?.length ? (
           <p>
             No attendance records found for today. Please check with your
@@ -132,55 +155,319 @@ export default function ReportDate({
             Create student evaluations
           </button>
         ) : (
-          <ul className="grid gap-4 border bg-gray-300 shadow xs:bg-gray-100 xs:p-4">
-            {presentStudents?.map((student) => (
-              <li
-                key={student.id}
-                className="flex flex-col gap-4 bg-white p-2 xs:grid xs:grid-cols-4 xs:border-2 xs:p-4"
-              >
-                <p className="col-span-2 w-full text-xl xs:col-span-4">
-                  {student.first_name} {student.last_name} {student.id}
-                </p>
-                {!student.evaluations_for_day ? (
-                  <p className="xs:col-span-4">
-                    Student evaluations not prepared.{" "}
-                    <button
-                      onClick={() => {
-                        setIsBatchCreate(true);
-                      }}
-                      className="underline underline-offset-2"
-                    >
-                      Click to prepare them now.
-                    </button>
-                  </p>
-                ) : (
-                  <>
-                    {student.evaluations_for_day?.map((evaluation) =>
-                      evaluation.evaluation_attribute.max_value &&
-                      evaluation.evaluation_attribute.min_value ? (
-                        <div
-                          key={evaluation.id}
-                          className="col-span-2 rounded border bg-white p-2 text-center shadow xs:col-span-2"
+          <>
+            <PageTabNavigation links={links} tab={tab} setTab={setTab} />
+            {tab === 1 ? (
+              <ul className="grid gap-4 border bg-gray-300 shadow xs:bg-gray-100 xs:p-4">
+                {presentStudents?.map((student) => (
+                  <li
+                    key={student.id}
+                    className="flex flex-col gap-4 bg-white p-2 xs:grid xs:grid-cols-4 xs:border-2 xs:p-4"
+                  >
+                    <p className="col-span-2 w-full text-xl xs:col-span-4">
+                      {student.first_name} {student.last_name} {student.id}
+                    </p>
+                    {!student.evaluations_for_day ? (
+                      <p className="xs:col-span-4">
+                        Student evaluations not prepared.{" "}
+                        <button
+                          onClick={() => {
+                            setIsBatchCreate(true);
+                          }}
+                          className="underline underline-offset-2"
                         >
-                          <RangeAttributeForm
-                            student={student}
-                            evaluation={evaluation}
-                          />
-                        </div>
-                      ) : (
-                        <div
-                          key={evaluation.id}
-                          className="grid w-full items-center rounded border p-2 shadow xs:col-span-4"
-                        >
-                          <TextAttributeForm evaluation={evaluation} />
-                        </div>
-                      ),
+                          Click to prepare them now.
+                        </button>
+                      </p>
+                    ) : (
+                      <>
+                        {student.evaluations_for_day?.map((evaluation) =>
+                          evaluation.evaluation_attribute.max_value &&
+                          evaluation.evaluation_attribute.min_value ? (
+                            <div
+                              key={evaluation.id}
+                              className="col-span-2 rounded border bg-white p-2 text-center shadow xs:col-span-2"
+                            >
+                              <RangeAttributeForm
+                                student={student}
+                                evaluation={evaluation}
+                              />
+                            </div>
+                          ) : (
+                            <div
+                              key={evaluation.id}
+                              className="grid w-full items-center rounded border p-2 shadow xs:col-span-4"
+                            >
+                              <TextAttributeForm evaluation={evaluation} />
+                            </div>
+                          ),
+                        )}
+                      </>
                     )}
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
+                  </li>
+                ))}
+              </ul>
+            ) : tab === 2 ? (
+              <div className="grid grid-cols-2 gap-4">
+                <ul>
+                  {presentStudents?.map((student) => (
+                    <li
+                      key={`participation-${student.id}`}
+                      className="flex items-center"
+                    >
+                      <p className="col-span-2 w-full text-xl xs:col-span-4">
+                        {student.first_name} {student.last_name} {student.id}
+                      </p>
+
+                      <span>
+                        {student.evaluations_for_day?.map(
+                          (evaluation) =>
+                            evaluation.evaluation_attribute.name ===
+                              "Participation" && (
+                              <div
+                                key={evaluation.id}
+                                className="col-span-2 rounded border bg-white p-2 text-center shadow xs:col-span-2"
+                              >
+                                <RangeAttributeForm
+                                  student={student}
+                                  evaluation={evaluation}
+                                />
+                              </div>
+                            ),
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <ul>
+                  {presentStudents?.map((student) => (
+                    <li
+                      key={`attitude-${student.id}`}
+                      className="flex items-center"
+                    >
+                      <p className="col-span-2 w-full text-xl xs:col-span-4">
+                        {student.first_name} {student.last_name} {student.id}
+                      </p>
+
+                      <span>
+                        {student.evaluations_for_day?.map(
+                          (evaluation) =>
+                            evaluation.evaluation_attribute.name ===
+                              "Attitude" && (
+                              <div
+                                key={evaluation.id}
+                                className="col-span-2 rounded border bg-white p-2 text-center shadow xs:col-span-2"
+                              >
+                                <RangeAttributeForm
+                                  student={student}
+                                  evaluation={evaluation}
+                                />
+                              </div>
+                            ),
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : tab === 3 ? (
+              <div className="">
+                <ul className="divide-y">
+                  {presentStudents?.map((student) => (
+                    <li
+                      key={`participation-${student.id}`}
+                      className="grid items-center gap-4 py-4 xs:grid-cols-4"
+                    >
+                      <p className="text-xl xs:col-span-1">
+                        {student.first_name} {student.last_name} {student.id}
+                      </p>
+
+                      <span>
+                        {student.evaluations_for_day?.map(
+                          (evaluation) =>
+                            evaluation.evaluation_attribute.name ===
+                              "Teacher Comment" && (
+                              <div
+                                key={evaluation.id}
+                                className="w-[70ch] xs:col-span-3 "
+                              >
+                                <TextAttributeForm evaluation={evaluation} />
+                              </div>
+                            ),
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : tab === 4 ? (
+              <div className="grid grid-cols-2 gap-4">
+                <ul>
+                  {presentStudents?.map((student) => (
+                    <li
+                      key={`participation-${student.id}`}
+                      className="flex items-center"
+                    >
+                      <p className="col-span-2 w-full text-xl xs:col-span-4">
+                        {student.first_name} {student.last_name} {student.id}
+                      </p>
+
+                      <span>
+                        {student.evaluations_for_day?.map(
+                          (evaluation) =>
+                            evaluation.evaluation_attribute.name ===
+                              "Participation" && (
+                              <div
+                                key={evaluation.id}
+                                className="col-span-2 rounded border bg-white p-2 text-center shadow xs:col-span-2"
+                              >
+                                <RangeAttributeForm
+                                  student={student}
+                                  evaluation={evaluation}
+                                />
+                              </div>
+                            ),
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : tab === 5 ? (
+              <div className="grid grid-cols-2 gap-4">
+                <ul>
+                  {presentStudents?.map((student) => (
+                    <li
+                      key={`attitude-${student.id}`}
+                      className="flex items-center"
+                    >
+                      <p className="col-span-2 w-full text-xl xs:col-span-4">
+                        {student.first_name} {student.last_name} {student.id}
+                      </p>
+
+                      <span>
+                        {student.evaluations_for_day?.map(
+                          (evaluation) =>
+                            evaluation.evaluation_attribute.name ===
+                              "Attitude" && (
+                              <div
+                                key={evaluation.id}
+                                className="col-span-2 rounded border bg-white p-2 text-center shadow xs:col-span-2"
+                              >
+                                <RangeAttributeForm
+                                  student={student}
+                                  evaluation={evaluation}
+                                />
+                              </div>
+                            ),
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : tab === 6 ? (
+              <>
+                <ul className="grid gap-4 border bg-gray-300 shadow xs:bg-gray-100 xs:p-4">
+                  {presentStudents?.map((student) => (
+                    <li
+                      key={student.id}
+                      className="gap-4 bg-white p-2 items-center xs:grid xs:grid-cols-6 xs:border-2 xs:p-4"
+                    >
+                      <p className="xs:col-span-1">
+                        {student.first_name} {student.last_name} {student.id}
+                      </p>
+                      {!student.evaluations_for_day ? (
+                        <p className="xs:col-span-1">
+                          Student evaluations not prepared.{" "}
+                          <button
+                            onClick={() => {
+                              setIsBatchCreate(true);
+                            }}
+                            className="underline underline-offset-2"
+                          >
+                            Click to prepare them now.
+                          </button>
+                        </p>
+                      ) : (
+                        <>
+                          {student.evaluations_for_day?.map((evaluation) =>
+                            evaluation.evaluation_attribute.max_value &&
+                            evaluation.evaluation_attribute.min_value ? (
+                              <div
+                                key={evaluation.id}
+                                className="rounded border bg-white p-2 text-center shadow xs:col-span-1"
+                              >
+                                <RangeAttributeForm
+                                  student={student}
+                                  evaluation={evaluation}
+                                />
+                              </div>
+                            ) : (
+                              <div
+                                key={evaluation.id}
+                                className="grid w-full items-center rounded border p-2 shadow xs:col-span-3"
+                              >
+                                <TextAttributeForm evaluation={evaluation} />
+                              </div>
+                            ),
+                          )}
+                        </>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <ul className="grid ">
+                {presentStudents?.map((student) => (
+                  <li
+                    key={`participation-${student.id}`}
+                    className="grid items-center xs:grid-cols-3"
+                  >
+                    <p className="w-full text-xl xs:col-span-1">
+                      {student.first_name} {student.last_name} {student.id}
+                    </p>
+
+                    <span>
+                      {student.evaluations_for_day?.map(
+                        (evaluation) =>
+                          evaluation.evaluation_attribute.name ===
+                            "Participation" && (
+                            <div
+                              key={evaluation.id}
+                              className="rounded border bg-white p-2 text-center shadow xs:col-span-1"
+                            >
+                              <RangeAttributeForm
+                                student={student}
+                                evaluation={evaluation}
+                              />
+                            </div>
+                          ),
+                      )}
+                    </span>
+                    <span>
+                      {student.evaluations_for_day?.map(
+                        (evaluation) =>
+                          evaluation.evaluation_attribute.name ===
+                            "Attitude" && (
+                            <div
+                              key={evaluation.id}
+                              className="rounded border bg-white p-2 text-center shadow xs:col-span-1"
+                            >
+                              <RangeAttributeForm
+                                student={student}
+                                evaluation={evaluation}
+                              />
+                            </div>
+                          ),
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
         )}
       </section>
       <Modal

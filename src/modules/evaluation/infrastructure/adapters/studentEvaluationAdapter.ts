@@ -91,18 +91,21 @@ class StudentEvaluationAdapter {
     return updatedAttendance;
   }
 
-  public async batchDelete({ student_id, date }: { student_id: number; date: string }) {
-    console.log('in adapter student id',student_id)
-    console.log('in adapter date', date)
-    // return
+  public async batchDelete({
+    evaluations_for_day,
+  }: {
+    evaluations_for_day?: StudentEvaluation[] | null;
+  }) {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/batch-delete-daily-evaluations/${student_id}/`,
+      `${process.env.NEXT_PUBLIC_API_URL}/batch-delete-daily-evaluations/`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({date: date}),
+        body: JSON.stringify({
+          evaluations_for_day: evaluations_for_day,
+        }),
       },
     );
   }

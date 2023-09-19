@@ -25,7 +25,7 @@ const ReportingEvaluationSection = ({
   const [filters, setFilters] = useState<StudentEvaluationFilters>({});
   const [isDeleteEvaluation, setIsDeleteEvaluation] = useState<boolean>(false);
   const [selectedStudent, setSelectedStudent] = useState<Student>();
-  // const [date, setDate] = useState<Date>(new Date());
+  const [nullEvaluationCount, setNullEvaluationCount] = useState<number>(0);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -34,24 +34,26 @@ const ReportingEvaluationSection = ({
       const preparedDate = date?.toISOString().split("T")[0];
       setLoading(true);
       try {
-
         await studentAdapter
           .listPresentStudentsWithEvaluations({
             date: preparedDate,
             classId: Number(selectedClass?.id),
+            present: true,
             signal: signal,
-            // filters: filters,
           })
           .then((res) => {
-            // const groupedData = groupBy(
-            //   res,
-            //   (evaluation) => evaluation.student?.last_name,
-            // );
+            let nullEvaluationCount = 0;
+            res.forEach((student) => {
+              if (student.evaluations_for_day === null) {
+                nullEvaluationCount += 1;
+              }
+            });
+            setNullEvaluationCount(nullEvaluationCount);
             setStudentsWithEvaluations(res);
             setLoading(false);
           });
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     }
 
@@ -59,7 +61,7 @@ const ReportingEvaluationSection = ({
 
     return () => {
       controller.abort();
-    }
+    };
   }, [date, filters, selectedClass]);
 
   function isSatOrSun({ date }: { date: Date }) {
@@ -81,20 +83,19 @@ const ReportingEvaluationSection = ({
   }
 
   async function handleDeleteEvaluations({
-    student_id,
+    studentForDelete,
   }: {
-    student_id: number;
+    studentForDelete: Student;
   }) {
     await studentEvaluationAdapter
       .batchDelete({
-        student_id: student_id,
-        date: date.toISOString().split("T")[0], // gets "2023-09-07 YYYY-mm-dd format"
+        evaluations_for_day: studentForDelete.evaluations_for_day,
       })
       .then((res) => {
         const updatedEvaluations = studentsWithEvaluations?.map(
           (student: Student) => {
             // Find the attendance object that matches the ID of the newAttendance
-            if (student.id === student_id) {
+            if (student.id === studentForDelete.id) {
               // Replace it with newAttendance
               student.evaluations_for_day = null;
             }
@@ -114,7 +115,7 @@ const ReportingEvaluationSection = ({
         </Skeleton>
       ) : (
         <ul className="grid gap-4">
-          {!studentsWithEvaluations?.length ? (
+          {nullEvaluationCount === studentsWithEvaluations?.length ? (
             <p className="grid gap-4 rounded-lg bg-white p-4 shadow">
               Evaluations not created
             </p>
@@ -151,7 +152,7 @@ const ReportingEvaluationSection = ({
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   {!student.evaluations_for_day ? (
-                    <p>No student evaluations today.</p>
+                    <p>Evaluations not yet created.</p>
                   ) : (
                     student.evaluations_for_day.map((evaluation) => (
                       <p
@@ -164,7 +165,9 @@ const ReportingEvaluationSection = ({
                       >
                         {evaluation.evaluation_attribute?.name !== "Comment" &&
                           `${evaluation.evaluation_attribute?.name}:`}{" "}
-                        {evaluation.evaluation_value ? (evaluation.evaluation_value) : "Comment not written yet."}
+                        {evaluation.evaluation_value
+                          ? evaluation.evaluation_value
+                          : "Comment not written yet."}
                       </p>
                     ))
                   )}
@@ -180,14 +183,14 @@ const ReportingEvaluationSection = ({
         title={`Delete student's evaluations`}
       >
         <p>
-          Are you sure you want to delete this {selectedStudent?.first_name}
+          Are you sure you want to delete {selectedStudent?.first_name}
           &apos;s records?
         </p>
         <button
           onClick={() => {
             selectedStudent &&
               handleDeleteEvaluations({
-                student_id: selectedStudent.id,
+                studentForDelete: selectedStudent,
               });
             setSelectedStudent(undefined);
           }}
