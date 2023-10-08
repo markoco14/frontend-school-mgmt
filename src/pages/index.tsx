@@ -9,22 +9,27 @@ import { School } from "../modules/school-mgmt/domain/entities/School";
 import { schoolAdapter } from "../modules/school-mgmt/infrastructure/adapters/schoolAdapter";
 import Login from "../modules/user-mgmt/infrastructure/ui/Login";
 import Signup from "../modules/user-mgmt/infrastructure/ui/Signup";
+import toast from "react-hot-toast";
 
 export default function Home() {
   const { user, selectedSchool, handleSelectSchool } = useUserContext();
+  console.log(user);
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
   const [schools, setSchools] = useState<School[]>([]);
   const router = useRouter();
   useEffect(() => {
     async function getData() {
       if (user) {
-        await schoolAdapter
-          .listUserSchools({ id: user?.user_id })
-          .then((res) => {
+        try {
+          await schoolAdapter.listUserSchools().then((res) => {
             setSchools(res);
           });
+        } catch (error) {
+          toast.error(error.message);
+        }
       }
     }
+
     getData();
   }, [user]);
 
@@ -65,30 +70,35 @@ export default function Home() {
           <article className="grid gap-4 rounded-lg border p-4 shadow xs:w-1/2">
             <div className="flex items-baseline justify-between">
               <p className="text-xl">Your schools</p>
-              {user.permissions.includes(1) || user.role === "OWNER" && (
-                <Link
-                  href="/school-mgmt/add"
-                  className="underline underline-offset-2 hover:text-blue-700"
-                >
-                  New School
-                </Link>
-              )}
+              {user.permissions.includes(1) ||
+                (user.role === "OWNER" && (
+                  <Link
+                    href="/school-mgmt/add"
+                    className="underline underline-offset-2 hover:text-blue-700"
+                  >
+                    New School
+                  </Link>
+                ))}
             </div>
             <ul className="divide-y">
-              {schools?.map((school: School, index: number) => (
-                <li key={index} className="rounded p-2 hover:bg-blue-300">
-                  <button
-                    onClick={() => {
-                      if (!selectedSchool) {
-                        handleSelectSchool(school);
-                      }
-                    }}
-                    className="w-full text-left"
-                  >
-                    {school.name}
-                  </button>
-                </li>
-              ))}
+              {schools.length === 0 ? (
+                <p>No schools shared with you.</p>
+              ) : (
+                schools?.map((school: School, index: number) => (
+                  <li key={index} className="rounded p-2 hover:bg-blue-300">
+                    <button
+                      onClick={() => {
+                        if (!selectedSchool) {
+                          handleSelectSchool(school);
+                        }
+                      }}
+                      className="w-full text-left"
+                    >
+                      {school.name}
+                    </button>
+                  </li>
+                ))
+              )}
             </ul>
           </article>
         </section>

@@ -2,6 +2,7 @@ import jwt_decode from "jwt-decode";
 import { createContext, useContext, useEffect, useState } from "react";
 import { jwtAdapter } from "./modules/auth/infrastructure/adapters/jwtAdapter";
 import { School } from "./modules/school-mgmt/domain/entities/School";
+import Cookie from "js-cookie";
 
 type UserContextProviderProps = {
   children: React.ReactNode; // not allowed: React.ReactNode
@@ -16,7 +17,7 @@ type AuthUser = {
 };
 
 type UserContext = {
-  user: AuthUser | null;
+  user: AuthUser;
   loginUser: Function;
   logout: Function;
   selectedSchool: School | undefined;
@@ -50,6 +51,12 @@ export default function UserContextProvider({
       await jwtAdapter.get({ payload: formData }).then((res) => {
         setAuthTokens(res);
         setUser(jwt_decode(res.access));
+
+        // Cookie.set("accessToken", res.access_token, { expires: 1 }); // Expires in 7 days, you can adjust this
+        // Cookie.set("refreshToken", res.refresh_token, { expires: 7 });
+        Cookie.set("accessToken", res.access, { expires: 1 }); // Expires in 7 days, you can adjust this
+        Cookie.set("refreshToken", res.refresh, { expires: 7 });
+
         localStorage.setItem("authTokens", JSON.stringify(res));
       });
     } catch (error) {
@@ -61,6 +68,9 @@ export default function UserContextProvider({
     setUser(null);
     setAuthTokens(null);
     setSelectedSchool(undefined);
+
+    Cookie.remove("accessToken");
+    Cookie.remove("refreshToken");
     localStorage.removeItem("authTokens");
     localStorage.removeItem("selectedSchool");
   };
@@ -73,6 +83,10 @@ export default function UserContextProvider({
           .then((res) => {
             setAuthTokens(res);
             setUser(jwt_decode(res.access));
+
+            Cookie.set("accessToken", res.access_token, { expires: 1 }); // Expires in 7 days, you can adjust this
+            Cookie.set("refreshToken", res.refresh_token, { expires: 7 });
+
             localStorage.setItem("authTokens", JSON.stringify(res));
           });
       } catch (error) {
