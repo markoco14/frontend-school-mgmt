@@ -9,16 +9,10 @@ class RangeAttributeAdapter {
   }: {
     school_id?: number;
   }): Promise<EvaluationAttribute[]> {
-    let url;
-
-    if (school_id) {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/range-attributes/`;
-    } else {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/range-attributes/`;
-    }
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/range-attributes/`;
 
     const queryParams: string[] = [];
-    // if (details) queryParams.push(`details=${encodeURIComponent(details)}`);
+    if (school_id) queryParams.push(`school=${encodeURIComponent(school_id)}`);
 
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;

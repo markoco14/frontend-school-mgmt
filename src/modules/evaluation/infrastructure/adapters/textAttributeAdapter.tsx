@@ -9,12 +9,13 @@ class TextAttributeAdapter {
   }: {
     school_id?: number;
   }): Promise<EvaluationAttribute[]> {
-    let url;
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/text-attributes/`;
 
-    if (school_id) {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/text-attributes/`;
-    } else {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/text-attributes/`;
+    const queryParams: string[] = [];
+    if (school_id) queryParams.push(`school=${encodeURIComponent(school_id)}`);
+
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
     }
 
     const res = await fetch(url);
@@ -30,19 +31,19 @@ class TextAttributeAdapter {
   }): Promise<EvaluationAttribute> {
     let url;
     url = `${process.env.NEXT_PUBLIC_API_URL}/evaluation-attributes/`;
-	const { name, school_id, data_type_id } = payload;
+    const { name, school_id, data_type_id } = payload;
 
-	if (!name) {
-		throw new Error("Name missing")
-	}
-	
-	if (!school_id) {
-		throw new Error("School Id missing")
-	}
-	
-	if (!data_type_id) {
-		throw new Error("Data Type missing")
-	}
+    if (!name) {
+      throw new Error("Name missing");
+    }
+
+    if (!school_id) {
+      throw new Error("School Id missing");
+    }
+
+    if (!data_type_id) {
+      throw new Error("Data Type missing");
+    }
 
     const res = await fetch(url, {
       method: "POST",

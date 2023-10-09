@@ -10,15 +10,10 @@ class EvaluationAttributeAdapter {
     school_id?: number;
     details?: boolean;
   }): Promise<EvaluationAttribute[]> {
-    let url;
-
-    if (school_id) {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/daily-report-attributes/`;
-    } else {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/daily-report-attributes/`;
-    }
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/daily-report-attributes/`;
 
     const queryParams: string[] = [];
+    if (school_id) queryParams.push(`school=${encodeURIComponent(school_id)}`);
     if (details) queryParams.push(`details=${encodeURIComponent(details)}`);
 
     if (queryParams.length) {
@@ -38,16 +33,11 @@ class EvaluationAttributeAdapter {
     school_id: number;
     details?: boolean;
   }): Promise<EvaluationAttribute[]> {
-    let url;
-
-    if (school_id) {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/evaluation-attributes/`;
-    } else {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/evaluation-attributes/`;
-    }
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/evaluation-attributes/`;
 
     const queryParams: string[] = [];
     if (details) queryParams.push(`details=${encodeURIComponent(details)}`);
+    if (school_id) queryParams.push(`school=${encodeURIComponent(school_id)}`);
 
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;
