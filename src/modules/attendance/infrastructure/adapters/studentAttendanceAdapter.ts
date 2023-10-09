@@ -43,15 +43,11 @@ class StudentAttendanceAdapter {
     date?: string;
     details?: boolean;
   }): Promise<StudentAttendance[]> {
-    let url;
 
-    if (school_id) {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/student-attendances/`;
-    } else {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/`;
-    }
-
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/`;
+   
     const queryParams: string[] = [];
+    if (school_id) queryParams.push(`school=${encodeURIComponent(school_id)}`)
     if (school_class)
       queryParams.push(`school_class=${encodeURIComponent(school_class)}`);
     if (date) queryParams.push(`date=${encodeURIComponent(date)}`);

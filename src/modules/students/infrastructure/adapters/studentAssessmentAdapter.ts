@@ -31,7 +31,7 @@ class StudentAssessmentAdapter {
 
   public async get({ id }: { id: number }): Promise<StudentAssessment> {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/${id}/`,
+      `${process.env.NEXT_PUBLIC_API_URL}/student-assessments/${id}/`,
     );
     const student: StudentAssessment = await res.json();
 

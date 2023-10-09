@@ -71,14 +71,6 @@ class RangeAttributeAdapter {
     return newAttribute;
   }
 
-  // public async get({ id }: { id: number }): Promise<EvaluationAttribute> {
-  //   const res = await fetch(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/${id}/`,
-  //   );
-  //   const student: EvaluationAttribute = await res.json();
-
-  //   return student;
-  // }
 }
 
 export const rangeAttributeAdapter = new RangeAttributeAdapter();

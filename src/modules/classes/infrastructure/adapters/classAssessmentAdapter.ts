@@ -28,15 +28,6 @@ class ClassAssessmentAdapter {
 
     return classAssessments;
   }
-
-  // public async get({ id }: { id: number }): Promise<ClassAssessment> {
-  //   const res = await fetch(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/${id}/`,
-  //   );
-  //   const student: ClassAssessment = await res.json();
-
-  //   return student;
-  // }
 }
 
 export const classAssessmentAdapter = new ClassAssessmentAdapter();
