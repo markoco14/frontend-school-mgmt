@@ -25,6 +25,7 @@ export default function Home() {
             setSchools(res);
           });
         } catch (error) {
+          // @ts-ignore
           toast.error(error.message);
         }
       }
