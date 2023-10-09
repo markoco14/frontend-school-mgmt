@@ -21,7 +21,7 @@ export default function ClassHome() {
       if (selectedSchool) {
         setLoading(true);
         await classAdapter
-          .listSchoolClasses({ id: selectedSchool.id })
+          .list({ school_id: selectedSchool.id })
           .then((res) => {
             setClasses(res);
             setLoading(false);

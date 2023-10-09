@@ -12,14 +12,11 @@ class ClassAdapter {
   }): Promise<ClassEntity[]> {
     let url;
 
-    if (school_id) {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/classes/`;
-    } else {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/classes/`;
-    }
-
+    url = `${process.env.NEXT_PUBLIC_API_URL}/classes/`;
+    
     const queryParams: string[] = [];
     if (day) queryParams.push(`day=${encodeURIComponent(day)}`);
+    if (school_id) queryParams.push(`school=${encodeURIComponent(school_id)}`);
 
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;
@@ -81,34 +78,6 @@ class ClassAdapter {
     );
 
     return response;
-  }
-
-  public async listSchoolClasses({
-    id,
-  }: {
-    id: number;
-  }): Promise<ClassEntity[]> {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/classes/`,
-    );
-    const classes: ClassEntity[] = await res.json();
-
-    return classes;
-  }
-
-  public async listSchoolTodayClasses({
-    school_id,
-    date,
-  }: {
-    school_id: number;
-    date: number;
-  }): Promise<ClassEntity[]> {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/classes/day/${date}/`,
-    );
-    const classes: ClassEntity[] = await res.json();
-
-    return classes;
   }
 
   public async addClassTeacher({
