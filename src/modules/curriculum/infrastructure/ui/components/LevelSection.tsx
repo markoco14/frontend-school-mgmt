@@ -20,22 +20,15 @@ export default function LevelSection() {
   useEffect(() => {
     async function listSchoolLevels() {
       setLoading(true);
-      await levelAdapter
-        .paginatedList({
-          school_id: selectedSchool?.id,
-          page: page,
-          per_page: per_page,
-        })
-        .then((res) => {
-          if (res.next) {
-            setNext(true);
-          } else {
-            setNext(false);
-          }
-          setLevels(res.results);
-          setCount(res.count);
-          setLoading(false);
-        });
+      selectedSchool &&
+        (await levelAdapter
+          .listSchoolLevels({
+            school_id: selectedSchool?.id,
+          })
+          .then((res) => {
+            setLevels(res);
+            setLoading(false);
+          }));
     }
 
     if (selectedSchool) {
@@ -49,18 +42,10 @@ export default function LevelSection() {
 
   async function fetchSchoolLevels(id: number) {
     setLoading(true);
-    await levelAdapter
-      .paginatedList({ school_id: id, page: page })
-      .then((res) => {
-        if (res.next) {
-          setNext(true);
-        } else {
-          setNext(false);
-        }
-        setLevels(res.results);
-        setCount(res.count);
-        setLoading(false);
-      });
+    await levelAdapter.listSchoolLevels({ school_id: id }).then((res) => {
+      setLevels(res);
+      setLoading(false);
+    });
   }
 
   async function handleDeleteLevel(levelId: number) {
