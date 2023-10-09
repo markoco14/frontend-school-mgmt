@@ -15,22 +15,20 @@ class StudentEvaluationAdapter {
     filters,
     date,
     class_id,
+    school_id,
   }: {
     student_id?: number;
     details?: boolean;
     filters?: StudentEvaluationFilters;
     date?: string;
     class_id?: number;
+    school_id?: number;
   }): Promise<StudentEvaluation[]> {
-    let url;
-
-    if (student_id) {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/students/${student_id}/daily-evaluations/`;
-    } else {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/daily-evaluations/`;
-    }
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/daily-evaluations/`;
 
     const queryParams: string[] = [];
+    if (school_id) queryParams.push(`school=${encodeURIComponent(school_id)}`)
+    if (student_id) queryParams.push(`student=${encodeURIComponent(student_id)}`)
     if (details) queryParams.push(`details=${encodeURIComponent(details)}`);
     if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
     if (class_id) queryParams.push(`class_id=${encodeURIComponent(class_id)}`);
