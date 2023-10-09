@@ -3,11 +3,23 @@ import { SubjectLevel } from "../../domain/entities/SubjectLevel";
 
 class SubjectLevelAdapter {
 
-	public async listSchoolSubjectLevels({id}: {id: number}): Promise<SubjectLevel[]> {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/subject-levels/`);
-		const levels: SubjectLevel[] = await res.json();
+	public async listSchoolSubjectLevels({schoolId}: {schoolId: number}): Promise<SubjectLevel[]> {
+		let url;
 
-		return levels
+    url = `${process.env.NEXT_PUBLIC_API_URL}/subject-levels/`;
+
+    const queryParams: string[] = [];
+
+		if (schoolId) queryParams.push(`school=${encodeURIComponent(schoolId)}`);
+
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
+    }
+
+		const res = await fetch(url);
+		const subjectLevels: SubjectLevel[] = await res.json();
+
+		return subjectLevels
 	}
 
 	public async addSubjectLevel({subject, level}: {subject: number, level: number}): Promise<SubjectLevel> {

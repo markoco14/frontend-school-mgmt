@@ -19,7 +19,7 @@ export default function CurriculumHome() {
   useEffect(() => {
     async function getSubjectLevels() {
       await subjectLevelAdapter
-        .listSchoolSubjectLevels({ id: Number(selectedSchool?.id) })
+        .listSchoolSubjectLevels({ schoolId: Number(selectedSchool?.id) })
         .then((res) => {
           setSubjectLevels(res);
         });
