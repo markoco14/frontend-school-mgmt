@@ -41,7 +41,7 @@ export default function ManageClassTeacher({
   useEffect(() => {
     async function getTeachers() {
       await userAdapter
-        .listSchoolTeachers({ id: selectedSchool?.id })
+        .listSchoolTeachers({ schoolId: selectedSchool?.id })
         .then((res) => setTeachers(res));
     }
 

@@ -120,10 +120,17 @@ class UserAdapter {
     return teacherList;
   }
 
-  public async listSchoolTeachers({ id }: { id?: number }): Promise<User[]> {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/teachers/`,
-    );
+  public async listSchoolTeachers({ schoolId }: { schoolId?: number }): Promise<User[]> {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/school-teachers/`;
+
+    const queryParams: string[] = [];
+    if (schoolId) queryParams.push(`school=${encodeURIComponent(schoolId)}`);
+
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
+    }
+
+    const res = await fetch(url);
     const teachers = await res.json();
 
     const teacherList: User[] = teachers;
@@ -131,17 +138,17 @@ class UserAdapter {
     return teacherList;
   }
 
-  
+
   public async listSchoolAdmins({
-    school_id,
+    schoolId,
   }: {
-    school_id: number;
+    schoolId: number;
   }): Promise<User[]> {
 
     let url = `${process.env.NEXT_PUBLIC_API_URL}/school-admins/`;
 
     const queryParams: string[] = [];
-    if (school_id) queryParams.push(`school=${encodeURIComponent(school_id)}`);
+    if (schoolId) queryParams.push(`school=${encodeURIComponent(schoolId)}`);
 
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;

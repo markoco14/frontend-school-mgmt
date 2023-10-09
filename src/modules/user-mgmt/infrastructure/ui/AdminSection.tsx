@@ -14,7 +14,7 @@ export default function AdminSection() {
   useEffect(() => {
     async function getData(school_id: number, user_id: number) {
       await userAdapter
-        .listSchoolAdmins({ school_id: school_id })
+        .listSchoolAdmins({ schoolId: school_id })
         .then((res) => {
           setAdmins(res);
         });
