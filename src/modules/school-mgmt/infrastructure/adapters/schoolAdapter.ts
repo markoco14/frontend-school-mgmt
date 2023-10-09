@@ -7,11 +7,10 @@ class SchoolAdapter {
 		const accessToken =  Cookie.get("accessToken")
 		try {
 			const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/user/schools/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/user-schools/`,
         {
           headers: {
-            Authorization:
-              `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         },
       );
