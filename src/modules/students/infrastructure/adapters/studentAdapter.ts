@@ -19,15 +19,13 @@ class StudentAdapter {
     attendance?: boolean;
     schoolId?: number;
   }): Promise<Student[]> {
-    let url;
 
-    if (schoolId) {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/students/`;
-    } else {
-      url = `${process.env.NEXT_PUBLIC_API_URL}/students/`;
-    }
+   
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/students/`;
+
 
     const queryParams: string[] = [];
+    if (schoolId) queryParams.push(`school=${encodeURIComponent(schoolId)}`)
     if (classEntityId)
       queryParams.push(`class_entity=${encodeURIComponent(classEntityId)}`);
     if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
@@ -45,14 +43,14 @@ class StudentAdapter {
   }
 
   public async listSchoolStudents({
-    id,
+    schoolId,
     page,
   }: {
-    id?: number;
+    schoolId?: number;
     page: number;
   }): Promise<PaginatedStudentResponse> {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/schools/${id}/students/?page=${page}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/students/?school=${schoolId}&page=${page}`,
     );
     const students: PaginatedStudentResponse = await res.json();
 

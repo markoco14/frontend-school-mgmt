@@ -33,7 +33,7 @@ export default function StudentsHome() {
       setLoading(true);
       if (selectedSchool) {
         await studentAdapter
-          .listSchoolStudents({ id: selectedSchool.id, page: page })
+          .listSchoolStudents({ schoolId: selectedSchool.id, page: page })
           .then((res) => {
             if (res.next) {
               setIsNext(true);

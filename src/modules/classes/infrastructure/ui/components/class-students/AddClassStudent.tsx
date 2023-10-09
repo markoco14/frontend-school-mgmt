@@ -41,7 +41,7 @@ export default function AddStudentToClassSection({
     async function getData() {
       setLoading(true);
       await studentAdapter
-        .listSchoolStudents({ id: selectedSchool?.id, page: page })
+        .listSchoolStudents({ schoolId: selectedSchool?.id, page: page })
         .then((res) => {
           if (res.next) {
             setNext(true);
