@@ -1,5 +1,3 @@
-// schools/<str:school_pk>/daily-report-attributes/
-
 import { EvaluationAttribute } from "../../domain/entities/EvaluationAttribute";
 import { TextAttributePayload } from "../../domain/entities/payloads/TextAttributePayload";
 
