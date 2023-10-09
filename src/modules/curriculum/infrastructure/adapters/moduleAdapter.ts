@@ -10,9 +10,10 @@ class ModuleAdapter {
     subjectName?: string;
     levelOrder?: number;
   }): Promise<Module[]> {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/modules/`;
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/modules/`;
 
     const queryParams: string[] = [];
+    if (schoolId) queryParams.push(`school=${encodeURIComponent(schoolId)}`);
     if (subjectName) queryParams.push(`subject=${encodeURIComponent(subjectName)}`);
     if (levelOrder) queryParams.push(`level=${levelOrder}`);
 
