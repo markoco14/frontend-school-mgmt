@@ -4,17 +4,17 @@ import { SubjectListResponse } from "../../domain/entities/SubjectListResponse";
 class SubjectAdapter {
   public async list({
     schoolId,
-	class_id,
+    class_id,
   }: {
     schoolId: number;
-	class_id?: number;
+    class_id?: number;
   }): Promise<Subject[]> {
-	let url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/subjects/`
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/subjects/`;
 
-	const queryParams: string[] = [];
-    if (class_id)
-      queryParams.push(`class_id=${encodeURIComponent(class_id)}`);
-    // if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
+    const queryParams: string[] = [];
+    if (class_id) queryParams.push(`class_id=${encodeURIComponent(class_id)}`);
+
+    if (schoolId) queryParams.push(`school=${encodeURIComponent(schoolId)}`);
 
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;
