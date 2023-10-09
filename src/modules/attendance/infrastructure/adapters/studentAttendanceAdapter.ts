@@ -16,11 +16,7 @@ class StudentAttendanceAdapter {
     let url;
 
     url = `${process.env.NEXT_PUBLIC_API_URL}/students-with-attendance/`;
-    // if (school_id) {
-    //   url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/student-attendances/`;
-    // } else {
-    //   url = `${process.env.NEXT_PUBLIC_API_URL}/student-attendances/`;
-    // }
+
     const queryParams: string[] = [];
     if (classId)
       queryParams.push(`class_entity=${encodeURIComponent(classId)}`);
