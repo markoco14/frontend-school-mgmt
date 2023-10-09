@@ -6,7 +6,14 @@ class ModuleTypeAdapter {
   }: {
     schoolId?: number;
   }): Promise<ModuleType[]> {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/schools/${schoolId}/module-types/`;
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/module-types/`;
+
+    const queryParams: string[] = [];
+    if (schoolId) queryParams.push(`school=${encodeURIComponent(schoolId)}`);
+    
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
+    }
 
     const res = await fetch(url);
     const moduleTypeList: ModuleType[] = await res.json();
