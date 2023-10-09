@@ -17,7 +17,7 @@ type AuthUser = {
 };
 
 type UserContext = {
-  user: AuthUser;
+  user: AuthUser | null;
   loginUser: Function;
   logout: Function;
   selectedSchool: School | undefined;
