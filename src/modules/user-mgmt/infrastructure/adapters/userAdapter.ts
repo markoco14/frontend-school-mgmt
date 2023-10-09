@@ -130,14 +130,24 @@ class UserAdapter {
 
     return teacherList;
   }
+
+  
   public async listSchoolAdmins({
     school_id,
   }: {
     school_id: number;
   }): Promise<User[]> {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/schools/${school_id}/admins/`,
-    );
+
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/school-admins/`;
+
+    const queryParams: string[] = [];
+    if (school_id) queryParams.push(`school=${encodeURIComponent(school_id)}`);
+
+    if (queryParams.length) {
+      url += `?${queryParams.join("&")}`;
+    }
+
+    const res = await fetch(url);
     const admins = await res.json();
 
     const adminList: User[] = admins;
