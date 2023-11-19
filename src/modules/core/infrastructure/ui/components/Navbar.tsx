@@ -8,16 +8,16 @@ export default function Navbar() {
   const router = useRouter();
   const [isShowing, setIsShowing] = useState<boolean>(false);
   return (
-    <nav className="flex h-[48px] items-center justify-between bg-blue-900 px-2 text-white xs:relative xs:bg-transparent xs:text-black ">
+    <nav className="">
       {/* desktop nav */}
-      <div className="hidden w-full gap-2 xs:flex xs:justify-end">
+      <div className="hidden h-screen xs:flex flex-col gap-2 text-center bg-blue-900 text-gray-200">
         {user && (
           <>
             <Link
               href="/"
               className={`${
                 router.pathname === "/"
-                  ? "text-blue-700 underline decoration-2 underline-offset-4"
+                  ? "text-white underline decoration-2 underline-offset-4"
                   : ""
               }`}
             >
@@ -27,7 +27,7 @@ export default function Navbar() {
               href={`/profile/${user.user_id}`}
               className={`${
                 router.pathname.includes("profile")
-                  ? "text-blue-700 underline decoration-2 underline-offset-4"
+                  ? "text-white underline decoration-2 underline-offset-4"
                   : ""
               }`}
             >
@@ -251,7 +251,7 @@ export default function Navbar() {
       )}
       {!isShowing && (
         <button
-          className="flex items-center xs:hidden"
+          className="absolute top-2 right-2 text-black flex items-center xs:hidden"
           onClick={() => {
             setIsShowing(true);
           }}
