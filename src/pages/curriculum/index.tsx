@@ -1,4 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
+import AdminLayout from "@/src/modules/core/infrastructure/ui/components/AdminLayout";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import { SubjectLevel } from "@/src/modules/curriculum/domain/entities/SubjectLevel";
@@ -32,30 +33,38 @@ export default function CurriculumHome() {
   if (user?.role !== "OWNER") {
     return (
       <Layout>
-        <PermissionDenied />
+        <AdminLayout>
+          <div className="h-full w-full bg-white">
+            <PermissionDenied />
+          </div>
+        </AdminLayout>
       </Layout>
     );
   }
 
   return (
     <Layout>
-      {/* <SchoolHeader /> */}
-      <CurriculumNav tab={tab} setTab={setTab} />
-      {tab === 1 && (
-        <SubjectSection
-          subjectLevels={subjectLevels}
-          setSubjectLevels={setSubjectLevels}
-        />
-      )}
-      {tab === 2 && <LevelSection />}
-      {tab === 3 && <ModuleSection subjectLevels={subjectLevels} />}
-      {tab === 4 && <ModuleTypeSection />}
-      {/* {tab === 5 && (
-        <AssessmentTypeSection />
-      )}
-      {tab === 6 && (
-        <AssessmentSection />
-      )} */}
+      <AdminLayout>
+        <div className="h-full w-full bg-white">
+          {/* <SchoolHeader /> */}
+          <CurriculumNav tab={tab} setTab={setTab} />
+          {tab === 1 && (
+            <SubjectSection
+              subjectLevels={subjectLevels}
+              setSubjectLevels={setSubjectLevels}
+            />
+          )}
+          {tab === 2 && <LevelSection />}
+          {tab === 3 && <ModuleSection subjectLevels={subjectLevels} />}
+          {tab === 4 && <ModuleTypeSection />}
+          {/* {tab === 5 && (
+          <AssessmentTypeSection />
+        )}
+        {tab === 6 && (
+          <AssessmentSection />
+        )} */}
+        </div>
+      </AdminLayout>
     </Layout>
   );
 }
