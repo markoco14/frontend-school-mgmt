@@ -6,6 +6,7 @@ import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSk
 import ClassList from "@/src/modules/attendance/infrastructure/ui/components/ClassList";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
+import AdminLayout from "@/src/modules/core/infrastructure/ui/components/AdminLayout";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import ParamsPageTabNav from "@/src/modules/core/infrastructure/ui/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
@@ -87,7 +88,11 @@ export default function ReportsHome() {
   if (!user?.permissions.some((permission) => [1, 2].includes(permission))) {
     return (
       <Layout>
-        <PermissionDenied />
+        <AdminLayout>
+          <div className="h-full w-full bg-white">
+            <PermissionDenied />
+          </div>
+        </AdminLayout>
       </Layout>
     );
   }
@@ -124,155 +129,165 @@ export default function ReportsHome() {
 
   return (
     <Layout>
-      <div className="grid gap-4">
-        <h1 className="text-3xl">Reporting</h1>
-        <div className="flex gap-2">
-          <input
-            type="date"
-            className="rounded border text-left text-xl shadow xs:text-right"
-            value={format(date, "yyyy-MM-dd")}
-            onChange={async (e) => {
-              setTodayClasses([]);
-              const newDate = new Date(e.target.value);
-              router.push(
-                `?${new URLSearchParams({
-                  date: newDate.toISOString().split("T")[0],
-                  tab: tab,
-                })}`,
-              );
-            }}
-          />
-          <button
-            className=" flex items-center justify-center rounded border shadow disabled:cursor-not-allowed"
-            onClick={decrementDate}
-          >
-            <span className="material-symbols-outlined">navigate_before</span>
-          </button>
-          <button
-            className=" flex items-center justify-center rounded border shadow disabled:cursor-not-allowed"
-            onClick={incrementDate}
-          >
-            <span className="material-symbols-outlined">navigate_next</span>
-          </button>
-        </div>
+      <AdminLayout>
+        <div className="h-full w-full bg-white">
+          <div className="grid gap-4">
+            <h1 className="text-3xl">Reporting</h1>
+            <div className="flex gap-2">
+              <input
+                type="date"
+                className="rounded border text-left text-xl shadow xs:text-right"
+                value={format(date, "yyyy-MM-dd")}
+                onChange={async (e) => {
+                  setTodayClasses([]);
+                  const newDate = new Date(e.target.value);
+                  router.push(
+                    `?${new URLSearchParams({
+                      date: newDate.toISOString().split("T")[0],
+                      tab: tab,
+                    })}`,
+                  );
+                }}
+              />
+              <button
+                className=" flex items-center justify-center rounded border shadow disabled:cursor-not-allowed"
+                onClick={decrementDate}
+              >
+                <span className="material-symbols-outlined">
+                  navigate_before
+                </span>
+              </button>
+              <button
+                className=" flex items-center justify-center rounded border shadow disabled:cursor-not-allowed"
+                onClick={incrementDate}
+              >
+                <span className="material-symbols-outlined">navigate_next</span>
+              </button>
+            </div>
 
-        <section className="flex flex-col gap-4 overflow-x-hidden rounded border bg-gray-100 p-2 shadow-inner sm:grid-cols-2 sm:gap-2">
-          <div className="bg-white sm:col-span-2">
-            <ParamsPageTabNav
-              links={links}
-              tab={tab}
-              dateString={date.toISOString().split("T")[0]}
-            />
-          </div>
-          {tab !== "daily reports" && (
-            <div className=" grid gap-2 sm:grid-cols-2">
-              <article className="relative flex flex-col gap-4 sm:col-span-1">
-                <div className="sticky top-4 rounded-lg border bg-white p-4 shadow">
-                  <div>
-                    <h2 className="mb-4 text-2xl">
-                      Classes {dayName} {date.toDateString()}
-                    </h2>
-                  </div>
-                  {loading ? (
-                    <Skeleton>
-                      <ClassListSkeletonProps />
-                    </Skeleton>
-                  ) : !todayClasses.length ? (
-                    <p>No classes today. Please check your school schedule.</p>
-                  ) : (
-                    <>
-                      <p className="mb-2">
-                        Click a class to see the student{" "}
-                        {tab === "attendance" ? "Attendance" : "Evaluations"} on
-                        the right.
-                      </p>
-                      <ClassList
-                        todayClasses={todayClasses}
-                        selectedClass={selectedClass}
-                        handleClick={handleChangeClass}
-                      />
-                    </>
-                  )}
-                </div>
-              </article>
-              <article className="rounded-lg border bg-white p-4 sm:col-span-1">
-                {/* <h2 className="mb-4 text-2xl">Attendance list</h2> */}
-                {tab === "attendance" ? (
-                  selectedClass ? (
-                    <>
+            <section className="flex flex-col gap-4 overflow-x-hidden rounded border bg-gray-100 p-2 shadow-inner sm:grid-cols-2 sm:gap-2">
+              <div className="bg-white sm:col-span-2">
+                <ParamsPageTabNav
+                  links={links}
+                  tab={tab}
+                  dateString={date.toISOString().split("T")[0]}
+                />
+              </div>
+              {tab !== "daily reports" && (
+                <div className=" grid gap-2 sm:grid-cols-2">
+                  <article className="relative flex flex-col gap-4 sm:col-span-1">
+                    <div className="sticky top-4 rounded-lg border bg-white p-4 shadow">
+                      <div>
+                        <h2 className="mb-4 text-2xl">
+                          Classes {dayName} {date.toDateString()}
+                        </h2>
+                      </div>
+                      {loading ? (
+                        <Skeleton>
+                          <ClassListSkeletonProps />
+                        </Skeleton>
+                      ) : !todayClasses.length ? (
+                        <p>
+                          No classes today. Please check your school schedule.
+                        </p>
+                      ) : (
+                        <>
+                          <p className="mb-2">
+                            Click a class to see the student{" "}
+                            {tab === "attendance"
+                              ? "Attendance"
+                              : "Evaluations"}{" "}
+                            on the right.
+                          </p>
+                          <ClassList
+                            todayClasses={todayClasses}
+                            selectedClass={selectedClass}
+                            handleClick={handleChangeClass}
+                          />
+                        </>
+                      )}
+                    </div>
+                  </article>
+                  <article className="rounded-lg border bg-white p-4 sm:col-span-1">
+                    {/* <h2 className="mb-4 text-2xl">Attendance list</h2> */}
+                    {tab === "attendance" ? (
+                      selectedClass ? (
+                        <>
+                          <AttendanceSection
+                            date={date}
+                            selectedClass={selectedClass}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <h2 className="mb-4 text-2xl">
+                            Please wait for attendance
+                          </h2>
+                          {loading && (
+                            <Skeleton>
+                              <StudentListSkeletonProps studentQuantity={8} />
+                            </Skeleton>
+                          )}
+                        </>
+                      )
+                    ) : tab === "evaluations" && selectedClass ? (
+                      <>
+                        <h2 className="mb-4 text-2xl">
+                          Class: {selectedClass?.name} Teacher{" "}
+                          {selectedClass?.teacher}
+                        </h2>
+                        <ReportingEvaluationSection
+                          date={date}
+                          selectedClass={selectedClass}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <h2 className="mb-4 text-2xl">
+                          Please wait for evaluations
+                        </h2>
+                        {loading && (
+                          <Skeleton>
+                            <EvaluationListSkeletonProps />
+                          </Skeleton>
+                        )}
+                      </>
+                    )}
+                    {/* {tab === "attendance" && selectedClass ? (
                       <AttendanceSection
                         date={date}
                         selectedClass={selectedClass}
                       />
-                    </>
-                  ) : (
-                    <>
-                      <h2 className="mb-4 text-2xl">
-                        Please wait for attendance
-                      </h2>
+                    ) : (
+                      <>
+                      <h2 className="mb-4 text-2xl">Please wait for attendance</h2>
                       {loading && (
                         <Skeleton>
-                          <StudentListSkeletonProps studentQuantity={8} />
-                        </Skeleton>
+                            <StudentListSkeletonProps studentQuantity={8} />
+                          </Skeleton>
                       )}
-                    </>
-                  )
-                ) : tab === "evaluations" && selectedClass ? (
-                  <>
-                    <h2 className="mb-4 text-2xl">
-                      Class: {selectedClass?.name} Teacher{" "}
-                      {selectedClass?.teacher}
-                    </h2>
-                    <ReportingEvaluationSection
-                      date={date}
-                      selectedClass={selectedClass}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <h2 className="mb-4 text-2xl">
-                      Please wait for evaluations
-                    </h2>
-                    {loading && (
-                      <Skeleton>
-                        <EvaluationListSkeletonProps />
-                      </Skeleton>
-                    )}
-                  </>
-                )}
-                {/* {tab === "attendance" && selectedClass ? (
-                  <AttendanceSection
-                    date={date}
-                    selectedClass={selectedClass}
-                  />
-                ) : (
-                  <>
-                  <h2 className="mb-4 text-2xl">Please wait for attendance</h2>
-                  {loading && (
-                    <Skeleton>
-                        <StudentListSkeletonProps studentQuantity={8} />
-                      </Skeleton>
-                  )}
-                  </>
-                )} */}
-              </article>
-              {/* {tab === "evaluations" && selectedClass && (
-                <article className="sm:col-span-1">
-                  <ReportingEvaluationSection
-                    date={date}
-                    selectedClass={selectedClass}
-                  />
-                </article>
-              )} */}
-            </div>
-          )}
-        </section>
-        {tab === "daily reports" && (
-          <section className="rounded border p-2 shadow">
-            <DailyReportOverview date={date} />
-          </section>
-        )}
-      </div>
+                      </>
+                    )} */}
+                  </article>
+                  {/* {tab === "evaluations" && selectedClass && (
+                    <article className="sm:col-span-1">
+                      <ReportingEvaluationSection
+                        date={date}
+                        selectedClass={selectedClass}
+                      />
+                    </article>
+                  )} */}
+                </div>
+              )}
+            </section>
+            {tab === "daily reports" && (
+              <section className="rounded border p-2 shadow">
+                <DailyReportOverview date={date} />
+              </section>
+            )}
+          </div>
+        </div>
+      </AdminLayout>
     </Layout>
   );
 }
