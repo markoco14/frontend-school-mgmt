@@ -11,7 +11,9 @@ export default function AdminLayout({ children }: LayoutProps) {
 			<div className="hidden w-[200px] xs:block">
 				<Navbar />
 			</div>
-			{children}
+			<div className="w-full">
+				{children}
+			</div>
 		</div>
   );
 }

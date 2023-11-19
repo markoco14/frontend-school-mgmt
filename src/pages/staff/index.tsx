@@ -1,4 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
+import AdminLayout from "@/src/modules/core/infrastructure/ui/components/AdminLayout";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import ParamsPageTabNav from "@/src/modules/core/infrastructure/ui/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
@@ -34,11 +35,13 @@ export default function Staff() {
 
   return (
     <Layout>
-      <section className="grid gap-4 sm:p-8">
-        <ParamsPageTabNav links={links} tab={tab} />
-        {tab === "teachers" && <TeacherSection />}
-        {tab === "admins" && <AdminSection />}
-      </section>
+      <AdminLayout>
+        <section className="max-w-[1000px] grid gap-4 sm:p-8">
+          <ParamsPageTabNav links={links} tab={tab} />
+          {tab === "teachers" && <TeacherSection />}
+          {tab === "admins" && <AdminSection />}
+        </section>
+      </AdminLayout>
     </Layout>
   );
 }
