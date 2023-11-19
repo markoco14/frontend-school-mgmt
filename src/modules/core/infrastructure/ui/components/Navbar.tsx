@@ -46,7 +46,7 @@ export default function Navbar() {
                 href="/curriculum/"
                 className={`${
                   router.pathname.includes("curriculum")
-                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    ? "text-white underline decoration-2 underline-offset-4"
                     : ""
                 }`}
               >
@@ -56,7 +56,7 @@ export default function Navbar() {
                 href="/schedule/"
                 className={`${
                   router.pathname.includes("schedule")
-                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    ? "text-white underline decoration-2 underline-offset-4"
                     : ""
                 }`}
               >
@@ -66,7 +66,7 @@ export default function Navbar() {
                 href="/staff/"
                 className={`${
                   router.pathname.includes("staff")
-                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    ? "text-white underline decoration-2 underline-offset-4"
                     : ""
                 }`}
               >
@@ -76,7 +76,7 @@ export default function Navbar() {
                 href="/classes/"
                 className={`${
                   router.pathname.includes("classes")
-                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    ? "text-white underline decoration-2 underline-offset-4"
                     : ""
                 }`}
               >
@@ -86,7 +86,7 @@ export default function Navbar() {
                 href="/students/"
                 className={`${
                   router.pathname.includes("students")
-                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    ? "text-white underline decoration-2 underline-offset-4"
                     : ""
                 }`}
               >
@@ -96,7 +96,7 @@ export default function Navbar() {
                 href="/reports/"
                 className={`${
                   router.pathname.includes("reports")
-                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    ? "text-white underline decoration-2 underline-offset-4"
                     : ""
                 }`}
               >
@@ -106,7 +106,7 @@ export default function Navbar() {
                 href="/manage"
                 className={`${
                   router.pathname.includes("manage")
-                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    ? "text-white underline decoration-2 underline-offset-4"
                     : ""
                 }`}
               >
@@ -142,7 +142,7 @@ export default function Navbar() {
                 href="/"
                 className={`${
                   router.pathname === "/"
-                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    ? "text-white underline decoration-2 underline-offset-4"
                     : ""
                 }`}
               >
@@ -152,7 +152,7 @@ export default function Navbar() {
                 href={`/profile/${user.user_id}`}
                 className={`${
                   router.pathname.includes("profile")
-                    ? "text-blue-700 underline decoration-2 underline-offset-4"
+                    ? "text-white underline decoration-2 underline-offset-4"
                     : ""
                 }`}
               >
@@ -169,7 +169,7 @@ export default function Navbar() {
                   href="/curriculum/"
                   className={`${
                     router.pathname.includes("curriculum")
-                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      ? "text-white underline decoration-2 underline-offset-4"
                       : ""
                   }`}
                 >
@@ -179,7 +179,7 @@ export default function Navbar() {
                   href="/schedule/"
                   className={`${
                     router.pathname.includes("schedule")
-                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      ? "text-white underline decoration-2 underline-offset-4"
                       : ""
                   }`}
                 >
@@ -189,7 +189,7 @@ export default function Navbar() {
                   href="/staff/"
                   className={`${
                     router.pathname.includes("staff")
-                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      ? "text-white underline decoration-2 underline-offset-4"
                       : ""
                   }`}
                 >
@@ -199,7 +199,7 @@ export default function Navbar() {
                   href="/classes/"
                   className={`${
                     router.pathname.includes("classes")
-                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      ? "text-white underline decoration-2 underline-offset-4"
                       : ""
                   }`}
                 >
@@ -209,7 +209,7 @@ export default function Navbar() {
                   href="/students/"
                   className={`${
                     router.pathname.includes("students")
-                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      ? "text-white underline decoration-2 underline-offset-4"
                       : ""
                   }`}
                 >
@@ -219,7 +219,7 @@ export default function Navbar() {
                   href="/reports/"
                   className={`${
                     router.pathname.includes("reports")
-                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      ? "text-white underline decoration-2 underline-offset-4"
                       : ""
                   }`}
                 >
@@ -229,7 +229,7 @@ export default function Navbar() {
                   href="/manage"
                   className={`${
                     router.pathname.includes("manage")
-                      ? "text-blue-700 underline decoration-2 underline-offset-4"
+                      ? "text-white underline decoration-2 underline-offset-4"
                       : ""
                   }`}
                 >
