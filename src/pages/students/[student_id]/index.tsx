@@ -1,4 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
+import AdminLayout from "@/src/modules/core/infrastructure/ui/components/AdminLayout";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import ParamsPageTabNav from "@/src/modules/core/infrastructure/ui/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
@@ -7,6 +8,7 @@ import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/s
 import Evaluations from "@/src/modules/students/infrastructure/ui/evaluation/Evaluations";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 const StudentPhoto = ({ student }: { student: Student }) => {
@@ -62,33 +64,46 @@ export default function Home({
   if (!user?.permissions.includes(1)) {
     return (
       <Layout>
-        <PermissionDenied />
+        <AdminLayout>
+          <div className="h-full w-full bg-white">
+            <PermissionDenied />
+          </div>
+        </AdminLayout>
       </Layout>
     );
   }
 
   return (
     <Layout>
-      {/* <SchoolHeader /> */}
-      <div className="grid gap-4 sm:grid-cols-8">
-        <div className="sm:col-span-2">
-          <StudentPhoto student={student} />
+      <AdminLayout>
+        <div className="h-full w-full bg-white">
+          {/* <SchoolHeader /> */}
+          <Link href="/students">Back</Link>
+          <div className="grid max-w-[1000px] gap-4 sm:grid-cols-8">
+            <div className="sm:col-span-2">
+              <StudentPhoto student={student} />
+            </div>
+            <div className="flex flex-col gap-4 sm:col-span-6">
+              <ParamsPageTabNav
+                queryParam={student.id}
+                links={links}
+                tab={tab}
+              />
+              {/* <PageTabNavigation links={links} tab={tab} setTab={setTab} /> */}
+              {tab === "profile" && (
+                <section className="rounded border p-2 shadow">
+                  <h2>Profile</h2>
+                </section>
+              )}
+              {tab === "evaluations" && (
+                <section className="rounded border p-2 shadow">
+                  <Evaluations student={student} />
+                </section>
+              )}
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 sm:col-span-6">
-          <ParamsPageTabNav queryParam={student.id} links={links} tab={tab} />
-          {/* <PageTabNavigation links={links} tab={tab} setTab={setTab} /> */}
-          {tab === "profile" && (
-            <section className="rounded border p-2 shadow">
-              <h2>Profile</h2>
-            </section>
-          )}
-          {tab === "evaluations" && (
-            <section className="rounded border p-2 shadow">
-              <Evaluations student={student} />
-            </section>
-          )}
-        </div>
-      </div>
+      </AdminLayout>
     </Layout>
   );
 }
