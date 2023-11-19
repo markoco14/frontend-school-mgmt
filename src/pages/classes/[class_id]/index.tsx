@@ -53,7 +53,9 @@ export default function ManageClassDetails({
     return (
       <Layout>
         <AdminLayout>
-          <PermissionDenied />
+          <div className="h-full w-full bg-white">
+            <PermissionDenied />
+          </div>
         </AdminLayout>
       </Layout>
     );
@@ -62,33 +64,39 @@ export default function ManageClassDetails({
   return (
     <Layout>
       <AdminLayout>
-        <section>
-          <div className="bg-white min-h-[50vh] max-w-[1000px]">
-            <div className="mb-2 flex items-baseline justify-between">
-              <h2 className="text-3xl">{selectedClass?.name}</h2>
-              <Link href="/classes">Back</Link>
-            </div>
-            <ParamsPageTabNav links={links} tab={tab} queryParam={classEntity.id} />
-            {tab === "class info" ? (
-              <article className="col-span-1 rounded border p-2 shadow md:row-span-2">
-                <p>Class info goes here.</p>
-              </article>
-            ) : tab === "students" ? (
-              <article className="col-span-1 md:row-span-2">
-                <ManageClassStudents selectedClass={selectedClass} />
-              </article>
-            ) : (
-              tab === "teachers" && (
-                <article className="col-span-1 row-span-1">
-                  <ManageClassTeacher
-                    selectedClass={selectedClass}
-                    setSelectedClass={setSelectedClass}
-                  />
+        <div className="h-full w-full bg-white">
+          <section>
+            <div className="min-h-[50vh] max-w-[1000px] bg-white">
+              <div className="mb-2 flex items-baseline justify-between">
+                <h2 className="text-3xl">{selectedClass?.name}</h2>
+                <Link href="/classes">Back</Link>
+              </div>
+              <ParamsPageTabNav
+                links={links}
+                tab={tab}
+                queryParam={classEntity.id}
+              />
+              {tab === "class info" ? (
+                <article className="col-span-1 rounded border p-2 shadow md:row-span-2">
+                  <p>Class info goes here.</p>
                 </article>
-              )
-            )}
-          </div>
-        </section>
+              ) : tab === "students" ? (
+                <article className="col-span-1 md:row-span-2">
+                  <ManageClassStudents selectedClass={selectedClass} />
+                </article>
+              ) : (
+                tab === "teachers" && (
+                  <article className="col-span-1 row-span-1">
+                    <ManageClassTeacher
+                      selectedClass={selectedClass}
+                      setSelectedClass={setSelectedClass}
+                    />
+                  </article>
+                )
+              )}
+            </div>
+          </section>
+        </div>
       </AdminLayout>
     </Layout>
   );

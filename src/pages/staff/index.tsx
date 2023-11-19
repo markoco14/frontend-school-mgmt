@@ -36,11 +36,13 @@ export default function Staff() {
   return (
     <Layout>
       <AdminLayout>
-        <section className="max-w-[1000px] grid gap-4 sm:p-8">
-          <ParamsPageTabNav links={links} tab={tab} />
-          {tab === "teachers" && <TeacherSection />}
-          {tab === "admins" && <AdminSection />}
-        </section>
+        <div className="bg-white h-full w-full">
+          <section className="max-w-[1000px] grid gap-4 sm:p-8">
+            <ParamsPageTabNav links={links} tab={tab} />
+            {tab === "teachers" && <TeacherSection />}
+            {tab === "admins" && <AdminSection />}
+          </section>
+        </div>
       </AdminLayout>
     </Layout>
   );

@@ -37,7 +37,7 @@ export default function ClassHome() {
     return (
       <Layout>
         <AdminLayout>
-          <div>
+          <div className="h-full w-full bg-white">
             <section>
               {/* <SchoolHeader /> */}
               <p>You need to choose a school first.</p>
@@ -55,7 +55,9 @@ export default function ClassHome() {
     return (
       <Layout>
         <AdminLayout>
-          <PermissionDenied />
+          <div className="h-full w-full bg-white">
+            <PermissionDenied />
+          </div>
         </AdminLayout>
       </Layout>
     );
@@ -69,51 +71,55 @@ export default function ClassHome() {
     <Layout>
       <AdminLayout>
         {/* <SchoolHeader /> */}
-        <section>
-          <div className="max-w-[1000px] rounded border-2 bg-white p-4 shadow">
-            <div className="mb-4 flex items-baseline justify-between">
-              <h2 className="text-3xl">Your Classes</h2>
-              <button
-                onClick={() => {
-                  setIsAddClass(true);
-                }}
-              >
-                <i className="fa-solid fa-plus"></i>
-              </button>
+        <div className="h-full w-full bg-white">
+          <section>
+            <div className="max-w-[1000px] rounded border-2 bg-white p-4 shadow">
+              <div className="mb-4 flex items-baseline justify-between">
+                <h2 className="text-3xl">Your Classes</h2>
+                <button
+                  onClick={() => {
+                    setIsAddClass(true);
+                  }}
+                >
+                  <i className="fa-solid fa-plus"></i>
+                </button>
+              </div>
+              {loading && (
+                <Skeleton>
+                  <ClassListSkeletonProps />
+                </Skeleton>
+              )}
+              {!loading && classes.length === 0 ? (
+                <article>
+                  <p>You have not created any classes for your school.</p>
+                </article>
+              ) : (
+                <article>
+                  <ul className="flex flex-col divide-y">
+                    {classes?.map(
+                      (currentClass: ClassEntity, index: number) => (
+                        <li
+                          key={index}
+                          className="flex justify-between rounded-md p-2 hover:bg-blue-200"
+                        >
+                          <Link
+                            href={`/classes/${currentClass.id}`}
+                            className="w-full"
+                          >
+                            {currentClass.name}
+                          </Link>
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </article>
+              )}
             </div>
-            {loading && (
-              <Skeleton>
-                <ClassListSkeletonProps />
-              </Skeleton>
-            )}
-            {!loading && classes.length === 0 ? (
-              <article>
-                <p>You have not created any classes for your school.</p>
-              </article>
-            ) : (
-              <article>
-                <ul className="flex flex-col divide-y">
-                  {classes?.map((currentClass: ClassEntity, index: number) => (
-                    <li
-                      key={index}
-                      className="flex justify-between rounded-md p-2 hover:bg-blue-200"
-                    >
-                      <Link
-                        href={`/classes/${currentClass.id}`}
-                        className="w-full"
-                      >
-                        {currentClass.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            )}
-          </div>
-          <Modal show={isAddClass} close={handleClose} title="Add Class">
-            <AddClass setClasses={setClasses} />
-          </Modal>
-        </section>
+            <Modal show={isAddClass} close={handleClose} title="Add Class">
+              <AddClass setClasses={setClasses} />
+            </Modal>
+          </section>
+        </div>
       </AdminLayout>
     </Layout>
   );
