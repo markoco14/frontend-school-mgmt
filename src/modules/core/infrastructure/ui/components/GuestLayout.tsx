@@ -5,5 +5,12 @@ type LayoutProps = {
 };
 
 export default function GuestLayout({ children }: LayoutProps) {
-  return <>{children}</>
+  return (
+    <>
+      <header>
+        <p>Nav Links</p>
+      </header>
+      <main>{children}</main>
+    </>
+  );
 }
