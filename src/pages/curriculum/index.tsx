@@ -46,23 +46,25 @@ export default function CurriculumHome() {
     <Layout>
       <AdminLayout>
         <div className="h-full w-full bg-white">
-          {/* <SchoolHeader /> */}
-          <CurriculumNav tab={tab} setTab={setTab} />
-          {tab === 1 && (
-            <SubjectSection
-              subjectLevels={subjectLevels}
-              setSubjectLevels={setSubjectLevels}
-            />
+          <div className="max-w-[1000px]">
+            {/* <SchoolHeader /> */}
+            <CurriculumNav tab={tab} setTab={setTab} />
+            {tab === 1 && (
+              <SubjectSection
+                subjectLevels={subjectLevels}
+                setSubjectLevels={setSubjectLevels}
+              />
+            )}
+            {tab === 2 && <LevelSection />}
+            {tab === 3 && <ModuleSection subjectLevels={subjectLevels} />}
+            {tab === 4 && <ModuleTypeSection />}
+            {/* {tab === 5 && (
+            <AssessmentTypeSection />
           )}
-          {tab === 2 && <LevelSection />}
-          {tab === 3 && <ModuleSection subjectLevels={subjectLevels} />}
-          {tab === 4 && <ModuleTypeSection />}
-          {/* {tab === 5 && (
-          <AssessmentTypeSection />
-        )}
-        {tab === 6 && (
-          <AssessmentSection />
-        )} */}
+          {tab === 6 && (
+            <AssessmentSection />
+          )} */}
+          </div>
         </div>
       </AdminLayout>
     </Layout>

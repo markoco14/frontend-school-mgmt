@@ -1,4 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
+import AdminLayout from "@/src/modules/core/infrastructure/ui/components/AdminLayout";
 import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
 import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
 import SchoolDaySection from "@/src/modules/schedule/infrastructure/ui/components/SchoolDaySection";
@@ -9,17 +10,27 @@ export default function Schedule() {
   if (user?.role !== "OWNER") {
     return (
       <Layout>
-        <PermissionDenied />
+        <AdminLayout>
+          <div className="h-full w-full bg-white">
+
+            <PermissionDenied />
+          </div>
+        </AdminLayout>
       </Layout>
     );
   }
 
   return (
     <Layout>
-      <div className="grid gap-4">
-        {/* <SchoolHeader /> */}
-        <SchoolDaySection />
-      </div>
+      <AdminLayout>
+        <div className="h-full w-full bg-white">
+          <div className="grid gap-4 max-w-[1000px]">
+            {/* <SchoolHeader /> */}
+            <SchoolDaySection />
+          </div>
+
+        </div>
+      </AdminLayout>
     </Layout>
   );
 }
