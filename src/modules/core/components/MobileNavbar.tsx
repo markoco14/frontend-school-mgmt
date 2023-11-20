@@ -1,5 +1,3 @@
-import { useUserContext } from "@/src/UserContext";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import NavigationLinks from "./NavigationLinks";
 

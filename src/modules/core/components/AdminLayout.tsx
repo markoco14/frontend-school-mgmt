@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Navbar from "@/src/modules/core/components/Navbar";
+import DesktopNavbar from "@/src/modules/core/components/DesktopNavbar";
 import MobileNavbar from "./MobileNavbar";
 
 type LayoutProps = {
@@ -10,7 +10,7 @@ export default function AdminLayout({ children }: LayoutProps) {
   return (
     <div className="relative flex min-h-screen">
 			<div className="hidden w-[200px] xs:block">
-				<Navbar />
+				<DesktopNavbar />
 			</div>
 			<div className="block xs:hidden">
 				<MobileNavbar />
