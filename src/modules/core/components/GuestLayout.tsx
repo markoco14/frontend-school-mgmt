@@ -7,10 +7,9 @@ type LayoutProps = {
 export default function GuestLayout({ children }: LayoutProps) {
   return (
     <>
-      <header>
-        <p>Nav Links</p>
-      </header>
+    {/* header */}
       <main>{children}</main>
+    {/* footer */}
     </>
   );
 }
