@@ -1,8 +1,8 @@
 import { useUserContext } from "@/src/UserContext";
-import AdminLayout from "@/src/modules/core/infrastructure/ui/components/AdminLayout";
-import GuestLayout from "@/src/modules/core/infrastructure/ui/components/GuestLayout";
-import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import SchoolHeader from "@/src/modules/core/infrastructure/ui/components/SchoolHeader";
+import AdminLayout from "@/src/modules/core/components/AdminLayout";
+import GuestLayout from "@/src/modules/core/components/GuestLayout";
+import Layout from "@/src/modules/core/components/Layout";
+import SchoolHeader from "@/src/modules/core/components/SchoolHeader";
 import { TodayClassList } from "@/src/modules/reports/infrastructure/ui/components/TodayClassList";
 import { School } from "@/src/modules/school-mgmt/domain/entities/School";
 import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";

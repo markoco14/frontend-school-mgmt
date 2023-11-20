@@ -6,10 +6,10 @@ import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSk
 import ClassList from "@/src/modules/attendance/infrastructure/ui/components/ClassList";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
-import AdminLayout from "@/src/modules/core/infrastructure/ui/components/AdminLayout";
-import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import ParamsPageTabNav from "@/src/modules/core/infrastructure/ui/components/ParamsPageTabNav";
-import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
+import AdminLayout from "@/src/modules/core/components/AdminLayout";
+import Layout from "@/src/modules/core/components/Layout";
+import ParamsPageTabNav from "@/src/modules/core/components/ParamsPageTabNav";
+import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import DailyReportOverview from "@/src/modules/reports/infrastructure/ui/components/DailyReportOverview";
 import AttendanceSection from "@/src/modules/reports/infrastructure/ui/components/attendance/AttendanceSection";
 import ReportingEvaluationSection from "@/src/modules/reports/infrastructure/ui/components/evaluation/ReportingEvaluationSection";

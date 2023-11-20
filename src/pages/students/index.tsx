@@ -1,8 +1,8 @@
 import { useUserContext } from "@/src/UserContext";
-import AdminLayout from "@/src/modules/core/infrastructure/ui/components/AdminLayout";
-import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
-import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
+import AdminLayout from "@/src/modules/core/components/AdminLayout";
+import Layout from "@/src/modules/core/components/Layout";
+import Modal from "@/src/modules/core/components/Modal";
+import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import { PaginatedStudentResponse } from "@/src/modules/students/domain/entities/PaginatedStudentResponse";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";

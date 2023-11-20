@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import Layout from "@/src/modules/core/components/Layout";
 import { ReportDetail } from "@/src/modules/reports/domain/entities/ReportDetail";
 import { reportDetailAdapter } from "@/src/modules/reports/infrastructure/adapters/reportDetailAdapter";
 import debounce from "lodash.debounce";

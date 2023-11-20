@@ -4,10 +4,10 @@ import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import AddClass from "@/src/modules/classes/infrastructure/ui/components/AddClass";
-import AdminLayout from "@/src/modules/core/infrastructure/ui/components/AdminLayout";
-import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
-import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
+import AdminLayout from "@/src/modules/core/components/AdminLayout";
+import Layout from "@/src/modules/core/components/Layout";
+import Modal from "@/src/modules/core/components/Modal";
+import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

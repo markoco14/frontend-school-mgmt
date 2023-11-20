@@ -1,7 +1,7 @@
 import EvaluationListSkeletonProps from "@/src/components/ui/skeleton/EvaluationListSkeletonProps";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import Modal from "@/src/modules/core/components/Modal";
 import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
 import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
 import { Student } from "@/src/modules/students/domain/entities/Student";

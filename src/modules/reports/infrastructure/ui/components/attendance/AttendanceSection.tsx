@@ -7,7 +7,7 @@ import AttendanceNoteButton from "@/src/modules/attendance/infrastructure/ui/com
 import AttendanceReasonForm from "@/src/modules/attendance/infrastructure/ui/components/AttendanceReasonForm";
 import AttendanceStatusButton from "@/src/modules/attendance/infrastructure/ui/components/AttendanceStatusButton";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import Modal from "@/src/modules/core/components/Modal";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import Image from "next/image";
 import { useEffect, useState } from "react";

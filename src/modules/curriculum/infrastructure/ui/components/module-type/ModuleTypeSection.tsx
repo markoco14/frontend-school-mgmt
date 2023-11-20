@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import Modal from "@/src/modules/core/components/Modal";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";

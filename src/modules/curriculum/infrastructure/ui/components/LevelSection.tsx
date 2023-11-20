@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import PaginationButtons from "@/src/modules/core/infrastructure/ui/components/PaginationButtons";
+import PaginationButtons from "@/src/modules/core/components/PaginationButtons";
 import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/levelAdapter";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";

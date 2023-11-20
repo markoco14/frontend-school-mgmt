@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import Layout from "@/src/modules/core/components/Layout";
 import New_ReportTeacherDetails from "@/src/modules/reports/infrastructure/ui/components/New_ReportTeacherDetails";
 import Link from "next/link";
 import { useState } from "react";

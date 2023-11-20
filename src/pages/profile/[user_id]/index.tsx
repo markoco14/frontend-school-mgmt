@@ -1,12 +1,12 @@
-import AdminLayout from "@/src/modules/core/infrastructure/ui/components/AdminLayout";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import AdminLayout from "@/src/modules/core/components/AdminLayout";
+import Modal from "@/src/modules/core/components/Modal";
 import { UserProfile } from "@/src/modules/user-mgmt/domain/entities/UserProfile";
 import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
 import ChangePasswordForm from "@/src/modules/user-mgmt/infrastructure/ui/ChangePasswordForm";
 import UserProfileForm from "@/src/modules/user-mgmt/infrastructure/ui/UserProfileForm";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../../UserContext";
-import Layout from "../../../modules/core/infrastructure/ui/components/Layout";
+import Layout from "../../../modules/core/components/Layout";
 
 export default function UserProfilePage() {
   const [userProfile, setUserProfile] = useState<UserProfile>();
