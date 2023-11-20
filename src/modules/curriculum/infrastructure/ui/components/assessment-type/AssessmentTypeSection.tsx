@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import Modal from "@/src/modules/core/components/Modal";
 import { AssessmentType } from "@/src/modules/curriculum/domain/entities/AssessmentType";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";

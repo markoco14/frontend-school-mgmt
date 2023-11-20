@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import Modal from "@/src/modules/core/components/Modal";
 import { EvaluationAttribute } from "@/src/modules/evaluation/domain/entities/EvaluationAttribute";
 import { RangeAttributePayload } from "@/src/modules/evaluation/domain/entities/payloads/RangeAttributePayload";
 import { useState } from "react";

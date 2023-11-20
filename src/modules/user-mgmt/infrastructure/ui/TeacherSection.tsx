@@ -1,7 +1,7 @@
 import { useUserContext } from "@/src/UserContext";
 import { useEffect, useState } from "react";
 
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import Modal from "@/src/modules/core/components/Modal";
 import { Teacher } from "../../domain/entities/Teacher";
 import { userAdapter } from "../adapters/userAdapter";
 import StaffList from "./StaffList";

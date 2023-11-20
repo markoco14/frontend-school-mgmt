@@ -1,7 +1,7 @@
 import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import Modal from "@/src/modules/core/components/Modal";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { classStudentAdapter } from "../../../adapters/classStudentAdapter";

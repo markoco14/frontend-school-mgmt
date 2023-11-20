@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
+import Modal from "@/src/modules/core/components/Modal";
 import { useEffect, useState } from "react";
 import { Level } from "../../../../domain/entities/Level";
 import { Module } from "../../../../domain/entities/Module";

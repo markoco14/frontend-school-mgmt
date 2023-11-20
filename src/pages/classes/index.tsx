@@ -4,9 +4,10 @@ import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import AddClass from "@/src/modules/classes/infrastructure/ui/components/AddClass";
-import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import Modal from "@/src/modules/core/infrastructure/ui/components/Modal";
-import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
+import AdminLayout from "@/src/modules/core/components/AdminLayout";
+import Layout from "@/src/modules/core/components/Layout";
+import Modal from "@/src/modules/core/components/Modal";
+import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -35,14 +36,17 @@ export default function ClassHome() {
   if (!selectedSchool) {
     return (
       <Layout>
-        <div>
-          <section>
-            {/* <SchoolHeader /> */}
-            <div className="mb-4 flex items-baseline justify-between">
-              <Link href="/">Click here to choose a school</Link>
-            </div>
-          </section>
-        </div>
+        <AdminLayout>
+          <div className="h-full w-full bg-white">
+            <section>
+              {/* <SchoolHeader /> */}
+              <p>You need to choose a school first.</p>
+              <div className="mb-4 flex items-baseline justify-between">
+                <Link href="/">Click here to choose a school</Link>
+              </div>
+            </section>
+          </div>
+        </AdminLayout>
       </Layout>
     );
   }
@@ -50,7 +54,11 @@ export default function ClassHome() {
   if (user?.role !== "OWNER") {
     return (
       <Layout>
-        <PermissionDenied />
+        <AdminLayout>
+          <div className="h-full w-full bg-white">
+            <PermissionDenied />
+          </div>
+        </AdminLayout>
       </Layout>
     );
   }
@@ -61,54 +69,58 @@ export default function ClassHome() {
 
   return (
     <Layout>
-      <div>
+      <AdminLayout>
         {/* <SchoolHeader /> */}
-        <section className="grid sm:grid-cols-2">
-          <div className="rounded border-2 p-4 shadow">
-            <div className="mb-4 flex items-baseline justify-between">
-              <h2 className="text-3xl">Your Classes</h2>
-              <button
-                onClick={() => {
-                  setIsAddClass(true);
-                }}
-              >
-                <i className="fa-solid fa-plus"></i>
-              </button>
+        <div className="h-full w-full bg-white">
+          <section>
+            <div className="max-w-[1000px] rounded border-2 bg-white p-4 shadow">
+              <div className="mb-4 flex items-baseline justify-between">
+                <h2 className="text-3xl">Your Classes</h2>
+                <button
+                  onClick={() => {
+                    setIsAddClass(true);
+                  }}
+                >
+                  <i className="fa-solid fa-plus"></i>
+                </button>
+              </div>
+              {loading && (
+                <Skeleton>
+                  <ClassListSkeletonProps />
+                </Skeleton>
+              )}
+              {!loading && classes.length === 0 ? (
+                <article>
+                  <p>You have not created any classes for your school.</p>
+                </article>
+              ) : (
+                <article>
+                  <ul className="flex flex-col divide-y">
+                    {classes?.map(
+                      (currentClass: ClassEntity, index: number) => (
+                        <li
+                          key={index}
+                          className="flex justify-between rounded-md p-2 hover:bg-blue-200"
+                        >
+                          <Link
+                            href={`/classes/${currentClass.id}`}
+                            className="w-full"
+                          >
+                            {currentClass.name}
+                          </Link>
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </article>
+              )}
             </div>
-            {loading && (
-              <Skeleton>
-                <ClassListSkeletonProps />
-              </Skeleton>
-            )}
-            {!loading && classes.length === 0 ? (
-              <article>
-                <p>You have not created any classes for your school.</p>
-              </article>
-            ) : (
-              <article>
-                <ul className="flex flex-col divide-y">
-                  {classes?.map((currentClass: ClassEntity, index: number) => (
-                    <li
-                      key={index}
-                      className="flex justify-between rounded-md p-2 hover:bg-blue-200"
-                    >
-                      <Link
-                        href={`/classes/${currentClass.id}`}
-                        className="w-full"
-                      >
-                        {currentClass.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            )}
-          </div>
-          <Modal show={isAddClass} close={handleClose} title="Add Class">
-            <AddClass setClasses={setClasses} />
-          </Modal>
-        </section>
-      </div>
+            <Modal show={isAddClass} close={handleClose} title="Add Class">
+              <AddClass setClasses={setClasses} />
+            </Modal>
+          </section>
+        </div>
+      </AdminLayout>
     </Layout>
   );
 }

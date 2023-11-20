@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import Layout from "@/src/modules/core/components/Layout";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";

@@ -3,9 +3,10 @@ import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import ManageClassTeacher from "@/src/modules/classes/infrastructure/ui/components/ManageClassTeacher";
 import ManageClassStudents from "@/src/modules/classes/infrastructure/ui/components/class-students/ManageClassStudents";
-import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
-import ParamsPageTabNav from "@/src/modules/core/infrastructure/ui/components/ParamsPageTabNav";
-import PermissionDenied from "@/src/modules/core/infrastructure/ui/components/PermissionDenied";
+import AdminLayout from "@/src/modules/core/components/AdminLayout";
+import Layout from "@/src/modules/core/components/Layout";
+import ParamsPageTabNav from "@/src/modules/core/components/ParamsPageTabNav";
+import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -51,38 +52,52 @@ export default function ManageClassDetails({
   if (!user?.permissions.includes(1)) {
     return (
       <Layout>
-        <PermissionDenied />
+        <AdminLayout>
+          <div className="h-full w-full bg-white">
+            <PermissionDenied />
+          </div>
+        </AdminLayout>
       </Layout>
     );
   }
 
   return (
     <Layout>
-      <section className="grid gap-4">
-        <div className="mb-2 flex items-baseline justify-between">
-          <h2 className="text-3xl">{selectedClass?.name}</h2>
-          <Link href="/classes">Back</Link>
-        </div>
-        <ParamsPageTabNav links={links} tab={tab} queryParam={classEntity.id} />
-        {tab === "class info" ? (
-          <article className="col-span-1 rounded border p-2 shadow md:row-span-2">
-            <p>Class info goes here.</p>
-          </article>
-        ) : tab === "students" ? (
-          <article className="col-span-1 md:row-span-2">
-            <ManageClassStudents selectedClass={selectedClass} />
-          </article>
-        ) : (
-          tab === "teachers" && (
-            <article className="col-span-1 row-span-1">
-              <ManageClassTeacher
-                selectedClass={selectedClass}
-                setSelectedClass={setSelectedClass}
+      <AdminLayout>
+        <div className="h-full w-full bg-white">
+          <section>
+            <div className="min-h-[50vh] max-w-[1000px] bg-white">
+              <div className="mb-2 flex items-baseline justify-between">
+                <h2 className="text-3xl">{selectedClass?.name}</h2>
+                <Link href="/classes">Back</Link>
+              </div>
+              <ParamsPageTabNav
+                links={links}
+                tab={tab}
+                queryParam={classEntity.id}
               />
-            </article>
-          )
-        )}
-      </section>
+              {tab === "class info" ? (
+                <article className="col-span-1 rounded border p-2 shadow md:row-span-2">
+                  <p>Class info goes here.</p>
+                </article>
+              ) : tab === "students" ? (
+                <article className="col-span-1 md:row-span-2">
+                  <ManageClassStudents selectedClass={selectedClass} />
+                </article>
+              ) : (
+                tab === "teachers" && (
+                  <article className="col-span-1 row-span-1">
+                    <ManageClassTeacher
+                      selectedClass={selectedClass}
+                      setSelectedClass={setSelectedClass}
+                    />
+                  </article>
+                )
+              )}
+            </div>
+          </section>
+        </div>
+      </AdminLayout>
     </Layout>
   );
 }

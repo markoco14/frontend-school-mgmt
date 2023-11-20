@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import Layout from "@/src/modules/core/infrastructure/ui/components/Layout";
+import Layout from "@/src/modules/core/components/Layout";
 import ReportAdminSetup from "@/src/modules/reports/infrastructure/ui/components/ReportAdminSetup";
 import ReportTeacherDetails from "@/src/modules/reports/infrastructure/ui/components/ReportTeacherDetails";
 import Link from "next/link";

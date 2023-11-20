@@ -14,7 +14,7 @@ const ParamsPageTabNav = ({
   // TODO: pass a query params object? construct params on each page and just send that object
   // will allow for dealing with optional parameters?
   return (
-    <ul className="flex gap-4 overflow-x-auto rounded border p-2 shadow">
+    <ul className="bg-white flex gap-4 overflow-x-auto rounded border p-2 shadow">
       {links.map((link) => (
         <Link
           href={`${queryParam ? queryParam : ""}?${
