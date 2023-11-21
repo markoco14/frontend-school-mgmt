@@ -28,8 +28,8 @@ export default function UserProfilePage() {
   return (
     <Layout>
       <AdminLayout>
-        <div className="h-full w-full bg-white pt-16">
-          <section className="mb-16 max-w-[600px] mx-auto">
+        <div className="h-full w-full bg-white flex flex-col gap-16">
+          <section className="max-w-[600px] border shadow p-4">
             <div className="flex justify-between">
               <h1>User Profile</h1>
               <button onClick={() => setIsEditProfile(true)}>Edit</button>
@@ -38,7 +38,7 @@ export default function UserProfilePage() {
             <p>{userProfile?.last_name}</p>
             <p>{userProfile?.email}</p>
           </section>
-          <section className="mb-16 max-w-[600px] mx-auto">
+          <section className="max-w-[600px] border shadow p-4">
             <h1>Secure info</h1>
             <button onClick={() => setIsEditPassword(true)}>
               Edit password
