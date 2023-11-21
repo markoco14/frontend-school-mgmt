@@ -1,5 +1,6 @@
 import { useUserContext } from "@/src/UserContext";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
+import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
 import PaginationButtons from "@/src/modules/core/components/PaginationButtons";
 import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/levelAdapter";
 import { schoolDayAdapter } from "@/src/modules/schedule/infrastructure/ui/adapters/schoolDayAdapter";
@@ -7,8 +8,7 @@ import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Level } from "../../../../curriculum/domain/entities/Level";
-import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
+import { Level } from "../../curriculum/domain/entities/Level";
 
 type Inputs = {
   className: string;

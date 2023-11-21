@@ -1,4 +1,4 @@
-import { ClassStudent } from "@/src/modules/classes/domain/entities/ClassStudent";
+import { ClassStudent } from "@/src/modules/classes/entities/ClassStudent";
 import { Student } from "@/src/modules/students/domain/entities/Student";
 import { StudentAttendance } from "../../domain/entities/StudentAttendance";
 

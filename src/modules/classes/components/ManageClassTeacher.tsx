@@ -1,8 +1,8 @@
 import { useUserContext } from "@/src/UserContext";
-import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { Teacher } from "@/src/modules/user-mgmt/domain/entities/Teacher";
 import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
 import { useEffect, useState } from "react";
+import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
 
 export default function ManageClassTeacher({
