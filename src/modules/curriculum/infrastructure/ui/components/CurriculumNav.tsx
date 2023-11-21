@@ -13,7 +13,7 @@ export default function CurriculumNav({tab, setTab}: {tab: number, setTab: Funct
 			>
 				Levels
 			</button>
-			<button
+			{/* <button
 				className={`${tab === 3 ? "text-blue-500 underline underline-offset-2" : "text-gray-600"} text-lg hover:text-blue-700 ease-in-out duration-200`} 
 				onClick={() => setTab(3)}
 			>
@@ -24,7 +24,7 @@ export default function CurriculumNav({tab, setTab}: {tab: number, setTab: Funct
 				onClick={() => setTab(4)}
 			>
 				Module Types
-			</button>
+			</button> */}
 			{/* <button
 				className={`${tab === 5 ? "text-blue-500 underline underline-offset-2" : "text-gray-600"} text-lg hover:text-blue-700 ease-in-out duration-200`} 
 				onClick={() => setTab(5)}

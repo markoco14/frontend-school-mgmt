@@ -88,26 +88,6 @@ const NavigationLinks = () => {
             >
               Students
             </Link>
-            <Link
-              href="/reports/"
-              className={`${
-                router.pathname.includes("reports")
-                  ? "text-white underline decoration-2 underline-offset-4"
-                  : ""
-              }`}
-            >
-              Reports
-            </Link>
-            <Link
-              href="/manage"
-              className={`${
-                router.pathname.includes("manage")
-                  ? "text-white underline decoration-2 underline-offset-4"
-                  : ""
-              }`}
-            >
-              Manage
-            </Link>
           </>
         )}
       {user && (

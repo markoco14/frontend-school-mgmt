@@ -8,14 +8,14 @@ export default function MobileNavbar() {
     <nav>
       {/* Sliding Panel */}
       {isShowing && (
-        <div className="absolute left-0 top-0 flex h-full w-screen flex-col bg-blue-900 pb-[36px] text-white">
+        <div className="z-10 absolute left-0 top-0 flex h-full w-screen flex-col bg-blue-900 pb-[36px] text-white">
           <div className="flex h-full flex-col items-center justify-evenly text-2xl text-white opacity-100">
             <NavigationLinks />
           </div>
         </div>
       )}
       {/* Bottom Nav Bar */}
-      <div className="justify-left fixed bottom-0 left-0 flex h-[36px] w-full items-center bg-blue-900 px-2 text-white">
+      <div className="z-10 justify-left fixed bottom-0 left-0 flex h-[36px] w-full items-center bg-blue-900 px-2 text-white">
         <button
           className="flex items-center"
           onClick={() => {
