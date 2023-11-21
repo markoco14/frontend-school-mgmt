@@ -8,16 +8,14 @@ import { School } from "@/src/modules/school-mgmt/domain/entities/School";
 import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
 import LandingPage from "@/src/modules/website/LandingPage";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { ReactElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { NextPageWithLayout } from "./_app";
 
 const Home: NextPageWithLayout = () => {
   const { user, selectedSchool, handleSelectSchool } = useUserContext();
-
   const [schools, setSchools] = useState<School[]>([]);
-  const router = useRouter();
+  
   useEffect(() => {
     async function getData() {
       if (user) {
