@@ -52,7 +52,7 @@ export default function Manage() {
     try {
       await evaluationAttributeAdapter
         .delete({ attribute_id: attribute_id })
-        .then((res) => {
+        .then(() => {
           const remainingAttributes = attributes.filter((attribute) => {
             return attribute.id !== attribute_id;
           });

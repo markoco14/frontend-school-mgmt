@@ -7,8 +7,6 @@ import { subjectLevelAdapter } from "@/src/modules/curriculum/infrastructure/ada
 import CurriculumNav from "@/src/modules/curriculum/infrastructure/ui/components/CurriculumNav";
 import LevelSection from "@/src/modules/curriculum/infrastructure/ui/components/LevelSection";
 import SubjectSection from "@/src/modules/curriculum/infrastructure/ui/components/SubjectSection";
-import ModuleTypeSection from "@/src/modules/curriculum/infrastructure/ui/components/module-type/ModuleTypeSection";
-import ModuleSection from "@/src/modules/curriculum/infrastructure/ui/components/module/ModuleSection";
 import { useEffect, useState } from "react";
 
 export default function CurriculumHome() {
@@ -47,7 +45,6 @@ export default function CurriculumHome() {
       <AdminLayout>
         <div className="h-full w-full bg-white">
           <div className="max-w-[1000px]">
-            {/* <SchoolHeader /> */}
             <CurriculumNav tab={tab} setTab={setTab} />
             {tab === 1 && (
               <SubjectSection
@@ -56,14 +53,6 @@ export default function CurriculumHome() {
               />
             )}
             {tab === 2 && <LevelSection />}
-            {/* {tab === 3 && <ModuleSection subjectLevels={subjectLevels} />} */}
-            {/* {tab === 4 && <ModuleTypeSection />} */}
-            {/* {tab === 5 && (
-            <AssessmentTypeSection />
-          )}
-          {tab === 6 && (
-            <AssessmentSection />
-          )} */}
           </div>
         </div>
       </AdminLayout>
