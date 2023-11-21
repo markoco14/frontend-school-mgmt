@@ -1,6 +1,6 @@
-import toast from "react-hot-toast";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
-import { classAdapter } from "../../adapters/classAdapter";
+import toast from "react-hot-toast";
+import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
 
 export default function DeleteClass({
   selectedClass,

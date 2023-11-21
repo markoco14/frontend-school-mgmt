@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import { classStudentAdapter } from "@/src/modules/classes/infrastructure/adapters/classStudentAdapter";
+import { classStudentAdapter } from "@/src/modules/classes/adapters/classStudentAdapter";
 import NoData from "@/src/modules/core/components/NoData";
 import EvaluationSection from "@/src/modules/evaluation/infrastructure/ui/components/EvaluationSection";
 import EvaluationSection2 from "@/src/modules/evaluation/infrastructure/ui/components/EvaluationSection2";

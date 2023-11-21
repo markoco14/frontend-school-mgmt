@@ -5,7 +5,7 @@ import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
 import ClassList from "@/src/modules/attendance/infrastructure/ui/components/ClassList";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
-import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
+import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import ParamsPageTabNav from "@/src/modules/core/components/ParamsPageTabNav";
