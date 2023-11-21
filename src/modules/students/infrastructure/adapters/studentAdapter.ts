@@ -1,5 +1,5 @@
-import { PaginatedStudentResponse } from "../../domain/entities/PaginatedStudentResponse";
-import { Student } from "./../../domain/entities/Student";
+import { PaginatedStudentResponse } from "@/src/modules/students/entities/PaginatedStudentResponse";
+import { Student } from "@/src/modules/students/entities/Student";
 
 class StudentAdapter {
   //
@@ -19,13 +19,10 @@ class StudentAdapter {
     attendance?: boolean;
     schoolId?: number;
   }): Promise<Student[]> {
-
-   
     let url = `${process.env.NEXT_PUBLIC_API_URL}/students/`;
 
-
     const queryParams: string[] = [];
-    if (schoolId) queryParams.push(`school=${encodeURIComponent(schoolId)}`)
+    if (schoolId) queryParams.push(`school=${encodeURIComponent(schoolId)}`);
     if (classEntityId)
       queryParams.push(`class_entity=${encodeURIComponent(classEntityId)}`);
     if (date) queryParams.push(`date=${encodeURIComponent(date)}`);

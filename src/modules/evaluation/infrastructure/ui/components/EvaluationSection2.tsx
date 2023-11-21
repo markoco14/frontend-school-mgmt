@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import { Student } from "@/src/modules/students/domain/entities/Student";
+import { Student } from "@/src/modules/students/entities/Student";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { evaluationAttributeAdapter } from "../../adapters/evaluationAttributeAdapter";

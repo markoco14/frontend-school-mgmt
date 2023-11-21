@@ -3,7 +3,7 @@ import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import ParamsPageTabNav from "@/src/modules/core/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
-import { Student } from "@/src/modules/students/domain/entities/Student";
+import { Student } from "@/src/modules/students/entities/Student";
 import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
 import Evaluations from "@/src/modules/students/infrastructure/ui/evaluation/Evaluations";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";

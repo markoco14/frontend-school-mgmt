@@ -3,8 +3,8 @@ import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
 import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
 import { useEffect, useState } from "react";
-import { Student } from "../../../domain/entities/Student";
-import { StudentEvaluationFilters } from "../../../domain/entities/StudentEvaluationFilters";
+import { Student } from "@/src/modules/students/entities/Student";
+import { StudentEvaluationFilters } from "@/src/modules/students/entities/StudentEvaluationFilters";
 import { set } from "date-fns";
 
 

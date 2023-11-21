@@ -3,7 +3,7 @@ import { classStudentAdapter } from "@/src/modules/classes/adapters/classStudent
 import NoData from "@/src/modules/core/components/NoData";
 import EvaluationSection from "@/src/modules/evaluation/infrastructure/ui/components/EvaluationSection";
 import EvaluationSection2 from "@/src/modules/evaluation/infrastructure/ui/components/EvaluationSection2";
-import { Student } from "@/src/modules/students/domain/entities/Student";
+import { Student } from "@/src/modules/students/entities/Student";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";

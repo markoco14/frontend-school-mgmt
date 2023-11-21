@@ -1,4 +1,4 @@
-import { Student } from "@/src/modules/students/domain/entities/Student";
+import { Student } from "@/src/modules/students/entities/Student";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";

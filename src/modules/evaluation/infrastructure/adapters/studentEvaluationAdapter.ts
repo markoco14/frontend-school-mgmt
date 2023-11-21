@@ -1,6 +1,6 @@
-import { StudentEvaluationFilters } from "@/src/modules/students/domain/entities/StudentEvaluationFilters";
-import { StudentEvaluation } from "../../domain/entities/StudentEvaluation";
-import { Student } from "@/src/modules/students/domain/entities/Student";
+import { StudentEvaluationFilters } from "@/src/modules/students/entities/StudentEvaluationFilters";
+import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
+import { Student } from "@/src/modules/students/entities/Student";
 
 class StudentEvaluationAdapter {
   //

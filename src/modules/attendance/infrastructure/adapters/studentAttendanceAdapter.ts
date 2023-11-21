@@ -1,5 +1,5 @@
 import { ClassStudent } from "@/src/modules/classes/entities/ClassStudent";
-import { Student } from "@/src/modules/students/domain/entities/Student";
+import { Student } from "@/src/modules/students/entities/Student";
 import { StudentAttendance } from "../../domain/entities/StudentAttendance";
 
 // students-with-attendance/?class_entity=36&date=2023-09-11

@@ -1,4 +1,4 @@
-import { StudentAssessment } from "../../domain/entities/StudentAssessment";
+import { StudentAssessment } from "@/src/modules/students/entities/StudentAssessment";
 
 class StudentAssessmentAdapter {
   public async list({
@@ -37,7 +37,6 @@ class StudentAssessmentAdapter {
 
     return student;
   }
-
 }
 
 export const studentAssessmentAdapter = new StudentAssessmentAdapter();

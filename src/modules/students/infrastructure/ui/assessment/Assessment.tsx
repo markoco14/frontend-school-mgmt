@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { Student } from "../../../domain/entities/Student";
-import { StudentAssessment } from "../../../domain/entities/StudentAssessment";
-import { studentAssessmentAdapter } from "../../adapters/studentAssessmentAdapter";
-import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
+import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
+import { useEffect, useState } from "react";
+import { Student } from "@/src/modules/students/entities/Student";
+import { StudentAssessment } from "@/src/modules/students/entities/StudentAssessment";
+import { studentAssessmentAdapter } from "../../adapters/studentAssessmentAdapter";
 
 const Assessments = ({ student }: { student: Student }) => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,4 +51,4 @@ const Assessments = ({ student }: { student: Student }) => {
   );
 };
 
-export default Assessments
+export default Assessments;

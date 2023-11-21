@@ -1,4 +1,4 @@
-import { Student } from "@/src/modules/students/domain/entities/Student";
+import { Student } from "@/src/modules/students/entities/Student";
 
 export class ReportDetail {
 	constructor(
