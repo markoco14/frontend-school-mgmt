@@ -37,7 +37,7 @@ export default function Staff() {
     <Layout>
       <AdminLayout>
         <div className="bg-white h-full w-full">
-          <section className="max-w-[1000px] grid gap-4 sm:p-8">
+          <section className="max-w-[1000px] grid gap-4">
             <ParamsPageTabNav links={links} tab={tab} />
             {tab === "teachers" && <TeacherSection />}
             {tab === "admins" && <AdminSection />}
