@@ -3,7 +3,7 @@ import BackButton from "@/src/components/ui/utils/BackButton";
 import Layout from "@/src/modules/core/components/Layout";
 import Modal from "@/src/modules/core/components/Modal";
 import PageTabNavigation from "@/src/modules/core/components/PageTabNavigation";
-import { Subject } from "@/src/modules/curriculum/domain/entities/Subject";
+import { Subject } from "@/src/modules/curriculum/entities/Subject";
 import { subjectAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectAdapter";
 import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
 import RangeAttributeForm from "@/src/modules/reports/infrastructure/ui/components/evaluation/RangeAttributeForm";

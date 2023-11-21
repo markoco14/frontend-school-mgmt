@@ -2,7 +2,7 @@ import { useUserContext } from "@/src/UserContext";
 import { subjectAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectAdapter";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Subject } from "../../../domain/entities/Subject";
+import { Subject } from "@/src/modules/curriculum/entities/Subject";
 
 type Inputs = {
   subjectName: string;

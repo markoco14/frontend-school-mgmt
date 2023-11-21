@@ -3,7 +3,7 @@ import Modal from "@/src/modules/core/components/Modal";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { ModuleType } from "../../../../domain/entities/ModuleType";
+import { ModuleType } from "@/src/modules/curriculum/entities/ModuleType";
 import { moduleTypeAdapter } from "../../../adapters/moduleTypeAdapter";
 import ManageModuleType from "./ManageModuleType";
 

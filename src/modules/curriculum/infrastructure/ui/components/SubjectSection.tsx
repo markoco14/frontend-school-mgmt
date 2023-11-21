@@ -1,9 +1,9 @@
 import { useUserContext } from "@/src/UserContext";
 import Modal from "@/src/modules/core/components/Modal";
+import { Subject } from "@/src/modules/curriculum/entities/Subject";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Subject } from "../../../domain/entities/Subject";
-import { SubjectLevel } from "../../../domain/entities/SubjectLevel";
+import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
 import { subjectAdapter } from "../../adapters/subjectAdapter";
 import AddSubjectForm from "./AddSubjectForm";
 import AddSubjectLevelForm from "./AddSubjectLevelForm";

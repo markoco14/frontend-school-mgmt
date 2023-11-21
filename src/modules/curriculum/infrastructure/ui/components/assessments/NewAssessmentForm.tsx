@@ -1,6 +1,6 @@
 import { useUserContext } from "@/src/UserContext";
-import { AssessmentType } from "@/src/modules/curriculum/domain/entities/AssessmentType";
-import { Module } from "@/src/modules/curriculum/domain/entities/Module";
+import { AssessmentType } from "@/src/modules/curriculum/entities/AssessmentType";
+import { Module } from "@/src/modules/curriculum/entities/Module";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";

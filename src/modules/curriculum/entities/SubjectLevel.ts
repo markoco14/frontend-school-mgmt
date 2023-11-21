@@ -1,5 +1,5 @@
+import { Subject } from "@/src/modules/curriculum/entities/Subject";
 import { Level } from "./Level";
-import { Subject } from "./Subject";
 
 export class SubjectLevel {
   constructor(

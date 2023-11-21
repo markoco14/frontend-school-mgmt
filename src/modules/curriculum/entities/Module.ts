@@ -1,11 +1,11 @@
+import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
 import { Assessment } from "./Assessment";
-import { SubjectLevel } from "./SubjectLevel";
 
 export class Module {
   constructor(
     public id: number,
     public name: string,
-		public description: string,
+    public description: string,
     public order: number,
     public subject_level: SubjectLevel,
     public type: number,

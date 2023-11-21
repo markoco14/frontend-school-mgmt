@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ModuleType } from "../../../../domain/entities/ModuleType";
-import { moduleTypeAdapter } from "../../../adapters/moduleTypeAdapter";
 import toast from "react-hot-toast";
+import { ModuleType } from "@/src/modules/curriculum/entities/ModuleType";
+import { moduleTypeAdapter } from "../../../adapters/moduleTypeAdapter";
 
 type Inputs = {
   name: string;
@@ -35,7 +35,7 @@ export default function ManageModuleType({
         .then((res) => {
           // Find the index of the object to replace
           const index = moduleTypes.findIndex(
-            (item) => item.id === selectedType?.id
+            (item) => item.id === selectedType?.id,
           );
 
           // Create a copy of the original array
@@ -55,7 +55,7 @@ export default function ManageModuleType({
     selectedType &&
       (await moduleTypeAdapter.delete({ typeId: selectedType.id }).then(() => {
         setModuleTypes((prevTypes: ModuleType[]) =>
-          prevTypes.filter((type) => type.id !== selectedType.id)
+          prevTypes.filter((type) => type.id !== selectedType.id),
         );
         setSelectedType(null);
         toast.success("Module Type deleted successfully!");
@@ -69,7 +69,7 @@ export default function ManageModuleType({
   ) : (
     <article className="flex flex-col gap-4 divide-y">
       <section>
-        <h3 className="text-lg mb-4 text-gray-700">{selectedType?.name}</h3>
+        <h3 className="mb-4 text-lg text-gray-700">{selectedType?.name}</h3>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label className="flex justify-between">
@@ -77,7 +77,7 @@ export default function ManageModuleType({
               {errors.name && <span className="text-red-500">required</span>}
             </label>
             <input
-              className="border shadow-inner rounded p-2"
+              className="rounded border p-2 shadow-inner"
               defaultValue={selectedType?.name}
               {...register("name", {
                 required: true,
@@ -86,13 +86,13 @@ export default function ManageModuleType({
               })}
             />
           </div>
-          <button className="w-full ease-in-out duration-200 bg-blue-600  hover:bg-blue-900 p-2 rounded shadow text-white">
+          <button className="w-full rounded bg-blue-600 p-2  text-white shadow duration-200 ease-in-out hover:bg-blue-900">
             Submit
           </button>
         </form>
       </section>
       <section className="pt-4">
-        <h3 className="text-lg mb-4 text-gray-700">Delete Module Type</h3>
+        <h3 className="mb-4 text-lg text-gray-700">Delete Module Type</h3>
         <p className="mb-2">
           Warning, this will delete all data related to {selectedType?.name}
         </p>

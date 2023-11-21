@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { assessmentTypeAdapter } from "../../../adapters/assessmentTypeAdapter";
-import { AssessmentType } from "@/src/modules/curriculum/domain/entities/AssessmentType";
+import { AssessmentType } from "@/src/modules/curriculum/entities/AssessmentType";
 
 type Inputs = {
   name: string;

@@ -1,4 +1,4 @@
-import { Level } from "@/src/modules/curriculum/domain/entities/Level";
+import { Level } from "@/src/modules/curriculum/entities/Level";
 
 export default function LevelSection({levels, handleDeleteLevel}: {levels: Level[], handleDeleteLevel: Function}) {
   

@@ -1,4 +1,4 @@
-import { Subject } from '@/src/modules/curriculum/domain/entities/Subject';
+import { Subject } from '@/src/modules/curriculum/entities/Subject';
 
 export class SubjectListResponse {
   constructor(

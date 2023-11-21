@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import { Module } from "@/src/modules/curriculum/domain/entities/Module";
+import { Module } from "@/src/modules/curriculum/entities/Module";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { assessmentAdapter } from "../../../adapters/assessmentAdapter";

@@ -1,4 +1,4 @@
-import { AssessmentType } from './../../domain/entities/AssessmentType';
+import { AssessmentType } from '../../entities/AssessmentType';
 
 
 class AssessmentTypeAdapter {
