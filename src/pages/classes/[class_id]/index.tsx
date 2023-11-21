@@ -2,7 +2,7 @@ import { useUserContext } from "@/src/UserContext";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
 import ManageClassTeacher from "@/src/modules/classes/components/ManageClassTeacher";
-import ManageClassStudents from "@/src/modules/classes/infrastructure/ui/components/class-students/ManageClassStudents";
+import ManageClassStudents from "@/src/modules/classes/components/class-students/ManageClassStudents";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import ParamsPageTabNav from "@/src/modules/core/components/ParamsPageTabNav";
