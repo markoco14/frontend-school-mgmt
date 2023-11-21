@@ -1,18 +1,15 @@
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
-import Modal from "@/src/modules/core/components/Modal";
+import UserPasswordSection from "@/src/modules/user-mgmt/components/UserPasswordSection";
+import UserProfileSection from "@/src/modules/user-mgmt/components/UserProfileSection";
 import { UserProfile } from "@/src/modules/user-mgmt/domain/entities/UserProfile";
 import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
-import ChangePasswordForm from "@/src/modules/user-mgmt/infrastructure/ui/ChangePasswordForm";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../../UserContext";
 import Layout from "../../../modules/core/components/Layout";
-import UserProfileSection from "@/src/modules/user-mgmt/components/UserProfileSection";
-import UserPasswordSection from "@/src/modules/user-mgmt/components/UserPasswordSection";
 
 export default function UserProfilePage() {
-  const [userProfile, setUserProfile] = useState<UserProfile>();
-  const [isEditPassword, setIsEditPassword] = useState<boolean>(false);
   const { user } = useUserContext();
+  const [userProfile, setUserProfile] = useState<UserProfile>();
 
   useEffect(() => {
     async function getData() {
@@ -25,20 +22,18 @@ export default function UserProfilePage() {
 
     getData();
   }, [user]);
+
   return (
     <Layout>
       <AdminLayout>
-        <div className="h-full w-full bg-white flex flex-col gap-16">
-          {userProfile && <UserProfileSection user={userProfile} setUserProfile={setUserProfile}/>}
-          {userProfile && <UserPasswordSection user={userProfile} setIsEditPassword={setIsEditPassword}/>}
-          
-          <Modal
-            show={isEditPassword}
-            close={setIsEditPassword}
-            title={"Change Password"}
-          >
-            <ChangePasswordForm />
-          </Modal>
+        <div className="flex h-full w-full flex-col gap-16 bg-white">
+          {userProfile && (
+            <UserProfileSection
+              user={userProfile}
+              setUserProfile={setUserProfile}
+            />
+          )}
+          {userProfile && <UserPasswordSection />}
         </div>
       </AdminLayout>
     </Layout>

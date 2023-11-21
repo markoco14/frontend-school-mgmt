@@ -1,20 +1,26 @@
-import React from "react";
-import { UserProfile } from "../domain/entities/UserProfile";
+import React, { useState } from "react";
+import Modal from "../../core/components/Modal";
+import ChangePasswordForm from "../infrastructure/ui/ChangePasswordForm";
 
-interface UserPasswordProps {
-  user: UserProfile;
-  setIsEditPassword: Function;
-}
 
-const UserPasswordSection: React.FC<UserPasswordProps> = ({
-  user,
-  setIsEditPassword,
+const UserPasswordSection = ({
 }) => {
+	const [isEditPassword, setIsEditPassword] = useState<boolean>(false);
+	
   return (
-    <section className="max-w-[600px] border p-4 shadow">
-      <h1>Secure info</h1>
-      <button onClick={() => setIsEditPassword(true)}>Edit password</button>
-    </section>
+    <>
+      <section className="max-w-[600px] border p-4 shadow">
+        <h1>Secure info</h1>
+        <button onClick={() => setIsEditPassword(true)}>Edit password</button>
+      </section>
+      <Modal
+        show={isEditPassword}
+        close={setIsEditPassword}
+        title={"Change Password"}
+      >
+        <ChangePasswordForm />
+      </Modal>
+    </>
   );
 };
 
