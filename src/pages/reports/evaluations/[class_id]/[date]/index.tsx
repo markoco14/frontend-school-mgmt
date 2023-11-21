@@ -35,9 +35,7 @@ export const getServerSideProps: GetServerSideProps<{
 export default function ReportDate({
   students,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(students);
   const { user, selectedSchool } = useUserContext();
-  const [loading, setLoading] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(1);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [selectedSubjectId, setSelectedSubjectId] = useState<number>();

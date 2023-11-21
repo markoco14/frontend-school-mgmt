@@ -1,4 +1,3 @@
-import { User } from "@/src/modules/user-mgmt/entities/User";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { userAdapter } from "../../adapters/userAdapter";
@@ -15,12 +14,11 @@ export default function Signup() {
     reset,
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      const user: User = await userAdapter.addUser({
+      await userAdapter.addUser({
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,

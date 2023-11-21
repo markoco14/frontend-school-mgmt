@@ -13,7 +13,7 @@ export default function TeacherSection() {
   const [isAddTeacher, setIsAddTeacher] = useState<boolean>(false);
 
   useEffect(() => {
-    async function getData(school_id: number, user_id: number) {
+    async function getData(school_id: number) {
       await userAdapter
         .listSchoolTeachers({ schoolId: school_id })
         .then((res) => {
@@ -21,7 +21,7 @@ export default function TeacherSection() {
         });
     }
     if (user && selectedSchool) {
-      getData(selectedSchool.id, user.user_id);
+      getData(selectedSchool.id);
     }
   }, [selectedSchool, user]);
 
