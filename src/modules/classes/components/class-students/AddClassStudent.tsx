@@ -2,7 +2,7 @@ import { useUserContext } from "@/src/UserContext";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
 import { Student } from "@/src/modules/students/entities/Student";
-import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
+import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";

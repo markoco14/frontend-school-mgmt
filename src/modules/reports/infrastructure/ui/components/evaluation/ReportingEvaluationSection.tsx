@@ -6,7 +6,7 @@ import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/Stud
 import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructure/adapters/studentEvaluationAdapter";
 import { Student } from "@/src/modules/students/entities/Student";
 import { StudentEvaluationFilters } from "@/src/modules/students/entities/StudentEvaluationFilters";
-import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
+import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
 import { Dictionary } from "lodash";
 import Image from "next/image";
 import { useEffect, useState } from "react";

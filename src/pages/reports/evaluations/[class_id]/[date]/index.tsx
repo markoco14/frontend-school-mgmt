@@ -9,7 +9,7 @@ import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructur
 import RangeAttributeForm from "@/src/modules/reports/infrastructure/ui/components/evaluation/RangeAttributeForm";
 import TextAttributeForm from "@/src/modules/reports/infrastructure/ui/components/evaluation/TextAttributeForm";
 import { Student } from "@/src/modules/students/entities/Student";
-import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
+import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";

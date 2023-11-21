@@ -3,7 +3,7 @@ import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import { useEffect, useState } from "react";
 import { Student } from "@/src/modules/students/entities/Student";
 import { StudentAssessment } from "@/src/modules/students/entities/StudentAssessment";
-import { studentAssessmentAdapter } from "../../adapters/studentAssessmentAdapter";
+import { studentAssessmentAdapter } from "@/src/modules/students/adapters/studentAssessmentAdapter";
 
 const Assessments = ({ student }: { student: Student }) => {
   const [loading, setLoading] = useState<boolean>(false);
