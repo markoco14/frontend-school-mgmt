@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Level } from "../../../../curriculum/domain/entities/Level";
-import { ClassEntity } from "../../../domain/entities/ClassEntity";
+import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { classAdapter } from "../../adapters/classAdapter";
 
 type Inputs = {

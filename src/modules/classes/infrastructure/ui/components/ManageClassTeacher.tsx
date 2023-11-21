@@ -2,7 +2,7 @@ import { useUserContext } from "@/src/UserContext";
 import { Teacher } from "@/src/modules/user-mgmt/domain/entities/Teacher";
 import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
 import { useEffect, useState } from "react";
-import { ClassEntity } from "../../../domain/entities/ClassEntity";
+import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { classAdapter } from "../../adapters/classAdapter";
 
 export default function ManageClassTeacher({

@@ -6,7 +6,7 @@ export class ClassEntity {
     public school: number,
     public name: string,
     public teacher: number,
-		public class_list?: ClassStudent[],
+    public class_list?: ClassStudent[],
     public day?: number[],
   ) {}
 }

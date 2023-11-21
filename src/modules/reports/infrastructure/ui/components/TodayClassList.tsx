@@ -1,7 +1,7 @@
 import { useUserContext } from "@/src/UserContext";
 import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
-import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
+import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import { format } from "date-fns";
 import Link from "next/link";

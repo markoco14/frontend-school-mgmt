@@ -1,4 +1,4 @@
-import { ClassEntity } from "../../domain/entities/ClassEntity";
+import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 
 class ClassAdapter {
   public async list({
@@ -13,7 +13,7 @@ class ClassAdapter {
     let url;
 
     url = `${process.env.NEXT_PUBLIC_API_URL}/classes/`;
-    
+
     const queryParams: string[] = [];
     if (day) queryParams.push(`day=${encodeURIComponent(day)}`);
     if (school_id) queryParams.push(`school=${encodeURIComponent(school_id)}`);
@@ -22,7 +22,7 @@ class ClassAdapter {
       url += `?${queryParams.join("&")}`;
     }
 
-    const res = await fetch(url, {signal});
+    const res = await fetch(url, { signal });
     const classEntity: ClassEntity[] = await res.json();
 
     return classEntity;

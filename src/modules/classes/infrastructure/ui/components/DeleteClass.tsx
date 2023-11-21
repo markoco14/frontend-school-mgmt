@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { ClassEntity } from "../../../domain/entities/ClassEntity";
+import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { classAdapter } from "../../adapters/classAdapter";
 
 export default function DeleteClass({

@@ -1,9 +1,12 @@
-
 import Image from "next/image";
-import { ClassStudent } from "../../../../domain/entities/ClassStudent";
+import { ClassStudent } from "@/src/modules/classes/entities/ClassStudent";
 
-export default function ClassStudentList({classStudentList}: {classStudentList: ClassStudent[]}) {
-	// async function removeStudentFromClassList(
+export default function ClassStudentList({
+  classStudentList,
+}: {
+  classStudentList: ClassStudent[];
+}) {
+  // async function removeStudentFromClassList(
   //   classId: number,
   //   studentId: number
   // ) {
@@ -16,7 +19,7 @@ export default function ClassStudentList({classStudentList}: {classStudentList: 
   //     prevClassList?.filter((student) => student.id !== studentId)
   //   );
   // }
-  
+
   return (
     <>
       {classStudentList?.length === 0 ? (
@@ -29,15 +32,15 @@ export default function ClassStudentList({classStudentList}: {classStudentList: 
             {classStudentList?.map((student: ClassStudent, index: number) => (
               <li
                 key={index}
-                className="p-2 rounded hover:bg-blue-200 flex items-center gap-4"
-              > 
+                className="flex items-center gap-4 rounded p-2 hover:bg-blue-200"
+              >
                 <div className="relative col-span-1 flex justify-center">
-                  <Image 
-                    src={student.student ? student.student?.photo_url :  ''}
+                  <Image
+                    src={student.student ? student.student?.photo_url : ""}
                     alt={`An image of ${student.student?.first_name}`}
                     width={50}
                     height={50}
-                    style={{ objectFit: 'cover' }}
+                    style={{ objectFit: "cover" }}
                     className="rounded-full"
                   />
                 </div>
@@ -58,4 +61,4 @@ export default function ClassStudentList({classStudentList}: {classStudentList: 
       )}
     </>
   );
-};
+}

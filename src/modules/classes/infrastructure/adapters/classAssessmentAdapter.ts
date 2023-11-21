@@ -1,4 +1,4 @@
-import { ClassAssessment } from "../../domain/entities/ClassAssessment";
+import { ClassAssessment } from "@/src/modules/classes/entities/ClassAssessment";
 
 class ClassAssessmentAdapter {
   public async list({

@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import { ClassEntity } from "@/src/modules/classes/domain/entities/ClassEntity";
+import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/infrastructure/adapters/classAdapter";
 import ManageClassTeacher from "@/src/modules/classes/infrastructure/ui/components/ManageClassTeacher";
 import ManageClassStudents from "@/src/modules/classes/infrastructure/ui/components/class-students/ManageClassStudents";

@@ -1,4 +1,4 @@
-import { ClassEntity } from '@/src/modules/classes/domain/entities/ClassEntity';
+import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 
 export class ClassAssessment {
   constructor(
