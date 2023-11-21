@@ -1,6 +1,6 @@
-import React, { useState } from "react";
 import Modal from "@/src/modules/core/components/Modal";
-import { UserProfile } from "../domain/entities/UserProfile";
+import React, { useState } from "react";
+import { UserProfile } from "@/src/modules/user-mgmt/entities/UserProfile";
 import UserProfileForm from "../infrastructure/ui/UserProfileForm";
 
 interface UserProfileProps {

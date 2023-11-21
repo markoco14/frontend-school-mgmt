@@ -1,4 +1,4 @@
-import { User } from "@/src/modules/user-mgmt/domain/entities/User";
+import { User } from "@/src/modules/user-mgmt/entities/User";
 import { Student } from "@/src/modules/students/entities/Student";
 
 export class StudentAttendance {

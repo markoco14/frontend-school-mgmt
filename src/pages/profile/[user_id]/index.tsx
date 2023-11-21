@@ -1,7 +1,7 @@
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import UserPasswordSection from "@/src/modules/user-mgmt/components/UserPasswordSection";
 import UserProfileSection from "@/src/modules/user-mgmt/components/UserProfileSection";
-import { UserProfile } from "@/src/modules/user-mgmt/domain/entities/UserProfile";
+import { UserProfile } from "@/src/modules/user-mgmt/entities/UserProfile";
 import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../../UserContext";

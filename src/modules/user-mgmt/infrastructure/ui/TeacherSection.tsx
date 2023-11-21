@@ -2,7 +2,7 @@ import { useUserContext } from "@/src/UserContext";
 import { useEffect, useState } from "react";
 
 import Modal from "@/src/modules/core/components/Modal";
-import { Teacher } from "../../domain/entities/Teacher";
+import { Teacher } from "@/src/modules/user-mgmt/entities/Teacher";
 import { userAdapter } from "../adapters/userAdapter";
 import StaffList from "./StaffList";
 import TeacherSignup from "./TeacherSignup";
@@ -14,9 +14,11 @@ export default function TeacherSection() {
 
   useEffect(() => {
     async function getData(school_id: number, user_id: number) {
-      await userAdapter.listSchoolTeachers({ schoolId: school_id }).then((res) => {
-        setTeachers(res);
-      });
+      await userAdapter
+        .listSchoolTeachers({ schoolId: school_id })
+        .then((res) => {
+          setTeachers(res);
+        });
     }
     if (user && selectedSchool) {
       getData(selectedSchool.id, user.user_id);

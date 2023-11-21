@@ -1,7 +1,7 @@
-import { PasswordSuccessResponse } from "../../domain/entities/PasswordSuccessResponse";
-import { Teacher } from "../../domain/entities/Teacher";
-import { User } from "../../domain/entities/User";
-import { UserProfile } from "../../domain/entities/UserProfile";
+import { User } from "@/src/modules/user-mgmt/entities/User";
+import { UserProfile } from "@/src/modules/user-mgmt/entities/UserProfile";
+import { PasswordSuccessResponse } from "@/src/modules/user-mgmt/entities/PasswordSuccessResponse";
+import { Teacher } from "@/src/modules/user-mgmt/entities/Teacher";
 
 class UserAdapter {
   public async getUsers(): Promise<User[]> {
@@ -120,7 +120,11 @@ class UserAdapter {
     return teacherList;
   }
 
-  public async listSchoolTeachers({ schoolId }: { schoolId?: number }): Promise<User[]> {
+  public async listSchoolTeachers({
+    schoolId,
+  }: {
+    schoolId?: number;
+  }): Promise<User[]> {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/school-teachers/`;
 
     const queryParams: string[] = [];
@@ -138,13 +142,11 @@ class UserAdapter {
     return teacherList;
   }
 
-
   public async listSchoolAdmins({
     schoolId,
   }: {
     schoolId: number;
   }): Promise<User[]> {
-
     let url = `${process.env.NEXT_PUBLIC_API_URL}/school-admins/`;
 
     const queryParams: string[] = [];
