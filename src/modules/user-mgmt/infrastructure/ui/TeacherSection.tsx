@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import Modal from "@/src/modules/core/components/Modal";
 import { Teacher } from "@/src/modules/user-mgmt/entities/Teacher";
-import { userAdapter } from "../adapters/userAdapter";
+import { userAdapter } from "../../adapters/userAdapter";
 import StaffList from "./StaffList";
 import TeacherSignup from "./TeacherSignup";
 

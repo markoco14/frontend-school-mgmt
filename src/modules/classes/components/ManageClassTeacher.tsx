@@ -1,6 +1,6 @@
 import { useUserContext } from "@/src/UserContext";
 import { Teacher } from "@/src/modules/user-mgmt/entities/Teacher";
-import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
+import { userAdapter } from "@/src/modules/user-mgmt/adapters/userAdapter";
 import { useEffect, useState } from "react";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
