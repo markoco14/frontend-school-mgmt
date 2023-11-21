@@ -3,7 +3,6 @@ import Modal from "@/src/modules/core/components/Modal";
 import { UserProfile } from "@/src/modules/user-mgmt/domain/entities/UserProfile";
 import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
 import ChangePasswordForm from "@/src/modules/user-mgmt/infrastructure/ui/ChangePasswordForm";
-import UserProfileForm from "@/src/modules/user-mgmt/infrastructure/ui/UserProfileForm";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../../UserContext";
 import Layout from "../../../modules/core/components/Layout";
@@ -12,7 +11,6 @@ import UserPasswordSection from "@/src/modules/user-mgmt/components/UserPassword
 
 export default function UserProfilePage() {
   const [userProfile, setUserProfile] = useState<UserProfile>();
-  const [isEditProfile, setIsEditProfile] = useState<boolean>(false);
   const [isEditPassword, setIsEditPassword] = useState<boolean>(false);
   const { user } = useUserContext();
 
@@ -31,18 +29,9 @@ export default function UserProfilePage() {
     <Layout>
       <AdminLayout>
         <div className="h-full w-full bg-white flex flex-col gap-16">
-          {userProfile && <UserProfileSection user={userProfile} setIsEditProfile={setIsEditProfile}/>}
+          {userProfile && <UserProfileSection user={userProfile} setUserProfile={setUserProfile}/>}
           {userProfile && <UserPasswordSection user={userProfile} setIsEditPassword={setIsEditPassword}/>}
-          <Modal
-            show={isEditProfile}
-            close={setIsEditProfile}
-            title={"Edit User Profile"}
-          >
-            <UserProfileForm
-              userProfile={userProfile}
-              setUserProfile={setUserProfile}
-            />
-          </Modal>
+          
           <Modal
             show={isEditPassword}
             close={setIsEditPassword}
