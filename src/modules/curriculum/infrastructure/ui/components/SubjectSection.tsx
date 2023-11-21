@@ -113,8 +113,8 @@ export default function SubjectSection({
   }
 
   return (
-    <section className="col-span-2 rounded border p-4 shadow xs:col-span-1">
-      <article className="grid w-1/2 gap-4">
+    <section className="rounded border p-4 shadow">
+      <article className="grid gap-4">
         <div className="flex justify-between">
           <h2 className="mb-2 text-3xl">Subjects</h2>
           <button
