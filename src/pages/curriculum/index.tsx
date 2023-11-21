@@ -56,8 +56,8 @@ export default function CurriculumHome() {
               />
             )}
             {tab === 2 && <LevelSection />}
-            {tab === 3 && <ModuleSection subjectLevels={subjectLevels} />}
-            {tab === 4 && <ModuleTypeSection />}
+            {/* {tab === 3 && <ModuleSection subjectLevels={subjectLevels} />} */}
+            {/* {tab === 4 && <ModuleTypeSection />} */}
             {/* {tab === 5 && (
             <AssessmentTypeSection />
           )}
