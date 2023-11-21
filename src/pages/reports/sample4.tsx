@@ -1,17 +1,12 @@
-import { useUserContext } from "@/src/UserContext";
 import Layout from "@/src/modules/core/components/Layout";
 import New_ReportTeacherDetails from "@/src/modules/reports/infrastructure/ui/components/New_ReportTeacherDetails";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function WriteReport() {
-  const { user } = useUserContext();
+
+  // eslint-disable-next-line no-unused-vars
   const [reportData, setReportData] = useState<any>();
-
-  const [isConfirmed, setIsConfirmed] = useState<boolean>(
-    user?.role === "TEACHER" ? true : false,
-  );
-
   const date = new Date();
 
   return (
@@ -36,7 +31,6 @@ export default function WriteReport() {
         <h2 className="mb-2 text-xl">Level 9 Monday/Thursday (Andrew)</h2>
         <New_ReportTeacherDetails
           reportData={reportData}
-          setIsConfirmed={setIsConfirmed}
         />
       </div>
     </Layout>

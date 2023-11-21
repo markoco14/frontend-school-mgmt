@@ -1,12 +1,11 @@
-import { useUserContext } from "@/src/UserContext";
+import { useEffect, useState } from "react";
+import { Switch } from "@headlessui/react";
+
 import { classStudentAdapter } from "@/src/modules/classes/adapters/classStudentAdapter";
 import NoData from "@/src/modules/core/components/NoData";
 import EvaluationSection from "@/src/modules/evaluation/infrastructure/ui/components/EvaluationSection";
 import EvaluationSection2 from "@/src/modules/evaluation/infrastructure/ui/components/EvaluationSection2";
 import { Student } from "@/src/modules/students/entities/Student";
-import { Switch } from "@headlessui/react";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 
 const HomeworkSection = ({
   scores,
@@ -172,29 +171,6 @@ const InClassSection = ({
   );
 };
 
-const StudentSummary = ({ selectedStudent }: { selectedStudent: any }) => {
-  const { user } = useUserContext();
-  return (
-    <div className="mb-4 grid grid-cols-4 items-center gap-4 rounded border p-4 shadow">
-      <div className="relative col-span-1 aspect-square">
-        <Image
-          src={selectedStudent?.photo_url}
-          alt="An image of a student"
-          fill={true}
-          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 20vw"
-          style={{ objectFit: "cover" }}
-          className="rounded-full"
-        />
-      </div>
-      <div className="col-span-3">
-        <p className="mb-2 text-3xl">
-          {selectedStudent?.first_name} {selectedStudent?.last_name}
-        </p>
-      </div>
-    </div>
-  );
-};
-
 const CategoryButtons = ({
   category,
   setCategory,
@@ -264,12 +240,10 @@ const CategoryButtons = ({
 
 export default function ReportTeacherDetails({
   reportData,
-  setIsConfirmed,
 }: {
   reportData: any;
-  setIsConfirmed: Function;
 }) {
-  const { user } = useUserContext();
+ 
 
   const [selectedStudent, setSelectedStudent] = useState<any>();
   const [category, setCategory] = useState<string>("homework");
@@ -308,9 +282,9 @@ export default function ReportTeacherDetails({
           selectedStudent={selectedStudent}
           setSelectedStudent={setSelectedStudent}
         /> */}
+        {loading && <p>Loading...</p>}
         <CategoryButtons category={category} setCategory={setCategory} />
         <div className="col-span-7 rounded sm:border sm:shadow">
-          {/* <StudentSummary selectedStudent={selectedStudent} /> */}
 
           {/* HOMEWORK SECTION */}
           {category === "homework" && (

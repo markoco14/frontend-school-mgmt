@@ -223,7 +223,7 @@ const ReportSetup = ({
   );
 };
 
-const ReportDetails = ({ setIsConfirmed }: { setIsConfirmed: Function }) => {
+const ReportDetails = () => {
   const students = [
     {
       id: 1,
@@ -663,7 +663,7 @@ export default function WriteReport() {
                   Edit Report Details
                 </button>
               )}
-              <ReportDetails setIsConfirmed={setIsConfirmed} />
+              <ReportDetails />
             </>
           )}
         </section>
