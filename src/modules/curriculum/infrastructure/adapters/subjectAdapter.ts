@@ -1,5 +1,5 @@
-import { Subject } from "../../domain/entities/Subject";
-import { SubjectListResponse } from "../../domain/entities/SubjectListResponse";
+import { SubjectListResponse } from "@/src/modules/curriculum/entities/SubjectListResponse";
+import { Subject } from "@/src/modules/curriculum/entities/Subject";
 
 class SubjectAdapter {
   public async list({

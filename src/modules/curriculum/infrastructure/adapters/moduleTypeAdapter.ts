@@ -1,4 +1,4 @@
-import { ModuleType } from "../../domain/entities/ModuleType";
+import { ModuleType } from "@/src/modules/curriculum/entities/ModuleType";
 
 class ModuleTypeAdapter {
   public async listSchoolModuleTypes({
@@ -10,7 +10,7 @@ class ModuleTypeAdapter {
 
     const queryParams: string[] = [];
     if (schoolId) queryParams.push(`school=${encodeURIComponent(schoolId)}`);
-    
+
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;
     }

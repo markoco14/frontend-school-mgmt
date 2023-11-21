@@ -1,4 +1,4 @@
-import { Teacher } from "@/src/modules/user-mgmt/domain/entities/Teacher";
+import { Teacher } from "@/src/modules/user-mgmt/entities/Teacher";
 
 class SchoolTeacherAdapter {
 

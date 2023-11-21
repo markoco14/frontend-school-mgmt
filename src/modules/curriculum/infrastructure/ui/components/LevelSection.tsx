@@ -3,7 +3,7 @@ import PaginationButtons from "@/src/modules/core/components/PaginationButtons";
 import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/levelAdapter";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Level } from "../../../domain/entities/Level";
+import { Level } from "@/src/modules/curriculum/entities/Level";
 import AddLevel from "./AddLevel";
 import LevelList from "./LevelList";
 

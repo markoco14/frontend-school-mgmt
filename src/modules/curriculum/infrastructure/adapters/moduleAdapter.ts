@@ -1,4 +1,4 @@
-import { Module } from "../../domain/entities/Module";
+import { Module } from "@/src/modules/curriculum/entities/Module";
 
 class ModuleAdapter {
   public async listSchoolModules({
@@ -14,7 +14,8 @@ class ModuleAdapter {
 
     const queryParams: string[] = [];
     if (schoolId) queryParams.push(`school=${encodeURIComponent(schoolId)}`);
-    if (subjectName) queryParams.push(`subject=${encodeURIComponent(subjectName)}`);
+    if (subjectName)
+      queryParams.push(`subject=${encodeURIComponent(subjectName)}`);
     if (levelOrder) queryParams.push(`level=${levelOrder}`);
 
     if (queryParams.length) {
@@ -27,18 +28,33 @@ class ModuleAdapter {
     return moduleList;
   }
 
-  public async add({name, type, order, subjectLevel}: {name: string, type:number, order: number, subjectLevel: number}): Promise<Module> {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/modules/`
-    const res = await fetch(url, { 
-			method: 'POST', 
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ name: name, type: type, order: order, subject_level: subjectLevel }) 
-		});
-		const newModule: Module = await res.json();
-    
-    return newModule
+  public async add({
+    name,
+    type,
+    order,
+    subjectLevel,
+  }: {
+    name: string;
+    type: number;
+    order: number;
+    subjectLevel: number;
+  }): Promise<Module> {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/modules/`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        type: type,
+        order: order,
+        subject_level: subjectLevel,
+      }),
+    });
+    const newModule: Module = await res.json();
+
+    return newModule;
   }
 
   public async delete({ id }: { id: number }): Promise<any> {
@@ -46,7 +62,7 @@ class ModuleAdapter {
       `${process.env.NEXT_PUBLIC_API_URL}/modules/${id}/`,
       {
         method: "DELETE",
-      }
+      },
     );
 
     return res;

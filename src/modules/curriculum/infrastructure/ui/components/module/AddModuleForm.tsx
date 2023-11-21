@@ -1,9 +1,9 @@
 import { useUserContext } from "@/src/UserContext";
+import { Module } from "@/src/modules/curriculum/entities/Module";
+import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Module } from "../../../../domain/entities/Module";
-import { ModuleType } from "../../../../domain/entities/ModuleType";
-import { SubjectLevel } from "../../../../domain/entities/SubjectLevel";
+import { ModuleType } from "@/src/modules/curriculum/entities/ModuleType";
 import { moduleAdapter } from "../../../adapters/moduleAdapter";
 import { moduleTypeAdapter } from "../../../adapters/moduleTypeAdapter";
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Modal from "../../core/components/Modal";
+import Modal from "@/src/modules/core/components/Modal";
 import ChangePasswordForm from "../infrastructure/ui/ChangePasswordForm";
 
 

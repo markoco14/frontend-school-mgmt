@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import { Student } from "@/src/modules/students/domain/entities/Student";
+import { Student } from "@/src/modules/students/entities/Student";
 import { Switch } from "@headlessui/react";
 import Image from "next/image";
 import { useState } from "react";

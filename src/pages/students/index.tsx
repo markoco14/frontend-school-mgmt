@@ -3,10 +3,10 @@ import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import Modal from "@/src/modules/core/components/Modal";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
-import { PaginatedStudentResponse } from "@/src/modules/students/domain/entities/PaginatedStudentResponse";
-import { Student } from "@/src/modules/students/domain/entities/Student";
-import { studentAdapter } from "@/src/modules/students/infrastructure/adapters/studentAdapter";
-import RegisterNewStudentModal from "@/src/modules/students/infrastructure/ui/RegisterNewStudentModal";
+import { PaginatedStudentResponse } from "@/src/modules/students/entities/PaginatedStudentResponse";
+import { Student } from "@/src/modules/students/entities/Student";
+import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
+import RegisterNewStudentModal from "@/src/modules/students/components/RegisterNewStudentModal";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

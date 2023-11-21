@@ -1,9 +1,9 @@
 import { useUserContext } from "@/src/UserContext";
+import { Subject } from "@/src/modules/curriculum/entities/Subject";
+import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Level } from "../../../domain/entities/Level";
-import { Subject } from "../../../domain/entities/Subject";
-import { SubjectLevel } from "../../../domain/entities/SubjectLevel";
+import { Level } from "@/src/modules/curriculum/entities/Level";
 import { levelAdapter } from "../../adapters/levelAdapter";
 import { subjectLevelAdapter } from "../../adapters/subjectLevelAdapter";
 

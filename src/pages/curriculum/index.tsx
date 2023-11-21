@@ -2,7 +2,7 @@ import { useUserContext } from "@/src/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
-import { SubjectLevel } from "@/src/modules/curriculum/domain/entities/SubjectLevel";
+import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
 import { subjectLevelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectLevelAdapter";
 import CurriculumNav from "@/src/modules/curriculum/infrastructure/ui/components/CurriculumNav";
 import LevelSection from "@/src/modules/curriculum/infrastructure/ui/components/LevelSection";

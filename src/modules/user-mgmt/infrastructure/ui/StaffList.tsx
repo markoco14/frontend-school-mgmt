@@ -1,4 +1,4 @@
-import { User } from "../../domain/entities/User";
+import { User } from "@/src/modules/user-mgmt/entities/User";
 
 const StaffList = ({ staffList }: { staffList: User[] }) => {
   return (
@@ -16,6 +16,6 @@ const StaffList = ({ staffList }: { staffList: User[] }) => {
       ))}
     </ul>
   );
-}
+};
 
-export default StaffList
+export default StaffList;

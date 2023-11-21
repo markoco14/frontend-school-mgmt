@@ -1,8 +1,8 @@
 import { useUserContext } from "@/src/UserContext";
 import Modal from "@/src/modules/core/components/Modal";
+import { Teacher } from "@/src/modules/user-mgmt/entities/Teacher";
 import { useEffect, useState } from "react";
-import { Teacher } from "../../domain/entities/Teacher";
-import { userAdapter } from "../adapters/userAdapter";
+import { userAdapter } from "../../adapters/userAdapter";
 import AdminSignup from "./AdminSignup";
 import StaffList from "./StaffList";
 

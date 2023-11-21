@@ -1,8 +1,8 @@
 import { useUserContext } from "@/src/UserContext";
+import { User } from "@/src/modules/user-mgmt/entities/User";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { User } from "../../domain/entities/User";
-import { userAdapter } from "../adapters/userAdapter";
+import { userAdapter } from "../../adapters/userAdapter";
 
 type Inputs = {
   first_name: string;
