@@ -7,6 +7,8 @@ import UserProfileForm from "@/src/modules/user-mgmt/infrastructure/ui/UserProfi
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../../UserContext";
 import Layout from "../../../modules/core/components/Layout";
+import UserProfileSection from "@/src/modules/user-mgmt/components/UserProfileSection";
+import UserPasswordSection from "@/src/modules/user-mgmt/components/UserPasswordSection";
 
 export default function UserProfilePage() {
   const [userProfile, setUserProfile] = useState<UserProfile>();
@@ -29,21 +31,8 @@ export default function UserProfilePage() {
     <Layout>
       <AdminLayout>
         <div className="h-full w-full bg-white flex flex-col gap-16">
-          <section className="max-w-[600px] border shadow p-4">
-            <div className="flex justify-between">
-              <h1>User Profile</h1>
-              <button onClick={() => setIsEditProfile(true)}>Edit</button>
-            </div>
-            <p>{userProfile?.first_name}</p>
-            <p>{userProfile?.last_name}</p>
-            <p>{userProfile?.email}</p>
-          </section>
-          <section className="max-w-[600px] border shadow p-4">
-            <h1>Secure info</h1>
-            <button onClick={() => setIsEditPassword(true)}>
-              Edit password
-            </button>
-          </section>
+          {userProfile && <UserProfileSection user={userProfile} setIsEditProfile={setIsEditProfile}/>}
+          {userProfile && <UserPasswordSection user={userProfile} setIsEditPassword={setIsEditPassword}/>}
           <Modal
             show={isEditProfile}
             close={setIsEditProfile}
