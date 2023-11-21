@@ -1,5 +1,5 @@
 import { User } from "@/src/modules/user-mgmt/domain/entities/User";
-import { Student } from "../../../students/domain/entities/Student";
+import { Student } from "@/src/modules/students/domain/entities/Student";
 
 export class StudentAttendance {
   constructor(

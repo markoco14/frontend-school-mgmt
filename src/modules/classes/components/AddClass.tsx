@@ -8,7 +8,7 @@ import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Level } from "../../curriculum/domain/entities/Level";
+import { Level } from "@/src/modules/curriculum/domain/entities/Level";
 
 type Inputs = {
   className: string;

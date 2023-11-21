@@ -5,7 +5,7 @@ import { UserProfile } from "@/src/modules/user-mgmt/domain/entities/UserProfile
 import { userAdapter } from "@/src/modules/user-mgmt/infrastructure/adapters/userAdapter";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../../UserContext";
-import Layout from "../../../modules/core/components/Layout";
+import Layout from "@/src/modules/core/components/Layout";
 
 export default function UserProfilePage() {
   const { user } = useUserContext();
