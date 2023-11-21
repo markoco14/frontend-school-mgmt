@@ -46,48 +46,43 @@ const Home: NextPageWithLayout = () => {
       {user && !selectedSchool && (
         <Layout>
           <AdminLayout>
-            <section className="h-full w-full bg-white">
-              <div className="mx-auto max-w-[800px]">
-                <h2 className="mb-4 text-3xl">Welcome back, {user?.name}!</h2>
-                <article className="grid gap-4 rounded-lg border p-4 shadow">
-                  <div className="flex items-baseline justify-between">
-                    <p className="text-xl">Your schools</p>
-                    {user.permissions.includes(1) ||
-                      (user.role === "OWNER" && (
-                        <Link
-                          href="/school-mgmt/add"
-                          className="underline underline-offset-2 hover:text-blue-700"
+            <div className="max-w-[800px]">
+              <h2 className="mb-4 text-3xl">Welcome back, {user?.name}!</h2>
+              <article className="grid gap-4 rounded-lg border p-4 shadow">
+                <div className="flex items-baseline justify-between">
+                  <p className="text-xl">Your schools</p>
+                  {user.permissions.includes(1) ||
+                    (user.role === "OWNER" && (
+                      <Link
+                        href="/school-mgmt/add"
+                        className="underline underline-offset-2 hover:text-blue-700"
+                      >
+                        New School
+                      </Link>
+                    ))}
+                </div>
+                <ul className="divide-y">
+                  {schools.length === 0 ? (
+                    <p>No schools shared with you.</p>
+                  ) : (
+                    schools?.map((school: School, index: number) => (
+                      <li key={index} className="rounded p-2 hover:bg-blue-300">
+                        <button
+                          onClick={() => {
+                            if (!selectedSchool) {
+                              handleSelectSchool(school);
+                            }
+                          }}
+                          className="w-full text-left"
                         >
-                          New School
-                        </Link>
-                      ))}
-                  </div>
-                  <ul className="divide-y">
-                    {schools.length === 0 ? (
-                      <p>No schools shared with you.</p>
-                    ) : (
-                      schools?.map((school: School, index: number) => (
-                        <li
-                          key={index}
-                          className="rounded p-2 hover:bg-blue-300"
-                        >
-                          <button
-                            onClick={() => {
-                              if (!selectedSchool) {
-                                handleSelectSchool(school);
-                              }
-                            }}
-                            className="w-full text-left"
-                          >
-                            {school.name}
-                          </button>
-                        </li>
-                      ))
-                    )}
-                  </ul>
-                </article>
-              </div>
-            </section>
+                          {school.name}
+                        </button>
+                      </li>
+                    ))
+                  )}
+                </ul>
+              </article>
+            </div>
           </AdminLayout>
         </Layout>
       )}
@@ -95,12 +90,10 @@ const Home: NextPageWithLayout = () => {
       {user && selectedSchool && (
         <Layout>
           <AdminLayout>
-            <section className="h-full w-full bg-white">
-              <SchoolHeader />
-              <div className="max-w-[1000px]">
-                <TodayClassList />
-              </div>
-            </section>
+            <SchoolHeader />
+            <div className="max-w-[1000px]">
+              <TodayClassList />
+            </div>
           </AdminLayout>
         </Layout>
       )}

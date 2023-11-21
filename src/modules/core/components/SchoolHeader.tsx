@@ -7,27 +7,21 @@ export default function SchoolHeader() {
   const router = useRouter();
   return (
     <section>
-      <p className=" mb-4 flex items-baseline justify-between text-gray-500">
-        {selectedSchool ? (
-          <>
-            <Link href="/" className="text-2xl">
-              {selectedSchool.name}
-            </Link>
-            <button
-              onClick={() => {
-                handleDeselectSchool();
-                if (router.pathname !== "/") {
-                  router.push("/");
-                }
-              }}
-            >
-              Change school
-            </button>
-          </>
-        ) : (
-          <Link href="/">You have not chosen a school</Link>
-        )}
-      </p>
+      <div className="mb-4 flex w-full items-baseline justify-between gap-16 text-gray-500">
+        <Link href="/" className="text-2xl">
+          {selectedSchool ? selectedSchool.name : "Choose a school"}
+        </Link>
+        <button
+          onClick={() => {
+            handleDeselectSchool();
+            if (router.pathname !== "/") {
+              router.push("/");
+            }
+          }}
+        >
+          Change school
+        </button>
+      </div>
     </section>
   );
 }
