@@ -5,7 +5,7 @@ import ParamsPageTabNav from "@/src/modules/core/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import { Student } from "@/src/modules/students/entities/Student";
 import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
-import Evaluations from "@/src/modules/students/infrastructure/ui/evaluation/Evaluations";
+import Evaluations from "@/src/modules/students/components/Evaluations";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";

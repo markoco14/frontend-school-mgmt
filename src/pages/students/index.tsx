@@ -6,7 +6,7 @@ import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import { PaginatedStudentResponse } from "@/src/modules/students/entities/PaginatedStudentResponse";
 import { Student } from "@/src/modules/students/entities/Student";
 import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
-import RegisterNewStudentModal from "@/src/modules/students/infrastructure/ui/RegisterNewStudentModal";
+import RegisterNewStudentModal from "@/src/modules/students/components/RegisterNewStudentModal";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
