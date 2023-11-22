@@ -1,6 +1,6 @@
 {
   "extends": ["next/core-web-vitals", "prettier", "eslint:recommended"],
-  // "ignorePatterns": ["*/entities/*.ts"],
+  "ignorePatterns": ["**/entities/*", "**/domain/entities/*"],
   // Using the unused imports package to autofix unused imports
   // "plugins": ["unused-imports"],
   "globals": {
