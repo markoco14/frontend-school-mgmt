@@ -5,7 +5,6 @@ import { studentEvaluationAdapter } from "@/src/modules/evaluation/infrastructur
 import { useEffect, useState } from "react";
 import { Student } from "@/src/modules/students/entities/Student";
 import { StudentEvaluationFilters } from "@/src/modules/students/entities/StudentEvaluationFilters";
-import { set } from "date-fns";
 
 
 
@@ -16,7 +15,7 @@ const EvaluationList = ({
 }) => {
   return (
     <ul className="divide-y">
-      {evaluations?.map((evaluation, index) => (
+      {evaluations?.map((evaluation) => (
         <li key={`evaluation-${evaluation.id}`} className="p-2">
           {/* <p>ID: {evaluation.id}</p> */}
           <p>Date: {new Date(evaluation.date).toDateString()}</p>

@@ -16,9 +16,7 @@ const   TextAttributeForm = ({
 }) => {
   const {
     register,
-    setValue,
     handleSubmit,
-    formState: { errors },
   } = useForm<Inputs>();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -29,17 +27,10 @@ const   TextAttributeForm = ({
         evaluation_id: Number(evaluation.id),
         evaluation_value: data.evaluation_value,
       })
-      .then((res) => {
+      .then(() => {
         toast.success("Comment updated successfully!");
         setLoading(false);
       })
-    //   .then((res) => {
-    //     toast.success("Reason updated successfully!");
-    //     // handleUpdateAttendance({ newAttendance: res });
-    //     // setTimeout(() => {
-    //     //   handleClose();
-    //     // }, 250);
-    //   });
     return;
   };
   return (

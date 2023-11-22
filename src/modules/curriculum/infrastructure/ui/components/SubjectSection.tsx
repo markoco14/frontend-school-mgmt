@@ -57,12 +57,12 @@ const SubjectList = ({
             >
               {subject.name}
             </button>
-            {/* <button
+            <button
               onClick={() => handleDeleteSubject({ subjectId: subject.id })}
               className="text-red-500 hover:text-red-600"
             >
               delete
-            </button> */}
+            </button>
           </li>
         ))}
       </ul>

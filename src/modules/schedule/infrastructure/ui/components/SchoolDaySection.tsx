@@ -35,7 +35,7 @@ const SchoolDayList = ({
   }) {
     await schoolDayAdapter
       .deleteSchoolDay({ schoolDayId: schoolDayId })
-      .then((res) => {
+      .then(() => {
         setSchoolDays(
           (prevSchoolDays: SchoolDay[]) =>
             prevSchoolDays?.filter(

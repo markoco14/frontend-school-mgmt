@@ -17,7 +17,7 @@ export default function RegisterNewStudentModal({
 }: {
   setStudents: Function;
 }) {
-  const { user, selectedSchool } = useUserContext();
+  const { selectedSchool } = useUserContext();
 
   const {
     reset,
@@ -28,7 +28,6 @@ export default function RegisterNewStudentModal({
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     let gender = Number(data.gender);
-    let photo_url;
     let male =
       "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_3.jpeg";
     let female =

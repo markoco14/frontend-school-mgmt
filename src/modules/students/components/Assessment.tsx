@@ -32,7 +32,7 @@ const Assessments = ({ student }: { student: Student }) => {
         </Skeleton>
       ) : (
         <ul>
-          {assessments?.map((assessment, index) => (
+          {assessments?.map((assessment) => (
             <li
               key={`assessment-${assessment.id}`}
               className="flex justify-between"

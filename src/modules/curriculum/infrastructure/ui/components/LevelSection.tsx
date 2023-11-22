@@ -13,7 +13,6 @@ export default function LevelSection() {
   const [loading, setLoading] = useState<boolean>(false);
   const [levels, setLevels] = useState<Level[]>();
   const [page, setPage] = useState<number>(1);
-  const per_page = 15;
   const [next, setNext] = useState<boolean>(false);
   const [count, setCount] = useState<number>(0);
 
@@ -76,6 +75,7 @@ export default function LevelSection() {
 
   return (
     <section className="col-span-2 rounded border p-4 shadow xs:col-span-1">
+      {loading && <p>Loading...</p>}
       <article>
         {levels && (
           <LevelList levels={levels} handleDeleteLevel={handleDeleteLevel} />

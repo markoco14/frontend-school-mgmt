@@ -103,7 +103,7 @@ const AddSubjectLevelForm = ({
                   : "hover:bg-gray-300 "
               } flex w-full justify-between p-2 disabled:cursor-not-allowed`}
             >
-              {level.name}
+              {level.name} 
             </button>
           </li>
         ))

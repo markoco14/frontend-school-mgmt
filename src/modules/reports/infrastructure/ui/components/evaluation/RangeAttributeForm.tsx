@@ -25,14 +25,13 @@ const RangeAttributeForm = ({
         evaluation_id: Number(evaluation.id),
         evaluation_value: new_value.toString(),
       })
-      .then((res) => {
+      .then(() => {
         setLoading(false);
         toast.success(`Updated successfully!`);
       });
   }
   const maxValue = evaluation.evaluation_attribute?.max_value;
   const minValue = evaluation.evaluation_attribute?.min_value;
-  const valueArray = maxValue && minValue && new Array(maxValue - minValue);
   const values = Array.from(
     // @ts-ignore
     { length: maxValue - minValue + 1 },
@@ -43,10 +42,10 @@ const RangeAttributeForm = ({
   const [selectedValue, setSelectedValue] = useState<number>(
     Number(evaluation.evaluation_value),
   );
-  const length = 3;
 
   return (
     <>
+      {loading && <p>Loading...</p>}
       <p>{evaluation.evaluation_attribute.name}</p>
       {values.map((value) => (
         <button
