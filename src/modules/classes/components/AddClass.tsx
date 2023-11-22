@@ -22,7 +22,9 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
   const [days, setDays] = useState<SchoolDay[]>([]);
   const [page, setPage] = useState<number>(1);
 
+  // eslint-disable-next-line no-unused-vars
   const [next, setNext] = useState<boolean>(false);
+  // eslint-disable-next-line no-unused-vars
   const [count, setCount] = useState<number>(0);
   const {
     reset,
