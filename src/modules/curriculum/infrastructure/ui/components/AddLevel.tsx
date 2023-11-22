@@ -6,9 +6,7 @@ import { levelAdapter } from "../../adapters/levelAdapter";
 import AddLevelForm from "./AddLevelForm";
 
 export default function AddLevel({
-  count,
   setCount,
-  page,
   setPage,
   setNext,
   levels,

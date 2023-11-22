@@ -21,6 +21,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
   const [levels, setLevels] = useState<Level[]>([]);
   const [days, setDays] = useState<SchoolDay[]>([]);
   const [page, setPage] = useState<number>(1);
+
   const [next, setNext] = useState<boolean>(false);
   const [count, setCount] = useState<number>(0);
   const {

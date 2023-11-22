@@ -30,7 +30,7 @@ export default function AddStudentToClassSection({
         class_id: selectedClass.id,
         student_id: student.id,
       })
-      .then((res) => {
+      .then(() => {
         toast.success(`Student added to class!`);
         setClassStudentList([...classStudentList, student]);
       });
