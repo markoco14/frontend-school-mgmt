@@ -6,9 +6,6 @@ export default function DateChangeButtons({
   setDate: Function;
 }) {
 
-	const dayNumber = new Date(date).getDay();
-	
-	
 	const incrementDate = () => {
 		const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() + 1);

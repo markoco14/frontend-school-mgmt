@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import UserContextProvider from "../UserContext";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  // eslint-disable-next-line no-unused-vars
   getLayout?: (page: ReactElement) => ReactNode;
 };
 

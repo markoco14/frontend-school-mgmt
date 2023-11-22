@@ -1,5 +1,4 @@
 import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
-import { Assessment } from "./Assessment";
 
 export class Module {
   constructor(
@@ -10,6 +9,5 @@ export class Module {
     public subject_level: SubjectLevel,
     public type: number,
     public parent: number,
-    public assessments?: Assessment[],
   ) {}
 }

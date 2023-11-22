@@ -3,8 +3,7 @@ import Modal from "@/src/modules/core/components/Modal";
 import ChangePasswordForm from "../infrastructure/ui/ChangePasswordForm";
 
 
-const UserPasswordSection = ({
-}) => {
+const UserPasswordSection = () => {
 	const [isEditPassword, setIsEditPassword] = useState<boolean>(false);
 	
   return (

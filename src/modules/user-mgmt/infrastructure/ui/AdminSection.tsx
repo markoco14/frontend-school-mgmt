@@ -12,7 +12,7 @@ export default function AdminSection() {
   const [isAddAdmin, setIsAddAdmin] = useState<boolean>(false);
 
   useEffect(() => {
-    async function getData(school_id: number, user_id: number) {
+    async function getData(school_id: number) {
       await userAdapter
         .listSchoolAdmins({ schoolId: school_id })
         .then((res) => {
@@ -20,7 +20,7 @@ export default function AdminSection() {
         });
     }
     if (user && selectedSchool) {
-      getData(selectedSchool.id, user.user_id);
+      getData(selectedSchool.id);
     }
   }, [selectedSchool, user]);
 

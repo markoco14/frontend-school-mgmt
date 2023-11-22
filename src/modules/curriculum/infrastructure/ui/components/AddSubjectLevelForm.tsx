@@ -18,6 +18,7 @@ const AddSubjectLevelForm = ({
 }) => {
   const { selectedSchool } = useUserContext();
 
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
   const [levels, setLevels] = useState<Level[]>([]);
 
@@ -103,7 +104,7 @@ const AddSubjectLevelForm = ({
                   : "hover:bg-gray-300 "
               } flex w-full justify-between p-2 disabled:cursor-not-allowed`}
             >
-              {level.name}
+              {level.name} 
             </button>
           </li>
         ))

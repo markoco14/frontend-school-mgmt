@@ -1,5 +1,5 @@
 import jwt_decode from "jwt-decode";
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { jwtAdapter } from "./modules/auth/infrastructure/adapters/jwtAdapter";
 import { School } from "./modules/school-mgmt/domain/entities/School";
 import Cookie from "js-cookie";
@@ -16,7 +16,7 @@ type AuthUser = {
   permissions: number[];
 };
 
-type UserContext = {
+type UserContextEntity = {
   user: AuthUser | null;
   loginUser: Function;
   logout: Function;
@@ -25,7 +25,7 @@ type UserContext = {
   handleDeselectSchool: Function;
 };
 
-const UserContext = createContext<UserContext | null>(null);
+const UserContext = createContext<UserContextEntity | null>(null);
 
 export default function UserContextProvider({
   children,

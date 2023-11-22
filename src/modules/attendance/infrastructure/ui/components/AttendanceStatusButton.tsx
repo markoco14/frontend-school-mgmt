@@ -1,6 +1,5 @@
 import { Student } from "@/src/modules/students/entities/Student";
 import toast from "react-hot-toast";
-import { StudentAttendance } from "../../../domain/entities/StudentAttendance";
 import { studentAttendanceAdapter } from "../../adapters/studentAttendanceAdapter";
 
 const AttendanceStatusButton = ({

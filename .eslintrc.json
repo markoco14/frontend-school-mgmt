@@ -1,3 +1,9 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next/core-web-vitals", "prettier", "eslint:recommended"],
+  "ignorePatterns": ["**/entities/*", "**/domain/entities/*"],
+  // Using the unused imports package to autofix unused imports
+  // "plugins": ["unused-imports"],
+  "globals": {
+    "JSX": "readonly"
+  }
 }

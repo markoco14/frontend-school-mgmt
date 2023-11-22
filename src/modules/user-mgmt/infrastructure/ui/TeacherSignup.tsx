@@ -23,7 +23,6 @@ export default function TeacherSignup({
     reset,
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -32,7 +31,7 @@ export default function TeacherSignup({
       return;
     }
 
-    if (teachers.find((teacher) => user?.email === data.email)) {
+    if (teachers.find((teacher) => user?.email === data.email && teacher.email == user?.email)) {
       toast("You cannot add yourself as a teacher in this school.");
       return;
     }

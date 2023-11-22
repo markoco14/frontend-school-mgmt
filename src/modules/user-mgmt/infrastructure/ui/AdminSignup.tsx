@@ -23,7 +23,6 @@ export default function AdminSignup({
     reset,
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -32,7 +31,7 @@ export default function AdminSignup({
       return;
     }
 
-    if (admins.find((admin) => user?.email === data.email)) {
+    if (admins.find((admin) => user?.email === data.email && admin.email == user?.email)) {
       toast("You cannot add yourself as an admin in this school.");
       return;
     }

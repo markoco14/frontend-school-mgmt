@@ -11,4 +11,4 @@ export class StudentEvaluationFilters {
 		public subject_id?: number,
 		public level_id?: number,
 	){}
-};
+}

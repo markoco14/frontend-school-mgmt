@@ -1,5 +1,4 @@
 import { Level } from "@/src/modules/curriculum/entities/Level";
-import { LevelListResponse } from "@/src/modules/curriculum/entities/LevelListResponse";
 
 class LevelAdapter {
 

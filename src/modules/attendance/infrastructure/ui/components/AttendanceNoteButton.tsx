@@ -1,5 +1,4 @@
 import { Student } from "@/src/modules/students/entities/Student";
-import { StudentAttendance } from "../../../domain/entities/StudentAttendance";
 
 const AttendanceNoteButton = ({
   student,

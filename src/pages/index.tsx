@@ -3,21 +3,18 @@ import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import GuestLayout from "@/src/modules/core/components/GuestLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import SchoolHeader from "@/src/modules/core/components/SchoolHeader";
-import { TodayClassList } from "@/src/modules/reports/infrastructure/ui/components/TodayClassList";
 import { School } from "@/src/modules/school-mgmt/domain/entities/School";
 import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
 import LandingPage from "@/src/modules/website/LandingPage";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { ReactElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { NextPageWithLayout } from "./_app";
 
 const Home: NextPageWithLayout = () => {
   const { user, selectedSchool, handleSelectSchool } = useUserContext();
-
   const [schools, setSchools] = useState<School[]>([]);
-  const router = useRouter();
+  
   useEffect(() => {
     async function getData() {
       if (user) {
@@ -91,9 +88,7 @@ const Home: NextPageWithLayout = () => {
         <Layout>
           <AdminLayout>
             <SchoolHeader />
-            <div className="max-w-[1000px]">
-              <TodayClassList />
-            </div>
+            <p>Tests will go here</p>
           </AdminLayout>
         </Layout>
       )}

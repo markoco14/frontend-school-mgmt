@@ -3,7 +3,6 @@ import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import Modal from "@/src/modules/core/components/Modal";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
-import { PaginatedStudentResponse } from "@/src/modules/students/entities/PaginatedStudentResponse";
 import { Student } from "@/src/modules/students/entities/Student";
 import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
 import RegisterNewStudentModal from "@/src/modules/students/components/RegisterNewStudentModal";
@@ -23,14 +22,13 @@ export default function StudentsHome() {
 
   const { user, selectedSchool } = useUserContext();
   const [loading, setLoading] = useState<boolean>(false);
-  const [studentResponse, setStudentResponse] =
-    useState<PaginatedStudentResponse>();
+
   const [students, setStudents] = useState<Student[]>([]);
   const [page, setPage] = useState<number>(1);
   const [isNext, setIsNext] = useState<boolean>(false);
 
   useEffect(() => {
-    async function getData(id: number) {
+    async function getData() {
       setLoading(true);
       if (selectedSchool) {
         await studentAdapter
@@ -41,7 +39,7 @@ export default function StudentsHome() {
             } else {
               setIsNext(false);
             }
-            setStudentResponse(res);
+
             setStudents(res.results);
           });
       }
@@ -50,7 +48,7 @@ export default function StudentsHome() {
 
     if (user) {
       try {
-        getData(user.user_id);
+        getData();
       } catch (error) {
         console.error(error);
       }

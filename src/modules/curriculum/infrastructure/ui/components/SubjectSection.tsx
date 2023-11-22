@@ -23,7 +23,7 @@ const SubjectList = ({
   const [isAddSubjectLevel, setIsAddSubjectLevel] = useState<boolean>(false);
 
   async function handleDeleteSubject({ subjectId }: { subjectId: number }) {
-    await subjectAdapter.deleteSubject({ id: subjectId }).then((res) => {
+    await subjectAdapter.deleteSubject({ id: subjectId }).then(() => {
       setSubjects(
         (prevSubjects: Subject[]) =>
           prevSubjects?.filter((subject) => subject.id !== subjectId),
@@ -57,12 +57,12 @@ const SubjectList = ({
             >
               {subject.name}
             </button>
-            {/* <button
+            <button
               onClick={() => handleDeleteSubject({ subjectId: subject.id })}
               className="text-red-500 hover:text-red-600"
             >
               delete
-            </button> */}
+            </button>
           </li>
         ))}
       </ul>

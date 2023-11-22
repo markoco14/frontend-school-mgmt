@@ -1,7 +1,7 @@
-
+import React from 'react'
 
 function Skeleton({
-  className,
+  // className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
