@@ -18,6 +18,7 @@ const AddSubjectLevelForm = ({
 }) => {
   const { selectedSchool } = useUserContext();
 
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
   const [levels, setLevels] = useState<Level[]>([]);
 
