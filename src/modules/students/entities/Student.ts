@@ -1,5 +1,4 @@
 import { StudentAttendance } from "@/src/modules/attendance/domain/entities/StudentAttendance";
-import { StudentEvaluation } from "@/src/modules/evaluation/domain/entities/StudentEvaluation";
 
 export class Student {
   constructor(
@@ -11,6 +10,5 @@ export class Student {
     public photo_url: string,
     public school_id: number,
     public attendance_for_day?: StudentAttendance,
-    public evaluations_for_day?: StudentEvaluation[] | null,
   ) {}
 }
