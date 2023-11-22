@@ -1,10 +1,10 @@
 import { useUserContext } from "@/src/UserContext";
 import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
 import AddSchoolDay from "@/src/modules/school-mgmt/infrastructure/ui/components/AddSchoolDay";
+import { removeListItem } from "@/src/utils/removeListItem";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { schoolDayAdapter } from "../adapters/schoolDayAdapter";
-import { removeListItem } from "@/src/utils/removeListItem";
 
 const SchoolDayList = ({
   schoolDays,
@@ -37,24 +37,33 @@ const SchoolDayList = ({
     await schoolDayAdapter
       .deleteSchoolDay({ schoolDayId: schoolDayId })
       .then(() => {
-        removeListItem(setSchoolDays, schoolDayId)
+        removeListItem(setSchoolDays, schoolDayId);
         toast.success("School Day deleted.");
       });
   }
 
   return (
     <ul className="mb-4 rounded bg-gray-100 shadow-inner">
-      {schoolDays?.map((schoolDay, index) => (
-        <li key={index} className="flex justify-between p-2 hover:bg-gray-300">
-          <span>{schoolDay?.day}</span>
-          <button
-            onClick={() => handleDeleteSchoolDay({ schoolDayId: schoolDay.id })}
-            className="text-red-500 hover:text-red-600"
+      {schoolDays.length > 0 ? (
+        schoolDays.map((schoolDay, index) => (
+          <li
+            key={index}
+            className="flex justify-between p-2 hover:bg-gray-300"
           >
-            delete
-          </button>
-        </li>
-      ))}
+            <span>{schoolDay?.day}</span>
+            <button
+              onClick={() =>
+                handleDeleteSchoolDay({ schoolDayId: schoolDay.id })
+              }
+              className="text-red-500 hover:text-red-600"
+            >
+              delete
+            </button>
+          </li>
+        ))
+      ) : (
+        <p className="p-2">No school days chosen.</p>
+      )}
     </ul>
   );
 };
