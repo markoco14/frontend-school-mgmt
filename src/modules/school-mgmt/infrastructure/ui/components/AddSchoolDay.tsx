@@ -29,6 +29,25 @@ export default function AddSchoolDay({
     getWeekDays();
   }, [selectedSchool]);
 
+  
+  function sortSchoolDays(schoolDayList: SchoolDay[]) {
+    const daysOrder = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+    return schoolDayList.sort((a: SchoolDay, b: SchoolDay) => {
+      if (typeof a.day === "string" && typeof b.day === "string") {
+        return daysOrder.indexOf(a.day) - daysOrder.indexOf(b.day);
+      } else {
+        return Number(a.day) - Number(b.day);
+      }
+    });
+  }
   const handleAddSchoolDay = async ({ weekday }: { weekday: WeekDay }) => {
     const doesWeekdayExist = schoolDays.some(
       (schoolDay) => schoolDay.day === weekday.day,
@@ -38,23 +57,8 @@ export default function AddSchoolDay({
       await schoolDayAdapter
         .addSchoolDay({ schoolId: Number(selectedSchool?.id), day: weekday.id })
         .then((res) => {
-          const daysOrder = [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday",
-          ];
           const updatedList = addListItem(schoolDays, res)
-          const sortedList = updatedList.sort((a: SchoolDay, b: SchoolDay) => {
-            if (typeof a.day === "string" && typeof b.day === "string") {
-              return daysOrder.indexOf(a.day) - daysOrder.indexOf(b.day);
-            } else {
-              return Number(a.day) - Number(b.day);
-            }
-          });
+          const sortedList = sortSchoolDays(updatedList);
           setSchoolDays(sortedList);
           toast.success("School day added.");
           return;

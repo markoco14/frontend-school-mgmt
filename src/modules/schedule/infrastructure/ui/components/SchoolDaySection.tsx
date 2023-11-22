@@ -38,7 +38,7 @@ const SchoolDayList = ({
       .deleteSchoolDay({ schoolDayId: schoolDayId })
       .then(() => {
         removeListItem(setSchoolDays, schoolDayId)
-        toast.success("Subject deleted.");
+        toast.success("School Day deleted.");
       });
   }
 
