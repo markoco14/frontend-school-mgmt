@@ -5,7 +5,6 @@ import ParamsPageTabNav from "@/src/modules/core/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import { Student } from "@/src/modules/students/entities/Student";
 import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
-import Evaluations from "@/src/modules/students/components/Evaluations";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -54,11 +53,6 @@ export default function Home({
       name: "Profile",
       urlString: "profile",
     },
-    {
-      value: 2,
-      name: "Evaluations",
-      urlString: "evaluations",
-    },
   ];
 
   if (!user?.permissions.includes(1)) {
@@ -93,11 +87,6 @@ export default function Home({
               {tab === "profile" && (
                 <section className="rounded border p-2 shadow">
                   <h2>Profile</h2>
-                </section>
-              )}
-              {tab === "evaluations" && (
-                <section className="rounded border p-2 shadow">
-                  <Evaluations student={student} />
                 </section>
               )}
             </div>
