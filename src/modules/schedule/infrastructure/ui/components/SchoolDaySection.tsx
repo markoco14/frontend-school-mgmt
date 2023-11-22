@@ -4,6 +4,7 @@ import AddSchoolDay from "@/src/modules/school-mgmt/infrastructure/ui/components
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { schoolDayAdapter } from "../adapters/schoolDayAdapter";
+import { removeListItem } from "@/src/utils/removeListItem";
 
 const SchoolDayList = ({
   schoolDays,
@@ -36,12 +37,7 @@ const SchoolDayList = ({
     await schoolDayAdapter
       .deleteSchoolDay({ schoolDayId: schoolDayId })
       .then(() => {
-        setSchoolDays(
-          (prevSchoolDays: SchoolDay[]) =>
-            prevSchoolDays?.filter(
-              (schoolDay: SchoolDay) => schoolDay.id !== schoolDayId,
-            ),
-        );
+        removeListItem(setSchoolDays, schoolDayId)
         toast.success("Subject deleted.");
       });
   }
