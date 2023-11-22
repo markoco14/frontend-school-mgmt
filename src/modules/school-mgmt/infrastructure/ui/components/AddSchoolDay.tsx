@@ -3,6 +3,7 @@ import { WeekDay } from "@/src/modules/schedule/domain/entities/WeekDay";
 import { scheduleAdapter } from "@/src/modules/schedule/infrastructure/ui/adapters/scheduleAdapter";
 import { schoolDayAdapter } from "@/src/modules/schedule/infrastructure/ui/adapters/schoolDayAdapter";
 import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
+import { addListItem } from "@/src/utils/addListItem";
 import { Dialog, Transition } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -46,16 +47,15 @@ export default function AddSchoolDay({
             "Saturday",
             "Sunday",
           ];
-
-          setSchoolDays((prevSubjects: SchoolDay[]) =>
-            [...prevSubjects, res].sort((a: SchoolDay, b: SchoolDay) => {
-              if (typeof a.day === "string" && typeof b.day === "string") {
-                return daysOrder.indexOf(a.day) - daysOrder.indexOf(b.day);
-              } else {
-                return Number(a.day) - Number(b.day);
-              }
-            }),
-          );
+          const updatedList = addListItem(schoolDays, res)
+          const sortedList = updatedList.sort((a: SchoolDay, b: SchoolDay) => {
+            if (typeof a.day === "string" && typeof b.day === "string") {
+              return daysOrder.indexOf(a.day) - daysOrder.indexOf(b.day);
+            } else {
+              return Number(a.day) - Number(b.day);
+            }
+          });
+          setSchoolDays(sortedList);
           toast.success("School day added.");
           return;
         });
