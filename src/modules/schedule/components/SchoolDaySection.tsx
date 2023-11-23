@@ -3,7 +3,7 @@ import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
 import AddSchoolDay from "@/src/modules/school-mgmt/components/AddSchoolDay";
 import { useEffect, useState } from "react";
 import { schoolDayAdapter } from "@/src/modules/schedule/adapters/schoolDayAdapter";
-import SchoolDayList from "@/src/components/schedule/SchoolDayList";
+import SchoolDayList from "@/src/modules/schedule/components/SchoolDayList";
 
 
 

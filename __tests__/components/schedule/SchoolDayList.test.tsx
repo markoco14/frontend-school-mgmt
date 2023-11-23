@@ -3,7 +3,7 @@
 */
 import { render, screen } from '@testing-library/react';
 import "@testing-library/jest-dom";
-import SchoolDayList from '@/src/components/schedule/SchoolDayList';
+import SchoolDayList from "@/src/modules/schedule/components/SchoolDayList";
 import UserContextProvider from '@/src/UserContext';
 
 describe('School Day List', () => {
