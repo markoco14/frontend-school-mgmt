@@ -1,5 +1,5 @@
 import Cookie from "js-cookie";
-import { School } from "../../entities/School";
+import { School } from "../entities/School";
 
 class SchoolAdapter {
   public async listUserSchools(): Promise<School[]> {

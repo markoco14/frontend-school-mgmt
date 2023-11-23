@@ -1,7 +1,7 @@
 import { useUserContext } from "@/src/UserContext";
 import Layout from "@/src/modules/core/components/Layout";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
-import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
+import { schoolAdapter } from "@/src/modules/school-mgmt/adapters/schoolAdapter";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
