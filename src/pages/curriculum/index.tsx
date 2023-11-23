@@ -4,9 +4,9 @@ import Layout from "@/src/modules/core/components/Layout";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
 import { subjectLevelAdapter } from "@/src/modules/curriculum/adapters/subjectLevelAdapter";
-import CurriculumNav from "@/src/modules/curriculum/infrastructure/ui/components/CurriculumNav";
-import LevelSection from "@/src/modules/curriculum/infrastructure/ui/components/LevelSection";
-import SubjectSection from "@/src/modules/curriculum/infrastructure/ui/components/SubjectSection";
+import CurriculumNav from "@/src/modules/curriculum/components/CurriculumNav";
+import LevelSection from "@/src/modules/curriculum/components/LevelSection";
+import SubjectSection from "@/src/modules/curriculum/components/SubjectSection";
 import { useEffect, useState } from "react";
 
 export default function CurriculumHome() {

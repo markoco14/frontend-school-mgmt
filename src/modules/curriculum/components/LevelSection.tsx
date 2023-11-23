@@ -1,9 +1,9 @@
 import { useUserContext } from "@/src/UserContext";
 import PaginationButtons from "@/src/modules/core/components/PaginationButtons";
 import { levelAdapter } from "@/src/modules/curriculum/adapters/levelAdapter";
+import { Level } from "@/src/modules/curriculum/entities/Level";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Level } from "@/src/modules/curriculum/entities/Level";
 import AddLevel from "./AddLevel";
 import LevelList from "./LevelList";
 

@@ -2,7 +2,7 @@ import { Level } from "@/src/modules/curriculum/entities/Level";
 import { Dialog, Transition } from "@headlessui/react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { levelAdapter } from "../../../adapters/levelAdapter";
+import { levelAdapter } from "../adapters/levelAdapter";
 import AddLevelForm from "./AddLevelForm";
 
 export default function AddLevel({
