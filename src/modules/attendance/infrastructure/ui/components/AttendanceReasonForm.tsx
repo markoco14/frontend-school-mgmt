@@ -2,7 +2,7 @@ import { Student } from "@/src/modules/students/entities/Student";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";
-import { studentAttendanceAdapter } from "../../adapters/studentAttendanceAdapter";
+import { studentAttendanceAdapter } from "../../../adapters/studentAttendanceAdapter";
 
 type Inputs = {
   reason: string;
@@ -82,8 +82,8 @@ export default function AttendanceReasonForm({
           </button>
         </div>
       </form>
-      <div className="grid divide-y border p-4 rounded-lg">
-        <p className="text-xl mb-4">Quick reasons</p>
+      <div className="grid divide-y rounded-lg border p-4">
+        <p className="mb-4 text-xl">Quick reasons</p>
         <button
           className="py-1 text-left"
           onClick={() => setReason({ suggestion: "Doctor appointment." })}

@@ -1,6 +1,6 @@
 import { Student } from "@/src/modules/students/entities/Student";
 import toast from "react-hot-toast";
-import { studentAttendanceAdapter } from "../../adapters/studentAttendanceAdapter";
+import { studentAttendanceAdapter } from "../../../adapters/studentAttendanceAdapter";
 
 const AttendanceStatusButton = ({
   student,
@@ -28,7 +28,7 @@ const AttendanceStatusButton = ({
               .patch({
                 attendance_id: Number(student.attendance_for_day?.id),
                 status: 0,
-                reason : null,
+                reason: null,
               })
               .then((res) => {
                 handleUpdateAttendance({ newAttendance: res });
