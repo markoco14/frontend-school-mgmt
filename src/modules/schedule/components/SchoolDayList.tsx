@@ -1,4 +1,4 @@
-import { useUserContext } from "@/src/UserContext";
+import { useUserContext } from "@/src/contexts/UserContext";
 import { schoolDayAdapter } from "@/src/modules/schedule/adapters/schoolDayAdapter";
 import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
 import { removeListItem } from "@/src/utils/removeListItem";
@@ -67,4 +67,4 @@ const SchoolDayList = ({
   );
 };
 
-export default SchoolDayList
+export default SchoolDayList;

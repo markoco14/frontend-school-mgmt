@@ -1,4 +1,4 @@
-import { useUserContext } from "@/src/UserContext";
+import { useUserContext } from "@/src/contexts/UserContext";
 import { Level } from "@/src/modules/curriculum/entities/Level";
 import { Subject } from "@/src/modules/curriculum/entities/Subject";
 import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";

@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { ReactElement, ReactNode } from "react";
 import { Toaster } from "react-hot-toast";
-import UserContextProvider from "../UserContext";
+import UserContextProvider from "../contexts/UserContext";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   // eslint-disable-next-line no-unused-vars

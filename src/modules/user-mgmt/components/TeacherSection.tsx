@@ -1,4 +1,4 @@
-import { useUserContext } from "@/src/UserContext";
+import { useUserContext } from "@/src/contexts/UserContext";
 import { useEffect, useState } from "react";
 
 import Modal from "@/src/modules/core/components/Modal";

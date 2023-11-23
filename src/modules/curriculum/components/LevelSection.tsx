@@ -1,4 +1,4 @@
-import { useUserContext } from "@/src/UserContext";
+import { useUserContext } from "@/src/contexts/UserContext";
 import PaginationButtons from "@/src/modules/core/components/PaginationButtons";
 import { levelAdapter } from "@/src/modules/curriculum/adapters/levelAdapter";
 import { Level } from "@/src/modules/curriculum/entities/Level";

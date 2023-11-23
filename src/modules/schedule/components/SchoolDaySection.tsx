@@ -1,11 +1,9 @@
-import { useUserContext } from "@/src/UserContext";
-import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
-import AddSchoolDay from "@/src/modules/school-mgmt/components/AddSchoolDay";
-import { useEffect, useState } from "react";
+import { useUserContext } from "@/src/contexts/UserContext";
 import { schoolDayAdapter } from "@/src/modules/schedule/adapters/schoolDayAdapter";
 import SchoolDayList from "@/src/modules/schedule/components/SchoolDayList";
-
-
+import AddSchoolDay from "@/src/modules/school-mgmt/components/AddSchoolDay";
+import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
+import { useEffect, useState } from "react";
 
 export default function SchoolDaySection() {
   const { selectedSchool } = useUserContext();

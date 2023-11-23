@@ -1,4 +1,4 @@
-import { useUserContext } from "@/src/UserContext";
+import { useUserContext } from "@/src/contexts/UserContext";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type Inputs = {
@@ -8,11 +8,7 @@ type Inputs = {
 
 export default function Login() {
   const { loginUser } = useUserContext();
-  const {
-    reset,
-    register,
-    handleSubmit,
-  } = useForm<Inputs>();
+  const { reset, register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     loginUser(data);

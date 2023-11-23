@@ -1,12 +1,12 @@
-import { useUserContext } from "@/src/UserContext";
+import { useUserContext } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
-import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
 import { subjectLevelAdapter } from "@/src/modules/curriculum/adapters/subjectLevelAdapter";
 import CurriculumNav from "@/src/modules/curriculum/components/CurriculumNav";
 import LevelSection from "@/src/modules/curriculum/components/LevelSection";
 import SubjectSection from "@/src/modules/curriculum/components/SubjectSection";
+import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
 import { useEffect, useState } from "react";
 
 export default function CurriculumHome() {

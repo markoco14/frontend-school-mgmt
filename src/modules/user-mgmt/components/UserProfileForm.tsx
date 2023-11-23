@@ -1,6 +1,6 @@
-import { useUserContext } from "@/src/UserContext";
-import { UserProfile } from "@/src/modules/user-mgmt/entities/UserProfile";
+import { useUserContext } from "@/src/contexts/UserContext";
 import { userAdapter } from "@/src/modules/user-mgmt/adapters/userAdapter";
+import { UserProfile } from "@/src/modules/user-mgmt/entities/UserProfile";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 

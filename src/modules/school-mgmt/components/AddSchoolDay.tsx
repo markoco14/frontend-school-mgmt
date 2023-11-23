@@ -1,8 +1,8 @@
-import { useUserContext } from "@/src/UserContext";
+import { useUserContext } from "@/src/contexts/UserContext";
 import Modal from "@/src/modules/core/components/Modal";
-import { WeekDay } from "@/src/modules/schedule/entities/WeekDay";
 import { scheduleAdapter } from "@/src/modules/schedule/adapters/scheduleAdapter";
 import { schoolDayAdapter } from "@/src/modules/schedule/adapters/schoolDayAdapter";
+import { WeekDay } from "@/src/modules/schedule/entities/WeekDay";
 import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
 import { addListItem } from "@/src/utils/addListItem";
 import { useEffect, useState } from "react";
@@ -29,7 +29,6 @@ export default function AddSchoolDay({
     getWeekDays();
   }, [selectedSchool]);
 
-  
   function sortSchoolDays(schoolDayList: SchoolDay[]) {
     const daysOrder = [
       "Monday",
@@ -57,7 +56,7 @@ export default function AddSchoolDay({
       await schoolDayAdapter
         .addSchoolDay({ schoolId: Number(selectedSchool?.id), day: weekday.id })
         .then((res) => {
-          const updatedList = addListItem(schoolDays, res)
+          const updatedList = addListItem(schoolDays, res);
           const sortedList = sortSchoolDays(updatedList);
           setSchoolDays(sortedList);
           toast.success("School day added.");

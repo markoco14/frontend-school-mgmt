@@ -1,9 +1,9 @@
-import { useUserContext } from "@/src/UserContext";
-import { Teacher } from "@/src/modules/user-mgmt/entities/Teacher";
-import { userAdapter } from "@/src/modules/user-mgmt/adapters/userAdapter";
-import { useEffect, useState } from "react";
-import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
+import { useUserContext } from "@/src/contexts/UserContext";
 import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
+import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
+import { userAdapter } from "@/src/modules/user-mgmt/adapters/userAdapter";
+import { Teacher } from "@/src/modules/user-mgmt/entities/Teacher";
+import { useEffect, useState } from "react";
 
 export default function ManageClassTeacher({
   selectedClass,

@@ -1,13 +1,13 @@
-import { useUserContext } from "@/src/UserContext";
 import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
 import StudentListSkeletonProps from "@/src/components/ui/skeleton/StudentListSkeletonProps";
-import { Student } from "@/src/modules/students/entities/Student";
-import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { useUserContext } from "@/src/contexts/UserContext";
+import { classStudentAdapter } from "@/src/modules/classes/adapters/classStudentAdapter";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { ClassStudent } from "@/src/modules/classes/entities/ClassStudent";
-import { classStudentAdapter } from "@/src/modules/classes/adapters/classStudentAdapter";
+import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
+import { Student } from "@/src/modules/students/entities/Student";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function AddStudentToClassSection({
   selectedClass,

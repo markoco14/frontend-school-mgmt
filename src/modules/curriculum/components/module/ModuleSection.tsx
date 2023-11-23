@@ -1,4 +1,4 @@
-import { useUserContext } from "@/src/UserContext";
+import { useUserContext } from "@/src/contexts/UserContext";
 import Modal from "@/src/modules/core/components/Modal";
 import { Level } from "@/src/modules/curriculum/entities/Level";
 import { Module } from "@/src/modules/curriculum/entities/Module";
