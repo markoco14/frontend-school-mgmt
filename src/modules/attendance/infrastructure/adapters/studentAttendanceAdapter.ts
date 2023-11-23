@@ -1,5 +1,5 @@
 import { Student } from "@/src/modules/students/entities/Student";
-import { StudentAttendance } from "../../domain/entities/StudentAttendance";
+import { StudentAttendance } from "../../entities/StudentAttendance";
 
 class StudentAttendanceAdapter {
   public async listStudentsWithAttendance({

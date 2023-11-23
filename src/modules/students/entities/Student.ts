@@ -1,4 +1,4 @@
-import { StudentAttendance } from "@/src/modules/attendance/domain/entities/StudentAttendance";
+import { StudentAttendance } from "@/src/modules/attendance/entities/StudentAttendance";
 
 export class Student {
   constructor(
