@@ -2,9 +2,9 @@ import { useUserContext } from "@/src/UserContext";
 import { useEffect, useState } from "react";
 
 import Modal from "@/src/modules/core/components/Modal";
+import StaffList from "@/src/modules/user-mgmt/components/StaffList";
 import { Teacher } from "@/src/modules/user-mgmt/entities/Teacher";
-import { userAdapter } from "../../adapters/userAdapter";
-import StaffList from "./StaffList";
+import { userAdapter } from "../adapters/userAdapter";
 import TeacherSignup from "./TeacherSignup";
 
 export default function TeacherSection() {

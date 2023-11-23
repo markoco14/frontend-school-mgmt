@@ -1,11 +1,10 @@
-import React, { useState } from "react";
 import Modal from "@/src/modules/core/components/Modal";
-import ChangePasswordForm from "../infrastructure/ui/ChangePasswordForm";
-
+import { useState } from "react";
+import ChangePasswordForm from "./ChangePasswordForm";
 
 const UserPasswordSection = () => {
-	const [isEditPassword, setIsEditPassword] = useState<boolean>(false);
-	
+  const [isEditPassword, setIsEditPassword] = useState<boolean>(false);
+
   return (
     <>
       <section className="max-w-[600px] border p-4 shadow">

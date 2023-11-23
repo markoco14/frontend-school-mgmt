@@ -2,7 +2,7 @@ import { useUserContext } from "@/src/UserContext";
 import { User } from "@/src/modules/user-mgmt/entities/User";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { userAdapter } from "../../adapters/userAdapter";
+import { userAdapter } from "../adapters/userAdapter";
 
 type Inputs = {
   first_name: string;
@@ -10,41 +10,42 @@ type Inputs = {
   password: string;
 };
 
-export default function TeacherSignup({
-  teachers,
-  setTeachers,
+export default function AdminSignup({
+  admins,
+  setAdmins,
 }: {
-  teachers: User[];
-  setTeachers: Function;
+  admins: User[];
+  setAdmins: Function;
 }) {
   const { user, selectedSchool } = useUserContext();
 
-  const {
-    reset,
-    register,
-    handleSubmit,
-  } = useForm<Inputs>();
+  const { reset, register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    if (teachers.find((teacher) => teacher.email === data.email)) {
+    if (admins.find((admin) => admin.email === data.email)) {
       toast("You already shared your school with this teacher.");
       return;
     }
 
-    if (teachers.find((teacher) => user?.email === data.email && teacher.email == user?.email)) {
-      toast("You cannot add yourself as a teacher in this school.");
+    if (
+      admins.find(
+        (admin) => user?.email === data.email && admin.email == user?.email,
+      )
+    ) {
+      toast("You cannot add yourself as an admin in this school.");
       return;
     }
+
     try {
-      const teacher: User = await userAdapter.addTeacher({
+      const admin: User = await userAdapter.addAdmin({
         first_name: data.first_name,
         email: data.email,
         password: data.password,
-        school_id: Number(selectedSchool?.id),
+        school_id: selectedSchool?.id,
       });
 
-      toast.success("School shared with teacher.");
-      setTeachers((prevTeachers: User[]) => [...prevTeachers, teacher]);
+      toast.success("School shared with admin.");
+      setAdmins((prevAdmins: User[]) => [...prevAdmins, admin]);
       reset();
     } catch (error) {
       console.error(error);

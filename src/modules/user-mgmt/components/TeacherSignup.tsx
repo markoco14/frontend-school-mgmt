@@ -2,7 +2,7 @@ import { useUserContext } from "@/src/UserContext";
 import { User } from "@/src/modules/user-mgmt/entities/User";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { userAdapter } from "../../adapters/userAdapter";
+import { userAdapter } from "../adapters/userAdapter";
 
 type Inputs = {
   first_name: string;
@@ -10,42 +10,41 @@ type Inputs = {
   password: string;
 };
 
-export default function AdminSignup({
-  admins,
-  setAdmins,
+export default function TeacherSignup({
+  teachers,
+  setTeachers,
 }: {
-  admins: User[];
-  setAdmins: Function;
+  teachers: User[];
+  setTeachers: Function;
 }) {
   const { user, selectedSchool } = useUserContext();
 
-  const {
-    reset,
-    register,
-    handleSubmit,
-  } = useForm<Inputs>();
+  const { reset, register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    if (admins.find((admin) => admin.email === data.email)) {
+    if (teachers.find((teacher) => teacher.email === data.email)) {
       toast("You already shared your school with this teacher.");
       return;
     }
 
-    if (admins.find((admin) => user?.email === data.email && admin.email == user?.email)) {
-      toast("You cannot add yourself as an admin in this school.");
+    if (
+      teachers.find(
+        (teacher) => user?.email === data.email && teacher.email == user?.email,
+      )
+    ) {
+      toast("You cannot add yourself as a teacher in this school.");
       return;
     }
-
     try {
-      const admin: User = await userAdapter.addAdmin({
+      const teacher: User = await userAdapter.addTeacher({
         first_name: data.first_name,
         email: data.email,
         password: data.password,
-        school_id: selectedSchool?.id,
+        school_id: Number(selectedSchool?.id),
       });
 
-      toast.success("School shared with admin.");
-      setAdmins((prevAdmins: User[]) => [...prevAdmins, admin]);
+      toast.success("School shared with teacher.");
+      setTeachers((prevTeachers: User[]) => [...prevTeachers, teacher]);
       reset();
     } catch (error) {
       console.error(error);

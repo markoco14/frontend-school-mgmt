@@ -1,7 +1,7 @@
 import { useUserContext } from "@/src/UserContext";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { userAdapter } from "../../adapters/userAdapter";
+import { userAdapter } from "../adapters/userAdapter";
 
 type Inputs = {
   current_password: string;

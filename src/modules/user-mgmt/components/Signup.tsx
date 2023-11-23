@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { userAdapter } from "../../adapters/userAdapter";
+import { userAdapter } from "../adapters/userAdapter";
 
 type Inputs = {
   firstName: string;
@@ -10,11 +10,7 @@ type Inputs = {
 };
 
 export default function Signup() {
-  const {
-    reset,
-    register,
-    handleSubmit,
-  } = useForm<Inputs>();
+  const { reset, register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {

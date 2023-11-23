@@ -1,6 +1,6 @@
+import Login from "@/src/modules/user-mgmt/components/Login";
 import { useState } from "react";
-import Login from "../user-mgmt/infrastructure/ui/Login";
-import Signup from "../user-mgmt/infrastructure/ui/Signup";
+import Signup from "../user-mgmt/components/Signup";
 
 const LandingPage = () => {
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
