@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import { schoolDayAdapter } from "@/src/modules/schedule/infrastructure/ui/adapters/schoolDayAdapter";
+import { schoolDayAdapter } from "@/src/modules/schedule/adapters/schoolDayAdapter";
 import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
 import { removeListItem } from "@/src/utils/removeListItem";
 import { useEffect } from "react";

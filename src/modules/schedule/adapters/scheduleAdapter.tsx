@@ -1,4 +1,4 @@
-import { WeekDay } from "../../../entities/WeekDay";
+import { WeekDay } from "../entities/WeekDay";
 
 class ScheduleAdapter {
 	public async listWeekDays(): Promise<WeekDay[]> {
