@@ -4,7 +4,7 @@ import { ModuleType } from "@/src/modules/curriculum/entities/ModuleType";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { moduleTypeAdapter } from "../../../../adapters/moduleTypeAdapter";
+import { moduleTypeAdapter } from "../../adapters/moduleTypeAdapter";
 import ManageModuleType from "./ManageModuleType";
 
 type Inputs = {

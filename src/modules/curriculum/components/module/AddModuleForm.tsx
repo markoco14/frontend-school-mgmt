@@ -4,8 +4,8 @@ import { ModuleType } from "@/src/modules/curriculum/entities/ModuleType";
 import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { moduleAdapter } from "../../../../adapters/moduleAdapter";
-import { moduleTypeAdapter } from "../../../../adapters/moduleTypeAdapter";
+import { moduleAdapter } from "../../adapters/moduleAdapter";
+import { moduleTypeAdapter } from "../../adapters/moduleTypeAdapter";
 
 type Inputs = {
   name: string;
