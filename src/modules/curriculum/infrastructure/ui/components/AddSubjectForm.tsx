@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import { subjectAdapter } from "@/src/modules/curriculum/infrastructure/adapters/subjectAdapter";
+import { subjectAdapter } from "@/src/modules/curriculum/adapters/subjectAdapter";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Subject } from "@/src/modules/curriculum/entities/Subject";

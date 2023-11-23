@@ -2,7 +2,7 @@ import { useUserContext } from "@/src/UserContext";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
 import PaginationButtons from "@/src/modules/core/components/PaginationButtons";
-import { levelAdapter } from "@/src/modules/curriculum/infrastructure/adapters/levelAdapter";
+import { levelAdapter } from "@/src/modules/curriculum/adapters/levelAdapter";
 import { schoolDayAdapter } from "@/src/modules/schedule/adapters/schoolDayAdapter";
 import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
 import { useEffect, useState } from "react";

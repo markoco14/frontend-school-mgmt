@@ -1,11 +1,11 @@
 import { useUserContext } from "@/src/UserContext";
+import { Level } from "@/src/modules/curriculum/entities/Level";
 import { Subject } from "@/src/modules/curriculum/entities/Subject";
 import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Level } from "@/src/modules/curriculum/entities/Level";
-import { levelAdapter } from "../../adapters/levelAdapter";
-import { subjectLevelAdapter } from "../../adapters/subjectLevelAdapter";
+import { levelAdapter } from "../../../adapters/levelAdapter";
+import { subjectLevelAdapter } from "../../../adapters/subjectLevelAdapter";
 
 const AddSubjectLevelForm = ({
   subject,
@@ -104,7 +104,7 @@ const AddSubjectLevelForm = ({
                   : "hover:bg-gray-300 "
               } flex w-full justify-between p-2 disabled:cursor-not-allowed`}
             >
-              {level.name} 
+              {level.name}
             </button>
           </li>
         ))

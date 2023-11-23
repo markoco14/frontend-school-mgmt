@@ -4,7 +4,7 @@ import { Subject } from "@/src/modules/curriculum/entities/Subject";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
-import { subjectAdapter } from "../../adapters/subjectAdapter";
+import { subjectAdapter } from "../../../adapters/subjectAdapter";
 import AddSubjectForm from "./AddSubjectForm";
 import AddSubjectLevelForm from "./AddSubjectLevelForm";
 

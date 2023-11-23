@@ -1,11 +1,11 @@
 import { useUserContext } from "@/src/UserContext";
 import Modal from "@/src/modules/core/components/Modal";
 import { Level } from "@/src/modules/curriculum/entities/Level";
+import { Module } from "@/src/modules/curriculum/entities/Module";
 import { Subject } from "@/src/modules/curriculum/entities/Subject";
 import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
 import { useEffect, useState } from "react";
-import { Module } from "@/src/modules/curriculum/entities/Module";
-import { moduleAdapter } from "../../../adapters/moduleAdapter";
+import { moduleAdapter } from "../../../../adapters/moduleAdapter";
 import AddModule from "./AddModule";
 
 export default function ModuleSection({
