@@ -1,7 +1,7 @@
 import { useUserContext } from "@/src/contexts/UserContext";
 import { schoolDayAdapter } from "@/src/modules/schedule/adapters/schoolDayAdapter";
 import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
-import { removeListItem } from "@/src/utils/removeListItem";
+import { removeListItemById } from "@/src/utils/removeListItem";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
@@ -36,7 +36,8 @@ const SchoolDayList = ({
     await schoolDayAdapter
       .deleteSchoolDay({ schoolDayId: schoolDayId })
       .then(() => {
-        removeListItem(setSchoolDays, schoolDayId);
+        const filteredList = removeListItemById(schoolDays, schoolDayId);
+        setSchoolDays(filteredList)
         toast.success("School Day deleted.");
       });
   }
