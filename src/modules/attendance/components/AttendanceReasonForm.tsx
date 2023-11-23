@@ -2,7 +2,7 @@ import { Student } from "@/src/modules/students/entities/Student";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import TextareaAutosize from "react-textarea-autosize";
-import { studentAttendanceAdapter } from "../../../adapters/studentAttendanceAdapter";
+import { studentAttendanceAdapter } from "../adapters/studentAttendanceAdapter";
 
 type Inputs = {
   reason: string;
