@@ -1,7 +1,7 @@
 import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { jwtAdapter } from "./modules/auth/infrastructure/adapters/jwtAdapter";
+import { jwtAdapter } from "./modules/auth/adapters/jwtAdapter";
 import { School } from "./modules/school-mgmt/entities/School";
 
 type UserContextProviderProps = {
