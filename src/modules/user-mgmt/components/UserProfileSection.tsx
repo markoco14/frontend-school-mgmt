@@ -1,7 +1,7 @@
 import Modal from "@/src/modules/core/components/Modal";
 import React, { useState } from "react";
 import { UserProfile } from "@/src/modules/user-mgmt/entities/UserProfile";
-import UserProfileForm from "../infrastructure/ui/UserProfileForm";
+import UserProfileForm from "./UserProfileForm";
 
 interface UserProfileProps {
   user: UserProfile;

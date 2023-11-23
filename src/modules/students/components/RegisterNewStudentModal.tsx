@@ -1,9 +1,9 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-import { useUserContext } from "@/src/UserContext";
-import { Student } from "@/src/modules/students/entities/Student";
+import { useUserContext } from "@/src/contexts/UserContext";
 import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
+import { Student } from "@/src/modules/students/entities/Student";
 
 type Inputs = {
   firstName: string;

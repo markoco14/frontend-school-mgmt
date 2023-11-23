@@ -1,10 +1,10 @@
-import { useUserContext } from "@/src/UserContext";
+import { useUserContext } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import GuestLayout from "@/src/modules/core/components/GuestLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import SchoolHeader from "@/src/modules/core/components/SchoolHeader";
-import { School } from "@/src/modules/school-mgmt/domain/entities/School";
-import { schoolAdapter } from "@/src/modules/school-mgmt/infrastructure/adapters/schoolAdapter";
+import { schoolAdapter } from "@/src/modules/school-mgmt/adapters/schoolAdapter";
+import { School } from "@/src/modules/school-mgmt/entities/School";
 import LandingPage from "@/src/modules/website/LandingPage";
 import Link from "next/link";
 import { ReactElement, useEffect, useState } from "react";
@@ -14,7 +14,7 @@ import { NextPageWithLayout } from "./_app";
 const Home: NextPageWithLayout = () => {
   const { user, selectedSchool, handleSelectSchool } = useUserContext();
   const [schools, setSchools] = useState<School[]>([]);
-  
+
   useEffect(() => {
     async function getData() {
       if (user) {

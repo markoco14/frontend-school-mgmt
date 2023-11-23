@@ -3,8 +3,8 @@
 */
 import { render, screen } from '@testing-library/react';
 import "@testing-library/jest-dom";
-import SchoolDayList from '@/src/components/schedule/SchoolDayList';
-import UserContextProvider from '@/src/UserContext';
+import SchoolDayList from "@/src/modules/schedule/components/SchoolDayList";
+import UserContextProvider from '@/src/contexts/UserContext';
 
 describe('School Day List', () => {
 	it('renders no school days chosen', () => {

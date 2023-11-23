@@ -1,11 +1,11 @@
-import { useUserContext } from "@/src/UserContext";
+import { useUserContext } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import Modal from "@/src/modules/core/components/Modal";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
-import { Student } from "@/src/modules/students/entities/Student";
 import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
 import RegisterNewStudentModal from "@/src/modules/students/components/RegisterNewStudentModal";
+import { Student } from "@/src/modules/students/entities/Student";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -71,7 +71,7 @@ export default function StudentsHome() {
   return (
     <Layout>
       <AdminLayout>
-        <div className="bg-white w-full h-full">
+        <div className="h-full w-full bg-white">
           {/* <SchoolHeader /> */}
           <section className="max-w-[1000px]">
             <div className="mb-4 flex items-baseline justify-between">
