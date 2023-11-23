@@ -1,4 +1,4 @@
-import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
+import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
 
 class SchoolDayAdapter {
 

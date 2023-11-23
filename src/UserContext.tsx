@@ -1,8 +1,8 @@
+import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { jwtAdapter } from "./modules/auth/infrastructure/adapters/jwtAdapter";
-import { School } from "./modules/school-mgmt/domain/entities/School";
-import Cookie from "js-cookie";
+import { School } from "./modules/school-mgmt/entities/School";
 
 type UserContextProviderProps = {
   children: React.ReactNode; // not allowed: React.ReactNode

@@ -3,7 +3,7 @@ import Modal from "@/src/modules/core/components/Modal";
 import { WeekDay } from "@/src/modules/schedule/domain/entities/WeekDay";
 import { scheduleAdapter } from "@/src/modules/schedule/infrastructure/ui/adapters/scheduleAdapter";
 import { schoolDayAdapter } from "@/src/modules/schedule/infrastructure/ui/adapters/schoolDayAdapter";
-import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
+import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
 import { addListItem } from "@/src/utils/addListItem";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";

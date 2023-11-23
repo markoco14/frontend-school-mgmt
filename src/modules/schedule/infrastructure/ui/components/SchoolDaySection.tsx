@@ -1,5 +1,5 @@
 import { useUserContext } from "@/src/UserContext";
-import { SchoolDay } from "@/src/modules/school-mgmt/domain/entities/SchoolDay";
+import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
 import AddSchoolDay from "@/src/modules/school-mgmt/infrastructure/ui/components/AddSchoolDay";
 import { useEffect, useState } from "react";
 import { schoolDayAdapter } from "../adapters/schoolDayAdapter";
