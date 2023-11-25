@@ -89,6 +89,7 @@ const Home: NextPageWithLayout = () => {
           <AdminLayout>
             <SchoolHeader />
             <p>Tests will go here</p>
+            <Link href="/tests">Tests</Link>
           </AdminLayout>
         </Layout>
       )}
