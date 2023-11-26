@@ -122,7 +122,10 @@ const DoTestPage: NextPageWithLayout = () => {
             ) : currentQuestionIndex >= questions.length ? (
               <TestEndDetails test={selectedTest} />
             ) : (
-              <TestQuestionRenderer question={currentQuestion} />
+              <div>
+                <p className="absolute top-2 right-2 sm:right-4 text-xl sm:text-5xl">{currentQuestionIndex + 1}/{questions.length}</p>
+                <TestQuestionRenderer question={currentQuestion} />
+              </div>
             )}
           </div>
         </div>
