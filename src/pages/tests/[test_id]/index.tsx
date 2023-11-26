@@ -1,9 +1,10 @@
 import TestStartDetails from "@/src/modules/tests/components/TestStartDetails";
 import { Test } from "@/src/modules/tests/entities/Test";
-import { Question } from "@/src/modules/tests/entities/TestQuestion";
+import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
 import { NextPageWithLayout } from "../../_app";
+import TestQuestionRenderer from "@/src/modules/tests/components/TestQuestionRenderer";
 
 const tests: Test[] = [
   { id: 1, name: "Level 7 Unit 1 Test 1", maxCorrections: 2, allowNoCorrections: true },
@@ -12,7 +13,7 @@ const tests: Test[] = [
   { id: 4, name: "Level 6 Unit 2 Test 4", maxCorrections: 2, allowNoCorrections: true },
 ];
 
-const questions: Question[] = [
+const questions: TestQuestion[] = [
   { id: 1, question: "Do her give the it to he?" },
   { id: 2, question: "Does I look like he?" },
   { id: 3, question: "Do we want to take her from it?" },
@@ -25,7 +26,7 @@ const DoTestPage: NextPageWithLayout = () => {
     return test.id === Number(router.query.test_id);
   });
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-  const currentQuestion: Question = questions[currentQuestionIndex];
+  const currentQuestion: TestQuestion = questions[currentQuestionIndex];
   const [isStarted, setIsStarted] = useState<boolean>(false);
 
   function previousQuestion() {
@@ -79,14 +80,12 @@ const DoTestPage: NextPageWithLayout = () => {
                 <button onClick={() => setIsStarted(true)}>Start Test</button>
               </>
             ) : (
-              <p className="text-center text-[180px]">
-                {currentQuestion.question}
-              </p>
+              <TestQuestionRenderer question={currentQuestion}/>
             )}
           </div>
         </div>
 
-        {/* Question button bar */}
+        {/* TestQuestion button bar */}
         <div className="absolute bottom-0 left-0 flex w-full justify-center gap-8 bg-gray-200 py-2 text-5xl opacity-0 duration-200 ease-in-out hover:opacity-100">
           {isStarted && (
             <button
