@@ -84,10 +84,13 @@ const DoTestPage: NextPageWithLayout = () => {
         {/* Header and in-game Navigation */}
         {isStarted && (
           <div className="absolute left-0 top-0 grid w-full grid-cols-10 bg-gray-200 py-2 opacity-0 duration-200 ease-in-out hover:opacity-100">
-            <button onClick={() => router.push("/tests")} className="col-span-1">
+            <button
+              onClick={() => router.push("/tests")}
+              className="col-span-1"
+            >
               Quit
             </button>
-            <h1 className="col-span-8 text-center text-5xl">
+            <h1 className="col-span-8 text-center text-xl sm:text-5xl">
               {selectedTest?.name}
             </h1>
           </div>
@@ -95,19 +98,19 @@ const DoTestPage: NextPageWithLayout = () => {
 
         {/* Test sections */}
         <div className="h-screen">
-          <div className="grid h-full place-content-center place-items-center gap-16">
+          <div className="grid h-full place-items-center gap-16 p-2 sm:place-content-center sm:p-0">
             {!isStarted ? (
               <>
                 <TestStartDetails test={selectedTest} />
-                <div className="flex gap-4">
+                <div className="flex gap-4  text-3xl sm:text-5xl ">
                   <button
-                    className="rounded p-4 text-5xl duration-100 ease-in-out hover:-translate-y-2 hover:bg-gray-600 hover:text-white"
+                    className="p-4 duration-100 rounded ease-in-out hover:-translate-y-2 hover:bg-gray-600 hover:text-white"
                     onClick={() => router.push("/tests")}
                   >
                     Quit
                   </button>
                   <button
-                    className="rounded p-4 text-5xl underline underline-offset-4 duration-100 ease-in-out hover:-translate-y-2 hover:bg-green-600 hover:text-white"
+                    className="rounded p-4 underline underline-offset-4 duration-100 ease-in-out hover:-translate-y-2 hover:bg-green-600 hover:text-white"
                     onClick={() => setIsStarted(true)}
                   >
                     Start Test
@@ -122,7 +125,7 @@ const DoTestPage: NextPageWithLayout = () => {
 
         {/* TestQuestion button bar */}
         {isStarted && (
-          <div className="absolute bottom-0 left-0 flex w-full justify-center gap-8 bg-gray-200 py-2 text-5xl opacity-0 duration-200 ease-in-out hover:opacity-100">
+          <div className="absolute bottom-0 left-0 flex w-full justify-center gap-8 bg-gray-200 py-2 duration-200 ease-in-out hover:opacity-100 sm:text-5xl sm:opacity-0">
             {isStarted && (
               <button
                 onClick={() => {
