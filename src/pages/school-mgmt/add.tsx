@@ -29,7 +29,6 @@ export default function Add() {
         toast.success("School added.");
         return response;
       } catch (error) {
-        console.error(error);
         toast.error(
           "Something went wrong. Please try again or contact customer support.",
         );

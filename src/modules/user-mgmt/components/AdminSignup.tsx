@@ -48,7 +48,7 @@ export default function AdminSignup({
       setAdmins((prevAdmins: User[]) => [...prevAdmins, admin]);
       reset();
     } catch (error) {
-      console.error(error);
+      toast.error("Unable to create new admin user")
     }
   };
 

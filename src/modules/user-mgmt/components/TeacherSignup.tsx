@@ -47,7 +47,7 @@ export default function TeacherSignup({
       setTeachers((prevTeachers: User[]) => [...prevTeachers, teacher]);
       reset();
     } catch (error) {
-      console.error(error);
+      toast.error("Unable to create new teacher user");
     }
   };
 

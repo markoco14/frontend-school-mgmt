@@ -23,7 +23,7 @@ export default function Signup() {
       toast.success("User added.");
       reset();
     } catch (error) {
-      console.error(error);
+      toast.error("Unable to sign up")
     }
   };
 

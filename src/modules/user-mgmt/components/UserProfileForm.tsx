@@ -40,7 +40,7 @@ export default function UserProfileForm({
       setUserProfile(profile);
       reset();
     } catch (error) {
-      console.error(error);
+      toast.error("Unable to update your user information at this time.")
     }
   };
 

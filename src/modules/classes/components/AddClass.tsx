@@ -48,7 +48,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
       setClasses((prevClasses: ClassEntity[]) => [...prevClasses, newClass]);
       reset();
     } catch (error) {
-      console.error(error);
+      toast.error("Unable to add new class")
     }
   };
 
@@ -65,7 +65,6 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
       await schoolDayAdapter
         .listSchoolSchoolDays({ schoolId: selectedSchool?.id })
         .then((res) => {
-          console.log(res);
           setDays(res);
         });
     }
@@ -75,7 +74,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
         getLevels();
         getWeekdays();
       } catch (error) {
-        console.error(error);
+        toast.error("Unable to get level and schedule data.")
       }
     }
   }, [user, selectedSchool, page]);

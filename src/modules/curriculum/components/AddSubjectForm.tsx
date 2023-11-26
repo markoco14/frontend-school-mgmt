@@ -28,7 +28,7 @@ const AddSubjectForm = ({ setSubjects }: { setSubjects: Function }) => {
         });
       reset();
     } catch (error) {
-      console.error(error);
+      toast.error("Unable to add new subject")
     }
   };
 

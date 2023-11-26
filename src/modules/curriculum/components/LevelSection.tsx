@@ -34,7 +34,7 @@ export default function LevelSection() {
       try {
         listSchoolLevels();
       } catch (error) {
-        console.error(error);
+        toast.error("Unable to get levels")
       }
     }
   }, [selectedSchool, page]);

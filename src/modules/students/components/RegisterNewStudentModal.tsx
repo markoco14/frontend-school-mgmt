@@ -32,10 +32,8 @@ export default function RegisterNewStudentModal({
       "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_3.jpeg";
     let female =
       "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_4.jpeg";
-    Number(data.gender) === 1
-      ? console.log("female", female)
-      : console.log("male", male);
-    // return;
+  
+
     try {
       const student: Student = await studentAdapter.addStudent({
         firstName: data.firstName,
@@ -61,7 +59,7 @@ export default function RegisterNewStudentModal({
       );
       reset();
     } catch (error) {
-      console.error(error);
+      toast.error("Unable to add new student.")
     }
   };
 

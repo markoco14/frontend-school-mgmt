@@ -63,7 +63,7 @@ export default function AddLevel({
           toast.success("Level added.");
         });
     } catch (error) {
-      console.error(error);
+      toast.error("Unable to add new level")
     }
   }
 
