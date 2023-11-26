@@ -7,9 +7,9 @@ export default function SchoolHeader() {
   const router = useRouter();
   return (
     <section>
-      <div className="mb-4 flex w-full items-baseline justify-between gap-16 text-gray-500">
+      <div className="border-b p-2 flex w-full items-baseline justify-between gap-16 text-gray-500 sm:py-4 sm:px-16">
         <Link href="/" className="text-2xl">
-          {selectedSchool ? selectedSchool.name : "Choose a school"}
+          {selectedSchool ? selectedSchool.name : "No school"}
         </Link>
         <button
           onClick={() => {
