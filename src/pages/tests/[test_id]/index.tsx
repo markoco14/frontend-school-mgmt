@@ -1,16 +1,36 @@
+import TestQuestionRenderer from "@/src/modules/tests/components/TestQuestionRenderer";
 import TestStartDetails from "@/src/modules/tests/components/TestStartDetails";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
 import { NextPageWithLayout } from "../../_app";
-import TestQuestionRenderer from "@/src/modules/tests/components/TestQuestionRenderer";
 
 const tests: Test[] = [
-  { id: 1, name: "Level 7 Unit 1 Test 1", maxCorrections: 2, allowNoCorrections: true },
-  { id: 2, name: "Level 10 Unit 4 Test 2", maxCorrections: 3, allowNoCorrections: true },
-  { id: 3, name: "Level 3 Unit 8 Test 3", maxCorrections: 1, allowNoCorrections: false },
-  { id: 4, name: "Level 6 Unit 2 Test 4", maxCorrections: 2, allowNoCorrections: true },
+  {
+    id: 1,
+    name: "Level 7 Unit 1 Test 1",
+    maxCorrections: 2,
+    allowNoCorrections: true,
+  },
+  {
+    id: 2,
+    name: "Level 10 Unit 4 Test 2",
+    maxCorrections: 3,
+    allowNoCorrections: true,
+  },
+  {
+    id: 3,
+    name: "Level 3 Unit 8 Test 3",
+    maxCorrections: 1,
+    allowNoCorrections: false,
+  },
+  {
+    id: 4,
+    name: "Level 6 Unit 2 Test 4",
+    maxCorrections: 2,
+    allowNoCorrections: true,
+  },
 ];
 
 const questions: TestQuestion[] = [
@@ -73,14 +93,19 @@ const DoTestPage: NextPageWithLayout = () => {
 
         {/* Test sections */}
         <div className="h-screen">
-          <div className="grid h-full place-content-center place-items-center">
+          <div className="grid h-full place-content-center place-items-center gap-16">
             {!isStarted ? (
               <>
                 <TestStartDetails test={selectedTest} />
-                <button onClick={() => setIsStarted(true)}>Start Test</button>
+                <button
+                  className="rounded p-4 text-5xl underline underline-offset-4 duration-100 ease-in-out hover:-translate-y-2 hover:bg-green-600 hover:text-white"
+                  onClick={() => setIsStarted(true)}
+                >
+                  Start Test
+                </button>
               </>
             ) : (
-              <TestQuestionRenderer question={currentQuestion}/>
+              <TestQuestionRenderer question={currentQuestion} />
             )}
           </div>
         </div>

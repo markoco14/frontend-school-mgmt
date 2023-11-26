@@ -13,9 +13,9 @@ const TestStartDetails = ({test}: {test: Test}) => {
 
 
 	return(
-		<div className="text-center grid gap-16">
-			<p className="text-8xl">{test.name}</p>
-			<p>Correct any mistakes in the following sentences.</p>
+		<div className="text-center grid gap-8">
+			<p className="text-8xl mb-16">{test.name}</p>
+			<p className="text-5xl">Correct any mistakes in the following sentences.</p>
 			<p className="text-8xl text-red-700">{mistakeString}X</p>
 		</div>
 	)
