@@ -1,3 +1,4 @@
+import TestEndDetails from "@/src/modules/tests/components/TestEndDetails";
 import TestQuestionRenderer from "@/src/modules/tests/components/TestQuestionRenderer";
 import TestStartDetails from "@/src/modules/tests/components/TestStartDetails";
 import { Test } from "@/src/modules/tests/entities/Test";
@@ -21,7 +22,7 @@ const tests: Test[] = [
   },
   {
     id: 3,
-    name: "Level 3 Unit 8 Test 3",
+    name: "Level 5 Unit 5 Test 3",
     maxCorrections: 1,
     allowNoCorrections: false,
   },
@@ -48,6 +49,7 @@ const DoTestPage: NextPageWithLayout = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const currentQuestion: TestQuestion = questions[currentQuestionIndex];
   const [isStarted, setIsStarted] = useState<boolean>(false);
+  const [isEndPage, setIsEndPage] = useState<boolean>(false);
 
   function previousQuestion() {
     if (currentQuestionIndex - 1 < 0) {
@@ -58,7 +60,7 @@ const DoTestPage: NextPageWithLayout = () => {
   }
 
   function nextQuestion() {
-    if (currentQuestionIndex + 1 >= questions.length) {
+    if (currentQuestionIndex >= questions.length) {
       // check if last index
       return;
     }
@@ -104,7 +106,7 @@ const DoTestPage: NextPageWithLayout = () => {
                 <TestStartDetails test={selectedTest} />
                 <div className="flex gap-4  text-3xl sm:text-5xl ">
                   <button
-                    className="p-4 duration-100 rounded ease-in-out hover:-translate-y-2 hover:bg-gray-600 hover:text-white"
+                    className="rounded p-4 duration-100 ease-in-out hover:-translate-y-2 hover:bg-gray-600 hover:text-white"
                     onClick={() => router.push("/tests")}
                   >
                     Quit
@@ -117,6 +119,8 @@ const DoTestPage: NextPageWithLayout = () => {
                   </button>
                 </div>
               </>
+            ) : currentQuestionIndex >= questions.length ? (
+              <TestEndDetails test={selectedTest} />
             ) : (
               <TestQuestionRenderer question={currentQuestion} />
             )}
@@ -130,24 +134,52 @@ const DoTestPage: NextPageWithLayout = () => {
               <button
                 onClick={() => {
                   setIsStarted(false);
+                  setIsEndPage(false);
+                  setCurrentQuestionIndex(0);
                 }}
+                className="rounded border p-2 duration-200 ease-in-out disabled:bg-gray-300 disabled:opacity-50"
               >
-                Start
+                Info
               </button>
             )}
             <button
+              disabled={currentQuestionIndex == 0}
               onClick={() => {
+                if (isEndPage) {
+                  setIsEndPage(false);
+                  return;
+                }
                 previousQuestion();
               }}
+              className="rounded border p-2 duration-200 ease-in-out disabled:bg-gray-300 disabled:opacity-50"
             >
               Prev
             </button>
+
             <button
+              disabled={currentQuestionIndex >= questions.length}
               onClick={() => {
+                // if (isEndPage) {
+                //   return;
+                // }
+                // if (currentQuestionIndex + 1 >= questions.length) {
+                //   setIsEndPage(true);
+                //   return;
+                // }
                 nextQuestion();
               }}
+              className="rounded border p-2 duration-200 ease-in-out disabled:bg-gray-300 disabled:opacity-50"
             >
               Next
+            </button>
+            <button
+              disabled={currentQuestionIndex >= questions.length}
+              onClick={() => {
+                setCurrentQuestionIndex(questions.length);
+              }}
+              className="rounded border p-2 duration-200 ease-in-out disabled:bg-gray-300 disabled:opacity-50"
+            >
+              End
             </button>
           </div>
         )}
