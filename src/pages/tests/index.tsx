@@ -4,13 +4,34 @@ import AdminLayout from "@/src/modules/core/components/AdminLayout"
 import Layout from "@/src/modules/core/components/Layout"
 import Link from "next/link"
 import ListContainer from "@/src/modules/core/components/ListContainer"
+import { Test } from "@/src/modules/tests/entities/Test"
 
-const tests = [
-	{id: 1, name: "Test 1"},
-	{id: 2, name: "Test 2"},
-	{id: 3, name: "Test 3"},
-	{id: 4, name: "Test 4"},
-]
+const tests: Test[] = [
+  {
+    id: 1,
+    name: "Level 7 Unit 1 Test 1",
+    maxCorrections: 2,
+    allowNoCorrections: true,
+  },
+  {
+    id: 2,
+    name: "Level 10 Unit 4 Test 2",
+    maxCorrections: 3,
+    allowNoCorrections: true,
+  },
+  {
+    id: 3,
+    name: "Level 3 Unit 8 Test 3",
+    maxCorrections: 1,
+    allowNoCorrections: false,
+  },
+  {
+    id: 4,
+    name: "Level 6 Unit 2 Test 4",
+    maxCorrections: 2,
+    allowNoCorrections: true,
+  },
+];
 
 const TestHomePage: NextPageWithLayout = () => {
 	return (
