@@ -29,9 +29,12 @@ const testsToday: Test[] = [
 ];
 
 
+
+
 const Home: NextPageWithLayout = () => {
   const { user, selectedSchool, handleSelectSchool } = useUserContext();
   const [schools, setSchools] = useState<School[]>([]);
+  const date = new Date();
 
   useEffect(() => {
     async function getData() {
@@ -105,9 +108,17 @@ const Home: NextPageWithLayout = () => {
       {user && selectedSchool && (
         <Layout>
           <AdminLayout>
-            <h1 className="text-3xl text-gray-700 mb-8">Today&apos;s Schedule</h1>
+            <div className="mb-8">
+              <h1 className="mb-1 text-3xl text-gray-700">
+                Today&apos;s Activities
+              </h1>
+              <p>
+                See everything that&apos;s happening on{" "}
+                {date.toDateString()}
+              </p>
+            </div>
             <CardContainer>
-              <div className="flex gap-16 items-baseline justify-between mb-4 p-2">
+              <div className="mb-4 flex items-baseline justify-between gap-16 p-2">
                 <h2 className="text-xl">Tests</h2>
                 <Link href="/tests" className="text-gray-500">
                   See all tests
@@ -115,10 +126,18 @@ const Home: NextPageWithLayout = () => {
               </div>
               <ListContainer>
                 {testsToday.map((test) => (
-                  <li key={`test-${test.id}`} className="grid sm:grid-cols-3 p-2 hover:bg-blue-300">
+                  <li
+                    key={`test-${test.id}`}
+                    className="grid p-2 hover:bg-blue-300 sm:grid-cols-3"
+                  >
                     <p className="font-bold">{test.name}</p>
                     <p>Teacher {test.teacher}</p>
-                    <Link href={`/tests/${test.id}`} className="underline underline-offset-2">Do Test</Link>
+                    <Link
+                      href={`/tests/${test.id}`}
+                      className="underline underline-offset-2"
+                    >
+                      Do Test
+                    </Link>
                   </li>
                 ))}
               </ListContainer>
