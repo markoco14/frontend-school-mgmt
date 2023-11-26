@@ -2,7 +2,6 @@ import { useUserContext } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import GuestLayout from "@/src/modules/core/components/GuestLayout";
 import Layout from "@/src/modules/core/components/Layout";
-import SchoolHeader from "@/src/modules/core/components/SchoolHeader";
 import { schoolAdapter } from "@/src/modules/school-mgmt/adapters/schoolAdapter";
 import { School } from "@/src/modules/school-mgmt/entities/School";
 import LandingPage from "@/src/modules/website/LandingPage";
@@ -11,6 +10,24 @@ import { ReactElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { NextPageWithLayout } from "./_app";
 import ListContainer from "../modules/core/components/ListContainer";
+import CardContainer from "../modules/core/components/CardContainer";
+import { Test } from "../modules/tests/entities/Test";
+
+const testsToday: Test[] = [
+  {
+    id: 1,
+    name: "Level 7 Unit 1 Test 1",
+    teacher: "Mark",
+  },
+  {
+    id: 2,
+    name: "Level 10 Unit 4 Test 2",
+    maxCorrections: 3,
+    allowNoCorrections: true,
+    teacher: "Pei",
+  },
+];
+
 
 const Home: NextPageWithLayout = () => {
   const { user, selectedSchool, handleSelectSchool } = useUserContext();
@@ -88,9 +105,24 @@ const Home: NextPageWithLayout = () => {
       {user && selectedSchool && (
         <Layout>
           <AdminLayout>
-            <SchoolHeader />
-            <p>Tests will go here</p>
-            <Link href="/tests">Tests</Link>
+            <h1 className="text-3xl text-gray-700 mb-8">Today&apos;s Schedule</h1>
+            <CardContainer>
+              <div className="flex gap-16 items-baseline justify-between mb-4 p-2">
+                <h2 className="text-xl">Tests</h2>
+                <Link href="/tests" className="text-gray-500">
+                  See all tests
+                </Link>
+              </div>
+              <ListContainer>
+                {testsToday.map((test) => (
+                  <li key={`test-${test.id}`} className="grid sm:grid-cols-3 p-2 hover:bg-blue-300">
+                    <p className="font-bold">{test.name}</p>
+                    <p>Teacher {test.teacher}</p>
+                    <Link href={`/tests/${test.id}`} className="underline underline-offset-2">Do Test</Link>
+                  </li>
+                ))}
+              </ListContainer>
+            </CardContainer>
           </AdminLayout>
         </Layout>
       )}

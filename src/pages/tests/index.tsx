@@ -5,6 +5,8 @@ import Layout from "@/src/modules/core/components/Layout"
 import Link from "next/link"
 import ListContainer from "@/src/modules/core/components/ListContainer"
 import { Test } from "@/src/modules/tests/entities/Test"
+import CardContainer from "@/src/modules/core/components/CardContainer"
+import { useUserContext } from "@/src/contexts/UserContext"
 
 const tests: Test[] = [
   {
@@ -34,20 +36,25 @@ const tests: Test[] = [
 ];
 
 const TestHomePage: NextPageWithLayout = () => {
+
+  const { selectedSchool } = useUserContext();
 	return (
     <Layout>
       <AdminLayout>
-        <div>
-          <h1>Test List Page</h1>
+        <CardContainer>
+          <div className="mb-4 p-2">
+            <h1 className="text-3xl mb-1">{selectedSchool?.name} Tests</h1>
+            <p className="text-gray-700">Manage all your test data here.</p>
+          </div>
           <ListContainer>
             {tests.map((test) => (
-              <li key={`test-${test.id}`} className="flex gap-4">
+              <li key={`test-${test.id}`} className="flex gap-4 p-2 hover:bg-blue-300">
                 <p>{test.name}</p>
                 <Link href={`/tests/${test.id}`}>Do</Link>
               </li>
             ))}
           </ListContainer>
-        </div>
+        </CardContainer>
       </AdminLayout>
     </Layout>
   );
