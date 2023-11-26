@@ -1,22 +1,15 @@
+import TestStartDetails from "@/src/modules/tests/components/TestStartDetails";
+import { Test } from "@/src/modules/tests/entities/Test";
+import { Question } from "@/src/modules/tests/entities/TestQuestion";
 import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
 import { NextPageWithLayout } from "../../_app";
 
-type Question = {
-  id: number;
-  question: string;
-};
-
-type Test = {
-  id: number;
-  name: string;
-};
-
 const tests: Test[] = [
-  { id: 1, name: "Test 1" },
-  { id: 2, name: "Test 2" },
-  { id: 3, name: "Test 3" },
-  { id: 4, name: "Test 4" },
+  { id: 1, name: "Test 1", maxCorrections: 2, allowNoCorrections: true },
+  { id: 2, name: "Test 2", maxCorrections: 3, allowNoCorrections: true },
+  { id: 3, name: "Test 3", maxCorrections: 1, allowNoCorrections: false },
+  { id: 4, name: "Test 4", maxCorrections: 2, allowNoCorrections: true },
 ];
 
 const questions: Question[] = [
@@ -28,11 +21,12 @@ const questions: Question[] = [
 
 const DoTestPage: NextPageWithLayout = () => {
   const router = useRouter();
-  const selectedTest = tests.find((test) => {
+  const selectedTest: Test | undefined = tests.find((test) => {
     return test.id === Number(router.query.test_id);
   });
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const currentQuestion: Question = questions[currentQuestionIndex];
+  const [isStarted, setIsStarted] = useState<boolean>(false);
 
   function previousQuestion() {
     if (currentQuestionIndex - 1 < 0) {
@@ -49,41 +43,77 @@ const DoTestPage: NextPageWithLayout = () => {
     }
     setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
   }
-  return (
-    <main>
-      {/* Header and In-game Navigation */}
-      <div className="absolute left-0 top-0 grid w-full grid-cols-10 bg-gray-200 py-2 opacity-0 duration-200 ease-in-out hover:opacity-100">
-        <button onClick={() => router.push("/tests")} className="col-span-1">
-          Back
-        </button>
-        <h1 className="col-span-8 text-center text-5xl">
-          {selectedTest?.name}
-        </h1>
-      </div>
-      {/* Current Question */}
+
+  if (!selectedTest) {
+    return (
       <div className="h-screen">
         <div className="grid h-full place-items-center">
-          <p className="text-center text-[180px]">{currentQuestion.question}</p>
+          <p>This test does not exist.</p>
+          <button onClick={() => router.push("/tests")} className="col-span-1">
+            Back
+          </button>
         </div>
       </div>
-      {/* Question button bar */}
-      <div className="flex justify-center gap-8 absolute bottom-0 left-0 w-full bg-gray-200 py-2 text-5xl opacity-0 duration-200 ease-in-out hover:opacity-100">
-        <button
-          onClick={() => {
-            previousQuestion();
-          }}
-        >
-          Back
-        </button>
-        <button
-          onClick={() => {
-            nextQuestion();
-          }}
-        >
-          Next
-        </button>
-      </div>
-    </main>
+    );
+  }
+
+  return (
+    <>
+      <main>
+        {/* Header and in-game Navigation */}
+        <div className="absolute left-0 top-0 grid w-full grid-cols-10 bg-gray-200 py-2 opacity-0 duration-200 ease-in-out hover:opacity-100">
+          <button onClick={() => router.push("/tests")} className="col-span-1">
+            Quit
+          </button>
+          <h1 className="col-span-8 text-center text-5xl">
+            {selectedTest?.name}
+          </h1>
+        </div>
+
+        {/* Test sections */}
+        <div className="h-screen">
+          <div className="grid h-full place-content-center place-items-center">
+            {!isStarted ? (
+              <>
+                <TestStartDetails test={selectedTest} />
+                <button onClick={() => setIsStarted(true)}>Start Test</button>
+              </>
+            ) : (
+              <p className="text-center text-[180px]">
+                {currentQuestion.question}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Question button bar */}
+        <div className="absolute bottom-0 left-0 flex w-full justify-center gap-8 bg-gray-200 py-2 text-5xl opacity-0 duration-200 ease-in-out hover:opacity-100">
+          {isStarted && (
+            <button
+              onClick={() => {
+                setIsStarted(false);
+              }}
+            >
+              Start
+            </button>
+          )}
+          <button
+            onClick={() => {
+              previousQuestion();
+            }}
+          >
+            Prev
+          </button>
+          <button
+            onClick={() => {
+              nextQuestion();
+            }}
+          >
+            Next
+          </button>
+        </div>
+      </main>
+    </>
   );
 };
 
