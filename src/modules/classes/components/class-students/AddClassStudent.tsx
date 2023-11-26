@@ -4,6 +4,7 @@ import { useUserContext } from "@/src/contexts/UserContext";
 import { classStudentAdapter } from "@/src/modules/classes/adapters/classStudentAdapter";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { ClassStudent } from "@/src/modules/classes/entities/ClassStudent";
+import ListContainer from "@/src/modules/core/components/ListContainer";
 import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
 import { Student } from "@/src/modules/students/entities/Student";
 import { useEffect, useState } from "react";
@@ -69,7 +70,7 @@ export default function AddStudentToClassSection({
         </Skeleton>
       ) : (
         <article className="rounded bg-gray-100 p-2 shadow-inner">
-          <ul className="items-baseline divide-y">
+          <ListContainer>
             {allStudents?.map((student, index) => (
               <li
                 key={index}
@@ -94,7 +95,7 @@ export default function AddStudentToClassSection({
                 </button>
               </li>
             ))}
-          </ul>
+          </ListContainer>
           <div className="flex justify-evenly gap-2">
             <button
               className="w-full rounded bg-blue-300 px-2 py-1 disabled:cursor-not-allowed disabled:bg-gray-300"

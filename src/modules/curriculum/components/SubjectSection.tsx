@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { subjectAdapter } from "../adapters/subjectAdapter";
 import AddSubjectForm from "./AddSubjectForm";
 import AddSubjectLevelForm from "./AddSubjectLevelForm";
+import ListContainer from "../../core/components/ListContainer";
 
 const SubjectList = ({
   subjects,
@@ -43,7 +44,7 @@ const SubjectList = ({
 
   return (
     <>
-      <ul className="rounded bg-gray-100 shadow-inner">
+      <ListContainer>
         {subjects?.map((subject, index) => (
           <li
             key={index}
@@ -65,7 +66,7 @@ const SubjectList = ({
             </button>
           </li>
         ))}
-      </ul>
+      </ListContainer>
       <Modal
         show={isAddSubjectLevel}
         close={handleClose}

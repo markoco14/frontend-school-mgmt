@@ -7,6 +7,7 @@ import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
 import { addListItem } from "@/src/utils/addListItem";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import ListContainer from "../../core/components/ListContainer";
 
 export default function AddSchoolDay({
   schoolDays,
@@ -84,7 +85,7 @@ export default function AddSchoolDay({
       {/*  */}
       <Modal show={isAddSchoolDay} close={handleClose} title="Add School Days">
         <p className="mb-4">Click days to add them to your school.</p>
-        <ul className="grid gap-2 rounded bg-gray-100">
+        <ListContainer>
           {weekDays?.map((weekday, index) => (
             <li key={index}>
               <button
@@ -102,7 +103,7 @@ export default function AddSchoolDay({
               </button>
             </li>
           ))}
-        </ul>
+        </ListContainer>
       </Modal>
     </>
   );

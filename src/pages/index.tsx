@@ -10,6 +10,7 @@ import Link from "next/link";
 import { ReactElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { NextPageWithLayout } from "./_app";
+import ListContainer from "../modules/core/components/ListContainer";
 
 const Home: NextPageWithLayout = () => {
   const { user, selectedSchool, handleSelectSchool } = useUserContext();
@@ -58,7 +59,7 @@ const Home: NextPageWithLayout = () => {
                       </Link>
                     ))}
                 </div>
-                <ul className="divide-y">
+                <ListContainer>
                   {schools.length === 0 ? (
                     <p>No schools shared with you.</p>
                   ) : (
@@ -77,7 +78,7 @@ const Home: NextPageWithLayout = () => {
                       </li>
                     ))
                   )}
-                </ul>
+                </ListContainer>
               </article>
             </div>
           </AdminLayout>

@@ -1,4 +1,5 @@
 import { Level } from "@/src/modules/curriculum/entities/Level";
+import ListContainer from "../../core/components/ListContainer";
 
 export default function LevelList({levels, handleDeleteLevel}: {levels: Level[], handleDeleteLevel: Function}) {
   
@@ -6,7 +7,7 @@ export default function LevelList({levels, handleDeleteLevel}: {levels: Level[],
   return (
 		<div className="mb-4 xs:mb-0">
 			<h2 className="text-3xl mb-2">Levels</h2>
-			<ul className="bg-gray-100 rounded shadow-inner mb-4">
+			<ListContainer>
 				{levels?.length >= 1 ? levels?.map((level, index) => (
 					<li 
 						key={index}
@@ -26,7 +27,7 @@ export default function LevelList({levels, handleDeleteLevel}: {levels: Level[],
 						<p>This page is empty.</p>
 					</article>
 				)}
-			</ul>
+			</ListContainer>
 		</div>
   );
 }

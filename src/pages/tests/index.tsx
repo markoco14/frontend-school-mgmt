@@ -3,6 +3,7 @@ import { NextPageWithLayout } from "../_app"
 import AdminLayout from "@/src/modules/core/components/AdminLayout"
 import Layout from "@/src/modules/core/components/Layout"
 import Link from "next/link"
+import ListContainer from "@/src/modules/core/components/ListContainer"
 
 const tests = [
 	{id: 1, name: "Test 1"},
@@ -17,14 +18,14 @@ const TestHomePage: NextPageWithLayout = () => {
       <AdminLayout>
         <div>
           <h1>Test List Page</h1>
-          <ul>
+          <ListContainer>
             {tests.map((test) => (
               <li key={`test-${test.id}`} className="flex gap-4">
                 <p>{test.name}</p>
                 <Link href={`/tests/${test.id}`}>Do</Link>
               </li>
             ))}
-          </ul>
+          </ListContainer>
         </div>
       </AdminLayout>
     </Layout>

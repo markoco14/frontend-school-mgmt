@@ -6,6 +6,7 @@ import AddClass from "@/src/modules/classes/components/AddClass";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
+import ListContainer from "@/src/modules/core/components/ListContainer";
 import Modal from "@/src/modules/core/components/Modal";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import Link from "next/link";
@@ -95,7 +96,7 @@ export default function ClassHome() {
                 </article>
               ) : (
                 <article>
-                  <ul className="flex flex-col divide-y">
+                  <ListContainer>
                     {classes?.map(
                       (currentClass: ClassEntity, index: number) => (
                         <li
@@ -111,7 +112,7 @@ export default function ClassHome() {
                         </li>
                       ),
                     )}
-                  </ul>
+                  </ListContainer>
                 </article>
               )}
             </div>

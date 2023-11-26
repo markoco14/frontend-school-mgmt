@@ -1,4 +1,5 @@
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
+import ListContainer from "../../core/components/ListContainer";
 
 const ClassList = ({
   todayClasses,
@@ -10,7 +11,7 @@ const ClassList = ({
   handleClick: Function;
 }) => {
   return (
-    <ul className="grid divide-y">
+    <ListContainer>
       {todayClasses?.map((classEntity) => (
         <li
           key={`class-${classEntity.id}`}
@@ -24,7 +25,7 @@ const ClassList = ({
           </span>
         </li>
       ))}
-    </ul>
+    </ListContainer>
   );
 };
 

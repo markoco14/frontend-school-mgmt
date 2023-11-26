@@ -1,6 +1,7 @@
 import { useUserContext } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
+import ListContainer from "@/src/modules/core/components/ListContainer";
 import Modal from "@/src/modules/core/components/Modal";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
@@ -8,6 +9,7 @@ import RegisterNewStudentModal from "@/src/modules/students/components/RegisterN
 import { Student } from "@/src/modules/students/entities/Student";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const NoData = ({ text }: { text: string }) => {
   return (
@@ -50,7 +52,7 @@ export default function StudentsHome() {
       try {
         getData();
       } catch (error) {
-        console.error(error);
+        toast.error("Unable to get student data.")
       }
     }
   }, [user, selectedSchool, page]);
@@ -95,7 +97,7 @@ export default function StudentsHome() {
                 {!students && <NoData text={"No students found"} />}
                 {students && (
                   <>
-                    <ul className="min-h-[420px] divide-y divide-gray-300 sm:h-full">
+                    <ListContainer>
                       {students?.map((student: Student, index) => (
                         <li key={index} className="flex justify-between gap-4">
                           <Link
@@ -106,7 +108,7 @@ export default function StudentsHome() {
                           </Link>
                         </li>
                       ))}
-                    </ul>
+                    </ListContainer>
                     <div className="flex justify-evenly gap-2">
                       <button
                         className="w-full rounded bg-blue-300 px-2 py-1 disabled:cursor-not-allowed disabled:bg-gray-300"

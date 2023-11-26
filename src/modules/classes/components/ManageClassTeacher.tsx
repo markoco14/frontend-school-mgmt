@@ -4,6 +4,7 @@ import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { userAdapter } from "@/src/modules/user-mgmt/adapters/userAdapter";
 import { Teacher } from "@/src/modules/user-mgmt/entities/Teacher";
 import { useEffect, useState } from "react";
+import ListContainer from "../../core/components/ListContainer";
 
 export default function ManageClassTeacher({
   selectedClass,
@@ -77,7 +78,7 @@ export default function ManageClassTeacher({
         {isAddTeacher && (
           <>
             <p className="text-xl">Available Teachers</p>
-            <ul className=" mb-4 rounded bg-white p-2 shadow-inner">
+            <ListContainer>
               {teachers?.map((teacher, index) => (
                 <li key={index} className="flex justify-between">
                   <span>
@@ -97,7 +98,7 @@ export default function ManageClassTeacher({
                   </button>
                 </li>
               ))}
-            </ul>
+            </ListContainer>
           </>
         )}
       </section>

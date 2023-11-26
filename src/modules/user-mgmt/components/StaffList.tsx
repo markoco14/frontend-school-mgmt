@@ -1,8 +1,9 @@
 import { User } from "@/src/modules/user-mgmt/entities/User";
+import ListContainer from "../../core/components/ListContainer";
 
 const StaffList = ({ staffList }: { staffList: User[] }) => {
   return (
-    <ul className="grid gap-2 rounded bg-gray-100 p-2 shadow-inner">
+    <ListContainer>
       {staffList?.map((staff: any, index: number) => (
         <li
           key={index}
@@ -14,7 +15,7 @@ const StaffList = ({ staffList }: { staffList: User[] }) => {
           {/* <span>remove</span> */}
         </li>
       ))}
-    </ul>
+    </ListContainer>
   );
 };
 

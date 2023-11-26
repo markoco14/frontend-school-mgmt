@@ -1,4 +1,5 @@
 import { Student } from "@/src/modules/students/entities/Student";
+import ListContainer from "../../core/components/ListContainer";
 
 type Props = {
 	students: Student[];
@@ -7,7 +8,7 @@ type Props = {
 export default function StudentList(props: Props) {
 
 	return(
-		<ul className="flex flex-col gap-2">
+		<ListContainer>
 			{props.students?.map((student: Student, index: number) => (
 				<li 
 					key={index}
@@ -16,6 +17,6 @@ export default function StudentList(props: Props) {
 					{student.first_name} {student.last_name}
 				</li>
 			))}
-		</ul>
+		</ListContainer>
 	)
 }

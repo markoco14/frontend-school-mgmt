@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ClassStudent } from "@/src/modules/classes/entities/ClassStudent";
+import ListContainer from "@/src/modules/core/components/ListContainer";
 
 export default function ClassStudentList({
   classStudentList,
@@ -28,7 +29,7 @@ export default function ClassStudentList({
         </article>
       ) : (
         <article>
-          <ul className="flex flex-col gap-2 divide-y">
+          <ListContainer>
             {classStudentList?.map((student: ClassStudent, index: number) => (
               <li
                 key={index}
@@ -56,7 +57,7 @@ export default function ClassStudentList({
                 </button> */}
               </li>
             ))}
-          </ul>
+          </ListContainer>
         </article>
       )}
     </>

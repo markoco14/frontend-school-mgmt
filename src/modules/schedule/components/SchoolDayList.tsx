@@ -1,4 +1,5 @@
 import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
+import ListContainer from "../../core/components/ListContainer";
 
 const SchoolDayList = ({
   schoolDays,
@@ -8,7 +9,7 @@ const SchoolDayList = ({
   handleDeleteSchoolDay: Function;
 }) => {
   return (
-    <ul className="mb-4 rounded bg-gray-100 shadow-inner">
+    <ListContainer>
       {schoolDays.length > 0 ? (
         schoolDays.map((schoolDay, index) => (
           <li
@@ -29,7 +30,7 @@ const SchoolDayList = ({
       ) : (
         <p className="p-2">No school days chosen.</p>
       )}
-    </ul>
+    </ListContainer>
   );
 };
 

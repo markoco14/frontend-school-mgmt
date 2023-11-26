@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { levelAdapter } from "../adapters/levelAdapter";
 import { subjectLevelAdapter } from "../adapters/subjectLevelAdapter";
+import ListContainer from "../../core/components/ListContainer";
 
 const AddSubjectLevelForm = ({
   subject,
@@ -56,7 +57,7 @@ const AddSubjectLevelForm = ({
           toast.success(`Added level ${level.name} to ${subject.name}`);
         });
     } catch (err) {
-      console.error(err);
+      toast.error("Unable to add level to subject.")
     }
   }
 
@@ -78,7 +79,7 @@ const AddSubjectLevelForm = ({
   }
 
   return (
-    <ul className="mb-4 overflow-y-auto rounded bg-gray-100 shadow-inner">
+    <ListContainer>
       {levels?.length >= 1 ? (
         levels?.map((level, index) => (
           <li key={index}>
@@ -113,7 +114,7 @@ const AddSubjectLevelForm = ({
           <p>This page is empty.</p>
         </article>
       )}
-    </ul>
+    </ListContainer>
   );
 };
 
