@@ -5,7 +5,7 @@ import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
-import { NextPageWithLayout } from "../../_app";
+import { NextPageWithLayout } from "@/src/pages/_app";
 
 const tests: Test[] = [
   {
@@ -85,17 +85,25 @@ const DoTestPage: NextPageWithLayout = () => {
       <main>
         {/* Header and in-game Navigation */}
         {isStarted && (
-          <div className="absolute left-0 top-0 grid w-full grid-cols-10 bg-gray-200 py-2 opacity-0 duration-200 ease-in-out hover:opacity-100">
-            <button
-              onClick={() => router.push("/tests")}
-              className="col-span-1"
-            >
-              Quit
-            </button>
+          <header className="absolute left-0 top-0 grid w-full grid-cols-10 bg-gray-200 px-4 py-2 opacity-0 duration-200 ease-in-out hover:opacity-100">
+            <div className="flex items-center gap-4 col-span-1">
+              <button
+                onClick={() => router.push("/")}
+                className="col-span-1"
+              >
+                Home
+              </button>
+              <button
+                onClick={() => router.push("/tests")}
+                className="col-span-1"
+              >
+                Tests
+              </button>
+            </div>
             <h1 className="col-span-8 text-center text-xl sm:text-5xl">
               {selectedTest?.name}
             </h1>
-          </div>
+          </header>
         )}
 
         {/* Test sections */}
@@ -130,9 +138,9 @@ const DoTestPage: NextPageWithLayout = () => {
           </div>
         </div>
 
-        {/* TestQuestion button bar */}
+        {/* Test question navigation bar */}
         {isStarted && (
-          <div className="absolute bottom-0 left-0 flex w-full justify-center gap-8 bg-gray-200 py-2 duration-200 ease-in-out hover:opacity-100 sm:text-5xl sm:opacity-0">
+          <nav className="absolute bottom-0 left-0 flex w-full justify-center gap-8 bg-gray-200 py-2 duration-200 ease-in-out hover:opacity-100 sm:text-5xl sm:opacity-0">
             {isStarted && (
               <button
                 onClick={() => {
@@ -162,13 +170,6 @@ const DoTestPage: NextPageWithLayout = () => {
             <button
               disabled={currentQuestionIndex >= questions.length}
               onClick={() => {
-                // if (isEndPage) {
-                //   return;
-                // }
-                // if (currentQuestionIndex + 1 >= questions.length) {
-                //   setIsEndPage(true);
-                //   return;
-                // }
                 nextQuestion();
               }}
               className="rounded border p-2 duration-200 ease-in-out disabled:bg-gray-300 disabled:opacity-50"
@@ -184,7 +185,7 @@ const DoTestPage: NextPageWithLayout = () => {
             >
               End
             </button>
-          </div>
+          </nav>
         )}
       </main>
     </>
