@@ -3,9 +3,9 @@ import TestQuestionRenderer from "@/src/modules/tests/components/TestQuestionRen
 import TestStartDetails from "@/src/modules/tests/components/TestStartDetails";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
+import { NextPageWithLayout } from "@/src/pages/_app";
 import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
-import { NextPageWithLayout } from "@/src/pages/_app";
 
 const tests: Test[] = [
   {
@@ -35,10 +35,39 @@ const tests: Test[] = [
 ];
 
 const questions: TestQuestion[] = [
-  { id: 1, question: "Do her give the it to he?" },
-  { id: 2, question: "Does I look like he?" },
-  { id: 3, question: "Do we want to take her from it?" },
-  { id: 4, question: "Do I want to talk to they?" },
+  {
+    id: 1,
+    question: "Do her give the it to he?",
+    mistakes: ["Do", "her", "the", "he"],
+    answers: [
+      "Does she give it to him?",
+      "Does she give the ball to him?",
+      "Does she give him it?",
+      "Does she give him the ball?",
+    ],
+  },
+  {
+    id: 2,
+    question: "Does I look like he?",
+    mistakes: ["Does", "he"],
+    answers: ["Do I look like him?", "Do I look like her?"],
+  },
+  {
+    id: 3,
+    question: "Do we want to take her from it?",
+    mistakes: ["Do", "her", "it"],
+    answers: [
+      "Do we want to take it from her?",
+      "Do they want to take it from her?",
+      "Do you want to take it from her?",
+    ],
+  },
+  {
+    id: 4,
+    question: "Do I want to talk to they?",
+    mistakes: ["they"],
+    answers: ["Do I want to talk to them?"],
+  },
 ];
 
 const DoTestPage: NextPageWithLayout = () => {
@@ -86,11 +115,8 @@ const DoTestPage: NextPageWithLayout = () => {
         {/* Header and in-game Navigation */}
         {isStarted && (
           <header className="absolute left-0 top-0 grid w-full grid-cols-10 bg-gray-200 px-4 py-2 opacity-0 duration-200 ease-in-out hover:opacity-100">
-            <div className="flex items-center gap-4 col-span-1">
-              <button
-                onClick={() => router.push("/")}
-                className="col-span-1"
-              >
+            <div className="col-span-1 flex items-center gap-4">
+              <button onClick={() => router.push("/")} className="col-span-1">
                 Home
               </button>
               <button
@@ -131,7 +157,9 @@ const DoTestPage: NextPageWithLayout = () => {
               <TestEndDetails test={selectedTest} />
             ) : (
               <div>
-                <p className="absolute top-2 right-2 sm:right-4 text-xl sm:text-5xl">{currentQuestionIndex + 1}/{questions.length}</p>
+                <p className="absolute right-2 top-2 text-xl sm:right-4 sm:text-5xl">
+                  {currentQuestionIndex + 1}/{questions.length}
+                </p>
                 <TestQuestionRenderer question={currentQuestion} />
               </div>
             )}
