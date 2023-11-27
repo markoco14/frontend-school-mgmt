@@ -50,7 +50,7 @@ const TestHomePage: NextPageWithLayout = () => {
             {tests.map((test) => (
               <li key={`test-${test.id}`} className="flex gap-4 p-2 hover:bg-blue-300">
                 <p>{test.name}</p>
-                <Link href={`/tests/${test.id}`}>Do</Link>
+                <Link href={`/tests/do-test/${test.id}`}>Do</Link>
               </li>
             ))}
           </ListContainer>
