@@ -54,7 +54,11 @@ const questions: TestQuestion[] = [
     id: 3,
     question: "Do we want to take her from it?",
     mistakes: ["Do", "her", "it"],
-    answers: ["Do we want to take it from her?", "Do they want to take it from her?", "Do you want to take it from her?"],
+    answers: [
+      "Do we want to take it from her?",
+      "Do they want to take it from her?",
+      "Do you want to take it from her?",
+    ],
   },
   {
     id: 4,
@@ -73,7 +77,6 @@ const ReviewTestPage: NextPageWithLayout = () => {
   const currentQuestion: TestQuestion = questions[currentQuestionIndex];
   const [currentAnswerIndex, setCurrentAnswerIndex] = useState<number>(0);
 
-
   function highlightWrongWords(question: string) {
     question = question.replace("?", " ?");
     const words = question.split(" ");
@@ -90,6 +93,29 @@ const ReviewTestPage: NextPageWithLayout = () => {
   const questionWithHighlights = highlightWrongWords(currentQuestion.question);
   // const questionWithHighlights =
 
+  function highlightCorrections(question: string, answer: string) {
+    let questionWords = question.replace("?", " ?").split(" ");
+    let answerWords = answer.replace("?", " ?").split(" ");
+    answerWords.forEach((word: string, index: number) => {
+      // check if it is a new word
+      if (!questionWords.includes(word)) {
+        answerWords[index] = `<span class="text-green-600">${word}</span>`;
+      }
+
+      // check if the word is the same, but position has changed
+      if (questionWords[index] !== word && word !== "?") {
+        answerWords[index] = `<span class="text-green-600">${word}</span>`;
+      }
+    });
+    let sentenceWithHighlights = "";
+    sentenceWithHighlights = answerWords.join(" ").replace(" ?", "?");
+    return sentenceWithHighlights;
+  }
+
+  const answerWithHighlights = highlightCorrections(
+    currentQuestion.question,
+    currentQuestion.answers[currentAnswerIndex],
+  );
 
   function prev({
     currentIndex,
@@ -157,9 +183,9 @@ const ReviewTestPage: NextPageWithLayout = () => {
                   stateFunction: setCurrentQuestionIndex,
                   min: 0,
                 });
-                setCurrentAnswerIndex(0)
+                setCurrentAnswerIndex(0);
               }}
-              >
+            >
               Prev
             </button>
             <button
@@ -171,7 +197,7 @@ const ReviewTestPage: NextPageWithLayout = () => {
                   stateFunction: setCurrentQuestionIndex,
                   max: questions.length,
                 });
-                setCurrentAnswerIndex(0)
+                setCurrentAnswerIndex(0);
               }}
             >
               Next
@@ -179,9 +205,12 @@ const ReviewTestPage: NextPageWithLayout = () => {
           </div>
         </div>
         <div className="relative mx-auto flex min-h-[50%] items-center justify-center px-2 sm:w-[80%]">
-          <p className="text-5xl sm:text-[120px]">
-            {currentQuestion.answers[currentAnswerIndex]}
-          </p>
+          <p
+            className="text-5xl sm:text-[120px]"
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(answerWithHighlights),
+            }}
+          ></p>
           {/* Debug bar */}
           <div className="absolute top-2">
             <p>Number of answers: {currentQuestion.answers.length}</p>
