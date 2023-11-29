@@ -53,7 +53,7 @@ const questions: TestQuestion[] = [
   {
     id: 3,
     question: "Do we want to take her from it?",
-    mistakes: ["Do", "her", "it"],
+    mistakes: ["her", "it"],
     answers: [
       "Do we want to take it from her?",
       "Do they want to take it from her?",
