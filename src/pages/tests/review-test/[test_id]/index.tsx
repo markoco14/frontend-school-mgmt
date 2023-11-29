@@ -90,7 +90,7 @@ const ReviewTestPage: NextPageWithLayout = () => {
     return sentenceWithHighlights;
   }
 
-  const questionWithHighlights = highlightMistakes(currentQuestion.question, currentQuestion.answers[currentAnswerIndex]);
+  const questionWithHighlights = highlightMistakes(currentQuestion.question);
 
   function highlightCorrections(question: string, answer: string) {
     let questionWords = question.replace("?", " ?").split(" ");
