@@ -113,8 +113,7 @@ const Home: NextPageWithLayout = () => {
                 Today&apos;s Activities
               </h1>
               <p>
-                See everything that&apos;s happening on{" "}
-                {date.toDateString()}
+                See everything that&apos;s happening on {date.toDateString()}
               </p>
             </div>
             <CardContainer>
@@ -128,15 +127,21 @@ const Home: NextPageWithLayout = () => {
                 {testsToday.map((test) => (
                   <li
                     key={`test-${test.id}`}
-                    className="grid p-2 hover:bg-blue-300 sm:grid-cols-3"
+                    className="grid p-2 hover:bg-blue-300 sm:grid-cols-4"
                   >
                     <p className="font-bold">{test.name}</p>
                     <p>Teacher {test.teacher}</p>
                     <Link
-                      href={`/tests/${test.id}`}
+                      href={`/tests/do-test/${test.id}`}
                       className="underline underline-offset-2"
                     >
                       Do Test
+                    </Link>
+                    <Link
+                      href={`/tests/review-test/${test.id}`}
+                      className="underline underline-offset-2"
+                    >
+                      Review Test
                     </Link>
                   </li>
                 ))}
