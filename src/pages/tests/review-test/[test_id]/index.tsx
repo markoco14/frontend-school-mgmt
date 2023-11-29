@@ -77,21 +77,20 @@ const ReviewTestPage: NextPageWithLayout = () => {
   const currentQuestion: TestQuestion = questions[currentQuestionIndex];
   const [currentAnswerIndex, setCurrentAnswerIndex] = useState<number>(0);
 
-  function highlightWrongWords(question: string) {
-    question = question.replace("?", " ?");
-    const words = question.split(" ");
-    words.forEach((word: string, index: number) => {
+  function highlightMistakes(question: string) {
+    let questionWords = question.replace("?", " ?").split(" ");
+    questionWords.forEach((word: string, index: number) => {
+      // check if it is in mistakes
       if (currentQuestion.mistakes.includes(word)) {
-        words[index] = `<span class="text-red-600">${word}</span>`;
+          questionWords[index] = `<span class="text-red-600">${word}</span>`;
       }
-    });
-    const sentenceWithHighlights = words.join(" ").replace(" ?", "?");
+    })
+    const sentenceWithHighlights = questionWords.join(" ").replace(" ?", "?");
 
     return sentenceWithHighlights;
   }
 
-  const questionWithHighlights = highlightWrongWords(currentQuestion.question);
-  // const questionWithHighlights =
+  const questionWithHighlights = highlightMistakes(currentQuestion.question, currentQuestion.answers[currentAnswerIndex]);
 
   function highlightCorrections(question: string, answer: string) {
     let questionWords = question.replace("?", " ?").split(" ");
