@@ -3,11 +3,12 @@ import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import CardContainer from "@/src/modules/core/components/CardContainer";
 import Layout from "@/src/modules/core/components/Layout";
 import ListContainer from "@/src/modules/core/components/ListContainer";
+import Modal from "@/src/modules/core/components/Modal";
 import { Test } from "@/src/modules/tests/entities/Test";
 import Link from "next/link";
 import { ReactElement, useState } from "react";
 import { NextPageWithLayout } from "../_app";
-import { addListItem } from "@/src/utils/addListItem";
+import NewTestForm from "./newTestForm";
 
 const tests: Test[] = [
   {
@@ -39,6 +40,12 @@ const tests: Test[] = [
 const TestHomePage: NextPageWithLayout = () => {
   const { selectedSchool } = useUserContext();
   const [testList, setTestList] = useState(tests);
+  const [isCreateTest, setIsCreateTest] = useState<boolean>(false);
+
+  function handleClose() {
+    setIsCreateTest(false);
+  }
+
   return (
     <Layout>
       <AdminLayout>
@@ -49,15 +56,8 @@ const TestHomePage: NextPageWithLayout = () => {
               <button
                 className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
                 onClick={() => {
-                  const newTest = {
-                    id: 5,
-                    name: "Level 9 Unit 4 Test 1",
-                    maxCorrections: 3,
-                    allowNoCorrections: true,
-                  };
-                  const updatedTests = addListItem(testList, newTest);
-                  setTestList(updatedTests)
-                  }}
+                  setIsCreateTest(true);
+                }}
               >
                 New Test
               </button>
@@ -76,6 +76,9 @@ const TestHomePage: NextPageWithLayout = () => {
             ))}
           </ListContainer>
         </CardContainer>
+        <Modal show={isCreateTest} close={handleClose} title="Create New Test">
+            <NewTestForm testList={testList} setTestList={setTestList}/>
+        </Modal>
       </AdminLayout>
     </Layout>
   );
