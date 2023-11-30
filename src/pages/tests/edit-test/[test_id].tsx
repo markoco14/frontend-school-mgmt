@@ -11,6 +11,8 @@ import Layout from "@/src/modules/core/components/Layout";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
+import Modal from "@/src/modules/core/components/Modal";
+import ListContainer from "@/src/modules/core/components/ListContainer";
 
 const currentTest: Test = {
   id: 1,
@@ -59,6 +61,8 @@ const EditTestPage: NextPageWithLayout = () => {
   const { user } = useUserContext();
   const test = currentTest;
   const [questionList, setQuestionList] = useState<TestQuestion[]>(questions);
+  const [isEditAnswers, setIsEditAnswers] = useState<boolean>(false);
+  const [selectedQuestion, setSelectedQuestion] = useState<TestQuestion | undefined>();
 
   async function handleReorder(values: any[]) {
     setQuestionList(values);
@@ -67,6 +71,9 @@ const EditTestPage: NextPageWithLayout = () => {
     // can worry about that logic later
   }
 
+  function handleClose() {
+    setIsEditAnswers(false);
+  }
   if (!user) {
     return (
       <Layout>
@@ -84,9 +91,11 @@ const EditTestPage: NextPageWithLayout = () => {
     <Layout>
       <AdminLayout>
         <CardContainer>
-          <div className="grid gap-2 mb-8">
+          <div className="mb-8 grid gap-2">
             <h1 className="text-3xl">{test.name}</h1>
-            <p className="text-gray-500">Click a question below to edit the answers.</p>
+            <p className="text-gray-500">
+              Click a question below to edit the answers.
+            </p>
           </div>
           <ReorderListContainer
             axis="y"
@@ -95,18 +104,46 @@ const EditTestPage: NextPageWithLayout = () => {
           >
             {questionList?.map((question, index) => (
               <Reorder.Item
-                className="p-2 hover:bg-blue-300 hover:cursor-pointer"
+                className="p-2 hover:cursor-pointer hover:bg-blue-300"
                 key={`question-${question.id}`}
                 value={question}
               >
-                <>
+                <div className="flex justify-between">
                   <p>
                     {index + 1}. {question.question}
                   </p>
-                </>
+                  <button
+                    onClick={() => {
+                      setIsEditAnswers(true);
+                      setSelectedQuestion(question);
+                    }}
+                  >
+                    Edit
+                  </button>
+                </div>
               </Reorder.Item>
             ))}
           </ReorderListContainer>
+          <Modal show={isEditAnswers} close={handleClose} title="Edit Answers">
+            {/* Question/answer container */}
+            <div>
+              <p>{selectedQuestion?.question}</p>
+              <ListContainer>
+                {selectedQuestion?.answers.map((answer, index) => (
+                  // we need a debounce on the change here, too
+                  // just change the input value to change the answer
+                  // use the live preview on the right
+                  // to see what the q/a pair looks like to the user
+                  <li key={index} className="border py-1 px-2">
+                    <span>{index + 1}. </span>
+                    <input value={answer}/>
+                  </li>
+                ))}
+              </ListContainer>
+            </div>
+            {/* Preview container */}
+            <div></div>
+          </Modal>
         </CardContainer>
       </AdminLayout>
     </Layout>
