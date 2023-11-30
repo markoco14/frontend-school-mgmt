@@ -81,10 +81,14 @@ const TestHomePage: NextPageWithLayout = () => {
             {testList.map((test) => (
               <li
                 key={`test-${test.id}`}
-                className="flex gap-4 p-2 hover:bg-blue-300"
+                className="flex justify-between gap-4 p-2 hover:bg-blue-300"
               >
                 <p>{test.name}</p>
-                <Link href={`/tests/do-test/${test.id}`}>Do</Link>
+                {/* Actions */}
+                <div className="flex gap-4">
+                  <Link href={`/tests/do-test/${test.id}`}>Try</Link>
+                  <Link href={`/tests/edit-test/${test.id}`}>Edit</Link>
+                </div>
               </li>
             ))}
           </ListContainer>
