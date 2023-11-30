@@ -84,25 +84,28 @@ const EditTestPage: NextPageWithLayout = () => {
     <Layout>
       <AdminLayout>
         <CardContainer>
-          <h1 className="mb-8">{test.name}</h1>
+          <div className="grid gap-2 mb-8">
+            <h1 className="text-3xl">{test.name}</h1>
+            <p className="text-gray-500">Click a question below to edit the answers.</p>
+          </div>
           <ReorderListContainer
             axis="y"
             values={questionList}
             onReorder={handleReorder}
           >
-              {questionList?.map((question, index) => (
-                <Reorder.Item
-                  className="p-2 hover:cursor-pointer"
-                  key={`question-${question.id}`}
-                  value={question}
-                >
-                  <>
-                    <p>
-                      {index + 1}. {question.question}
-                    </p>
-                  </>
-                </Reorder.Item>
-              ))}
+            {questionList?.map((question, index) => (
+              <Reorder.Item
+                className="p-2 hover:bg-blue-300 hover:cursor-pointer"
+                key={`question-${question.id}`}
+                value={question}
+              >
+                <>
+                  <p>
+                    {index + 1}. {question.question}
+                  </p>
+                </>
+              </Reorder.Item>
+            ))}
           </ReorderListContainer>
         </CardContainer>
       </AdminLayout>
