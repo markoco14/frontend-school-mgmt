@@ -38,12 +38,25 @@ const tests: Test[] = [
 ];
 
 const TestHomePage: NextPageWithLayout = () => {
-  const { selectedSchool } = useUserContext();
+  const { user, selectedSchool } = useUserContext();
   const [testList, setTestList] = useState(tests);
   const [isCreateTest, setIsCreateTest] = useState<boolean>(false);
 
   function handleClose() {
     setIsCreateTest(false);
+  }
+
+  if (!user) {
+    return (
+      <Layout>
+        <AdminLayout>
+          <CardContainer>
+            <p>You are not logged in!</p>
+            <Link href="/">Log in</Link>
+          </CardContainer>
+        </AdminLayout>
+      </Layout>
+    );
   }
 
   return (
@@ -77,7 +90,7 @@ const TestHomePage: NextPageWithLayout = () => {
           </ListContainer>
         </CardContainer>
         <Modal show={isCreateTest} close={handleClose} title="Create New Test">
-            <NewTestForm testList={testList} setTestList={setTestList}/>
+          <NewTestForm testList={testList} setTestList={setTestList} />
         </Modal>
       </AdminLayout>
     </Layout>
