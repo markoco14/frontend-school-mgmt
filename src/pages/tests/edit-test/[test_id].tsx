@@ -8,11 +8,11 @@ import { useUserContext } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import CardContainer from "@/src/modules/core/components/CardContainer";
 import Layout from "@/src/modules/core/components/Layout";
+import ListContainer from "@/src/modules/core/components/ListContainer";
+import Modal from "@/src/modules/core/components/Modal";
+import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
-import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
-import Modal from "@/src/modules/core/components/Modal";
-import ListContainer from "@/src/modules/core/components/ListContainer";
 
 const currentTest: Test = {
   id: 1,
@@ -62,7 +62,9 @@ const EditTestPage: NextPageWithLayout = () => {
   const test = currentTest;
   const [questionList, setQuestionList] = useState<TestQuestion[]>(questions);
   const [isEditAnswers, setIsEditAnswers] = useState<boolean>(false);
-  const [selectedQuestion, setSelectedQuestion] = useState<TestQuestion | undefined>();
+  const [selectedQuestion, setSelectedQuestion] = useState<
+    TestQuestion | undefined
+  >();
 
   async function handleReorder(values: any[]) {
     setQuestionList(values);
@@ -126,23 +128,21 @@ const EditTestPage: NextPageWithLayout = () => {
           </ReorderListContainer>
           <Modal show={isEditAnswers} close={handleClose} title="Edit Answers">
             {/* Question/answer container */}
-            <div>
-              <p>{selectedQuestion?.question}</p>
-              <ListContainer>
-                {selectedQuestion?.answers.map((answer, index) => (
-                  // we need a debounce on the change here, too
-                  // just change the input value to change the answer
-                  // use the live preview on the right
-                  // to see what the q/a pair looks like to the user
-                  <li key={index} className="border py-1 px-2">
-                    <span>{index + 1}. </span>
-                    <input value={answer}/>
-                  </li>
-                ))}
-              </ListContainer>
-            </div>
-            {/* Preview container */}
-            <div></div>
+              <div>
+                <p>{selectedQuestion?.question}</p>
+                <ListContainer>
+                  {selectedQuestion?.answers.map((answer, index) => (
+                    // we need a debounce on the change here, too
+                    // just change the input value to change the answer
+                    // use the live preview on the right
+                    // to see what the q/a pair looks like to the user
+                    <li key={index} className="border px-2 py-1">
+                      <span>{index + 1}. </span>
+                      <input defaultValue={answer}/>
+                    </li>
+                  ))}
+                </ListContainer>
+              </div>
           </Modal>
         </CardContainer>
       </AdminLayout>
