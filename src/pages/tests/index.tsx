@@ -5,8 +5,9 @@ import Layout from "@/src/modules/core/components/Layout";
 import ListContainer from "@/src/modules/core/components/ListContainer";
 import { Test } from "@/src/modules/tests/entities/Test";
 import Link from "next/link";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import { NextPageWithLayout } from "../_app";
+import { addListItem } from "@/src/utils/addListItem";
 
 const tests: Test[] = [
   {
@@ -37,6 +38,7 @@ const tests: Test[] = [
 
 const TestHomePage: NextPageWithLayout = () => {
   const { selectedSchool } = useUserContext();
+  const [testList, setTestList] = useState(tests);
   return (
     <Layout>
       <AdminLayout>
@@ -46,7 +48,16 @@ const TestHomePage: NextPageWithLayout = () => {
               <h1 className="mb-1 text-3xl">{selectedSchool?.name} Tests</h1>
               <button
                 className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
-                onClick={() => {}}
+                onClick={() => {
+                  const newTest = {
+                    id: 5,
+                    name: "Level 9 Unit 4 Test 1",
+                    maxCorrections: 3,
+                    allowNoCorrections: true,
+                  };
+                  const updatedTests = addListItem(testList, newTest);
+                  setTestList(updatedTests)
+                  }}
               >
                 New Test
               </button>
@@ -54,7 +65,7 @@ const TestHomePage: NextPageWithLayout = () => {
             <p className="text-gray-700">Manage all your test data here.</p>
           </div>
           <ListContainer>
-            {tests.map((test) => (
+            {testList.map((test) => (
               <li
                 key={`test-${test.id}`}
                 className="flex gap-4 p-2 hover:bg-blue-300"
