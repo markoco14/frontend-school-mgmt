@@ -99,6 +99,11 @@ const EditTestPage: NextPageWithLayout = () => {
               Click a question below to edit the answers.
             </p>
           </div>
+          <div className="mb-8 flex">
+            <button className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md">
+              New Question
+            </button>
+          </div>
           <ReorderListContainer
             axis="y"
             values={questionList}
@@ -128,21 +133,21 @@ const EditTestPage: NextPageWithLayout = () => {
           </ReorderListContainer>
           <Modal show={isEditAnswers} close={handleClose} title="Edit Answers">
             {/* Question/answer container */}
-              <div>
-                <p>{selectedQuestion?.question}</p>
-                <ListContainer>
-                  {selectedQuestion?.answers.map((answer, index) => (
-                    // we need a debounce on the change here, too
-                    // just change the input value to change the answer
-                    // use the live preview on the right
-                    // to see what the q/a pair looks like to the user
-                    <li key={index} className="border px-2 py-1">
-                      <span>{index + 1}. </span>
-                      <input defaultValue={answer}/>
-                    </li>
-                  ))}
-                </ListContainer>
-              </div>
+            <div>
+              <p>{selectedQuestion?.question}</p>
+              <ListContainer>
+                {selectedQuestion?.answers.map((answer, index) => (
+                  // we need a debounce on the change here, too
+                  // just change the input value to change the answer
+                  // use the live preview on the right
+                  // to see what the q/a pair looks like to the user
+                  <li key={index} className="border px-2 py-1">
+                    <span>{index + 1}. </span>
+                    <input defaultValue={answer} />
+                  </li>
+                ))}
+              </ListContainer>
+            </div>
           </Modal>
         </CardContainer>
       </AdminLayout>
