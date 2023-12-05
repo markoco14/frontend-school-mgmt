@@ -13,9 +13,8 @@ import Modal from "@/src/modules/core/components/Modal";
 import ListContainer from "@/src/modules/core/components/ListContainer";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
-import { addListItem } from "@/src/utils/addListItem";
-import toast from "react-hot-toast";
 import AnswerList from "./AnswerList";
+import NewQuestionForm from "./NewQuestionForm";
 
 const currentTest: Test = {
   id: 1,
@@ -72,7 +71,8 @@ const EditTestPage: NextPageWithLayout = () => {
   >();
 
   const [isNewQuestion, setIsNewQuestion] = useState<boolean>(false);
-  const [newQuestion, setNewQuestion] = useState<string>("");
+
+
 
   // async function handleReorder(values: any[]) {
   //   setQuestionList(values);
@@ -140,48 +140,16 @@ const EditTestPage: NextPageWithLayout = () => {
                 </div>
               ) : (
                 <AnswerList answers={currentQuestion.answers} />
-                // <p>Answers for &quot;{currentQuestion.question}&quot;</p>
               )}
             </div>
           </div>
-          
+
           <Modal
             show={isNewQuestion}
             close={setIsNewQuestion}
             title="New Question"
           >
-            <div className="flex flex-col gap-2">
-              <label>hellow new question</label>
-              <input
-                type="text"
-                className="border p-2"
-                onChange={(e) => setNewQuestion(e.target.value)}
-              />
-              <button
-                onClick={() => {
-                  if (!newQuestion) {
-                    toast("You need to type the question before saving.");
-                  }
-                  // TODO: replace with call to API
-                  // return new DB ojbect
-                  const newQuestionMapper = {
-                    id: 8,
-                    question: newQuestion,
-                    mistakes: [],
-                    answers: [],
-                  };
-                  // add to list
-                  const updatedQuestionList = addListItem(
-                    questionList,
-                    newQuestionMapper,
-                  );
-                  setQuestionList(updatedQuestionList);
-                }}
-                className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
-              >
-                OK
-              </button>
-            </div>
+            <NewQuestionForm questionList={questionList} setQuestionList={setQuestionList} />
           </Modal>
         </CardContainer>
       </AdminLayout>
