@@ -1,4 +1,4 @@
-import { Reorder } from "framer-motion";
+// import { Reorder } from "framer-motion";
 
 import Link from "next/link";
 import { ReactElement, useState } from "react";
@@ -9,11 +9,12 @@ import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import CardContainer from "@/src/modules/core/components/CardContainer";
 import Layout from "@/src/modules/core/components/Layout";
 import Modal from "@/src/modules/core/components/Modal";
-import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
+// import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import { addListItem } from "@/src/utils/addListItem";
 import toast from "react-hot-toast";
+import ListContainer from "@/src/modules/core/components/ListContainer";
 
 const currentTest: Test = {
   id: 1,
@@ -69,12 +70,12 @@ const EditTestPage: NextPageWithLayout = () => {
   const [isNewQuestion, setIsNewQuestion] = useState<boolean>(false);
   const [newQuestion, setNewQuestion] = useState<string>("");
 
-  async function handleReorder(values: any[]) {
-    setQuestionList(values);
-    // can set up debounce logic
-    // do not update in db until no reorders for last 2 seconds
-    // can worry about that logic later
-  }
+  // async function handleReorder(values: any[]) {
+  //   setQuestionList(values);
+  //   // can set up debounce logic
+  //   // do not update in db until no reorders for last 2 seconds
+  //   // can worry about that logic later
+  // }
 
   if (!user) {
     return (
@@ -109,7 +110,25 @@ const EditTestPage: NextPageWithLayout = () => {
             </button>
           </div>
           {/* Questions */}
-          <ReorderListContainer
+          <ListContainer>
+            {questionList?.map((question, index) => (
+              <li
+                key={`question-${question.id}`}
+                // value={question}
+                className={`${
+                  selectedQuestion?.id === question.id ? "bg-blue-200" : ""
+                } p-2 duration-200 ease-in-out hover:cursor-pointer hover:bg-blue-300`}
+                onClick={() => setSelectedQuestion(question)}
+              >
+                <div className={`flex justify-between`}>
+                  <p>
+                    {index + 1}. {question.question}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ListContainer>
+          {/* <ReorderListContainer
             axis="y"
             values={questionList}
             onReorder={handleReorder}
@@ -130,7 +149,7 @@ const EditTestPage: NextPageWithLayout = () => {
                 </div>
               </Reorder.Item>
             ))}
-          </ReorderListContainer>
+          </ReorderListContainer> */}
           <Modal
             show={isNewQuestion}
             close={setIsNewQuestion}
