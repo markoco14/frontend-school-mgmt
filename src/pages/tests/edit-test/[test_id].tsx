@@ -9,11 +9,11 @@ import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import CardContainer from "@/src/modules/core/components/CardContainer";
 import Layout from "@/src/modules/core/components/Layout";
 import Modal from "@/src/modules/core/components/Modal";
-// import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
 import ListContainer from "@/src/modules/core/components/ListContainer";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import AnswerList from "./AnswerList";
+import NewAnswerForm from "./NewAnswerForm";
 import NewQuestionForm from "./NewQuestionForm";
 
 const currentTest: Test = {
@@ -71,6 +71,7 @@ const EditTestPage: NextPageWithLayout = () => {
   >();
 
   const [isNewQuestion, setIsNewQuestion] = useState<boolean>(false);
+  const [isNewAnswer, setIsNewAnswer] = useState<boolean>(false);
 
 
 
@@ -80,6 +81,7 @@ const EditTestPage: NextPageWithLayout = () => {
   //   // do not update in db until no reorders for last 2 seconds
   //   // can worry about that logic later
   // }
+
 
   if (!user) {
     return (
@@ -105,35 +107,49 @@ const EditTestPage: NextPageWithLayout = () => {
               change question order.
             </p>
           </div>
-          <div className="mb-8 flex">
-            <button
-              onClick={() => setIsNewQuestion(true)}
-              className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
-            >
-              New Question
-            </button>
-          </div>
           {/* Questions */}
-          <div className="grid grid-cols-2">
-            <ListContainer>
-              {questionList?.map((question, index) => (
-                <li
-                  key={`question-${question.id}`}
-                  // value={question}
-                  className={`${
-                    currentQuestion?.id === question.id ? "bg-blue-200" : ""
-                  } p-2 duration-200 ease-in-out hover:cursor-pointer hover:bg-blue-300`}
-                  onClick={() => setCurrentQuestion(question)}
-                >
-                  <div className={`flex justify-between`}>
-                    <p>
-                      {index + 1}. {question.question}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ListContainer>
+          <section className="grid grid-cols-2">
             <div>
+              <div className="mb-8 flex">
+                <button
+                  onClick={() => setIsNewQuestion(true)}
+                  className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
+                >
+                  New Question
+                </button>
+              </div>
+              <ListContainer>
+                {questionList?.map((question, index) => (
+                  <li
+                    key={`question-${question.id}`}
+                    // value={question}
+                    className={`${
+                      currentQuestion?.id === question.id ? "bg-blue-200" : ""
+                    } p-2 duration-200 ease-in-out hover:cursor-pointer hover:bg-blue-300`}
+                    onClick={() => {
+                      setCurrentQuestion(question);
+                    }}
+                  >
+                    <div className={`flex justify-between`}>
+                      <p>
+                        {index + 1}. {question.question}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ListContainer>
+            </div>
+            <div>
+              {currentQuestion && (
+                <div className="mb-8 flex">
+                  <button
+                    onClick={() => setIsNewAnswer(true)}
+                    className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
+                  >
+                    New Answer
+                  </button>
+                </div>
+              )}
               {!currentQuestion ? (
                 <div>
                   <p className="p-2">Click a question to list answers.</p>
@@ -142,14 +158,22 @@ const EditTestPage: NextPageWithLayout = () => {
                 <AnswerList answers={currentQuestion.answers} />
               )}
             </div>
-          </div>
+          </section>
 
           <Modal
             show={isNewQuestion}
             close={setIsNewQuestion}
             title="New Question"
           >
-            <NewQuestionForm questionList={questionList} setQuestionList={setQuestionList} />
+            <NewQuestionForm
+              questionList={questionList}
+              setQuestionList={setQuestionList}
+            />
+          </Modal>
+          <Modal show={isNewAnswer} close={setIsNewAnswer} title="New Answer">
+            <NewAnswerForm
+              answerList={currentQuestion?.answers}
+            />
           </Modal>
         </CardContainer>
       </AdminLayout>
