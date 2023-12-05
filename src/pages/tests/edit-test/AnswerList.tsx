@@ -7,11 +7,11 @@ type AnswerListProps = {
 
 const AnswerList = ({ answers }: AnswerListProps) => {
   return answers.length === 0 ? (
-    <p>No answers for this question</p>
+    <p className="p-2">No answers found.</p>
   ) : (
     <ListContainer>
       {answers.map((answer) => (
-        <li key={answer.id}>{answer.answer}</li>
+        <li key={answer.id} className="p-2">{answer.answer}</li>
       ))}
     </ListContainer>
   );

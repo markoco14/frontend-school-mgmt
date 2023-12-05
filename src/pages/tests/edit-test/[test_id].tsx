@@ -10,11 +10,12 @@ import CardContainer from "@/src/modules/core/components/CardContainer";
 import Layout from "@/src/modules/core/components/Layout";
 import Modal from "@/src/modules/core/components/Modal";
 // import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
+import ListContainer from "@/src/modules/core/components/ListContainer";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import { addListItem } from "@/src/utils/addListItem";
 import toast from "react-hot-toast";
-import ListContainer from "@/src/modules/core/components/ListContainer";
+import AnswerList from "./AnswerList";
 
 const currentTest: Test = {
   id: 1,
@@ -29,33 +30,36 @@ const questions: TestQuestion[] = [
     question: "Do her give the it to he?",
     mistakes: ["Do", "her", "the", "he"],
     answers: [
-      "Does she give it to him?",
-      "Does she give the ball to him?",
-      "Does she give him it?",
-      "Does she give him the ball?",
+      { id: 1, answer: "Does she give it to him?" },
+      { id: 2, answer: "Does she give the ball to him?" },
+      { id: 3, answer: "Does she give him it?" },
+      { id: 4, answer: "Does she give him the ball?" },
     ],
   },
   {
     id: 2,
     question: "Does I look like he?",
     mistakes: ["Does", "he"],
-    answers: ["Do I look like him?", "Do I look like her?"],
+    answers: [
+      { id: 5, answer: "Do I look like him?" },
+      { id: 6, answer: "Do I look like her?" },
+    ],
   },
   {
     id: 3,
     question: "Do we want to take her from it?",
     mistakes: ["her", "it"],
     answers: [
-      "Do we want to take it from her?",
-      "Do they want to take it from her?",
-      "Do you want to take it from her?",
+      { id: 7, answer: "Do we want to take it from her?" },
+      { id: 8, answer: "Do they want to take it from her?" },
+      { id: 9, answer: "Do you want to take it from her?" },
     ],
   },
   {
     id: 4,
     question: "Do I want to talk to they?",
     mistakes: ["they"],
-    answers: ["Do I want to talk to them?"],
+    answers: [{ id: 10, answer: "Do I want to talk to them?" }],
   },
 ];
 
@@ -63,7 +67,7 @@ const EditTestPage: NextPageWithLayout = () => {
   const { user } = useUserContext();
   const test = currentTest;
   const [questionList, setQuestionList] = useState<TestQuestion[]>(questions);
-  const [selectedQuestion, setSelectedQuestion] = useState<
+  const [currentQuestion, setCurrentQuestion] = useState<
     TestQuestion | undefined
   >();
 
@@ -110,46 +114,37 @@ const EditTestPage: NextPageWithLayout = () => {
             </button>
           </div>
           {/* Questions */}
-          <ListContainer>
-            {questionList?.map((question, index) => (
-              <li
-                key={`question-${question.id}`}
-                // value={question}
-                className={`${
-                  selectedQuestion?.id === question.id ? "bg-blue-200" : ""
-                } p-2 duration-200 ease-in-out hover:cursor-pointer hover:bg-blue-300`}
-                onClick={() => setSelectedQuestion(question)}
-              >
-                <div className={`flex justify-between`}>
-                  <p>
-                    {index + 1}. {question.question}
-                  </p>
+          <div className="grid grid-cols-2">
+            <ListContainer>
+              {questionList?.map((question, index) => (
+                <li
+                  key={`question-${question.id}`}
+                  // value={question}
+                  className={`${
+                    currentQuestion?.id === question.id ? "bg-blue-200" : ""
+                  } p-2 duration-200 ease-in-out hover:cursor-pointer hover:bg-blue-300`}
+                  onClick={() => setCurrentQuestion(question)}
+                >
+                  <div className={`flex justify-between`}>
+                    <p>
+                      {index + 1}. {question.question}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ListContainer>
+            <div>
+              {!currentQuestion ? (
+                <div>
+                  <p className="p-2">Click a question to list answers.</p>
                 </div>
-              </li>
-            ))}
-          </ListContainer>
-          {/* <ReorderListContainer
-            axis="y"
-            values={questionList}
-            onReorder={handleReorder}
-          >
-            {questionList?.map((question, index) => (
-              <Reorder.Item
-                key={`question-${question.id}`}
-                value={question}
-                className={`${
-                  selectedQuestion?.id === question.id ? "bg-blue-200" : ""
-                } p-2 duration-200 ease-in-out hover:cursor-pointer hover:bg-blue-300`}
-                onClick={() => setSelectedQuestion(question)}
-              >
-                <div className={`flex justify-between`}>
-                  <p>
-                    {index + 1}. {question.question}
-                  </p>
-                </div>
-              </Reorder.Item>
-            ))}
-          </ReorderListContainer> */}
+              ) : (
+                <AnswerList answers={currentQuestion.answers} />
+                // <p>Answers for &quot;{currentQuestion.question}&quot;</p>
+              )}
+            </div>
+          </div>
+          
           <Modal
             show={isNewQuestion}
             close={setIsNewQuestion}
