@@ -5,6 +5,7 @@ import { jwtAdapter } from "../modules/auth/adapters/jwtAdapter";
 import { School } from "../modules/school-mgmt/entities/School";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
+import { getToken } from "../utils/tokenUtils";
 
 type UserContextProviderProps = {
   children: React.ReactNode; // not allowed: React.ReactNode
@@ -126,7 +127,7 @@ export default function UserContextProvider({
     };
 
     let updateToken = async () => {
-      const refreshToken = Cookie.get("refreshToken");
+      const refreshToken = getToken("refreshToken");
 
       try {
         await jwtAdapter.refresh({ refresh: refreshToken }).then((res) => {
@@ -140,21 +141,21 @@ export default function UserContextProvider({
       }
     };
 
-    if (Cookie.get("accessToken") === "undefined") {
-      toast.error('Session expired. Please log in.')
+    if (getToken("accessToken") === "undefined" || getToken("refreshToken") === "undefined") {
+      toast.error("Session expired. Please log in.");
       logoutOnFailedUpdate();
     }
 
     const tenMinutes = 1000 * 60 * 10;
     if (!user) {
-      const accessToken = Cookie.get("accessToken");
+      const accessToken = getToken("accessToken");
 
       if (accessToken && !isTokenExpired({ currentToken: accessToken })) {
         setUser(() => jwt_decode(accessToken));
       }
 
       if (accessToken && isTokenExpired({ currentToken: accessToken })) {
-        const refreshToken = Cookie.get("refreshToken");
+        const refreshToken = getToken("refreshToken");
 
         if (refreshToken && isTokenExpired({ currentToken: refreshToken })) {
           logoutOnFailedUpdate();
@@ -166,7 +167,7 @@ export default function UserContextProvider({
 
     } else {
       const interval = setInterval(() => {
-        if (Cookie.get("accessToken")) {
+        if (getToken("accessToken")) {
           updateToken();
         }
       }, tenMinutes);
