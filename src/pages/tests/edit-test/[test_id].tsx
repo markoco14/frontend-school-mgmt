@@ -19,6 +19,7 @@ import toast from "react-hot-toast";
 import AnswerList from "./AnswerList";
 import NewAnswerForm from "./NewAnswerForm";
 import NewQuestionForm from "./NewQuestionForm";
+import Drawer from "./Drawer";
 
 const currentTest: Test = {
   id: 1,
@@ -66,6 +67,8 @@ const questions: TestQuestion[] = [
   },
 ];
 
+
+
 const EditTestPage: NextPageWithLayout = () => {
   const { user } = useUserContext();
   const test = currentTest;
@@ -77,15 +80,16 @@ const EditTestPage: NextPageWithLayout = () => {
   const [isNewQuestion, setIsNewQuestion] = useState<boolean>(false);
   const [isNewAnswer, setIsNewAnswer] = useState<boolean>(false);
 
+  // Drawer
+  const [isEditQuestion, setIsEditQuestion] = useState<boolean>(false);
+  function handleCloseDrawer() {
+    setIsEditQuestion(false);
+    setCurrentQuestion(undefined);
+  }
+
   // TODO: try derived state for answerList
   const answerList = currentQuestion?.answers;
 
-  // async function handleReorder(values: any[]) {
-  //   setQuestionList(values);
-  //   // can set up debounce logic
-  //   // do not update in db until no reorders for last 2 seconds
-  //   // can worry about that logic later
-  // }
 
   function handleAddAnswerToQuestion({
     answer,
@@ -136,62 +140,12 @@ const EditTestPage: NextPageWithLayout = () => {
   return (
     <Layout>
       <AdminLayout>
-        <CardContainer>
-          <div className="mb-8 grid gap-2">
-            <h1 className="text-3xl">{test.name}</h1>
-            <p className="text-gray-500">
-              Click a question below to edit the answers. Drag and drop to
-              change question order.
-            </p>
-          </div>
-          {/* Questions */}
-          <section className="grid grid-cols-2">
-            <div>
-              <div className="mb-8 flex">
-                <button
-                  onClick={() => setIsNewQuestion(true)}
-                  className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
-                >
-                  New Question
-                </button>
-              </div>
-              <ReorderListContainer
-                axis="y"
-                values={questionList}
-                onReorder={setQuestionList}
-              >
-                {questionList.map((question, index) => (
-                  <Reorder.Item
-                    key={question.id}
-                    value={question}
-                    className={`${
-                      question.id === currentQuestion?.id && "bg-blue-200"
-                    } flex justify-between p-2 hover:bg-blue-300`}
-                  >
-                    <span>
-                      {index + 1}. {question.question}
-                    </span>
-                    <button
-                      onClick={() => {
-                        if (question.id === currentQuestion?.id) {
-                          setCurrentQuestion(undefined);
-                          return;
-                        }
-                        setCurrentQuestion(question);
-                      }}
-                    >
-                      Answers
-                    </button>
-                  </Reorder.Item>
-                ))}
-              </ReorderListContainer>
-            </div>
-            <div
-              className={`${
-                !currentQuestion && "flex items-center justify-center"
-              }`}
-            >
-              {currentQuestion && (
+        {isEditQuestion && currentQuestion && (
+          <Drawer
+            title={`Edit "${currentQuestion.question}"`}
+            handleCloseDrawer={handleCloseDrawer}
+          >
+
                 <div className="mb-8 flex">
                   <button
                     onClick={() => setIsNewAnswer(true)}
@@ -200,7 +154,6 @@ const EditTestPage: NextPageWithLayout = () => {
                     New Answer
                   </button>
                 </div>
-              )}
               {!currentQuestion ? (
                 <AnimatePresence>
                   <motion.p
@@ -215,7 +168,58 @@ const EditTestPage: NextPageWithLayout = () => {
               ) : (
                 <AnswerList answers={currentQuestion.answers} />
               )}
+          </Drawer>
+        )}
+        <CardContainer>
+          <div className="mb-8 grid gap-2">
+            <h1 className="text-3xl">{test.name}</h1>
+            <p className="text-gray-500">
+              Click a question below to edit the answers. Drag and drop to
+              change question order.
+            </p>
+          </div>
+          {/* Questions */}
+          <section>
+            <div className="mb-8 flex">
+              <button
+                onClick={() => setIsNewQuestion(true)}
+                className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
+              >
+                New Question
+              </button>
             </div>
+            <ReorderListContainer
+              axis="y"
+              values={questionList}
+              onReorder={setQuestionList}
+            >
+              {questionList.map((question, index) => (
+                <Reorder.Item
+                  key={question.id}
+                  value={question}
+                  className={`${
+                    question.id === currentQuestion?.id && "bg-blue-200"
+                  } flex justify-between p-2 hover:bg-blue-300`}
+                >
+                  <span>
+                    {index + 1}. {question.question}
+                  </span>
+                  <button
+                    onClick={() => {
+                      if (question.id === currentQuestion?.id) {
+                        setCurrentQuestion(undefined);
+                        setIsEditQuestion(false);
+                        return;
+                      }
+                      setCurrentQuestion(question);
+                      setIsEditQuestion(true);
+                    }}
+                  >
+                    Answers
+                  </button>
+                </Reorder.Item>
+              ))}
+            </ReorderListContainer>
           </section>
 
           <Modal
