@@ -73,6 +73,8 @@ const EditTestPage: NextPageWithLayout = () => {
   const [isNewQuestion, setIsNewQuestion] = useState<boolean>(false);
   const [isNewAnswer, setIsNewAnswer] = useState<boolean>(false);
 
+  // TODO: try derived state for answerList
+  const answerList = currentQuestion?.answers;
 
 
   // async function handleReorder(values: any[]) {
@@ -171,9 +173,7 @@ const EditTestPage: NextPageWithLayout = () => {
             />
           </Modal>
           <Modal show={isNewAnswer} close={setIsNewAnswer} title="New Answer">
-            <NewAnswerForm
-              answerList={currentQuestion?.answers}
-            />
+            <NewAnswerForm answerList={answerList} />
           </Modal>
         </CardContainer>
       </AdminLayout>

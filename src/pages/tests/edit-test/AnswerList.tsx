@@ -10,8 +10,10 @@ const AnswerList = ({ answers }: AnswerListProps) => {
     <p className="p-2">No answers found.</p>
   ) : (
     <ListContainer>
-      {answers.map((answer) => (
-        <li key={answer.id} className="p-2">{answer.answer}</li>
+      {answers.map((answer, index) => (
+        <li key={answer.id} className="p-2 hover:bg-gray-200 active:bg-gray-300">
+          {index + 1}. {answer.answer}
+        </li>
       ))}
     </ListContainer>
   );
