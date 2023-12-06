@@ -27,7 +27,7 @@ const EditQuestionForm = ({
         </button>
       </div>
 
-      <AnswerList answers={currentQuestion.answers} />
+      <AnswerList answers={answerList} />
       <Modal show={isNewAnswer} close={setIsNewAnswer} title="New Answer">
         <NewAnswerForm
           answerList={answerList}
