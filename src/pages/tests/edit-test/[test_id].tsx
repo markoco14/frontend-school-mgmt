@@ -186,7 +186,7 @@ const EditTestPage: NextPageWithLayout = () => {
                 ))}
               </ReorderListContainer>
             </div>
-            <div>
+            <div className={`${!currentQuestion && "flex justify-center items-center"}`}>
               {currentQuestion && (
                 <div className="mb-8 flex">
                   <button
@@ -198,9 +198,7 @@ const EditTestPage: NextPageWithLayout = () => {
                 </div>
               )}
               {!currentQuestion ? (
-                <div>
                   <p className="p-2">Click a question to list answers.</p>
-                </div>
               ) : (
                 <AnswerList answers={currentQuestion.answers} />
               )}
