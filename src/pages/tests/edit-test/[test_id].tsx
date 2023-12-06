@@ -166,7 +166,7 @@ const EditTestPage: NextPageWithLayout = () => {
             >
               {questionList.map((question, index) => (
                 <Reorder.Item
-                  key={question.id}
+                  key={`question-${question.id}`}
                   value={question}
                   className={`${
                     question.id === currentQuestion?.id && "bg-blue-200"
