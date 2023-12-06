@@ -1,5 +1,3 @@
-import { AnimatePresence, motion } from "framer-motion";
-
 import Link from "next/link";
 import { ReactElement, useState } from "react";
 import { NextPageWithLayout } from "../../_app";
@@ -16,10 +14,10 @@ import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import { addListItem } from "@/src/utils/addListItem";
 import { Reorder } from "framer-motion";
 import toast from "react-hot-toast";
-import AnswerList from "./AnswerList";
+import Drawer from "./Drawer";
 import NewAnswerForm from "./NewAnswerForm";
 import NewQuestionForm from "./NewQuestionForm";
-import Drawer from "./Drawer";
+import EditQuestionForm from "./EditQuestionForm";
 
 const currentTest: Test = {
   id: 1,
@@ -67,8 +65,6 @@ const questions: TestQuestion[] = [
   },
 ];
 
-
-
 const EditTestPage: NextPageWithLayout = () => {
   const { user } = useUserContext();
   const test = currentTest;
@@ -89,7 +85,6 @@ const EditTestPage: NextPageWithLayout = () => {
 
   // TODO: try derived state for answerList
   const answerList = currentQuestion?.answers;
-
 
   function handleAddAnswerToQuestion({
     answer,
@@ -145,29 +140,10 @@ const EditTestPage: NextPageWithLayout = () => {
             title={`Edit "${currentQuestion.question}"`}
             handleCloseDrawer={handleCloseDrawer}
           >
-
-                <div className="mb-8 flex">
-                  <button
-                    onClick={() => setIsNewAnswer(true)}
-                    className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
-                  >
-                    New Answer
-                  </button>
-                </div>
-              {!currentQuestion ? (
-                <AnimatePresence>
-                  <motion.p
-                    className="p-2"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
-                    Click a question to list answers.
-                  </motion.p>
-                </AnimatePresence>
-              ) : (
-                <AnswerList answers={currentQuestion.answers} />
-              )}
+            <EditQuestionForm
+              currentQuestion={currentQuestion}
+              setIsNewAnswer={setIsNewAnswer}
+            />
           </Drawer>
         )}
         <CardContainer>
