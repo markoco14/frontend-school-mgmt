@@ -18,6 +18,8 @@ import AnswerList from "./AnswerList";
 import NewAnswerForm from "./NewAnswerForm";
 import NewQuestionForm from "./NewQuestionForm";
 import { addListItem } from "@/src/utils/addListItem";
+import { Reorder } from "framer-motion";
+import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
 
 const currentTest: Test = {
   id: 1,
@@ -154,6 +156,21 @@ const EditTestPage: NextPageWithLayout = () => {
                   New Question
                 </button>
               </div>
+              <ReorderListContainer
+                axis="y"
+                values={questionList}
+                onReorder={setQuestionList}
+              >
+                {questionList.map((question, index) => (
+                  <Reorder.Item
+                    key={question.id}
+                    value={question}
+                    className="p-2"
+                  >
+                    {index + 1}. {question.question}
+                  </Reorder.Item>
+                ))}
+              </ReorderListContainer>
               <ListContainer>
                 {questionList?.map((question, index) => (
                   <li
