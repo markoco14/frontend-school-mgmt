@@ -1,5 +1,3 @@
-import { Reorder } from "framer-motion";
-
 import Link from "next/link";
 import { ReactElement, useState } from "react";
 import { NextPageWithLayout } from "../../_app";
@@ -10,10 +8,15 @@ import CardContainer from "@/src/modules/core/components/CardContainer";
 import Layout from "@/src/modules/core/components/Layout";
 import Modal from "@/src/modules/core/components/Modal";
 import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
+import { Answer } from "@/src/modules/tests/entities/Answer";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import { addListItem } from "@/src/utils/addListItem";
+import { Reorder } from "framer-motion";
 import toast from "react-hot-toast";
+import Drawer from "./Drawer";
+import NewQuestionForm from "./NewQuestionForm";
+import EditQuestionForm from "./EditQuestionForm";
 
 const currentTest: Test = {
   id: 1,
@@ -28,33 +31,36 @@ const questions: TestQuestion[] = [
     question: "Do her give the it to he?",
     mistakes: ["Do", "her", "the", "he"],
     answers: [
-      "Does she give it to him?",
-      "Does she give the ball to him?",
-      "Does she give him it?",
-      "Does she give him the ball?",
+      { id: 1, answer: "Does she give it to him?", questionId: 1 },
+      { id: 2, answer: "Does she give the ball to him?", questionId: 1 },
+      { id: 3, answer: "Does she give him it?", questionId: 1 },
+      { id: 4, answer: "Does she give him the ball?", questionId: 1 },
     ],
   },
   {
     id: 2,
     question: "Does I look like he?",
     mistakes: ["Does", "he"],
-    answers: ["Do I look like him?", "Do I look like her?"],
+    answers: [
+      { id: 5, answer: "Do I look like him?", questionId: 2 },
+      { id: 6, answer: "Do I look like her?", questionId: 2 },
+    ],
   },
   {
     id: 3,
     question: "Do we want to take her from it?",
     mistakes: ["her", "it"],
     answers: [
-      "Do we want to take it from her?",
-      "Do they want to take it from her?",
-      "Do you want to take it from her?",
+      { id: 7, answer: "Do we want to take it from her?", questionId: 3 },
+      { id: 8, answer: "Do they want to take it from her?", questionId: 3 },
+      { id: 9, answer: "Do you want to take it from her?", questionId: 3 },
     ],
   },
   {
     id: 4,
     question: "Do I want to talk to they?",
     mistakes: ["they"],
-    answers: ["Do I want to talk to them?"],
+    answers: [{ id: 10, answer: "Do I want to talk to them?", questionId: 4 }],
   },
 ];
 
@@ -62,18 +68,50 @@ const EditTestPage: NextPageWithLayout = () => {
   const { user } = useUserContext();
   const test = currentTest;
   const [questionList, setQuestionList] = useState<TestQuestion[]>(questions);
-  const [selectedQuestion, setSelectedQuestion] = useState<
+  const [currentQuestion, setCurrentQuestion] = useState<
     TestQuestion | undefined
   >();
 
   const [isNewQuestion, setIsNewQuestion] = useState<boolean>(false);
-  const [newQuestion, setNewQuestion] = useState<string>("");
 
-  async function handleReorder(values: any[]) {
-    setQuestionList(values);
-    // can set up debounce logic
-    // do not update in db until no reorders for last 2 seconds
-    // can worry about that logic later
+  // Drawer
+  const [isEditQuestion, setIsEditQuestion] = useState<boolean>(false);
+  function handleCloseDrawer() {
+    setIsEditQuestion(false);
+    setCurrentQuestion(undefined);
+  }
+
+  function handleAddAnswerToQuestion({
+    answer,
+    answerList,
+  }: {
+    answer: string;
+    answerList: Answer[];
+  }) {
+    if (!currentQuestion) {
+      toast("You need to choose a question first.");
+      return;
+    }
+
+    const randomId = Math.floor(Math.random() * 100) + 15;
+    const newAnswer: Answer = {
+      id: randomId,
+      answer: answer,
+      questionId: currentQuestion?.id,
+    };
+    // update answer list
+    const updatedAnswerList = addListItem(answerList, newAnswer);
+
+    // update question list
+    const updatedQuestionList = questionList.map((question) => {
+      if (question.id !== currentQuestion.id) {
+        return question;
+      }
+      question.answers = updatedAnswerList;
+      return question;
+    });
+
+    setQuestionList(updatedQuestionList);
   }
 
   if (!user) {
@@ -92,6 +130,17 @@ const EditTestPage: NextPageWithLayout = () => {
   return (
     <Layout>
       <AdminLayout>
+        {isEditQuestion && currentQuestion && (
+          <Drawer
+            title={`Edit "${currentQuestion.question}"`}
+            handleCloseDrawer={handleCloseDrawer}
+          >
+            <EditQuestionForm
+              currentQuestion={currentQuestion}
+              handleAddAnswerToQuestion={handleAddAnswerToQuestion}
+            />
+          </Drawer>
+        )}
         <CardContainer>
           <div className="mb-8 grid gap-2">
             <h1 className="text-3xl">{test.name}</h1>
@@ -100,74 +149,59 @@ const EditTestPage: NextPageWithLayout = () => {
               change question order.
             </p>
           </div>
-          <div className="mb-8 flex">
-            <button
-              onClick={() => setIsNewQuestion(true)}
-              className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
-            >
-              New Question
-            </button>
-          </div>
           {/* Questions */}
-          <ReorderListContainer
-            axis="y"
-            values={questionList}
-            onReorder={handleReorder}
-          >
-            {questionList?.map((question, index) => (
-              <Reorder.Item
-                key={`question-${question.id}`}
-                value={question}
-                className={`${
-                  selectedQuestion?.id === question.id ? "bg-blue-200" : ""
-                } p-2 duration-200 ease-in-out hover:cursor-pointer hover:bg-blue-300`}
-                onClick={() => setSelectedQuestion(question)}
+          <section>
+            <div className="mb-8 flex">
+              <button
+                onClick={() => setIsNewQuestion(true)}
+                className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
               >
-                <div className={`flex justify-between`}>
-                  <p>
+                New Question
+              </button>
+            </div>
+            <ReorderListContainer
+              axis="y"
+              values={questionList}
+              onReorder={setQuestionList}
+            >
+              {questionList.map((question, index) => (
+                <Reorder.Item
+                  key={`question-${question.id}`}
+                  value={question}
+                  className={`${
+                    question.id === currentQuestion?.id && "bg-blue-200"
+                  } flex justify-between p-2 hover:bg-blue-300`}
+                >
+                  <span>
                     {index + 1}. {question.question}
-                  </p>
-                </div>
-              </Reorder.Item>
-            ))}
-          </ReorderListContainer>
+                  </span>
+                  <button
+                    onClick={() => {
+                      if (question.id === currentQuestion?.id) {
+                        setCurrentQuestion(undefined);
+                        setIsEditQuestion(false);
+                        return;
+                      }
+                      setCurrentQuestion(question);
+                      setIsEditQuestion(true);
+                    }}
+                  >
+                    Answers
+                  </button>
+                </Reorder.Item>
+              ))}
+            </ReorderListContainer>
+          </section>
+
           <Modal
             show={isNewQuestion}
             close={setIsNewQuestion}
             title="New Question"
           >
-            <div className="flex flex-col gap-2">
-              <label>hellow new question</label>
-              <input
-                type="text"
-                className="border p-2"
-                onChange={(e) => setNewQuestion(e.target.value)}
-              />
-              <button
-                onClick={() => {
-                  if (!newQuestion) {
-                    toast("You need to type the question before saving.");
-                  }
-                  // TODO: replace with call to API
-                  // return new DB ojbect
-                  const newQuestionMapper = {
-                    id: 8,
-                    question: newQuestion,
-                    mistakes: [],
-                    answers: [],
-                  };
-                  // add to list
-                  const updatedQuestionList = addListItem(
-                    questionList,
-                    newQuestionMapper,
-                  );
-                  setQuestionList(updatedQuestionList);
-                }}
-                className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
-              >
-                OK
-              </button>
-            </div>
+            <NewQuestionForm
+              questionList={questionList}
+              setQuestionList={setQuestionList}
+            />
           </Modal>
         </CardContainer>
       </AdminLayout>
