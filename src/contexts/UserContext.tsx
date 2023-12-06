@@ -140,8 +140,9 @@ export default function UserContextProvider({
       }
     };
 
-    if (!Cookie.get("accessToken")) {
-      return;
+    if (Cookie.get("accessToken") === "undefined") {
+      toast.error('Session expired. Please log in.')
+      logoutOnFailedUpdate();
     }
 
     const tenMinutes = 1000 * 60 * 10;
