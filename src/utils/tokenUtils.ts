@@ -15,3 +15,10 @@ export function getToken(type: "accessToken" | "refreshToken"): string | undefin
 	return Cookie.get(type);
 }
 
+/**
+ * Remove access and refresh tokens from cookies
+ */
+export function removeToken() {
+	Cookie.remove('accessToken');
+	Cookie.remove('refreshToken');
+}

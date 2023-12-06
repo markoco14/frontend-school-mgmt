@@ -1,11 +1,11 @@
 import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
+import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { jwtAdapter } from "../modules/auth/adapters/jwtAdapter";
 import { School } from "../modules/school-mgmt/entities/School";
-import { useRouter } from "next/router";
-import toast from "react-hot-toast";
-import { getToken } from "../utils/tokenUtils";
+import { getToken, removeToken } from "../utils/tokenUtils";
 
 type UserContextProviderProps = {
   children: React.ReactNode; // not allowed: React.ReactNode
@@ -29,7 +29,7 @@ type UserContextEntity = {
 };
 
 // {
-  // "token_type": "access", // access | refresh
+// "token_type": "access", // access | refresh
 //   "exp": 1701158298,
 //   "iat": 1700899098,
 //   "jti": "9a0d2ef3ce704edf8261d2850716eef3",
@@ -77,7 +77,7 @@ export default function UserContextProvider({
         Cookie.set("refreshToken", res.refresh, { expires: 7 });
       });
     } catch (error) {
-      toast.error("Unable to login. Please check your email or password.")
+      toast.error("Unable to login. Please check your email or password.");
     }
   };
 
@@ -85,12 +85,9 @@ export default function UserContextProvider({
     setUser(null);
     setSelectedSchool(undefined);
 
-    Cookie.remove("accessToken");
-    Cookie.remove("refreshToken");
+    removeToken();
     localStorage.removeItem("selectedSchool");
   };
-
-  
 
   useEffect(() => {
     function getTokenExpiry({ token }: { token: Token }) {
@@ -120,8 +117,7 @@ export default function UserContextProvider({
     let logoutOnFailedUpdate = () => {
       setUser(null);
       setSelectedSchool(undefined);
-      Cookie.remove("accessToken");
-      Cookie.remove("refreshToken");
+      removeToken();
       localStorage.removeItem("selectedSchool");
       router.push("/");
     };
@@ -136,15 +132,11 @@ export default function UserContextProvider({
           Cookie.set("refreshToken", res.refresh_token, { expires: 7 });
         });
       } catch (error) {
-        toast.error("Your session expired. Please log in again.")
+        toast.error("Your session expired. Please log in again.");
         logoutOnFailedUpdate();
       }
     };
 
-    if (getToken("accessToken") === "undefined" || getToken("refreshToken") === "undefined") {
-      toast.error("Session expired. Please log in.");
-      logoutOnFailedUpdate();
-    }
 
     const tenMinutes = 1000 * 60 * 10;
     if (!user) {
@@ -164,7 +156,6 @@ export default function UserContextProvider({
 
         updateToken();
       }
-
     } else {
       const interval = setInterval(() => {
         if (getToken("accessToken")) {
