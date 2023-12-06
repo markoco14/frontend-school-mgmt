@@ -23,14 +23,16 @@ const Drawer = ({ children, handleCloseDrawer, title }: DrawerProps) => {
         exit={{ opacity: 0, x: 50 }}
       >
         <div>
-          <h2 className="mb-2">{title}</h2>
-          <button
-            onClick={() => {
-              handleCloseDrawer(false);
-            }}
-          >
-            X
-          </button>
+          <div className="mb-8 flex justify-between">
+            <h2>{title}</h2>
+            <button
+              onClick={() => {
+                handleCloseDrawer(false);
+              }}
+            >
+              close
+            </button>
+          </div>
           {children}
         </div>
       </motion.div>
