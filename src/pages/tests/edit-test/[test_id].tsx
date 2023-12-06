@@ -8,13 +8,16 @@ import { useUserContext } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import CardContainer from "@/src/modules/core/components/CardContainer";
 import Layout from "@/src/modules/core/components/Layout";
-import Modal from "@/src/modules/core/components/Modal";
 import ListContainer from "@/src/modules/core/components/ListContainer";
+import Modal from "@/src/modules/core/components/Modal";
+import { Answer } from "@/src/modules/tests/entities/Answer";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
+import toast from "react-hot-toast";
 import AnswerList from "./AnswerList";
 import NewAnswerForm from "./NewAnswerForm";
 import NewQuestionForm from "./NewQuestionForm";
+import { addListItem } from "@/src/utils/addListItem";
 
 const currentTest: Test = {
   id: 1,
@@ -29,10 +32,10 @@ const questions: TestQuestion[] = [
     question: "Do her give the it to he?",
     mistakes: ["Do", "her", "the", "he"],
     answers: [
-      { id: 1, answer: "Does she give it to him?" },
-      { id: 2, answer: "Does she give the ball to him?" },
-      { id: 3, answer: "Does she give him it?" },
-      { id: 4, answer: "Does she give him the ball?" },
+      { id: 1, answer: "Does she give it to him?", questionId: 1 },
+      { id: 2, answer: "Does she give the ball to him?", questionId: 1 },
+      { id: 3, answer: "Does she give him it?", questionId: 1 },
+      { id: 4, answer: "Does she give him the ball?", questionId: 1 },
     ],
   },
   {
@@ -40,8 +43,8 @@ const questions: TestQuestion[] = [
     question: "Does I look like he?",
     mistakes: ["Does", "he"],
     answers: [
-      { id: 5, answer: "Do I look like him?" },
-      { id: 6, answer: "Do I look like her?" },
+      { id: 5, answer: "Do I look like him?", questionId: 2 },
+      { id: 6, answer: "Do I look like her?", questionId: 2 },
     ],
   },
   {
@@ -49,16 +52,16 @@ const questions: TestQuestion[] = [
     question: "Do we want to take her from it?",
     mistakes: ["her", "it"],
     answers: [
-      { id: 7, answer: "Do we want to take it from her?" },
-      { id: 8, answer: "Do they want to take it from her?" },
-      { id: 9, answer: "Do you want to take it from her?" },
+      { id: 7, answer: "Do we want to take it from her?", questionId: 3 },
+      { id: 8, answer: "Do they want to take it from her?", questionId: 3 },
+      { id: 9, answer: "Do you want to take it from her?", questionId: 3 },
     ],
   },
   {
     id: 4,
     question: "Do I want to talk to they?",
     mistakes: ["they"],
-    answers: [{ id: 10, answer: "Do I want to talk to them?" }],
+    answers: [{ id: 10, answer: "Do I want to talk to them?", questionId: 4 }],
   },
 ];
 
@@ -76,7 +79,6 @@ const EditTestPage: NextPageWithLayout = () => {
   // TODO: try derived state for answerList
   const answerList = currentQuestion?.answers;
 
-
   // async function handleReorder(values: any[]) {
   //   setQuestionList(values);
   //   // can set up debounce logic
@@ -84,6 +86,38 @@ const EditTestPage: NextPageWithLayout = () => {
   //   // can worry about that logic later
   // }
 
+  function handleAddAnswerToQuestion({
+    answer,
+    answerList,
+  }: {
+    answer: string;
+    answerList: Answer[];
+  }) {
+    if (!currentQuestion) {
+      toast("You need to choose a question first.");
+      return;
+    }
+
+    const randomId = Math.floor(Math.random() * 100) + 15;
+    const newAnswer: Answer = {
+      id: randomId,
+      answer: answer,
+      questionId: currentQuestion?.id,
+    };
+    // update answer list
+    const updatedAnswerList = addListItem(answerList, newAnswer)
+    
+    // update question list
+    const updatedQuestionList = questionList.map((question) => {
+      if (question.id !== currentQuestion.id) {
+        return question
+      }
+      question.answers = updatedAnswerList
+      return question
+    })
+
+    setQuestionList(updatedQuestionList)
+  }
 
   if (!user) {
     return (
@@ -173,7 +207,10 @@ const EditTestPage: NextPageWithLayout = () => {
             />
           </Modal>
           <Modal show={isNewAnswer} close={setIsNewAnswer} title="New Answer">
-            <NewAnswerForm answerList={answerList} />
+            <NewAnswerForm
+              answerList={answerList}
+              updateAnswerList={handleAddAnswerToQuestion}
+            />
           </Modal>
         </CardContainer>
       </AdminLayout>

@@ -4,9 +4,10 @@ import toast from "react-hot-toast";
 
 type NewAnswerFormProps = {
   answerList: Answer[] | undefined;
+  updateAnswerList: Function;
 };
 
-const NewAnswerForm = ({answerList}: NewAnswerFormProps) => {
+const NewAnswerForm = ({answerList, updateAnswerList}: NewAnswerFormProps) => {
 	const [newAnswer, setNewAnswer] = useState<string>('')
 	answerList;
   return (
@@ -21,20 +22,9 @@ const NewAnswerForm = ({answerList}: NewAnswerFormProps) => {
         onClick={() => {
           if (!newAnswer) {
             toast("You need to type the question before saving.");
+            return
           }
-          // TODO: replace with call to API
-          // return new DB ojbect
-          // const newAnswerMapper = {
-          //   id: 100,
-          //   answers: newAnswer,
-          // };
-          // handleUpdate(newQuestionMapper)
-          // add to list
-          // const updatedQuestionList = addListItem(
-          //   questionList,
-          //   newQuestionMapper,
-          // );
-          // setQuestionList(updatedQuestionList);
+          updateAnswerList({answer: newAnswer, answerList: answerList});
         }}
         className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
       >
