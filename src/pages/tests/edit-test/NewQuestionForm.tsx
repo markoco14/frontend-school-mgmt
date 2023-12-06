@@ -16,7 +16,7 @@ const NewQuestionForm = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <label>hello new question</label>
+      <label className="text-gray-600">Type your question below.</label>
       <input
         type="text"
         className="border p-2"
