@@ -8,10 +8,12 @@ type NewQuestionFormProps = {
   setQuestionList: Function;
 };
 
-const NewQuestionForm = ({questionList, setQuestionList}: NewQuestionFormProps) => {
-    const [newQuestion, setNewQuestion] = useState<string>("");
+const NewQuestionForm = ({
+  questionList,
+  setQuestionList,
+}: NewQuestionFormProps) => {
+  const [newQuestion, setNewQuestion] = useState<string>("");
 
-    
   return (
     <div className="flex flex-col gap-2">
       <label>hello new question</label>
@@ -24,6 +26,7 @@ const NewQuestionForm = ({questionList, setQuestionList}: NewQuestionFormProps) 
         onClick={() => {
           if (!newQuestion) {
             toast("You need to type the question before saving.");
+            return;
           }
           // TODO: replace with call to API
           // return new DB ojbect
@@ -47,6 +50,6 @@ const NewQuestionForm = ({questionList, setQuestionList}: NewQuestionFormProps) 
       </button>
     </div>
   );
-}
+};
 
 export default NewQuestionForm;
