@@ -8,18 +8,17 @@ import { useUserContext } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import CardContainer from "@/src/modules/core/components/CardContainer";
 import Layout from "@/src/modules/core/components/Layout";
-import ListContainer from "@/src/modules/core/components/ListContainer";
 import Modal from "@/src/modules/core/components/Modal";
+import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
 import { Answer } from "@/src/modules/tests/entities/Answer";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
+import { addListItem } from "@/src/utils/addListItem";
+import { Reorder } from "framer-motion";
 import toast from "react-hot-toast";
 import AnswerList from "./AnswerList";
 import NewAnswerForm from "./NewAnswerForm";
 import NewQuestionForm from "./NewQuestionForm";
-import { addListItem } from "@/src/utils/addListItem";
-import { Reorder } from "framer-motion";
-import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
 
 const currentTest: Test = {
   id: 1,
@@ -107,18 +106,18 @@ const EditTestPage: NextPageWithLayout = () => {
       questionId: currentQuestion?.id,
     };
     // update answer list
-    const updatedAnswerList = addListItem(answerList, newAnswer)
-    
+    const updatedAnswerList = addListItem(answerList, newAnswer);
+
     // update question list
     const updatedQuestionList = questionList.map((question) => {
       if (question.id !== currentQuestion.id) {
-        return question
+        return question;
       }
-      question.answers = updatedAnswerList
-      return question
-    })
+      question.answers = updatedAnswerList;
+      return question;
+    });
 
-    setQuestionList(updatedQuestionList)
+    setQuestionList(updatedQuestionList);
   }
 
   if (!user) {
@@ -165,32 +164,27 @@ const EditTestPage: NextPageWithLayout = () => {
                   <Reorder.Item
                     key={question.id}
                     value={question}
-                    className="p-2"
+                    className={`${
+                      question.id === currentQuestion?.id && "bg-blue-200"
+                    } flex justify-between p-2 hover:bg-blue-300`}
                   >
-                    {index + 1}. {question.question}
+                    <span>
+                      {index + 1}. {question.question}
+                    </span>
+                    <button
+                      onClick={() => {
+                        if (question.id === currentQuestion?.id) {
+                          setCurrentQuestion(undefined);
+                          return;
+                        }
+                        setCurrentQuestion(question);
+                      }}
+                    >
+                      Answers
+                    </button>
                   </Reorder.Item>
                 ))}
               </ReorderListContainer>
-              <ListContainer>
-                {questionList?.map((question, index) => (
-                  <li
-                    key={`question-${question.id}`}
-                    // value={question}
-                    className={`${
-                      currentQuestion?.id === question.id ? "bg-blue-200" : ""
-                    } p-2 duration-200 ease-in-out hover:cursor-pointer hover:bg-blue-300`}
-                    onClick={() => {
-                      setCurrentQuestion(question);
-                    }}
-                  >
-                    <div className={`flex justify-between`}>
-                      <p>
-                        {index + 1}. {question.question}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ListContainer>
             </div>
             <div>
               {currentQuestion && (
