@@ -1,8 +1,8 @@
+import Modal from "@/src/modules/core/components/Modal";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import { useState } from "react";
-import AnswerList from "./AnswerList";
-import Modal from "@/src/modules/core/components/Modal";
 import NewAnswerForm from "./NewAnswerForm";
+import AnswerList from "./AnswerList";
 
 type EditQuestionFormProps = {
   currentQuestion: TestQuestion;
