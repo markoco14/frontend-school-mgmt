@@ -1,4 +1,4 @@
-// import { Reorder } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 import Link from "next/link";
 import { ReactElement, useState } from "react";
@@ -186,7 +186,11 @@ const EditTestPage: NextPageWithLayout = () => {
                 ))}
               </ReorderListContainer>
             </div>
-            <div className={`${!currentQuestion && "flex justify-center items-center"}`}>
+            <div
+              className={`${
+                !currentQuestion && "flex items-center justify-center"
+              }`}
+            >
               {currentQuestion && (
                 <div className="mb-8 flex">
                   <button
@@ -198,7 +202,16 @@ const EditTestPage: NextPageWithLayout = () => {
                 </div>
               )}
               {!currentQuestion ? (
-                  <p className="p-2">Click a question to list answers.</p>
+                <AnimatePresence>
+                  <motion.p
+                    className="p-2"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    Click a question to list answers.
+                  </motion.p>
+                </AnimatePresence>
               ) : (
                 <AnswerList answers={currentQuestion.answers} />
               )}
