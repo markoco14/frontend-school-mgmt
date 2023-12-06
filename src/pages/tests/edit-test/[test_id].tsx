@@ -15,7 +15,6 @@ import { addListItem } from "@/src/utils/addListItem";
 import { Reorder } from "framer-motion";
 import toast from "react-hot-toast";
 import Drawer from "./Drawer";
-import NewAnswerForm from "./NewAnswerForm";
 import NewQuestionForm from "./NewQuestionForm";
 import EditQuestionForm from "./EditQuestionForm";
 
@@ -74,7 +73,6 @@ const EditTestPage: NextPageWithLayout = () => {
   >();
 
   const [isNewQuestion, setIsNewQuestion] = useState<boolean>(false);
-  const [isNewAnswer, setIsNewAnswer] = useState<boolean>(false);
 
   // Drawer
   const [isEditQuestion, setIsEditQuestion] = useState<boolean>(false);
@@ -82,9 +80,6 @@ const EditTestPage: NextPageWithLayout = () => {
     setIsEditQuestion(false);
     setCurrentQuestion(undefined);
   }
-
-  // TODO: try derived state for answerList
-  const answerList = currentQuestion?.answers;
 
   function handleAddAnswerToQuestion({
     answer,
@@ -142,7 +137,7 @@ const EditTestPage: NextPageWithLayout = () => {
           >
             <EditQuestionForm
               currentQuestion={currentQuestion}
-              setIsNewAnswer={setIsNewAnswer}
+              handleAddAnswerToQuestion={handleAddAnswerToQuestion}
             />
           </Drawer>
         )}
@@ -206,12 +201,6 @@ const EditTestPage: NextPageWithLayout = () => {
             <NewQuestionForm
               questionList={questionList}
               setQuestionList={setQuestionList}
-            />
-          </Modal>
-          <Modal show={isNewAnswer} close={setIsNewAnswer} title="New Answer">
-            <NewAnswerForm
-              answerList={answerList}
-              updateAnswerList={handleAddAnswerToQuestion}
             />
           </Modal>
         </CardContainer>

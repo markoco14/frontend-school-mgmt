@@ -1,16 +1,21 @@
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
-import { Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 import AnswerList from "./AnswerList";
+import Modal from "@/src/modules/core/components/Modal";
+import NewAnswerForm from "./NewAnswerForm";
 
 type EditQuestionFormProps = {
   currentQuestion: TestQuestion;
-  setIsNewAnswer: Dispatch<SetStateAction<boolean>>;
+  handleAddAnswerToQuestion: Function;
 };
 
 const EditQuestionForm = ({
   currentQuestion,
-  setIsNewAnswer,
+  handleAddAnswerToQuestion,
 }: EditQuestionFormProps) => {
+  const [isNewAnswer, setIsNewAnswer] = useState<boolean>(false);
+  const answerList = currentQuestion?.answers;
+
   return (
     <div>
       <div className="mb-8 flex">
@@ -23,6 +28,12 @@ const EditQuestionForm = ({
       </div>
 
       <AnswerList answers={currentQuestion.answers} />
+      <Modal show={isNewAnswer} close={setIsNewAnswer} title="New Answer">
+        <NewAnswerForm
+          answerList={answerList}
+          updateAnswerList={handleAddAnswerToQuestion}
+        />
+      </Modal>
     </div>
   );
 };
