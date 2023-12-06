@@ -7,6 +7,26 @@ type DrawerProps = {
   title: string;
 };
 
+type DrawerHeaderProps = {
+	title: string;
+	handleCloseDrawer: Function;
+}
+
+const DrawerHeader = ({ title, handleCloseDrawer }: DrawerHeaderProps) => {
+  return (
+    <div className="mb-8 flex justify-between">
+      <h2>{title}</h2>
+      <button
+        onClick={() => {
+          handleCloseDrawer(false);
+        }}
+      >
+        close
+      </button>
+    </div>
+  );
+};
+
 const Drawer = ({ children, handleCloseDrawer, title }: DrawerProps) => {
   return (
     <AnimatePresence>
@@ -23,21 +43,13 @@ const Drawer = ({ children, handleCloseDrawer, title }: DrawerProps) => {
         exit={{ opacity: 0, x: 50 }}
       >
         <div>
-          <div className="mb-8 flex justify-between">
-            <h2>{title}</h2>
-            <button
-              onClick={() => {
-                handleCloseDrawer(false);
-              }}
-            >
-              close
-            </button>
-          </div>
+          <DrawerHeader title={title} handleCloseDrawer={handleCloseDrawer}/>
           {children}
         </div>
       </motion.div>
     </AnimatePresence>
   );
 };
+
 
 export default Drawer;
