@@ -1,11 +1,10 @@
-import Cookie from "js-cookie";
 import jwt_decode from "jwt-decode";
 import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { jwtAdapter } from "../modules/auth/adapters/jwtAdapter";
 import { School } from "../modules/school-mgmt/entities/School";
-import { getToken, removeToken } from "../utils/tokenUtils";
+import { getToken, removeToken, setToken } from "../utils/tokenUtils";
 
 type UserContextProviderProps = {
   children: React.ReactNode; // not allowed: React.ReactNode
@@ -73,8 +72,7 @@ export default function UserContextProvider({
     try {
       await jwtAdapter.get({ payload: formData }).then((res) => {
         setUser(jwt_decode(res.access));
-        Cookie.set("accessToken", res.access, { expires: 1 }); // Expires in 7 days, you can adjust this
-        Cookie.set("refreshToken", res.refresh, { expires: 7 });
+        setToken({ accessToken: res.access, refreshToken: res.refresh });
       });
     } catch (error) {
       toast.error("Unable to login. Please check your email or password.");
@@ -128,8 +126,7 @@ export default function UserContextProvider({
       try {
         await jwtAdapter.refresh({ refresh: refreshToken }).then((res) => {
           setUser(jwt_decode(res.access));
-          Cookie.set("accessToken", res.access_token, { expires: 1 }); // Expires in 7 days, you can adjust this
-          Cookie.set("refreshToken", res.refresh_token, { expires: 7 });
+          setToken({ accessToken: res.access, refreshToken: res.refresh });
         });
       } catch (error) {
         toast.error("Your session expired. Please log in again.");
@@ -137,7 +134,7 @@ export default function UserContextProvider({
       }
     };
 
-
+    // const tenSeconds = 1000 * 10;
     const tenMinutes = 1000 * 60 * 10;
     if (!user) {
       const accessToken = getToken("accessToken");
