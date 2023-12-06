@@ -14,9 +14,9 @@ import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import { addListItem } from "@/src/utils/addListItem";
 import { Reorder } from "framer-motion";
 import toast from "react-hot-toast";
-import Drawer from "./Drawer";
-import NewQuestionForm from "./NewQuestionForm";
-import EditQuestionForm from "./EditQuestionForm";
+import Drawer from "../../../components/Drawer";
+import EditQuestionForm from "../../../components/edit-tests/EditQuestionForm";
+import NewQuestionForm from "../../../components/edit-tests/NewQuestionForm";
 
 const currentTest: Test = {
   id: 1,
