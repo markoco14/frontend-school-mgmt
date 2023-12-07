@@ -1,10 +1,7 @@
 import Cookie from "js-cookie"
-// import { jwt_decode } from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
+import { DecodedToken } from "../modules/auth/enitities/DecodedToken";
 
-// type DecodedToken = {
-// 	exp: number;
-// 	[key: string]: any;
-// }
 
 /**
  * Get a token from cookies
@@ -33,3 +30,30 @@ export function removeToken() {
 	Cookie.remove('accessToken');
 	Cookie.remove('refreshToken');
 }
+
+export function isValidToken(token: string): number | undefined{
+	try {
+		const { exp } = jwt_decode<DecodedToken>(token)
+		return exp
+	} catch {
+		return undefined
+	}
+}
+
+/**
+ * Check if a token is expired.
+ * @param token The token to check.
+ * @returns True if the token is expired, false otherwise.
+ */
+export function isTokenExpiredUtil(token: string): boolean {
+  try {
+    const { exp } = jwt_decode<DecodedToken>(token);
+    if (!exp) {
+      return true;
+    }
+    return Date.now() >= exp * 1000;
+  } catch {
+    return true;
+  }
+}
+
