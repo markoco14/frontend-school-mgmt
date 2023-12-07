@@ -68,10 +68,11 @@ export default function UserContextProvider({
     localStorage.removeItem("selectedSchool");
   };
 
-  let loginUser = async (formData: any) => {
+  const loginUser = async (formData: any) => {
     try {
       await jwtAdapter.get({ payload: formData }).then((res) => {
-        setUser(jwt_decode(res.access));
+        const decodedUser = jwt_decode<AuthUser>(res.access);
+        setUser(decodedUser);
         setToken({ accessToken: res.access, refreshToken: res.refresh });
       });
     } catch (error) {
@@ -79,14 +80,15 @@ export default function UserContextProvider({
     }
   };
 
-  let logout = () => {
+  const logout = () => {
     setUser(null);
     setSelectedSchool(undefined);
-
     removeToken();
     localStorage.removeItem("selectedSchool");
+    router.push("/");
   };
 
+  
   useEffect(() => {
     function getTokenExpiry({ token }: { token: Token }) {
       return token.exp;
