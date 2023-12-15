@@ -1,9 +1,7 @@
-import Modal from "@/src/modules/core/components/Modal";
 import { Answer } from "@/src/modules/tests/entities/Answer";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AnswerList from "./AnswerList";
-import NewAnswerForm from "./NewAnswerForm";
 
 const answers: Answer[] = [
   { id: 1, answer: "Does she give it to him?", questionId: 1 },
@@ -25,12 +23,11 @@ type EditQuestionFormProps = {
 
 const EditQuestionForm = ({
   currentQuestion,
-  handleAddAnswerToQuestion,
 }: EditQuestionFormProps) => {
-  const [isNewAnswer, setIsNewAnswer] = useState<boolean>(false);
-  const answerList = currentQuestion?.answers;
   const [currentAnswers, setCurrentAnswers] = useState<Answer[]>();
-  
+  const inputRef = useRef<HTMLInputElement>(null)
+
+
   useEffect(() => {
     const answersToQuestion = answers.filter((answer) => {
       return answer.questionId === currentQuestion.id;
@@ -38,24 +35,39 @@ const EditQuestionForm = ({
     answersToQuestion && setCurrentAnswers(answersToQuestion);
   }, [currentQuestion]);
 
+  function handleAddAnswer() {
+    if (!inputRef.current) {
+      return
+    }
+    if (inputRef.current.value === '') {
+      alert('choose a value for answer')
+      return
+    }
+    const newAnswer: Answer = {
+      id: Math.floor(Math.random() * 100) + 15,
+      answer: inputRef.current?.value,
+      questionId: currentQuestion.id
+    }
+    setCurrentAnswers(prev => [...prev, newAnswer])
+    // but we really want to add to the total answer list
+    // and derive the current answers from that list
+    // later, when we use a db call, we won't need that
+  }
+
   return (
     <div>
-      <div className="mb-8 flex">
-        <button
-          onClick={() => setIsNewAnswer(true)}
-          className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
-        >
-          New Answer
-        </button>
-      </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleAddAnswer();
+        }}
+      >
+        <label>New Answer</label>
 
+        <input ref={inputRef} type="text" className="border p-2" />
+        <button>OK</button>
+      </form>
       {currentAnswers && <AnswerList answers={currentAnswers} />}
-      <Modal show={isNewAnswer} close={setIsNewAnswer} title="New Answer">
-        <NewAnswerForm
-          answerList={answerList}
-          updateAnswerList={handleAddAnswerToQuestion}
-        />
-      </Modal>
     </div>
   );
 };
