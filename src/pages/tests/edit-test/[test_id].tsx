@@ -25,42 +25,28 @@ const currentTest: Test = {
   allowNoCorrections: true,
 };
 
+
+
 const questions: TestQuestion[] = [
   {
     id: 1,
     question: "Do her give the it to he?",
     mistakes: ["Do", "her", "the", "he"],
-    answers: [
-      { id: 1, answer: "Does she give it to him?", questionId: 1 },
-      { id: 2, answer: "Does she give the ball to him?", questionId: 1 },
-      { id: 3, answer: "Does she give him it?", questionId: 1 },
-      { id: 4, answer: "Does she give him the ball?", questionId: 1 },
-    ],
   },
   {
     id: 2,
     question: "Does I look like he?",
     mistakes: ["Does", "he"],
-    answers: [
-      { id: 5, answer: "Do I look like him?", questionId: 2 },
-      { id: 6, answer: "Do I look like her?", questionId: 2 },
-    ],
   },
   {
     id: 3,
     question: "Do we want to take her from it?",
     mistakes: ["her", "it"],
-    answers: [
-      { id: 7, answer: "Do we want to take it from her?", questionId: 3 },
-      { id: 8, answer: "Do they want to take it from her?", questionId: 3 },
-      { id: 9, answer: "Do you want to take it from her?", questionId: 3 },
-    ],
   },
   {
     id: 4,
     question: "Do I want to talk to they?",
     mistakes: ["they"],
-    answers: [{ id: 10, answer: "Do I want to talk to them?", questionId: 4 }],
   },
 ];
 
