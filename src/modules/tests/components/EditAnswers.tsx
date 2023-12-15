@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Answer } from "../entities/Answer";
+import ReorderListContainer from "../../core/components/ReorderListContainer";
+import { Reorder } from "framer-motion";
 
 type EditAnswersProps = {
   questionId: number;
@@ -71,9 +73,23 @@ const EditAnswers = ({ questionId }: EditAnswersProps) => {
         <input ref={inputRef} type="text" className="border p-2" />
         <button>OK</button>
       </form>
-      <ul>
-        {answers?.map((answer) => <li key={answer.id}>{answer.answer}</li>)}
-      </ul>
+      <ReorderListContainer
+        axis="y"
+        values={answers}
+        onReorder={setAnswers}
+      >
+        {answers.map((answer, index) => (
+          <Reorder.Item
+            key={`question-${answer.id}`}
+            value={answer}
+            className={`flex justify-between p-2 hover:bg-blue-300`}
+          >
+            <span>
+              {index + 1}. {answer.answer}
+            </span>
+          </Reorder.Item>
+        ))}
+      </ReorderListContainer>
     </>
   );
 };
