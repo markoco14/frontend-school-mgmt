@@ -114,7 +114,7 @@ const ReviewTestPage: NextPageWithLayout = () => {
     return sentenceWithHighlights;
   }
 
-  const answerWithHighlights = highlightCorrections(
+  const answerWithHighlights = currentQuestion.answers && highlightCorrections(
     currentQuestion.question,
     currentQuestion.answers[currentAnswerIndex].answer,
   );
@@ -207,15 +207,15 @@ const ReviewTestPage: NextPageWithLayout = () => {
           </div>
         </div>
         <div className="relative mx-auto flex min-h-[50%] items-center justify-center px-2 sm:w-[80%]">
-          <p
+          {answerWithHighlights && <p
             className="text-5xl sm:text-[120px]"
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(answerWithHighlights),
             }}
-          ></p>
+          ></p>}
           {/* Debug bar */}
           <div className="absolute top-2">
-            <p>Number of answers: {currentQuestion.answers.length}</p>
+            <p>Number of answers: {currentQuestion.answers?.length}</p>
             <p>Current answer: {currentAnswerIndex + 1}</p>
           </div>
           <div className="absolute bottom-2">
@@ -234,10 +234,11 @@ const ReviewTestPage: NextPageWithLayout = () => {
             </button>
             <button
               disabled={
-                currentAnswerIndex + 1 >= currentQuestion.answers.length
+                currentQuestion.answers && currentAnswerIndex + 1 >= currentQuestion.answers.length
               }
               className="rounded border p-2 disabled:bg-gray-300"
               onClick={() => {
+                currentQuestion.answers &&
                 next({
                   currentIndex: currentAnswerIndex,
                   stateFunction: setCurrentAnswerIndex,

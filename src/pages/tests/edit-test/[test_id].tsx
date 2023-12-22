@@ -8,15 +8,12 @@ import CardContainer from "@/src/modules/core/components/CardContainer";
 import Layout from "@/src/modules/core/components/Layout";
 import Modal from "@/src/modules/core/components/Modal";
 import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
-import { Answer } from "@/src/modules/tests/entities/Answer";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
-import { addListItem } from "@/src/utils/addListItem";
 import { Reorder } from "framer-motion";
-import toast from "react-hot-toast";
-import Drawer from "../../../components/Drawer";
-import EditQuestionForm from "../../../components/edit-tests/EditQuestionForm";
 import NewQuestionForm from "../../../components/edit-tests/NewQuestionForm";
+import Drawer from "@/src/components/Drawer";
+import EditAnswers from "@/src/modules/tests/components/EditAnswers";
 
 const currentTest: Test = {
   id: 1,
@@ -25,42 +22,28 @@ const currentTest: Test = {
   allowNoCorrections: true,
 };
 
+
+
 const questions: TestQuestion[] = [
   {
     id: 1,
     question: "Do her give the it to he?",
     mistakes: ["Do", "her", "the", "he"],
-    answers: [
-      { id: 1, answer: "Does she give it to him?", questionId: 1 },
-      { id: 2, answer: "Does she give the ball to him?", questionId: 1 },
-      { id: 3, answer: "Does she give him it?", questionId: 1 },
-      { id: 4, answer: "Does she give him the ball?", questionId: 1 },
-    ],
   },
   {
     id: 2,
     question: "Does I look like he?",
     mistakes: ["Does", "he"],
-    answers: [
-      { id: 5, answer: "Do I look like him?", questionId: 2 },
-      { id: 6, answer: "Do I look like her?", questionId: 2 },
-    ],
   },
   {
     id: 3,
     question: "Do we want to take her from it?",
     mistakes: ["her", "it"],
-    answers: [
-      { id: 7, answer: "Do we want to take it from her?", questionId: 3 },
-      { id: 8, answer: "Do they want to take it from her?", questionId: 3 },
-      { id: 9, answer: "Do you want to take it from her?", questionId: 3 },
-    ],
   },
   {
     id: 4,
     question: "Do I want to talk to they?",
     mistakes: ["they"],
-    answers: [{ id: 10, answer: "Do I want to talk to them?", questionId: 4 }],
   },
 ];
 
@@ -73,45 +56,11 @@ const EditTestPage: NextPageWithLayout = () => {
   >();
 
   const [isNewQuestion, setIsNewQuestion] = useState<boolean>(false);
-
-  // Drawer
   const [isEditQuestion, setIsEditQuestion] = useState<boolean>(false);
+
   function handleCloseDrawer() {
     setIsEditQuestion(false);
     setCurrentQuestion(undefined);
-  }
-
-  function handleAddAnswerToQuestion({
-    answer,
-    answerList,
-  }: {
-    answer: string;
-    answerList: Answer[];
-  }) {
-    if (!currentQuestion) {
-      toast("You need to choose a question first.");
-      return;
-    }
-
-    const randomId = Math.floor(Math.random() * 100) + 15;
-    const newAnswer: Answer = {
-      id: randomId,
-      answer: answer,
-      questionId: currentQuestion?.id,
-    };
-    // update answer list
-    const updatedAnswerList = addListItem(answerList, newAnswer);
-
-    // update question list
-    const updatedQuestionList = questionList.map((question) => {
-      if (question.id !== currentQuestion.id) {
-        return question;
-      }
-      question.answers = updatedAnswerList;
-      return question;
-    });
-
-    setQuestionList(updatedQuestionList);
   }
 
   if (!user) {
@@ -130,17 +79,6 @@ const EditTestPage: NextPageWithLayout = () => {
   return (
     <Layout>
       <AdminLayout>
-        {isEditQuestion && currentQuestion && (
-          <Drawer
-            title={`Edit "${currentQuestion.question}"`}
-            handleCloseDrawer={handleCloseDrawer}
-          >
-            <EditQuestionForm
-              currentQuestion={currentQuestion}
-              handleAddAnswerToQuestion={handleAddAnswerToQuestion}
-            />
-          </Drawer>
-        )}
         <CardContainer>
           <div className="mb-8 grid gap-2">
             <h1 className="text-3xl">{test.name}</h1>
@@ -175,24 +113,29 @@ const EditTestPage: NextPageWithLayout = () => {
                   <span>
                     {index + 1}. {question.question}
                   </span>
+                  {/* change to drawer button */}
                   <button
                     onClick={() => {
-                      if (question.id === currentQuestion?.id) {
-                        setCurrentQuestion(undefined);
-                        setIsEditQuestion(false);
-                        return;
-                      }
-                      setCurrentQuestion(question);
                       setIsEditQuestion(true);
+                      setCurrentQuestion(question);
                     }}
                   >
-                    Answers
+                    Edit
                   </button>
                 </Reorder.Item>
               ))}
             </ReorderListContainer>
           </section>
-
+          <Drawer
+            show={isEditQuestion}
+            title={`Edit Question and Answers`}
+            handleCloseDrawer={handleCloseDrawer}
+          >
+            <p>{currentQuestion?.question}</p>
+            {currentQuestion && (
+              <EditAnswers questionId={currentQuestion.id} />
+            )}
+          </Drawer>
           <Modal
             show={isNewQuestion}
             close={setIsNewQuestion}

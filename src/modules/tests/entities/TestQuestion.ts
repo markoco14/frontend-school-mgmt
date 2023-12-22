@@ -4,5 +4,5 @@ export type TestQuestion = {
   id: number;
   question: string;
   mistakes: string[];
-  answers: Answer[];
+  answers?: Answer[];
 };
