@@ -2,6 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { userAdapter } from "../user-mgmt/adapters/userAdapter";
 import PublicLinks from "./PublicLinks";
+import { useState } from "react";
 
 type Inputs = {
   firstName: string;
@@ -12,8 +13,9 @@ type Inputs = {
 
 export default function Signup() {
   const { reset, register, handleSubmit } = useForm<Inputs>();
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    setIsLoading(true)
     try {
       await userAdapter.addUser({
         firstName: data.firstName,
@@ -21,10 +23,16 @@ export default function Signup() {
         email: data.email,
         password: data.password,
       });
-      toast.success("User added.");
+      toast.success("User added!");
+      setIsLoading(false)
       reset();
     } catch (error) {
-      toast.error("Unable to sign up")
+      setIsLoading(false)
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error("Failed to add user.")
+      }
     }
   };
 
@@ -32,7 +40,7 @@ export default function Signup() {
     <div className="mx-auto max-w-[500px] px-2 md:px-0">
       <PublicLinks />
       <h2 className="text-blue-700 text-2xl mb-4">Sign up to get started.</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="grid">
         <div className="mb-4 flex flex-col">
           <label className="mb-2">First Name</label>
           <input
@@ -82,7 +90,7 @@ export default function Signup() {
           />
         </div>
         <button className="rounded bg-blue-300 px-4 py-1 text-blue-900 hover:bg-blue-500 hover:text-white">
-          Save
+        { isLoading ? "Signing Up" : "Sign Up"}
         </button>
       </form>
     </div>

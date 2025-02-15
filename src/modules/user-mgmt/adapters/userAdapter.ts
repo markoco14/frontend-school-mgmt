@@ -37,25 +37,33 @@ class UserAdapter {
     lastName: string;
     email: string;
     password: string;
-  }): Promise<User> {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/users/add/`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+  }): Promise<User | Error> {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/add/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            password: password,
+          }),
         },
-        body: JSON.stringify({
-          first_name: firstName,
-          last_name: lastName,
-          email: email,
-          password: password,
-        }),
-      },
-    );
-    const user: User = await response.json();
+      );
 
-    return user;
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        console.log(errorResponse)
+        throw new Error(errorResponse.message || "Failed to add user.")
+      }
+      return await response.json();
+    } catch (error) {
+      throw error
+    }
   }
 
   public async updateUser({
