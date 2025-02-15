@@ -1,6 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { userAdapter } from "../adapters/userAdapter";
+import { userAdapter } from "../user-mgmt/adapters/userAdapter";
+import PublicLinks from "./PublicLinks";
 
 type Inputs = {
   firstName: string;
@@ -28,8 +29,9 @@ export default function Signup() {
   };
 
   return (
-    <>
-      <h2 className="mb-4">Sign up to get started.</h2>
+    <div className="mx-auto max-w-[500px] px-2 md:px-0">
+      <PublicLinks />
+      <h2 className="text-blue-700 text-2xl mb-4">Sign up to get started.</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4 flex flex-col">
           <label className="mb-2">First Name</label>
@@ -83,6 +85,6 @@ export default function Signup() {
           Save
         </button>
       </form>
-    </>
+    </div>
   );
 }

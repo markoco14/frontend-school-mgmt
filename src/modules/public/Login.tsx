@@ -1,5 +1,6 @@
 import { useUserContext } from "@/src/contexts/UserContext";
 import { SubmitHandler, useForm } from "react-hook-form";
+import PublicLinks from "./PublicLinks";
 
 type Inputs = {
   email: string;
@@ -9,17 +10,16 @@ type Inputs = {
 export default function Login() {
   const { loginUser } = useUserContext();
   const { reset, register, handleSubmit } = useForm<Inputs>();
-
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     loginUser(data);
     reset();
-
     return;
   };
 
   return (
-    <>
-      <h2 className="mb-4">Log In to manage your schools.</h2>
+    <div className="mx-auto max-w-[500px] px-2 md:px-0">
+    <PublicLinks />
+      <h2 className="text-blue-700 text-2xl mb-4">Log In to manage your schools.</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4 flex flex-col">
           <label className="mb-2">Email</label>
@@ -41,6 +41,6 @@ export default function Login() {
           Login
         </button>
       </form>
-    </>
+    </div>
   );
 }
