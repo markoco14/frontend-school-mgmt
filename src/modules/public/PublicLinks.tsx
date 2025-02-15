@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 export default function PublicLinks() {
   const router = useRouter();
   return (
-    <nav className="flex gap-4 h-[48px] items-baseline">
+    <nav className="flex gap-4 h-[48px] items-center justify-end">
       <Link
         href="/"
         className={`${router.asPath === ""
