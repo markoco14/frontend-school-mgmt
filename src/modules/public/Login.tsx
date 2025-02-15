@@ -18,7 +18,7 @@ export default function Login() {
 
   return (
     <div className="mx-auto max-w-[500px] px-2 md:px-0">
-    <PublicLinks />
+      <PublicLinks />
       <h2 className="text-blue-700 text-2xl mb-4">Log In to manage your schools.</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4 flex flex-col">
