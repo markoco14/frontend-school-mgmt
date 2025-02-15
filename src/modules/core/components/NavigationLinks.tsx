@@ -32,11 +32,8 @@ const NavigationLinks = () => {
         </>
       )}
 
-      {/* array1. some((item) => array2. includes(item)) */}
-      {user &&
-        user?.permissions.some((permission) => [1, 2].includes(permission)) &&
+      {user && (user.role == "OWNER" || user.role == "ADMIN")  &&
         selectedSchool && (
-          // user.user_id === selectedSchool.owner_id && (
           <>
             <Link
               href="/curriculum/"
