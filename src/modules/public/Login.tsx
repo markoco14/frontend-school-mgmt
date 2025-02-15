@@ -1,5 +1,8 @@
 import { useUserContext } from "@/src/contexts/UserContext";
 import { SubmitHandler, useForm } from "react-hook-form";
+import PublicLinks from "./PublicLinks";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 type Inputs = {
   email: string;
@@ -9,18 +12,26 @@ type Inputs = {
 export default function Login() {
   const { loginUser } = useUserContext();
   const { reset, register, handleSubmit } = useForm<Inputs>();
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    loginUser(data);
-    reset();
-
-    return;
+    setIsLoading(true)
+    try {
+      loginUser(data);
+      setIsLoading(false)
+      reset();
+      return;
+    } catch (error) {
+      toast.error("Unable to login. Please check your email or password.");
+      setIsLoading(false)
+      return
+    }
   };
 
   return (
-    <>
-      <h2 className="mb-4">Log In to manage your schools.</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="mx-auto max-w-[500px] px-2 md:px-0">
+      <PublicLinks />
+      <h2 className="text-blue-700 text-2xl mb-4">Log In to manage your schools.</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="grid">
         <div className="mb-4 flex flex-col">
           <label className="mb-2">Email</label>
           <input
@@ -38,9 +49,9 @@ export default function Login() {
           />
         </div>
         <button className="rounded bg-blue-300 px-4 py-1 text-blue-900 hover:bg-blue-500 hover:text-white">
-          Login
+          { isLoading ? "Signing In" : "Sign In"}
         </button>
       </form>
-    </>
+    </div>
   );
 }

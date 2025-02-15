@@ -4,7 +4,7 @@ import GuestLayout from "@/src/modules/core/components/GuestLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import { schoolAdapter } from "@/src/modules/school-mgmt/adapters/schoolAdapter";
 import { School } from "@/src/modules/school-mgmt/entities/School";
-import LandingPage from "@/src/modules/website/LandingPage";
+import LandingPage from "@/src/modules/public/LandingPage";
 import Link from "next/link";
 import { ReactElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";

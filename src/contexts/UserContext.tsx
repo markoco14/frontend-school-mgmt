@@ -64,7 +64,7 @@ export default function UserContextProvider({
         setToken({ accessToken: res.access, refreshToken: res.refresh });
       });
     } catch (error) {
-      toast.error("Unable to login. Please check your email or password.");
+      return error
     }
   };
 

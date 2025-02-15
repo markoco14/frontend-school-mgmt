@@ -1,7 +1,7 @@
-import { User } from "@/src/modules/user-mgmt/entities/User";
-import { UserProfile } from "@/src/modules/user-mgmt/entities/UserProfile";
 import { PasswordSuccessResponse } from "@/src/modules/user-mgmt/entities/PasswordSuccessResponse";
 import { Teacher } from "@/src/modules/user-mgmt/entities/Teacher";
+import { User } from "@/src/modules/user-mgmt/entities/User";
+import { UserProfile } from "@/src/modules/user-mgmt/entities/UserProfile";
 
 class UserAdapter {
   public async getUsers(): Promise<User[]> {
@@ -37,7 +37,7 @@ class UserAdapter {
     lastName: string;
     email: string;
     password: string;
-  }): Promise<User> {
+  }): Promise<User | Error> {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/users/add/`,
       {
@@ -53,9 +53,12 @@ class UserAdapter {
         }),
       },
     );
-    const user: User = await response.json();
 
-    return user;
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || "Failed to add user.")
+    }
+    return await response.json();
   }
 
   public async updateUser({
