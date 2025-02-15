@@ -6,7 +6,7 @@ const LandingPage = () => {
   const [isSignUp, setIsSignUp] = useState<boolean>(true);
 
   return (
-    <div className="mx-auto max-w-[1000px]">
+    <div className="mx-auto max-w-[500px] px-2 md:px-0">
       <section>
         <h1>The Greatest Cram School Management System Ever</h1>
       </section>
