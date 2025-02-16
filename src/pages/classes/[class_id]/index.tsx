@@ -4,6 +4,7 @@ import ManageClassTeacher from "@/src/modules/classes/components/ManageClassTeac
 import ManageClassStudents from "@/src/modules/classes/components/class-students/ManageClassStudents";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
+import GuestLayout from "@/src/modules/core/components/GuestLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import ParamsPageTabNav from "@/src/modules/core/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
@@ -49,7 +50,15 @@ export default function ManageClassDetails({
     },
   ];
 
-  if (!user?.permissions.includes(1)) {
+  if (!user) {
+    return (
+      <GuestLayout>
+        <p>You don&apos;t have permission to access this page.</p>
+      </GuestLayout>
+    )
+  }
+
+  if (user?.role === "TEACHER") {
     return (
       <Layout>
         <AdminLayout>
