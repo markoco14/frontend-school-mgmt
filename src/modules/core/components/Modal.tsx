@@ -10,7 +10,7 @@ export default function Modal({show, close, title, children}: {show: boolean, cl
 		>
 			<Dialog
 				onClose={() => close(false)}
-				className="fixed top-0 left-0 w-screen sm:inset-0 sm:top-8 sm:w-full flex items-center justify-center"
+				className="fixed inset-0 flex items-center justify-center px-4"
 			>	
 				<Transition.Child
 					as={Fragment}
@@ -32,7 +32,7 @@ export default function Modal({show, close, title, children}: {show: boolean, cl
 					leaveFrom="opacity-100 scale-100"
 					leaveTo="opacity-0"
 				>
-					<Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10">
+					<Dialog.Panel className="bg-white rounded-2xl shadow-xl p-8 z-10 w-screen sm:w-[500px]">
 						<div className="mb-4 flex justify-between items-baseline">
 							<Dialog.Title className="text-2xl ">
 								{title}

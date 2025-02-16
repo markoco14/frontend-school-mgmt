@@ -1,38 +1,37 @@
 import { useUserContext } from "@/src/contexts/UserContext";
+import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import { schoolAdapter } from "@/src/modules/school-mgmt/adapters/schoolAdapter";
-import Link from "next/link";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 
 export default function Add() {
   const { user } = useUserContext();
-
   const [loading, setLoading] = useState<boolean>(false);
   const [newSchoolName, setNewSchoolName] = useState<string>("");
 
-  async function handleAddSchool() {
+  async function handleAddSchool(newSchoolName: string, userId: number) {
     if (!newSchoolName) {
       toast("You forgot to add your school's name!");
+      return
     }
 
-    if (user && newSchoolName) {
-      try {
-        setLoading(true);
-        const response = await schoolAdapter.addSchool({
-          schoolName: newSchoolName,
-          ownerId: user.user_id,
-        });
-        setNewSchoolName("");
-        setLoading(false);
-        toast.success("School added.");
-        return response;
-      } catch (error) {
-        toast.error(
-          "Something went wrong. Please try again or contact customer support.",
-        );
-      }
+    try {
+      setLoading(true);
+      const response = await schoolAdapter.addSchool({
+        schoolName: newSchoolName,
+        ownerId: userId,
+      });
+      setNewSchoolName("");
+      setLoading(false);
+      toast.success("School added.");
+      return response;
+    } catch (error) {
+      setLoading(false);
+      toast.error(
+        "Something went wrong. Please try again.",
+      );
     }
   }
 
@@ -45,22 +44,17 @@ export default function Add() {
   }
 
   return (
-    <Layout>
-      <div>
+    <AdminLayout>
+      <div className="max-w-[500px]">
         <section>
           <div className="mb-4">
-            <div className="mb-4 flex items-baseline justify-between">
-              <h2 className="text-3xl">New School Information</h2>
-              <Link href="/">Back</Link>
-            </div>
-            <p>Add basic information for your school.</p>
+              <h1 className="text-3xl">Add Your New School</h1>
           </div>
-          {!loading ? (
             <form
-              className=""
+              className="grid"
               onSubmit={(e) => {
                 e.preventDefault();
-                handleAddSchool();
+                handleAddSchool(newSchoolName, user.user_id);
               }}
             >
               <div className="mb-4 flex flex-col">
@@ -74,14 +68,11 @@ export default function Add() {
                 />
               </div>
               <button className="rounded bg-blue-300 px-4 py-1 text-blue-900 hover:bg-blue-500 hover:text-white">
-                Save
+                {loading ? "Adding School" : "Add School"}
               </button>
             </form>
-          ) : (
-            <p>loading...</p>
-          )}
         </section>
       </div>
-    </Layout>
+    </AdminLayout>
   );
 }

@@ -1,5 +1,6 @@
 import { useUserContext } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
+import GuestLayout from "@/src/modules/core/components/GuestLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import ParamsPageTabNav from "@/src/modules/core/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
@@ -55,7 +56,15 @@ export default function Home({
     },
   ];
 
-  if (!user?.permissions.includes(1)) {
+  if (!user) {
+    return (
+      <GuestLayout>
+        <p>You don&apos;t have permission to access this page.</p>
+      </GuestLayout>
+    )
+  }
+
+  if (user.role === "TEACHER") {
     return (
       <Layout>
         <AdminLayout>
@@ -71,7 +80,6 @@ export default function Home({
     <Layout>
       <AdminLayout>
         <div className="h-full w-full bg-white">
-          {/* <SchoolHeader /> */}
           <Link href="/students">Back</Link>
           <div className="grid max-w-[1000px] gap-4 sm:grid-cols-8">
             <div className="sm:col-span-2">
@@ -83,7 +91,6 @@ export default function Home({
                 links={links}
                 tab={tab}
               />
-              {/* <PageTabNavigation links={links} tab={tab} setTab={setTab} /> */}
               {tab === "profile" && (
                 <section className="rounded border p-2 shadow">
                   <h2>Profile</h2>

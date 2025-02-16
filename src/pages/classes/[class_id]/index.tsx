@@ -1,16 +1,15 @@
 import { useUserContext } from "@/src/contexts/UserContext";
 import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
-import ManageClassTeacher from "@/src/modules/classes/components/ManageClassTeacher";
 import ManageClassStudents from "@/src/modules/classes/components/class-students/ManageClassStudents";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
+import GuestLayout from "@/src/modules/core/components/GuestLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import ParamsPageTabNav from "@/src/modules/core/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
 
 export const getServerSideProps: GetServerSideProps<{
   classEntity: ClassEntity;
@@ -26,30 +25,33 @@ export default function ManageClassDetails({
 }: {
   classEntity: ClassEntity;
 }) {
-  const [selectedClass, setSelectedClass] = useState<ClassEntity>(classEntity);
+  const selectedClass = classEntity
   const { user } = useUserContext();
   const searchParams = useSearchParams();
-  const tab = searchParams.get("tab") || "class info";
+  const tab = searchParams.get("tab") || "info";
 
   const links = [
     {
       value: 1,
       name: "Class Info",
-      urlString: "class info",
+      urlString: "info",
     },
     {
       value: 2,
       name: "Students",
       urlString: "students",
-    },
-    {
-      value: 3,
-      name: "Teachers",
-      urlString: "teachers",
-    },
+    }
   ];
 
-  if (!user?.permissions.includes(1)) {
+  if (!user) {
+    return (
+      <GuestLayout>
+        <p>You don&apos;t have permission to access this page.</p>
+      </GuestLayout>
+    )
+  }
+
+  if (user?.role === "TEACHER") {
     return (
       <Layout>
         <AdminLayout>
@@ -80,19 +82,10 @@ export default function ManageClassDetails({
                 <article className="col-span-1 rounded border p-2 shadow md:row-span-2">
                   <p>Class info goes here.</p>
                 </article>
-              ) : tab === "students" ? (
+              ) :  (
                 <article className="col-span-1 md:row-span-2">
                   <ManageClassStudents selectedClass={selectedClass} />
                 </article>
-              ) : (
-                tab === "teachers" && (
-                  <article className="col-span-1 row-span-1">
-                    <ManageClassTeacher
-                      selectedClass={selectedClass}
-                      setSelectedClass={setSelectedClass}
-                    />
-                  </article>
-                )
               )}
             </div>
           </section>

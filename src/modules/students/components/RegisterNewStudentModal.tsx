@@ -114,11 +114,12 @@ export default function RegisterNewStudentModal({
       </div>
       <div className="mb-4 flex flex-col">
         <label className="mb-2">Gender</label>
-        <input
-          className="rounded px-1 py-2 shadow"
-          type="number"
-          {...register("gender", { required: true, min: 0, max: 1 })}
-        />
+        <select
+          {...register("gender", { required: true })}
+        >
+          <option value="0">Boy</option>
+          <option value="1">Girl</option>
+        </select>
         {errors.gender?.type === "required" && (
           <p role="alert" className="mt-2 text-red-500">
             Gender is required
