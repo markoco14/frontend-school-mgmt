@@ -55,7 +55,7 @@ const NavigationLinks = () => {
             >
               Schedule
             </Link>
-            <Link
+            {/* <Link
               href="/staff/"
               className={`${
                 router.pathname.includes("staff")
@@ -64,7 +64,7 @@ const NavigationLinks = () => {
               }`}
             >
               Staff
-            </Link>
+            </Link> */}
             <Link
               href="/classes/"
               className={`${
