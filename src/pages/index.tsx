@@ -71,7 +71,7 @@ const Home: NextPageWithLayout = () => {
                   <p className="text-xl">Your schools</p>
                   {user.membership === "OWNER" && (
                       <Link
-                        href="/school-mgmt/add"
+                        href="/schools/new"
                         className="underline underline-offset-2 hover:text-blue-700"
                       >
                         New School
