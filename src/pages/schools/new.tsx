@@ -3,39 +3,42 @@ import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import { schoolAdapter } from "@/src/modules/school-mgmt/adapters/schoolAdapter";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 
 export default function Add() {
   const { user } = useUserContext();
   const [loading, setLoading] = useState<boolean>(false);
-  const [newSchoolName, setNewSchoolName] = useState<string>("");
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
-  async function handleAddSchool(newSchoolName: string, userId: number) {
-    if (!newSchoolName) {
-      toast("You forgot to add your school's name!");
+  async function handleAddSchool(userId: number) {
+    if (!nameInputRef.current) {
       return
     }
 
+    if (nameInputRef.current.value === "") {
+      toast("School added.");
+    }
+    
     try {
       setLoading(true);
       const response = await schoolAdapter.addSchool({
-        schoolName: newSchoolName,
+        schoolName: nameInputRef.current.value,
         ownerId: userId,
       });
-      setNewSchoolName("");
       setLoading(false);
+      nameInputRef.current.value = "";
       toast.success("School added.");
       return response;
     } catch (error) {
       setLoading(false);
-      toast.error(
-        "Something went wrong. Please try again.",
-      );
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
   }
 
-  if (user?.role !== "OWNER") {
+  if (user?.membership !== "OWNER") {
     return (
       <Layout>
         <PermissionDenied />
@@ -54,15 +57,13 @@ export default function Add() {
               className="grid"
               onSubmit={(e) => {
                 e.preventDefault();
-                handleAddSchool(newSchoolName, user.user_id);
+                handleAddSchool(user.user_id);
               }}
             >
               <div className="mb-4 flex flex-col">
                 <label className="mb-2">School Name</label>
                 <input
-                  onChange={(e) => {
-                    setNewSchoolName(e.target.value);
-                  }}
+                  ref={nameInputRef}
                   type="text"
                   className="rounded border p-2 shadow-md"
                 />
