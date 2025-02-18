@@ -35,11 +35,13 @@ class SchoolAdapter {
     schoolName: string;
     ownerId: number;
   }): Promise<School> {
+    const accessToken = Cookie.get("accessToken");
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/schools/add/`,
       {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -48,6 +50,12 @@ class SchoolAdapter {
         }),
       },
     );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail)
+    }
+    
     const data = await response.json();
     const school: School = data;
 
