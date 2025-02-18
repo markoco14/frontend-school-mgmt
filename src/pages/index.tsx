@@ -69,15 +69,14 @@ const Home: NextPageWithLayout = () => {
               <article className="grid gap-4 rounded-lg border p-4 shadow">
                 <div className="flex items-baseline justify-between">
                   <p className="text-xl">Your schools</p>
-                  {user.permissions.includes(1) ||
-                    (user.role === "OWNER" && (
+                  {user.membership === "OWNER" && (
                       <Link
                         href="/school-mgmt/add"
                         className="underline underline-offset-2 hover:text-blue-700"
                       >
                         New School
                       </Link>
-                    ))}
+                    )}
                 </div>
                 <ListContainer>
                   {schools.length === 0 ? (

@@ -22,6 +22,7 @@ type AuthUser = {
   role: string;
   email: string;
   permissions: number[];
+  membership: string;
 };
 
 type UserContextEntity = {
