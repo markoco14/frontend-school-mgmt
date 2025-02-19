@@ -4,10 +4,10 @@ import GuestLayout from "@/src/modules/core/components/GuestLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import Link from "next/link";
 import { ReactElement } from "react";
-import { NextPageWithLayout } from "../_app";
-import ListContainer from "../../modules/core/components/ListContainer";
-import CardContainer from "../../modules/core/components/CardContainer";
-import { Test } from "../../modules/tests/entities/Test";
+import { NextPageWithLayout } from "../../_app";
+import ListContainer from "../../../modules/core/components/ListContainer";
+import CardContainer from "../../../modules/core/components/CardContainer";
+import { Test } from "../../../modules/tests/entities/Test";
 
 const testsToday: Test[] = [
   {
