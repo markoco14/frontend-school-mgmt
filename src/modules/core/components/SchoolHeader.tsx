@@ -1,26 +1,21 @@
-import { useUserContext } from "@/src/contexts/UserContext";
+import { checkIsSchools } from "@/src/utils/checkIsSchools";
+import { getSelectedSchool } from "@/src/utils/getSelectedSchool";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function SchoolHeader() {
-  const { selectedSchool, handleDeselectSchool } = useUserContext();
   const router = useRouter();
+  const isSchools = checkIsSchools(router.asPath)
+  const selectedSchool = getSelectedSchool(router.asPath)
   return (
     <section>
-      <div className="border-b p-2 flex w-full items-baseline justify-between gap-16 text-gray-500 sm:py-4 sm:px-16">
-        <Link href="/" className="text-2xl">
-          {selectedSchool ? selectedSchool.name : "No school"}
-        </Link>
-        <button
-          onClick={() => {
-            handleDeselectSchool();
-            if (router.pathname !== "/") {
-              router.push("/");
-            }
-          }}
-        >
-          Change school
-        </button>
+      <div className="border-b h-[48px] px-2 sm:px-16 md:h-[72px] flex w-full items-center justify-between text-gray-500 ">
+        {isSchools && selectedSchool && selectedSchool !== "new" && (
+          <>
+            <span className="text-2xl">{selectedSchool ? selectedSchool : "No school"}</span>
+            <Link href="/schools">Change school</Link>
+          </>
+        )}
       </div>
     </section>
   );

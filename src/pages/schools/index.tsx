@@ -46,7 +46,6 @@ const SchoolsPage: NextPageWithLayout = () => {
         <Layout>
           <AdminLayout>
             <div className="max-w-[800px]">
-              <h2 className="mb-4 text-3xl">Welcome back, {user?.name}!</h2>
               <article className="grid gap-4 rounded-lg border p-4 shadow">
                 <div className="flex items-baseline justify-between">
                   <p className="text-xl">Your schools</p>
