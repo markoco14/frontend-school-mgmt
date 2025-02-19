@@ -30,8 +30,8 @@ const testsToday: Test[] = [
 
 
 
-const Home: NextPageWithLayout = () => {
-  const { user, selectedSchool, handleSelectSchool } = useUserContext();
+const Schools: NextPageWithLayout = () => {
+  const { user, selectedSchool } = useUserContext();
   const [schools, setSchools] = useState<School[]>([]);
   const date = new Date();
 
@@ -83,16 +83,7 @@ const Home: NextPageWithLayout = () => {
                   ) : (
                     schools?.map((school: School, index: number) => (
                       <li key={index} className="rounded p-2 hover:bg-blue-300">
-                        <button
-                          onClick={() => {
-                            if (!selectedSchool) {
-                              handleSelectSchool(school);
-                            }
-                          }}
-                          className="w-full text-left"
-                        >
-                          {school.name}
-                        </button>
+                        <Link href={`/schools/${school.slug}`}>{school.name}</Link>
                       </li>
                     ))
                   )}
@@ -152,8 +143,8 @@ const Home: NextPageWithLayout = () => {
   );
 };
 
-Home.getLayout = function getLayout(page: ReactElement) {
+Schools.getLayout = function getLayout(page: ReactElement) {
   return <>{page}</>;
 };
 
-export default Home;
+export default Schools;
