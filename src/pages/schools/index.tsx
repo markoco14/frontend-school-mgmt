@@ -9,31 +9,13 @@ import { ReactElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { NextPageWithLayout } from "../_app";
 import ListContainer from "../../modules/core/components/ListContainer";
-import CardContainer from "../../modules/core/components/CardContainer";
-import { Test } from "../../modules/tests/entities/Test";
-
-const testsToday: Test[] = [
-  {
-    id: 1,
-    name: "Level 7 Unit 1 Test 1",
-    teacher: "Mark",
-  },
-  {
-    id: 2,
-    name: "Level 10 Unit 4 Test 2",
-    maxCorrections: 3,
-    allowNoCorrections: true,
-    teacher: "Pei",
-  },
-];
 
 
 
 
-const Schools: NextPageWithLayout = () => {
-  const { user, selectedSchool } = useUserContext();
+const SchoolsPage: NextPageWithLayout = () => {
+  const { user } = useUserContext();
   const [schools, setSchools] = useState<School[]>([]);
-  const date = new Date();
 
   useEffect(() => {
     async function getData() {
@@ -60,7 +42,7 @@ const Schools: NextPageWithLayout = () => {
         </GuestLayout>
       )}
 
-      {user && !selectedSchool && (
+      {user && (
         <Layout>
           <AdminLayout>
             <div className="max-w-[800px]">
@@ -93,58 +75,12 @@ const Schools: NextPageWithLayout = () => {
           </AdminLayout>
         </Layout>
       )}
-
-      {user && selectedSchool && (
-        <Layout>
-          <AdminLayout>
-            <div className="mb-8">
-              <h1 className="mb-1 text-3xl text-gray-700">
-                Today&apos;s Activities
-              </h1>
-              <p>
-                See everything that&apos;s happening on {date.toDateString()}
-              </p>
-            </div>
-            <CardContainer>
-              <div className="mb-4 flex items-baseline justify-between gap-16 p-2">
-                <h2 className="text-xl">Tests</h2>
-                <Link href="/tests" className="text-gray-500">
-                  See all tests
-                </Link>
-              </div>
-              <ListContainer>
-                {testsToday.map((test) => (
-                  <li
-                    key={`test-${test.id}`}
-                    className="grid p-2 hover:bg-blue-300 sm:grid-cols-4"
-                  >
-                    <p className="font-bold">{test.name}</p>
-                    <p>Teacher {test.teacher}</p>
-                    <Link
-                      href={`/tests/do-test/${test.id}`}
-                      className="underline underline-offset-2"
-                    >
-                      Do Test
-                    </Link>
-                    <Link
-                      href={`/tests/review-test/${test.id}`}
-                      className="underline underline-offset-2"
-                    >
-                      Review Test
-                    </Link>
-                  </li>
-                ))}
-              </ListContainer>
-            </CardContainer>
-          </AdminLayout>
-        </Layout>
-      )}
     </>
   );
 };
 
-Schools.getLayout = function getLayout(page: ReactElement) {
+SchoolsPage.getLayout = function getLayout(page: ReactElement) {
   return <>{page}</>;
 };
 
-export default Schools;
+export default SchoolsPage;
