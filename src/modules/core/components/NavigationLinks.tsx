@@ -54,7 +54,7 @@ const NavigationLinks = () => {
                   Staff
                   </Link> */}
               <Link
-                href="/classes/"
+                href={`/schools/${selectedSchool}/classes`}
                 className={`${router.pathname.includes("classes")
                   ? "text-white underline decoration-2 underline-offset-4"
                   : ""
