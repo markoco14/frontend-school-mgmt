@@ -26,7 +26,7 @@ const NavigationLinks = () => {
           {isSchools && selectedSchool && selectedSchool !== "new" && (
             <>
               <Link
-                href="/curriculum/"
+                href={`/schools/${selectedSchool}/curriculum`}
                 className={`${router.pathname.includes("curriculum")
                   ? "text-white underline decoration-2 underline-offset-4"
                   : ""
