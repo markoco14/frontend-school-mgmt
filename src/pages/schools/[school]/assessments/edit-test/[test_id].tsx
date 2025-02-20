@@ -1,19 +1,19 @@
 import Link from "next/link";
 import { ReactElement, useState } from "react";
-import { NextPageWithLayout } from "../../_app";
+import { NextPageWithLayout } from "../../../../_app";
 
+import Drawer from "@/src/components/Drawer";
 import { useUserContext } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import CardContainer from "@/src/modules/core/components/CardContainer";
 import Layout from "@/src/modules/core/components/Layout";
 import Modal from "@/src/modules/core/components/Modal";
 import ReorderListContainer from "@/src/modules/core/components/ReorderListContainer";
+import EditAnswers from "@/src/modules/tests/components/EditAnswers";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import { Reorder } from "framer-motion";
-import NewQuestionForm from "../../../components/edit-tests/NewQuestionForm";
-import Drawer from "@/src/components/Drawer";
-import EditAnswers from "@/src/modules/tests/components/EditAnswers";
+import NewQuestionForm from "../../../../../components/edit-tests/NewQuestionForm";
 
 const currentTest: Test = {
   id: 1,
@@ -106,9 +106,8 @@ const EditTestPage: NextPageWithLayout = () => {
                 <Reorder.Item
                   key={`question-${question.id}`}
                   value={question}
-                  className={`${
-                    question.id === currentQuestion?.id && "bg-blue-200"
-                  } flex justify-between p-2 hover:bg-blue-300`}
+                  className={`${question.id === currentQuestion?.id && "bg-blue-200"
+                    } flex justify-between p-2 hover:bg-blue-300`}
                 >
                   <span>
                     {index + 1}. {question.question}

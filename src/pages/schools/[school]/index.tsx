@@ -8,6 +8,8 @@ import { NextPageWithLayout } from "../../_app";
 import ListContainer from "../../../modules/core/components/ListContainer";
 import CardContainer from "../../../modules/core/components/CardContainer";
 import { Test } from "../../../modules/tests/entities/Test";
+import { getSelectedSchool } from "@/src/utils/getSelectedSchool";
+import { useRouter } from "next/router";
 
 const testsToday: Test[] = [
   {
@@ -28,6 +30,8 @@ const testsToday: Test[] = [
 const SchoolPage: NextPageWithLayout = () => {
   const { user } = useUserContext();
   const date = new Date();
+  const router = useRouter();
+  const selectedSchool = getSelectedSchool(router.asPath);
 
   return (
     <>
@@ -48,7 +52,7 @@ const SchoolPage: NextPageWithLayout = () => {
             <CardContainer>
               <div className="mb-4 flex items-baseline justify-between gap-16 p-2">
                 <h2 className="text-xl">Tests</h2>
-                <Link href="/tests" className="text-gray-500">
+                <Link href={`/schools/${selectedSchool}/assessments`} className="text-gray-500">
                   See all tests
                 </Link>
               </div>
@@ -61,13 +65,13 @@ const SchoolPage: NextPageWithLayout = () => {
                     <p className="font-bold">{test.name}</p>
                     <p>Teacher {test.teacher}</p>
                     <Link
-                      href={`/tests/do-test/${test.id}`}
+                      href={`/schools/${selectedSchool}/assessments/do-test/${test.id}`}
                       className="underline underline-offset-2"
                     >
                       Do Test
                     </Link>
                     <Link
-                      href={`/tests/review-test/${test.id}`}
+                      href={`/schools/${selectedSchool}/assessments/review-test/${test.id}`}
                       className="underline underline-offset-2"
                     >
                       Review Test
