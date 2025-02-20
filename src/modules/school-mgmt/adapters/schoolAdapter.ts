@@ -30,9 +30,11 @@ class SchoolAdapter {
 
   public async addSchool({
     schoolName,
+    slug,
     ownerId,
   }: {
     schoolName: string;
+    slug: string;
     ownerId: number;
   }): Promise<School> {
     const accessToken = Cookie.get("accessToken");
@@ -46,6 +48,7 @@ class SchoolAdapter {
         },
         body: JSON.stringify({
           name: schoolName,
+          slug: slug,
           owner_id: ownerId,
         }),
       },
