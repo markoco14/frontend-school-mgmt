@@ -4,6 +4,8 @@ import TestStartDetails from "@/src/modules/tests/components/TestStartDetails";
 import { Test } from "@/src/modules/tests/entities/Test";
 import { TestQuestion } from "@/src/modules/tests/entities/TestQuestion";
 import { NextPageWithLayout } from "@/src/pages/_app";
+import { getSelectedSchool } from "@/src/utils/getSelectedSchool";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
 
@@ -83,6 +85,9 @@ const DoTestPage: NextPageWithLayout = () => {
   const [isStarted, setIsStarted] = useState<boolean>(false);
   const [isEndPage, setIsEndPage] = useState<boolean>(false);
 
+  const selectedSchool = getSelectedSchool(router.asPath);
+
+
   function previousQuestion() {
     if (currentQuestionIndex - 1 < 0) {
       // check if first index
@@ -142,12 +147,12 @@ const DoTestPage: NextPageWithLayout = () => {
               <>
                 <TestStartDetails test={selectedTest} />
                 <div className="flex gap-4  text-3xl sm:text-5xl ">
-                  <button
+                  <Link
+                    href={`/schools/${selectedSchool}/assessments`}
                     className="rounded p-4 duration-100 ease-in-out hover:-translate-y-2 hover:bg-gray-600 hover:text-white"
-                    onClick={() => router.push("/tests")}
                   >
                     Quit
-                  </button>
+                  </Link>
                   <button
                     className="rounded p-4 underline underline-offset-4 duration-100 ease-in-out hover:-translate-y-2 hover:bg-green-600 hover:text-white"
                     onClick={() => setIsStarted(true)}

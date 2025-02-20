@@ -7,8 +7,10 @@ import Modal from "@/src/modules/core/components/Modal";
 import { Test } from "@/src/modules/tests/entities/Test";
 import Link from "next/link";
 import { ReactElement, useState } from "react";
-import { NextPageWithLayout } from "../_app";
+import { NextPageWithLayout } from "../../../_app";
 import NewTestForm from "./newTestForm";
+import { useRouter } from "next/router";
+import { getSelectedSchool } from "@/src/utils/getSelectedSchool";
 
 const tests: Test[] = [
   {
@@ -38,9 +40,11 @@ const tests: Test[] = [
 ];
 
 const TestHomePage: NextPageWithLayout = () => {
-  const { user, selectedSchool } = useUserContext();
+  const { user } = useUserContext();
   const [testList, setTestList] = useState(tests);
   const [isCreateTest, setIsCreateTest] = useState<boolean>(false);
+  const router = useRouter();
+  const selectedSchool = getSelectedSchool(router.asPath);
 
   function handleClose() {
     setIsCreateTest(false);
@@ -65,7 +69,7 @@ const TestHomePage: NextPageWithLayout = () => {
         <CardContainer>
           <div className="mb-4 p-2">
             <div className="flex justify-between">
-              <h1 className="mb-1 text-3xl">{selectedSchool?.name} Tests</h1>
+              <h1 className="mb-1 text-3xl">{selectedSchool} Tests</h1>
               <button
                 className="rounded border-2 p-2 shadow hover:bg-gray-100 active:bg-gray-200 active:shadow-md"
                 onClick={() => {
@@ -86,8 +90,8 @@ const TestHomePage: NextPageWithLayout = () => {
                 <p>{test.name}</p>
                 {/* Actions */}
                 <div className="flex gap-4">
-                  <Link href={`/tests/do-test/${test.id}`}>Try</Link>
-                  <Link href={`/tests/edit-test/${test.id}`}>Edit</Link>
+                  <Link href={`/schools/${selectedSchool}/assessments/do-test/${test.id}`}>Try</Link>
+                  <Link href={`/schools/${selectedSchool}/assessments/edit-test/${test.id}`}>Edit</Link>
                 </div>
               </li>
             ))}

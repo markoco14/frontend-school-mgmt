@@ -63,6 +63,7 @@ export default function UserContextProvider({
         const decodedUser = jwt_decode<AuthUser>(res.access);
         setUser(decodedUser);
         setToken({ accessToken: res.access, refreshToken: res.refresh });
+        router.push('/schools')
       });
     } catch (error) {
       return error

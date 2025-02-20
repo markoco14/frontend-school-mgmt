@@ -17,7 +17,7 @@ export default function AdminLayout({ children }: LayoutProps) {
         <MobileNavbar />
       </div>
       <div className="w-full h-full">
-					<SchoolHeader />
+        <SchoolHeader />
         <section className="h-full w-full bg-white p-2 sm:px-16 sm:pt-8">
           {children}
         </section>
