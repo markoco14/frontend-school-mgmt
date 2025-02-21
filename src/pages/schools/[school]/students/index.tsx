@@ -104,7 +104,7 @@ const StudentsPage: NextPageWithLayout<StudentsPageProps> = ({ user }) => {
                   {students?.map((student: Student, index) => (
                     <li key={index} className="flex justify-between gap-4">
                       <Link
-                        href={`/students/${student.id}`}
+                        href={`/schools/${selectedSchool}/students/${student.id}`}
                         className="w-full rounded p-2 hover:bg-blue-300"
                       >
                         {student.first_name} {student.last_name}
