@@ -1,5 +1,6 @@
 import { PaginatedStudentResponse } from "@/src/modules/students/entities/PaginatedStudentResponse";
 import { Student } from "@/src/modules/students/entities/Student";
+import Cookie from "js-cookie";
 
 class StudentAdapter {
   //
@@ -46,8 +47,17 @@ class StudentAdapter {
     schoolSlug?: string;
     page: number;
   }): Promise<PaginatedStudentResponse> {
+    const accessToken = Cookie.get("accessToken");
     const res = await fetch(
+
       `${process.env.NEXT_PUBLIC_API_URL}/students/?school=${schoolSlug}&page=${page}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
     const students: PaginatedStudentResponse = await res.json();
 

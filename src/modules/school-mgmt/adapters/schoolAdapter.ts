@@ -58,7 +58,7 @@ class SchoolAdapter {
       const error = await response.json();
       throw new Error(error.detail)
     }
-    
+
     const data = await response.json();
     const school: School = data;
 
