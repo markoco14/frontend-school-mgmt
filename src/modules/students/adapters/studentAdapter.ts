@@ -40,14 +40,14 @@ class StudentAdapter {
   }
 
   public async listSchoolStudents({
-    schoolId,
+    schoolSlug,
     page,
   }: {
-    schoolId?: number;
+    schoolSlug?: string;
     page: number;
   }): Promise<PaginatedStudentResponse> {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/students/?school=${schoolId}&page=${page}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/students/?school=${schoolSlug}&page=${page}`,
     );
     const students: PaginatedStudentResponse = await res.json();
 
