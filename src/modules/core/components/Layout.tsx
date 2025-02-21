@@ -15,7 +15,7 @@ export default function Layout({ children }: LayoutProps) {
         src="https://kit.fontawesome.com/d0c81e3c08.js"
         crossOrigin="anonymous"
       />
-      {!user ? (<main className="box-border min-h-screen flex justify-center"><p>Fetching user data...</p></main>) : (
+      {!user ? (<main className="box-border min-h-screen grid place-content-center"><p>Fetching user data...</p></main>) : (
 
         <main className="box-border min-h-screen">{children}</main>
       )}
