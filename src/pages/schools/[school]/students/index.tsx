@@ -8,7 +8,6 @@ import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
 import RegisterNewStudentModal from "@/src/modules/students/components/RegisterNewStudentModal";
 import { Student } from "@/src/modules/students/entities/Student";
 import { NextPageWithLayout } from "@/src/pages/_app";
-import { getSelectedSchool } from "@/src/utils/getSelectedSchool";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement, useEffect, useState } from "react";
@@ -21,28 +20,31 @@ type StudentsPageProps = {
 const StudentsPage: NextPageWithLayout<StudentsPageProps> = ({ user }) => {
   const [isAddStudent, setIsAddStudent] = useState<boolean>(false);
   const router = useRouter();
-  const selectedSchool = getSelectedSchool(router.asPath);
+  const selectedSchool = router.query.school;
   const [loading, setLoading] = useState<boolean>(false);
 
   const [students, setStudents] = useState<Student[] | null>(null);
-  const [page, setPage] = useState<number>(1);
-  const [isNext, setIsNext] = useState<boolean>(false);
-
+  // const [page, setPage] = useState<number>(1);
+  // const [isNext, setIsNext] = useState<boolean>(false);
 
   useEffect(() => {
     async function getData() {
       setLoading(true);
-      await studentAdapter
-        .listSchoolStudents({ schoolSlug: selectedSchool, page: page })
-        .then((res) => {
-          if (res.next) {
-            setIsNext(true);
-          } else {
-            setIsNext(false);
-          }
 
-          setStudents(res.results);
+      if (!selectedSchool) {
+        return
+      }
+
+      if (typeof selectedSchool !== "string") {
+        return
+      }
+
+      await studentAdapter
+        .listSchoolStudents({ schoolSlug: selectedSchool, page: 1 })
+        .then((response) => {
+          setStudents(response);
         });
+
       setLoading(false);
     }
 
@@ -53,7 +55,7 @@ const StudentsPage: NextPageWithLayout<StudentsPageProps> = ({ user }) => {
         toast.error("Unable to get student data.")
       }
     }
-  }, [user, selectedSchool, page]);
+  }, [user, selectedSchool]);
 
   if (user && user.membership !== "OWNER") {
     return (
@@ -112,7 +114,7 @@ const StudentsPage: NextPageWithLayout<StudentsPageProps> = ({ user }) => {
                     </li>
                   ))}
                 </ListContainer>
-                <div className="flex justify-evenly gap-2">
+                {/* <div className="flex justify-evenly gap-2">
                   <button
                     className="w-full rounded bg-blue-300 px-2 py-1 hover:cursor-pointer hover:disabled:cursor-default disabled:bg-gray-300 disabled:opacity-50"
                     disabled={page === 1}
@@ -124,14 +126,14 @@ const StudentsPage: NextPageWithLayout<StudentsPageProps> = ({ user }) => {
                   </button>
                   <button
                     className="w-full rounded bg-blue-300 px-2 py-1 hover:cursor-pointer hover:disabled:cursor-default disabled:bg-gray-300 disabled:opacity-50"
-                    disabled={!isNext}
+                    // disabled={!isNext}
                     onClick={() => {
                       setPage((prevPage) => prevPage + 1);
                     }}
                   >
                     <i className="fa-solid fa-arrow-right"></i>
                   </button>
-                </div>
+                </div> */}
               </article>
             )}
           </section>

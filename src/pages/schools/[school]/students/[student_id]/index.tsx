@@ -6,35 +6,15 @@ import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
 import { Student } from "@/src/modules/students/entities/Student";
 import { NextPageWithLayout } from "@/src/pages/_app";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-const StudentPhoto = ({ student }: { student: Student }) => {
-  return (
-    <section className="flex items-center gap-4 border shadow sm:grid">
-      <div className="relative h-24 w-24 sm:aspect-square sm:h-full sm:w-full">
-        <Image
-          src={student ? student.photo_url : ""}
-          alt={`An image of ${student.first_name}`}
-          fill={true}
-          sizes="(max-width: 768px) 25vw, (max-width: 1200px) 20vw"
-          style={{ objectFit: "cover" }}
-        />
-      </div>
-      <article className="sm:mb-4">
-        <p className="text-center text-2xl">
-          {student.first_name} {student.last_name}
-        </p>
-      </article>
-    </section>
-  );
-};
-
 type StudentShowPageProps = {
   user: AuthUser | null;
-  student: Student | null; // server side prop
-  error: string | null; // server side prop
+  student: Student | null;
+  error: string | null;
 }
 
 const StudentShowPage: NextPageWithLayout<StudentShowPageProps> = ({ user }) => {
@@ -43,25 +23,32 @@ const StudentShowPage: NextPageWithLayout<StudentShowPageProps> = ({ user }) => 
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const studentID = router.query.student_id
+  const selectedSchool = router.query.school ? router.query.school : null
 
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     async function getData() {
       setLoading(true);
       try {
-        await studentAdapter
-          .getStudentByID({ id: Number(studentID) })
-          .then((res) => {
-            setStudent(res)
-          })
+        const response = await studentAdapter
+          .getStudentByID({ id: Number(studentID), signal })
+        setStudent(response)
+        setLoading(false)
       } catch (error) {
+        if (signal.aborted) {
+          return
+        }
+
         if (error instanceof (Error)) {
           setError(error.message)
+          setLoading(false)
         } else {
           setError("No student found.")
+          setLoading(false)
         }
-      } finally {
-        setLoading(false)
       }
     }
 
@@ -71,6 +58,10 @@ const StudentShowPage: NextPageWithLayout<StudentShowPageProps> = ({ user }) => 
       } catch (error) {
         toast.error("Unable to get student data.")
       }
+    }
+
+    return () => {
+      controller.abort();
     }
   }, [studentID])
 
@@ -88,24 +79,47 @@ const StudentShowPage: NextPageWithLayout<StudentShowPageProps> = ({ user }) => 
     <Layout>
       <AdminLayout>
         <div className="h-full w-full bg-white">
+          <Link href={`/schools/${selectedSchool}/students`} className="inline-block p-2 rounded-md border mb-4">Back</Link>
           {loading ? (
-            <p>loading</p>
+            <>
+              <section className="flex justify-center sm:justify-start mb-4">
+                <div className="h-[100px] aspect-square bg-gray-300 animate-pulse rounded-md">
+                  
+                </div>
+              </section>
+              <section className="grid divide-y divide-white">
+                <h2 className="text-xl font-semibold bg-gray-200 animate-pulse rounded-md h-[28px]"></h2>
+                <p className="bg-gray-200 animate-pulse rounded-md h-[24px]"></p>
+                <p className="bg-gray-200 animate-pulse rounded-md h-[24px]"></p>
+              </section>
+            </>
           ) : !student ? (
-                <article className="rounded border p-4 shadow">
-                  <p>{error}</p>
-                </article>
+            <p>{error}</p>
           ) : (
-
-            <div className="grid max-w-[1000px] gap-4 sm:grid-cols-8">
-              <div className="sm:col-span-2">
-                <StudentPhoto student={student} />
-              </div>
-              <div className="flex flex-col gap-4 sm:col-span-6">
-                <section className="rounded border p-2 shadow">
-                  <p>A wonderful student with lots of potential.</p>
-                </section>
-              </div>
-            </div>
+            <>
+              <section className="flex justify-center sm:justify-start mb-4">
+                <div className="h-[100px] aspect-square">
+                  {student.photo_url ? (
+                    <Image
+                      src={student ? student.photo_url : ""}
+                      alt={`An image of ${student.first_name}`}
+                      // fill={true}
+                      width={250}
+                      height={250}
+                      style={{ objectFit: "cover" }}
+                      className="rounded-md"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-300 rounded-md"></div>
+                  )}
+                </div>
+              </section>
+              <section className="">
+                <h2 className="text-xl font-semibold">{student.first_name} {student.last_name}</h2>
+                <p>Age: {student.age}</p>
+                <p>Gender: {student.gender === 0 ? "Male" : "Female"}</p>
+              </section>
+            </>
           )}
         </div>
       </AdminLayout>

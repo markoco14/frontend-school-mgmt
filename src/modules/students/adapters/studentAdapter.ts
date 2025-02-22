@@ -46,7 +46,7 @@ class StudentAdapter {
   }: {
     schoolSlug?: string;
     page: number;
-  }): Promise<PaginatedStudentResponse> {
+  }): Promise<Student[]> {
     const accessToken = Cookie.get("accessToken");
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/students/?school=${schoolSlug}&page=${page}`,
@@ -58,7 +58,7 @@ class StudentAdapter {
         },
       }
     );
-    const students: PaginatedStudentResponse = await res.json();
+    const students = await res.json();
 
     return students;
   }
@@ -72,7 +72,7 @@ class StudentAdapter {
     return students;
   }
 
-  public async getStudentByID({ id }: { id: number }): Promise<Student> {
+  public async getStudentByID({ id, signal }: { id: number; signal: AbortSignal }): Promise<Student> {
     const accessToken = Cookie.get("accessToken");
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/students/${id}/`,
@@ -81,7 +81,8 @@ class StudentAdapter {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json"
-        }
+        },
+        signal
       }
     );
 
