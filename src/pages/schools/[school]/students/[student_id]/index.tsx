@@ -25,7 +25,6 @@ const StudentShowPage: NextPageWithLayout<StudentShowPageProps> = ({ user }) => 
   const studentID = router.query.student_id
   const selectedSchool = router.query.school ? router.query.school : null
 
-
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -99,11 +98,10 @@ const StudentShowPage: NextPageWithLayout<StudentShowPageProps> = ({ user }) => 
             <>
               <section className="flex justify-center sm:justify-start mb-4">
                 <div className="h-[100px] aspect-square">
-                  {student.photo_url ? (
+                  {student.photoUrl ? (
                     <Image
-                      src={student ? student.photo_url : ""}
-                      alt={`An image of ${student.first_name}`}
-                      // fill={true}
+                      src={student ? student.photoUrl : ""}
+                      alt={`An image of ${student.firstName}`}
                       width={250}
                       height={250}
                       style={{ objectFit: "cover" }}
@@ -115,7 +113,7 @@ const StudentShowPage: NextPageWithLayout<StudentShowPageProps> = ({ user }) => 
                 </div>
               </section>
               <section className="">
-                <h2 className="text-xl font-semibold">{student.first_name} {student.last_name}</h2>
+                <h2 className="text-xl font-semibold">{student.firstName} {student.lastName}</h2>
                 <p>Age: {student.age}</p>
                 <p>Gender: {student.gender === 0 ? "Male" : "Female"}</p>
               </section>

@@ -1,6 +1,6 @@
-import { PaginatedStudentResponse } from "@/src/modules/students/entities/PaginatedStudentResponse";
 import { Student } from "@/src/modules/students/entities/Student";
 import Cookie from "js-cookie";
+import { NewStudent } from "../entities/NewStudent";
 
 class StudentAdapter {
   //
@@ -99,35 +99,25 @@ class StudentAdapter {
   }
 
   public async addStudent({
-    firstName,
-    lastName,
-    age,
-    schoolId,
-    gender,
-    photo_url,
+    newStudent
   }: {
-    firstName: string;
-    lastName: string;
-    age: number;
-    schoolId: number;
-    gender: number;
-    photo_url: string;
+    newStudent: NewStudent;
   }): Promise<Student> {
+    const accessToken = Cookie.get("accessToken");
+
+    if (!accessToken) {
+      throw new Error("No access token.")
+    }
+
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/students/`,
+      `${process.env.NEXT_PUBLIC_API_URL}/students/new`,
       {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          first_name: firstName,
-          last_name: lastName,
-          age: age,
-          school_id: schoolId,
-          gender: gender,
-          photo_url: photo_url,
-        }),
+        body: JSON.stringify(newStudent),
       },
     );
 

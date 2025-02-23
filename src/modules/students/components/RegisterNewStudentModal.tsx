@@ -1,9 +1,9 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-import { useUserContext } from "@/src/contexts/UserContext";
 import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
 import { Student } from "@/src/modules/students/entities/Student";
+import { NewStudent } from "../entities/NewStudent";
 
 type Inputs = {
   firstName: string;
@@ -13,11 +13,12 @@ type Inputs = {
 };
 
 export default function RegisterNewStudentModal({
+  selectedSchool,
   setStudents,
 }: {
+  selectedSchool: string;
   setStudents: Function;
 }) {
-  const { selectedSchool } = useUserContext();
 
   const {
     reset,
@@ -27,35 +28,30 @@ export default function RegisterNewStudentModal({
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    let gender = Number(data.gender);
-    let male =
-      "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_3.jpeg";
-    let female =
-      "https://storage.googleapis.com/twle-445f4.appspot.com/images/student_4.jpeg";
-  
+    const newStudent = new NewStudent(
+      data.firstName,
+      data.lastName,
+      data.age,
+      data.gender,
+      selectedSchool
+    )
 
     try {
       const student: Student = await studentAdapter.addStudent({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        age: Number(data.age),
-        gender: Number(data.gender),
-        photo_url: gender === 1 ? female : male,
-        schoolId: Number(selectedSchool?.id),
+        newStudent: newStudent
       });
       toast.success("Student added.");
       setStudents((prevStudents: Student[]) =>
         [...prevStudents, student]
           .sort((a: Student, b: Student) => {
-            if (a.last_name < b.last_name) {
+            if (a.lastName < b.lastName) {
               return -1;
             }
-            if (a.last_name > b.last_name) {
+            if (a.lastName > b.lastName) {
               return 1;
             }
             return 0;
-          })
-          .slice(0, 10),
+          }),
       );
       reset();
     } catch (error) {
