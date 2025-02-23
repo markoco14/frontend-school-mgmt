@@ -1,9 +1,9 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
 import { Student } from "@/src/modules/students/entities/Student";
 import { NewStudent } from "../entities/NewStudent";
+import addStudent from "@/src/modules/students/requests/addStudent";
 
 type Inputs = {
   firstName: string;
@@ -37,7 +37,7 @@ export default function RegisterNewStudentModal({
     )
 
     try {
-      const student: Student = await studentAdapter.addStudent({
+      const student: Student = await addStudent({
         newStudent: newStudent
       });
       toast.success("Student added.");
