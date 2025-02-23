@@ -14,7 +14,7 @@ export default function StudentList(props: Props) {
 					key={index}
 					className="p-2 rounded-md hover:bg-blue-200 flex justify-between"
 				>
-					{student.first_name} {student.last_name}
+					{student.firstName} {student.lastName}
 				</li>
 			))}
 		</ListContainer>
