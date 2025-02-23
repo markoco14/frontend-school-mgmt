@@ -1,7 +1,6 @@
 import { useUserContext } from "@/src/contexts/UserContext";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
-import PaginationButtons from "@/src/modules/core/components/PaginationButtons";
 import { levelAdapter } from "@/src/modules/curriculum/adapters/levelAdapter";
 import { schoolDayAdapter } from "@/src/modules/schedule/adapters/schoolDayAdapter";
 import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
@@ -20,12 +19,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
   const { user, selectedSchool } = useUserContext();
   const [levels, setLevels] = useState<Level[]>([]);
   const [days, setDays] = useState<SchoolDay[]>([]);
-  const [page, setPage] = useState<number>(1);
 
-  // eslint-disable-next-line no-unused-vars
-  const [next, setNext] = useState<boolean>(false);
-  // eslint-disable-next-line no-unused-vars
-  const [count, setCount] = useState<number>(0);
   const {
     reset,
     register,
@@ -77,7 +71,7 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
         toast.error("Unable to get level and schedule data.")
       }
     }
-  }, [user, selectedSchool, page]);
+  }, [user, selectedSchool]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
@@ -121,12 +115,6 @@ export default function AddClass({ setClasses }: { setClasses: Function }) {
             Level is required
           </p>
         )}
-        <PaginationButtons
-          count={count}
-          page={page}
-          setPage={setPage}
-          next={next}
-        />
       </div>
       <div className="grid gap-2">
         <p>Days of Week</p>

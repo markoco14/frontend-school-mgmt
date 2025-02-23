@@ -13,7 +13,7 @@ export default function Layout({ children }: LayoutProps) {
         src="https://kit.fontawesome.com/d0c81e3c08.js"
         crossOrigin="anonymous"
       />
-      <main className="box-border min-h-screen">{children}</main>
+        <main className="box-border min-h-screen">{children}</main>
     </>
   );
 }

@@ -1,76 +1,74 @@
-import { useUserContext } from "@/src/contexts/UserContext";
+import { AuthUser } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
-import GuestLayout from "@/src/modules/core/components/GuestLayout";
 import Layout from "@/src/modules/core/components/Layout";
-import ParamsPageTabNav from "@/src/modules/core/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
 import { Student } from "@/src/modules/students/entities/Student";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { NextPageWithLayout } from "@/src/pages/_app";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
+import { ReactElement, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-const StudentPhoto = ({ student }: { student: Student }) => {
-  return (
-    <section className="flex items-center gap-4 border shadow sm:grid">
-      <div className="relative h-24 w-24 sm:aspect-square sm:h-full sm:w-full">
-        <Image
-          src={student ? student.photo_url : ""}
-          alt={`An image of ${student.first_name}`}
-          fill={true}
-          sizes="(max-width: 768px) 25vw, (max-width: 1200px) 20vw"
-          style={{ objectFit: "cover" }}
-        />
-      </div>
-      <article className="sm:mb-4">
-        <p className="text-center text-2xl">
-          {student.first_name} {student.last_name}
-        </p>
-      </article>
-    </section>
-  );
-};
+type StudentShowPageProps = {
+  user: AuthUser | null;
+  student: Student | null;
+  error: string | null;
+}
 
-export const getServerSideProps: GetServerSideProps<{
-  student: Student;
-}> = async (context) => {
-  const id = Number(context.query.student_id);
-  const student = await studentAdapter.getStudent({ id: id });
+const StudentShowPage: NextPageWithLayout<StudentShowPageProps> = ({ user }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [student, setStudent] = useState<Student | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const studentID = router.query.student_id
+  const selectedSchool = router.query.school ? router.query.school : null
 
-  return { props: { student } };
-};
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
 
-export default function Home({
-  student,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { user } = useUserContext();
-  const searchParams = useSearchParams();
-  const tab = searchParams.get("tab") || "profile";
+    async function getData() {
+      setLoading(true);
+      try {
+        const response = await studentAdapter
+          .getStudentByID({ id: Number(studentID), signal })
+        setStudent(response)
+        setLoading(false)
+      } catch (error) {
+        if (signal.aborted) {
+          return
+        }
 
-  const links = [
-    {
-      value: 1,
-      name: "Profile",
-      urlString: "profile",
-    },
-  ];
+        if (error instanceof (Error)) {
+          setError(error.message)
+          setLoading(false)
+        } else {
+          setError("No student found.")
+          setLoading(false)
+        }
+      }
+    }
 
-  if (!user) {
-    return (
-      <GuestLayout>
-        <p>You don&apos;t have permission to access this page.</p>
-      </GuestLayout>
-    )
-  }
+    if (studentID) {
+      try {
+        getData()
+      } catch (error) {
+        toast.error("Unable to get student data.")
+      }
+    }
 
-  if (user.role === "TEACHER") {
+    return () => {
+      controller.abort();
+    }
+  }, [studentID])
+
+  if (user && user.membership !== "OWNER") {
     return (
       <Layout>
         <AdminLayout>
-          <div className="h-full w-full bg-white">
-            <PermissionDenied />
-          </div>
+          <PermissionDenied />
         </AdminLayout>
       </Layout>
     );
@@ -80,26 +78,55 @@ export default function Home({
     <Layout>
       <AdminLayout>
         <div className="h-full w-full bg-white">
-          <Link href="/students">Back</Link>
-          <div className="grid max-w-[1000px] gap-4 sm:grid-cols-8">
-            <div className="sm:col-span-2">
-              <StudentPhoto student={student} />
-            </div>
-            <div className="flex flex-col gap-4 sm:col-span-6">
-              <ParamsPageTabNav
-                queryParam={student.id}
-                links={links}
-                tab={tab}
-              />
-              {tab === "profile" && (
-                <section className="rounded border p-2 shadow">
-                  <h2>Profile</h2>
-                </section>
-              )}
-            </div>
-          </div>
+          <Link href={`/schools/${selectedSchool}/students`} className="inline-block p-2 rounded-md border mb-4">Back</Link>
+          {loading ? (
+            <>
+              <section className="flex justify-center sm:justify-start mb-4">
+                <div className="h-[100px] aspect-square bg-gray-300 animate-pulse rounded-md">
+                  
+                </div>
+              </section>
+              <section className="grid divide-y divide-white">
+                <h2 className="text-xl font-semibold bg-gray-200 animate-pulse rounded-md h-[28px]"></h2>
+                <p className="bg-gray-200 animate-pulse rounded-md h-[24px]"></p>
+                <p className="bg-gray-200 animate-pulse rounded-md h-[24px]"></p>
+              </section>
+            </>
+          ) : !student ? (
+            <p>{error}</p>
+          ) : (
+            <>
+              <section className="flex justify-center sm:justify-start mb-4">
+                <div className="h-[100px] aspect-square">
+                  {student.photoUrl ? (
+                    <Image
+                      src={student ? student.photoUrl : ""}
+                      alt={`An image of ${student.firstName}`}
+                      width={250}
+                      height={250}
+                      style={{ objectFit: "cover" }}
+                      className="rounded-md"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-300 rounded-md"></div>
+                  )}
+                </div>
+              </section>
+              <section className="">
+                <h2 className="text-xl font-semibold">{student.firstName} {student.lastName}</h2>
+                <p>Age: {student.age}</p>
+                <p>Gender: {student.gender === 0 ? "Male" : "Female"}</p>
+              </section>
+            </>
+          )}
         </div>
       </AdminLayout>
     </Layout>
   );
 }
+
+StudentShowPage.getLayout = function getLayout(page: ReactElement) {
+  return <>{page}</>
+}
+
+export default StudentShowPage;

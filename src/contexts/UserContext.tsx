@@ -16,7 +16,7 @@ type UserContextProviderProps = {
   children: React.ReactNode; // not allowed: React.ReactNode
 };
 
-type AuthUser = {
+export type AuthUser = {
   name: string;
   user_id: number;
   role: string;
@@ -100,8 +100,9 @@ export default function UserContextProvider({
       }
     };
 
-    const tenSeconds = 1000 * 10;
+    // const tenSeconds = 1000 * 10;
     // const tenMinutes = 1000 * 60 * 10;
+    const oneHour = 1000 * 60 * 60;
     if (!user) {
       const accessToken = getToken("accessToken");
 
@@ -139,7 +140,7 @@ export default function UserContextProvider({
         } else {
           logoutOnFailedUpdate();
         }
-      }, tenSeconds);
+      }, oneHour);
       return () => clearInterval(interval);
     }
   }, [user, router]);
