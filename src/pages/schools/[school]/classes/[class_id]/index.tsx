@@ -1,6 +1,5 @@
 import { useUserContext } from "@/src/contexts/UserContext";
 import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
-import ManageClassStudents from "@/src/modules/classes/components/class-students/ManageClassStudents";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import GuestLayout from "@/src/modules/core/components/GuestLayout";
@@ -78,15 +77,10 @@ export default function ManageClassDetails({
                 tab={tab}
                 queryParam={classEntity.id}
               />
-              {tab === "class info" ? (
+          
                 <article className="col-span-1 rounded border p-2 shadow md:row-span-2">
                   <p>Class info goes here.</p>
                 </article>
-              ) :  (
-                <article className="col-span-1 md:row-span-2">
-                  <ManageClassStudents selectedClass={selectedClass} />
-                </article>
-              )}
             </div>
           </section>
         </div>
