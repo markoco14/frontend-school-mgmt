@@ -3,12 +3,11 @@ import { StudentAttendance } from "@/src/modules/attendance/entities/StudentAtte
 export class Student {
   constructor(
     public id: number,
-    public first_name: string,
-    public last_name: string,
+    public firstName: string,
+    public lastName: string,
     public age: number,
     public gender: number,
-    public photo_url: string,
-    public school_id: number,
-    public attendance_for_day?: StudentAttendance,
+    public photoUrl: string,
+    public schoolID: number,
   ) {}
 }
