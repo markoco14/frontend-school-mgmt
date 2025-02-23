@@ -87,9 +87,7 @@ class StudentAdapter {
     );
 
     if (!res.ok) {
-      // console.log(res)
       const error = await res.json();
-      console.log(error)
       throw new Error(error.detail) 
     }
 
