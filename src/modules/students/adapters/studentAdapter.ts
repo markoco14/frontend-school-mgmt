@@ -12,12 +12,10 @@ class StudentAdapter {
   public async list({
     classEntityId,
     date,
-    attendance,
     schoolId,
   }: {
     classEntityId?: number;
     date?: string;
-    attendance?: boolean;
     schoolId?: number;
   }): Promise<Student[]> {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/students/`;
@@ -27,8 +25,6 @@ class StudentAdapter {
     if (classEntityId)
       queryParams.push(`class_entity=${encodeURIComponent(classEntityId)}`);
     if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
-    if (attendance)
-      queryParams.push(`attendance=${encodeURIComponent(attendance)}`);
 
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;
@@ -147,11 +143,9 @@ class StudentAdapter {
   public async listStudentsPresentToday({
     classEntityId,
     date,
-    attendance,
   }: {
     classEntityId: number;
     date?: string;
-    attendance?: boolean;
   }): Promise<Student[]> {
     let url;
     url = `${process.env.NEXT_PUBLIC_API_URL}/students-here-today/`;
@@ -160,8 +154,6 @@ class StudentAdapter {
     if (classEntityId)
       queryParams.push(`class_entity=${encodeURIComponent(classEntityId)}`);
     if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
-    if (attendance)
-      queryParams.push(`attendance=${encodeURIComponent(attendance)}`);
 
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;
@@ -192,8 +184,6 @@ class StudentAdapter {
       queryParams.push(`class_entity=${encodeURIComponent(classId)}`);
     if (date) queryParams.push(`date=${encodeURIComponent(date)}`);
     if (present) queryParams.push(`present=${encodeURIComponent(present)}`);
-    // if (attendance)
-    //   queryParams.push(`attendance=${encodeURIComponent(attendance)}`);
 
     if (queryParams.length) {
       url += `?${queryParams.join("&")}`;
