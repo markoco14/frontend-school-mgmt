@@ -9,5 +9,6 @@ export class Student {
     public gender: number,
     public photoUrl: string,
     public schoolID: number,
+    public attendance_for_day?: StudentAttendance,
   ) {}
 }
