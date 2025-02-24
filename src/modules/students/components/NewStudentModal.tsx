@@ -1,6 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
+import { Spinner } from "@/src/components/ui/spinner";
 import { School } from "@/src/modules/schools/entities/School";
 import getSchoolBySlug from "@/src/modules/schools/requests/getSchoolBySlug";
 import { Student } from "@/src/modules/students/entities/Student";
@@ -86,12 +87,12 @@ export default function RegisterNewStudentModal({
   }, [])
 
   return (
-
     loading ? (
-      <p>loading</p>
+      <div className="min-h-[300px] grid place-content-center">
+        <Spinner color={"blue"} />
+      </div>
     ) : (
-
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="min-h-[300px]">
         <div className="mb-4 flex flex-col">
           <label className="mb-2">First Name</label>
           <input
@@ -160,6 +161,5 @@ export default function RegisterNewStudentModal({
         </button>
       </form >
     )
-
   );
 }
