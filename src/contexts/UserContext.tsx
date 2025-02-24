@@ -2,12 +2,12 @@ import jwt_decode from "jwt-decode";
 import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { jwtAdapter } from "../modules/auth/adapters/jwtAdapter";
-import { School } from "../modules/school-mgmt/entities/School";
+import { jwtAdapter } from "@/src/modules/auth/adapters/jwtAdapter";
+import { School } from "@/src/modules/schools/entities/School";
 import {
   getToken,
-  isValidToken,
   isTokenExpiredUtil,
+  isValidToken,
   removeToken,
   setToken,
 } from "../utils/tokenUtils";

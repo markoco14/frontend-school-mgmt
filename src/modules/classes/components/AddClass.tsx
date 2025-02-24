@@ -1,13 +1,13 @@
 import { useUserContext } from "@/src/contexts/UserContext";
-import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
+import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { levelAdapter } from "@/src/modules/curriculum/adapters/levelAdapter";
+import { Level } from "@/src/modules/curriculum/entities/Level";
 import { schoolDayAdapter } from "@/src/modules/schedule/adapters/schoolDayAdapter";
-import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
+import { SchoolDay } from "@/src/modules/schools/entities/SchoolDay";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Level } from "@/src/modules/curriculum/entities/Level";
 
 type Inputs = {
   className: string;

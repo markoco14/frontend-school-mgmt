@@ -1,5 +1,5 @@
-import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
-import ListContainer from "../../core/components/ListContainer";
+import { SchoolDay } from "@/src/modules/schools/entities/SchoolDay";
+import ListContainer from "@/src/modules/core/components/ListContainer";
 
 const SchoolDayList = ({
   schoolDays,

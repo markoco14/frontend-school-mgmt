@@ -1,8 +1,8 @@
 import { useUserContext } from "@/src/contexts/UserContext";
 import { schoolDayAdapter } from "@/src/modules/schedule/adapters/schoolDayAdapter";
 import SchoolDayList from "@/src/modules/schedule/components/SchoolDayList";
-import AddSchoolDay from "@/src/modules/school-mgmt/components/AddSchoolDay";
-import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
+import AddSchoolDay from "@/src/modules/schools/components/AddSchoolDay";
+import { SchoolDay } from "@/src/modules/schools/entities/SchoolDay";
 import { removeListItemById } from "@/src/utils/removeListItem";
 import Link from "next/link";
 import { useEffect, useState } from "react";

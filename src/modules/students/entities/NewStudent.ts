@@ -5,6 +5,6 @@ export class NewStudent {
     public lastName: string,
     public age: number,
     public gender: number,
-    public schoolSlug: string,
+    public schoolID: number,
   ) {}
 }

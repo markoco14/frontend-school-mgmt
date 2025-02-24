@@ -5,7 +5,7 @@ import ListContainer from "@/src/modules/core/components/ListContainer";
 import Modal from "@/src/modules/core/components/Modal";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import { studentAdapter } from "@/src/modules/students/adapters/studentAdapter";
-import RegisterNewStudentModal from "@/src/modules/students/components/RegisterNewStudentModal";
+import RegisterNewStudentModal from "@/src/modules/students/components/NewStudentModal";
 import { Student } from "@/src/modules/students/entities/Student";
 import { NextPageWithLayout } from "@/src/pages/_app";
 import Link from "next/link";

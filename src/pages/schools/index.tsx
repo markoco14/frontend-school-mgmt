@@ -1,8 +1,8 @@
 import { AuthUser } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
-import { schoolAdapter } from "@/src/modules/school-mgmt/adapters/schoolAdapter";
-import { School } from "@/src/modules/school-mgmt/entities/School";
+import { schoolAdapter } from "@/src/modules/schools/adapters/schoolAdapter";
+import { School } from "@/src/modules/schools/entities/School";
 import Link from "next/link";
 import { ReactElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
