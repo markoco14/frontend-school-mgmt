@@ -2,7 +2,7 @@ import { useUserContext } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
-import { schoolAdapter } from "@/src/modules/school-mgmt/adapters/schoolAdapter";
+import { schoolAdapter } from "@/src/modules/schools/adapters/schoolAdapter";
 import { useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 
@@ -20,7 +20,7 @@ export default function Add() {
     if (nameInputRef.current.value === "") {
       toast("You need to give your school a name.");
     }
-    
+
     if (urlInputRef.current.value === "") {
       toast("You need to give your school a unique URL.");
     }

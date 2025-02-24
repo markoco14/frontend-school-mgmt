@@ -3,7 +3,7 @@ import Modal from "@/src/modules/core/components/Modal";
 import { scheduleAdapter } from "@/src/modules/schedule/adapters/scheduleAdapter";
 import { schoolDayAdapter } from "@/src/modules/schedule/adapters/schoolDayAdapter";
 import { WeekDay } from "@/src/modules/schedule/entities/WeekDay";
-import { SchoolDay } from "@/src/modules/school-mgmt/entities/SchoolDay";
+import { SchoolDay } from "@/src/modules/schools/entities/SchoolDay";
 import { addListItem } from "@/src/utils/addListItem";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -93,11 +93,10 @@ export default function AddSchoolDay({
                   handleAddSchoolDay({ weekday: weekday });
                 }}
                 disabled={checkWeekDayInSchoolDays({ weekday: weekday })}
-                className={`${
-                  checkWeekDayInSchoolDays({ weekday: weekday })
+                className={`${checkWeekDayInSchoolDays({ weekday: weekday })
                     ? "bg-blue-300 hover:cursor-not-allowed"
                     : "hover:cursor-pointer hover:bg-blue-300"
-                } w-full rounded p-2 text-left`}
+                  } w-full rounded p-2 text-left`}
               >
                 {weekday.day}
               </button>
