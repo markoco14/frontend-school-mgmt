@@ -1,9 +1,12 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
+import { School } from "@/src/modules/schools/entities/School";
+import getSchoolBySlug from "@/src/modules/schools/requests/getSchoolBySlug";
 import { Student } from "@/src/modules/students/entities/Student";
-import { NewStudent } from "../entities/NewStudent";
 import addStudent from "@/src/modules/students/requests/addStudent";
+import { useEffect, useState } from "react";
+import { NewStudent } from "../entities/NewStudent";
 
 type Inputs = {
   firstName: string;
@@ -19,6 +22,8 @@ export default function RegisterNewStudentModal({
   selectedSchool: string;
   setStudents: Function;
 }) {
+  const [school, setSchool] = useState<School | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     reset,
@@ -28,12 +33,17 @@ export default function RegisterNewStudentModal({
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (!school) {
+      toast.error("No school data. Please close the form and try again.")
+      return
+    }
+
     const newStudent = new NewStudent(
       data.firstName,
       data.lastName,
       data.age,
       data.gender,
-      selectedSchool
+      school?.id
     )
 
     try {
@@ -59,72 +69,97 @@ export default function RegisterNewStudentModal({
     }
   };
 
+  useEffect(() => {
+    async function getData() {
+      setLoading(true)
+      try {
+        const school = await getSchoolBySlug(selectedSchool);
+        setSchool(school)
+      } catch (error) {
+        toast.error("Unable to get school data. Please try again.")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    getData()
+  }, [])
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-4 flex flex-col">
-        <label className="mb-2">First Name</label>
-        <input
-          className="rounded px-1 py-2 shadow"
-          type="text"
-          {...register("firstName", {
-            required: true,
-            minLength: 2,
-            maxLength: 50,
-          })}
-        />
-        {errors.firstName?.type === "required" && (
-          <p role="alert" className="mt-2 text-red-500">
-            First name is required
-          </p>
-        )}
-      </div>
-      <div className="mb-4 flex flex-col">
-        <label className="mb-2">Last Name</label>
-        <input
-          className="rounded px-1 py-2 shadow"
-          type="text"
-          {...register("lastName", {
-            required: true,
-            minLength: 1,
-            maxLength: 50,
-          })}
-        />
-        {errors.lastName?.type === "required" && (
-          <p role="alert" className="mt-2 text-red-500">
-            Last name is required
-          </p>
-        )}
-      </div>
-      <div className="mb-4 flex flex-col">
-        <label className="mb-2">Age</label>
-        <input
-          className="rounded px-1 py-2 shadow"
-          type="number"
-          {...register("age", { required: true, min: 1, max: 100 })}
-        />
-        {errors.age?.type === "required" && (
-          <p role="alert" className="mt-2 text-red-500">
-            Age is required
-          </p>
-        )}
-      </div>
-      <div className="mb-4 flex flex-col">
-        <label className="mb-2">Gender</label>
-        <select
-          {...register("gender", { required: true })}
-        >
-          <option value="0">Boy</option>
-          <option value="1">Girl</option>
-        </select>
-        {errors.gender?.type === "required" && (
-          <p role="alert" className="mt-2 text-red-500">
-            Gender is required
-          </p>
-        )}
-      </div>
-      <button className="rounded bg-blue-300 px-4 py-1 text-blue-900 hover:bg-blue-500 hover:text-white">
-        Add
-      </button>
-    </form>
+
+    loading ? (
+      <p>loading</p>
+    ) : (
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-4 flex flex-col">
+          <label className="mb-2">First Name</label>
+          <input
+            className="rounded px-1 py-2 shadow"
+            type="text"
+            {...register("firstName", {
+              required: true,
+              minLength: 2,
+              maxLength: 50,
+            })}
+          />
+          {
+            errors.firstName?.type === "required" && (
+              <p role="alert" className="mt-2 text-red-500">
+                First name is required
+              </p>
+            )
+          }
+        </div >
+        <div className="mb-4 flex flex-col">
+          <label className="mb-2">Last Name</label>
+          <input
+            className="rounded px-1 py-2 shadow"
+            type="text"
+            {...register("lastName", {
+              required: true,
+              minLength: 1,
+              maxLength: 50,
+            })}
+          />
+          {errors.lastName?.type === "required" && (
+            <p role="alert" className="mt-2 text-red-500">
+              Last name is required
+            </p>
+          )}
+        </div>
+        <div className="mb-4 flex flex-col">
+          <label className="mb-2">Age</label>
+          <input
+            className="rounded px-1 py-2 shadow"
+            type="number"
+            {...register("age", { required: true, min: 1, max: 100 })}
+          />
+          {errors.age?.type === "required" && (
+            <p role="alert" className="mt-2 text-red-500">
+              Age is required
+            </p>
+          )}
+        </div>
+        <div className="mb-4 flex flex-col">
+          <label className="mb-2">Gender</label>
+          <select
+            {...register("gender", { required: true })}
+          >
+            <option value="0">Boy</option>
+            <option value="1">Girl</option>
+          </select>
+          {errors.gender?.type === "required" && (
+            <p role="alert" className="mt-2 text-red-500">
+              Gender is required
+            </p>
+          )}
+        </div>
+        <button className="rounded bg-blue-300 px-4 py-1 text-blue-900 hover:bg-blue-500 hover:text-white">
+          Add
+        </button>
+      </form >
+    )
+
   );
 }
