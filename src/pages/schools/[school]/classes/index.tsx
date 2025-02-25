@@ -1,5 +1,5 @@
 import { AuthUser } from "@/src/contexts/UserContext";
-import AddClass from "@/src/modules/classes/components/AddClass";
+import AddClassModal from "@/src/modules/classes/components/AddClassModal";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import listClasses from "@/src/modules/classes/requests/listClasses";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
@@ -133,7 +133,7 @@ const ClassesPage: NextPageWithLayout<ClassesPageProps> = ({ user }) => {
               )}
             </div>
             <Modal show={isAddClass} close={handleClose} title="Add Class">
-              <AddClass setClasses={setClasses} />
+              <AddClassModal schoolSlug={selectedSchool} setClasses={setClasses} />
             </Modal>
           </section>
         </div>
