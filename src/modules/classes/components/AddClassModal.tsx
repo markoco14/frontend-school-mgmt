@@ -1,25 +1,24 @@
 import { Spinner } from "@/src/components/ui/spinner";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
 import { NewClassEntity } from "@/src/modules/classes/entities/NewClassEntity";
-// import { Level } from "@/src/modules/curriculum/entities/Level";
 import { School } from "@/src/modules/schools/entities/School";
-// import { SchoolDay } from "@/src/modules/schools/entities/SchoolDay";
 import getSchoolBySlug from "@/src/modules/schools/requests/getSchoolBySlug";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import addClass from "../requests/addClass";
+import { Level } from "../../curriculum/entities/Level";
+import listLevels from "../../curriculum/requests/listLevels";
 
 type Inputs = {
   className: string;
-  // level: number;
+  level: number;
   // daysOfWeek: string[];
 };
 
 export default function AddClassModal({ schoolSlug, setClasses }: { schoolSlug: string; setClasses: Function }) {
-  // const { user } = useUserContext();
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
-  // const [levels, setLevels] = useState<Level[]>([]);
+  const [levels, setLevels] = useState<Level[] | null>(null);
   // const [days, setDays] = useState<SchoolDay[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -36,12 +35,9 @@ export default function AddClassModal({ schoolSlug, setClasses }: { schoolSlug: 
       return
     }
 
-    // const days: number[] = [];
-    // data.daysOfWeek?.forEach((day) => days.push(Number(day)));
-
     const newClass = new NewClassEntity(
       data.className,
-      // 1,
+      data.level,
       // [1, 4],
       selectedSchool.id
     )
@@ -58,8 +54,10 @@ export default function AddClassModal({ schoolSlug, setClasses }: { schoolSlug: 
 
   useEffect(() => {
     async function getData() {
-      const response = await getSchoolBySlug(schoolSlug)
-      setSelectedSchool(response)
+      const school = await getSchoolBySlug(schoolSlug)
+      setSelectedSchool(school)
+      const levels = await listLevels(schoolSlug)
+      setLevels(levels)
     }
 
     try {
@@ -99,7 +97,7 @@ export default function AddClassModal({ schoolSlug, setClasses }: { schoolSlug: 
           )}
         </div>
 
-        {/* <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <label>Level</label>
           <div className="grid grid-cols-5 gap-2">
             {levels?.map((level: Level, index: number) => (
@@ -121,7 +119,7 @@ export default function AddClassModal({ schoolSlug, setClasses }: { schoolSlug: 
               Level is required
             </p>
           )}
-        </div> */}
+        </div>
         {/* <div className="grid gap-2">
           <p>Days of Week</p>
           <div className="grid gap-2">
