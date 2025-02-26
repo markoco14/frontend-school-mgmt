@@ -1,62 +1,66 @@
-import { useUserContext } from "@/src/contexts/UserContext";
-import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
+import { Spinner } from "@/src/components/ui/spinner";
+import { AuthUser } from "@/src/contexts/UserContext";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
+import getClass from "@/src/modules/classes/requests/getClass";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
-import GuestLayout from "@/src/modules/core/components/GuestLayout";
 import Layout from "@/src/modules/core/components/Layout";
-import ParamsPageTabNav from "@/src/modules/core/components/ParamsPageTabNav";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
-import { GetServerSideProps } from "next";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { NextPageWithLayout } from "@/src/pages/_app";
+import { useRouter } from "next/router";
+import { ReactElement, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-export const getServerSideProps: GetServerSideProps<{
-  classEntity: ClassEntity;
-}> = async (context) => {
-  const id = Number(context.query.class_id);
-  const classEntity = await classAdapter.getClassById({ class_id: id });
+type ClassDetailPageProps = {
+  user: AuthUser
+}
 
-  return { props: { classEntity } };
-};
 
-export default function ManageClassDetails({
-  classEntity,
-}: {
-  classEntity: ClassEntity;
-}) {
-  const selectedClass = classEntity
-  const { user } = useUserContext();
-  const searchParams = useSearchParams();
-  const tab = searchParams.get("tab") || "info";
+const ClassDetailPage: NextPageWithLayout<ClassDetailPageProps> = ({ user }) => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [currentClass, setCurrentClass] = useState<ClassEntity | null>(null);
+  const router = useRouter();
+  const classID = Number(router.query.class_id as string)
 
-  const links = [
-    {
-      value: 1,
-      name: "Class Info",
-      urlString: "info",
-    },
-    {
-      value: 2,
-      name: "Students",
-      urlString: "students",
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    async function getData() {
+      if (!classID) {
+        toast("Error loading class data. Please refresh the page.")
+        return
+      }
+
+      try {
+        const classEntity = await getClass(classID, signal);
+        setCurrentClass(classEntity)
+      } catch (error) {
+        if (signal.aborted) {
+          return
+        }
+
+        if (error instanceof Error) {
+          toast.error(error.message)
+        } else {
+          toast.error("Error getting class data. Please try again.")
+        }
+      } finally {
+        setLoading(false)
+      }
     }
-  ];
 
-  if (!user) {
-    return (
-      <GuestLayout>
-        <p>You don&apos;t have permission to access this page.</p>
-      </GuestLayout>
-    )
-  }
+    getData()
 
-  if (user?.role === "TEACHER") {
+    return () => {
+      controller.abort();
+    }
+  }, [classID])
+
+  if (user && user.membership !== "OWNER") {
     return (
       <Layout>
         <AdminLayout>
-          <div className="h-full w-full bg-white">
-            <PermissionDenied />
-          </div>
+          <PermissionDenied />
         </AdminLayout>
       </Layout>
     );
@@ -68,19 +72,27 @@ export default function ManageClassDetails({
         <div className="h-full w-full bg-white">
           <section>
             <div className="min-h-[50vh] max-w-[1000px] bg-white">
-              <div className="mb-2 flex items-baseline justify-between">
-                <h2 className="text-3xl">{selectedClass?.name}</h2>
-                <Link href="/classes">Back</Link>
-              </div>
-              <ParamsPageTabNav
-                links={links}
-                tab={tab}
-                queryParam={classEntity.id}
-              />
-          
-                <article className="col-span-1 rounded border p-2 shadow md:row-span-2">
-                  <p>Class info goes here.</p>
-                </article>
+              <article className="col-span-1 rounded border p-2 shadow md:row-span-2">
+                {loading ? (
+                  <div className="flex justify-center">
+                    <Spinner />
+                  </div>
+                ) : !currentClass ? (
+                  <p>No class found</p>
+                ) : (
+                  <>
+                    <h1>{currentClass.name} Class</h1>
+                    <p>Level {currentClass.level}</p>
+                    {currentClass.days ? (
+                      currentClass.days.map((index, day) => (
+                        <p key={index + 1}>{day}</p>
+                      ))
+                    ) : (
+                      <p>No days assigned.</p>
+                    )}
+                  </>
+                )}
+              </article>
             </div>
           </section>
         </div>
@@ -88,3 +100,9 @@ export default function ManageClassDetails({
     </Layout>
   );
 }
+
+ClassDetailPage.getLayout = function getLayout(page: ReactElement) {
+  return <>{page}</>
+}
+
+export default ClassDetailPage

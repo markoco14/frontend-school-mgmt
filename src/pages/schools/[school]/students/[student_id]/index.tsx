@@ -20,7 +20,6 @@ type StudentShowPageProps = {
 const StudentShowPage: NextPageWithLayout<StudentShowPageProps> = ({ user }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [student, setStudent] = useState<Student | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const studentID = router.query.student_id
   const selectedSchool = router.query.school ? router.query.school : null
@@ -42,10 +41,10 @@ const StudentShowPage: NextPageWithLayout<StudentShowPageProps> = ({ user }) => 
         }
 
         if (error instanceof (Error)) {
-          setError(error.message)
+          toast.error(error.message)
           setLoading(false)
         } else {
-          setError("No student found.")
+          toast.error("No student found.")
           setLoading(false)
         }
       }
@@ -93,7 +92,7 @@ const StudentShowPage: NextPageWithLayout<StudentShowPageProps> = ({ user }) => 
               </section>
             </>
           ) : !student ? (
-            <p>{error}</p>
+            <p>No student found.</p>
           ) : (
             <>
               <section className="flex justify-center sm:justify-start mb-4">

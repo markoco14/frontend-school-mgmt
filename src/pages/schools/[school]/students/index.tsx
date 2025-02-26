@@ -74,10 +74,9 @@ const StudentsPage: NextPageWithLayout<StudentsPageProps> = ({ user }) => {
                 onClick={() => {
                   setIsAddStudent(true);
                 }}
-                className="rounded bg-blue-300 p-2 hover:bg-blue-500"
               >
-                <i className="fa-solid fa-plus"></i>{" "}
-                <i className="fa-solid fa-user"></i>
+                <i className="fa-solid fa-plus"></i>
+          
               </button>
             </div>
             {loading ? (

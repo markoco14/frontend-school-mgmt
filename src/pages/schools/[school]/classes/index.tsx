@@ -24,7 +24,7 @@ const ClassesPage: NextPageWithLayout<ClassesPageProps> = ({ user }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
-  const selectedSchool = router.query.school as string
+  const schoolSlug = router.query.school as string
 
   useEffect(() => {
     const controller = new AbortController();
@@ -33,13 +33,13 @@ const ClassesPage: NextPageWithLayout<ClassesPageProps> = ({ user }) => {
     async function getData() {
       setLoading(true)
 
-      if (!selectedSchool) {
+      if (!schoolSlug) {
         toast("No school selected")
         return
       }
 
       try {
-        const classes = await listClasses({ schoolSlug: selectedSchool, signal: signal })
+        const classes = await listClasses({ schoolSlug: schoolSlug, signal: signal })
         setClasses(classes)
       } catch (error) {
         if (signal.aborted) {
@@ -54,7 +54,6 @@ const ClassesPage: NextPageWithLayout<ClassesPageProps> = ({ user }) => {
       } finally {
         setLoading(false)
       }
-
     }
 
     try {
@@ -70,7 +69,7 @@ const ClassesPage: NextPageWithLayout<ClassesPageProps> = ({ user }) => {
     return () => {
       controller.abort();
     }
-  }, [selectedSchool]);
+  }, [schoolSlug]);
 
   function handleClose() {
     setIsAddClass(false);
@@ -92,7 +91,7 @@ const ClassesPage: NextPageWithLayout<ClassesPageProps> = ({ user }) => {
         {/* <SchoolHeader /> */}
         <div className="h-full w-full bg-white">
           <section>
-            <div className="max-w-[1000px] rounded border-2 bg-white p-4 shadow">
+            <div className="max-w-[1000px]">
               <div className="mb-4 flex items-baseline justify-between">
                 <h2 className="text-3xl">Your Classes</h2>
                 <button
@@ -103,8 +102,10 @@ const ClassesPage: NextPageWithLayout<ClassesPageProps> = ({ user }) => {
                   <i className="fa-solid fa-plus"></i>
                 </button>
               </div>
+              <div className="min-h-[200px] rounded border p-4 shadow">
+
               {loading ? (
-                <ul className="flex flex-col divide-y divide-white">
+                <ul className=" flex flex-col divide-y divide-white">
                   <li className="bg-gray-300 animate-pulse h-[40px] rounded"></li>
                   <li className="bg-gray-300 animate-pulse h-[40px] rounded"></li>
                   <li className="bg-gray-300 animate-pulse h-[40px] rounded"></li>
@@ -121,7 +122,7 @@ const ClassesPage: NextPageWithLayout<ClassesPageProps> = ({ user }) => {
                         className="flex justify-between rounded-md p-2 hover:bg-blue-200"
                       >
                         <Link
-                          href={`/classes/${currentClass.id}`}
+                          href={`/schools/${schoolSlug}/classes/${currentClass.id}`}
                           className="w-full"
                         >
                           {currentClass.name}
@@ -131,9 +132,10 @@ const ClassesPage: NextPageWithLayout<ClassesPageProps> = ({ user }) => {
                   )}
                 </ListContainer>
               )}
+              </div>
             </div>
             <Modal show={isAddClass} close={handleClose} title="Add Class">
-              <AddClassModal schoolSlug={selectedSchool} setClasses={setClasses} />
+              <AddClassModal schoolSlug={schoolSlug} setClasses={setClasses} />
             </Modal>
           </section>
         </div>
