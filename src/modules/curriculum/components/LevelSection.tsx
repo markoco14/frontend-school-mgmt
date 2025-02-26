@@ -1,103 +1,51 @@
-import { useUserContext } from "@/src/contexts/UserContext";
-import PaginationButtons from "@/src/modules/core/components/PaginationButtons";
-import { levelAdapter } from "@/src/modules/curriculum/adapters/levelAdapter";
+import { Spinner } from "@/src/components/ui/spinner";
 import { Level } from "@/src/modules/curriculum/entities/Level";
+import listLevels from "@/src/modules/curriculum/requests/listLevels";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import AddLevel from "./AddLevel";
 import LevelList from "./LevelList";
 
 export default function LevelSection() {
-  const { selectedSchool } = useUserContext();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [levels, setLevels] = useState<Level[]>();
-  const [page, setPage] = useState<number>(1);
-  const [next, setNext] = useState<boolean>(false);
-  const [count, setCount] = useState<number>(0);
+
+  const router = useRouter();
+  const schoolSlug = router.query.school as string
 
   useEffect(() => {
-    async function listSchoolLevels() {
-      setLoading(true);
-      selectedSchool &&
-        (await levelAdapter
-          .listSchoolLevels({
-            school_id: selectedSchool?.id,
-          })
-          .then((res) => {
-            setLevels(res);
-            setLoading(false);
-          }));
-    }
+    async function getData() {
 
-    if (selectedSchool) {
-      try {
-        listSchoolLevels();
-      } catch (error) {
-        toast.error("Unable to get levels")
+      if (!schoolSlug) {
+        toast("No school selected")
+        return
       }
-    }
-  }, [selectedSchool, page]);
 
-  async function fetchSchoolLevels(id: number) {
-    setLoading(true);
-    await levelAdapter.listSchoolLevels({ school_id: id }).then((res) => {
-      setLevels(res);
+      const levels = await listLevels(schoolSlug);
+      setLevels(levels)
+    }
+
+    try {
+      setLoading(true)
+      getData();
+    } catch (error) {
+      toast.error("Unable to get levels")
+    } finally {
       setLoading(false);
-    });
-  }
-
-  async function handleDeleteLevel(levelId: number) {
-    if (levels) {
-      await levelAdapter.deleteLevel({ id: levelId }).then((res) => {
-        if (res.status === 500) {
-          toast.error(
-            "Cannot delete. There may be Classes assigned to this level.",
-          );
-          return;
-        }
-        if (levels?.length === 1 && page > 1) {
-          setPage((prevPage: number) => prevPage - 1);
-          return;
-        }
-
-        if (levels?.length - 1 === 9 && selectedSchool) {
-          fetchSchoolLevels(selectedSchool.id);
-        }
-
-        setLevels(
-          (prevLevels) => prevLevels?.filter((level) => level.id !== levelId),
-        );
-        toast.success("Level deleted.");
-      });
     }
-  }
+  }, [schoolSlug]);
 
   return (
     <section className="col-span-2 rounded border p-4 shadow xs:col-span-1">
-      {loading && <p>Loading...</p>}
-      <article>
-        {levels && (
-          <LevelList levels={levels} handleDeleteLevel={handleDeleteLevel} />
-        )}
-        <PaginationButtons
-          count={count}
-          page={page}
-          setPage={setPage}
-          next={next}
-        />
-        {levels && (
-          <AddLevel
-            setCount={setCount}
-            levels={levels}
-            count={count}
-            page={page}
-            setPage={setPage}
-            setNext={setNext}
-            setLevels={setLevels}
-          />
-        )}
-      </article>
+      {loading ? (
+        <Spinner />
+      ) : levels ? (
+
+        <LevelList levels={levels} />
+      ) : (
+        <p>No levels</p>
+      )}
     </section>
   );
 }

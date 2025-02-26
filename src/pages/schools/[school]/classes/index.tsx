@@ -1,71 +1,88 @@
-import ClassListSkeletonProps from "@/src/components/ui/skeleton/ClassListSkeletonProps";
-import { Skeleton } from "@/src/components/ui/skeleton/Skeleton";
-import { useUserContext } from "@/src/contexts/UserContext";
-import { classAdapter } from "@/src/modules/classes/adapters/classAdapter";
-import AddClass from "@/src/modules/classes/components/AddClass";
+import { AuthUser } from "@/src/contexts/UserContext";
+import AddClassModal from "@/src/modules/classes/components/AddClassModal";
 import { ClassEntity } from "@/src/modules/classes/entities/ClassEntity";
+import listClasses from "@/src/modules/classes/requests/listClasses";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import ListContainer from "@/src/modules/core/components/ListContainer";
 import Modal from "@/src/modules/core/components/Modal";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
+import { NextPageWithLayout } from "@/src/pages/_app";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { ReactElement, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-export default function ClassHome() {
-  const { user, selectedSchool } = useUserContext();
-  const [classes, setClasses] = useState<ClassEntity[]>([]);
+type ClassesPageProps = {
+  user: AuthUser
+}
+
+const ClassesPage: NextPageWithLayout<ClassesPageProps> = ({ user }) => {
+
+  const [classes, setClasses] = useState<ClassEntity[] | null>(null);
   const [isAddClass, setIsAddClass] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const router = useRouter();
+  const schoolSlug = router.query.school as string
+
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     async function getData() {
-      if (selectedSchool) {
-        setLoading(true);
-        await classAdapter
-          .list({ school_id: selectedSchool.id })
-          .then((res) => {
-            setClasses(res);
-            setLoading(false);
-          });
+      setLoading(true)
+
+      if (!schoolSlug) {
+        toast("No school selected")
+        return
+      }
+
+      try {
+        const classes = await listClasses({ schoolSlug: schoolSlug, signal: signal })
+        setClasses(classes)
+      } catch (error) {
+        if (signal.aborted) {
+          return
+        }
+
+        if (error instanceof (Error)) {
+          toast.error(error.message)
+        } else {
+          toast.error("Something went wrong getting your classes.")
+        }
+      } finally {
+        setLoading(false)
       }
     }
 
-    getData();
-  }, [selectedSchool]);
+    try {
+      getData();
+    } catch (error) {
+      if (error instanceof (Error)) {
+        toast.error(error.message)
+      } else {
+        toast.error("Something went wrong getting your classes.")
+      }
+    }
 
-  if (!selectedSchool) {
-    return (
-      <Layout>
-        <AdminLayout>
-          <div className="h-full w-full bg-white">
-            <section>
-              {/* <SchoolHeader /> */}
-              <p>You need to choose a school first.</p>
-              <div className="mb-4 flex items-baseline justify-between">
-                <Link href="/">Click here to choose a school</Link>
-              </div>
-            </section>
-          </div>
-        </AdminLayout>
-      </Layout>
-    );
-  }
-
-  if (user?.role !== "OWNER") {
-    return (
-      <Layout>
-        <AdminLayout>
-          <div className="h-full w-full bg-white">
-            <PermissionDenied />
-          </div>
-        </AdminLayout>
-      </Layout>
-    );
-  }
+    return () => {
+      controller.abort();
+    }
+  }, [schoolSlug]);
 
   function handleClose() {
     setIsAddClass(false);
+  }
+
+  if (user && user.membership !== "OWNER") {
+    return (
+      <Layout>
+        <AdminLayout>
+          <PermissionDenied />
+        </AdminLayout>
+      </Layout>
+    );
   }
 
   return (
@@ -74,7 +91,7 @@ export default function ClassHome() {
         {/* <SchoolHeader /> */}
         <div className="h-full w-full bg-white">
           <section>
-            <div className="max-w-[1000px] rounded border-2 bg-white p-4 shadow">
+            <div className="max-w-[1000px]">
               <div className="mb-4 flex items-baseline justify-between">
                 <h2 className="text-3xl">Your Classes</h2>
                 <button
@@ -85,39 +102,40 @@ export default function ClassHome() {
                   <i className="fa-solid fa-plus"></i>
                 </button>
               </div>
-              {loading && (
-                <Skeleton>
-                  <ClassListSkeletonProps />
-                </Skeleton>
-              )}
-              {!loading && classes.length === 0 ? (
-                <article>
-                  <p>You have not created any classes for your school.</p>
-                </article>
+              <div className="min-h-[200px] rounded border p-4 shadow">
+
+              {loading ? (
+                <ul className=" flex flex-col divide-y divide-white">
+                  <li className="bg-gray-300 animate-pulse h-[40px] rounded"></li>
+                  <li className="bg-gray-300 animate-pulse h-[40px] rounded"></li>
+                  <li className="bg-gray-300 animate-pulse h-[40px] rounded"></li>
+                  <li className="bg-gray-300 animate-pulse h-[40px] rounded"></li>
+                </ul>
+              ) : (classes && classes.length === 0) ? (
+                <p>You have not created any classes for your school.</p>
               ) : (
-                <article>
-                  <ListContainer>
-                    {classes?.map(
-                      (currentClass: ClassEntity, index: number) => (
-                        <li
-                          key={index}
-                          className="flex justify-between rounded-md p-2 hover:bg-blue-200"
+                <ListContainer>
+                  {classes?.map(
+                    (currentClass: ClassEntity, index: number) => (
+                      <li
+                        key={index}
+                        className="flex justify-between rounded-md p-2 hover:bg-blue-200"
+                      >
+                        <Link
+                          href={`/schools/${schoolSlug}/classes/${currentClass.id}`}
+                          className="w-full"
                         >
-                          <Link
-                            href={`/classes/${currentClass.id}`}
-                            className="w-full"
-                          >
-                            {currentClass.name}
-                          </Link>
-                        </li>
-                      ),
-                    )}
-                  </ListContainer>
-                </article>
+                          {currentClass.name}
+                        </Link>
+                      </li>
+                    ),
+                  )}
+                </ListContainer>
               )}
+              </div>
             </div>
             <Modal show={isAddClass} close={handleClose} title="Add Class">
-              <AddClass setClasses={setClasses} />
+              <AddClassModal schoolSlug={schoolSlug} setClasses={setClasses} />
             </Modal>
           </section>
         </div>
@@ -125,3 +143,9 @@ export default function ClassHome() {
     </Layout>
   );
 }
+
+ClassesPage.getLayout = function getLayout(page: ReactElement) {
+  return <>{page}</>
+}
+
+export default ClassesPage
