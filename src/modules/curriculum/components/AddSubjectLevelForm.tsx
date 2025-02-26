@@ -1,12 +1,13 @@
-import { useUserContext } from "@/src/contexts/UserContext";
+import { Spinner } from "@/src/components/ui/spinner";
+import ListContainer from "@/src/modules/core/components/ListContainer";
+import { subjectLevelAdapter } from "@/src/modules/curriculum/adapters/subjectLevelAdapter";
 import { Level } from "@/src/modules/curriculum/entities/Level";
 import { Subject } from "@/src/modules/curriculum/entities/Subject";
 import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
+import listLevels from "@/src/modules/curriculum/requests/listLevels";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { levelAdapter } from "../adapters/levelAdapter";
-import { subjectLevelAdapter } from "../adapters/subjectLevelAdapter";
-import ListContainer from "../../core/components/ListContainer";
 
 const AddSubjectLevelForm = ({
   subject,
@@ -17,27 +18,25 @@ const AddSubjectLevelForm = ({
   subjectLevels: SubjectLevel[];
   setSubjectLevels: Function;
 }) => {
-  const { selectedSchool } = useUserContext();
-
-  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
-  const [levels, setLevels] = useState<Level[]>([]);
+  const [levels, setLevels] = useState<Level[] | null>(null);
+  const router = useRouter();
+  const schoolSlug = router.query.school as string;
 
   useEffect(() => {
     async function listSchoolLevels() {
       setLoading(true);
-      await levelAdapter
-        .listSchoolLevels({ school_id: selectedSchool?.id })
+      await listLevels(schoolSlug)
         .then((res) => {
           setLevels(res);
           setLoading(false);
         });
     }
 
-    if (selectedSchool) {
+    if (schoolSlug) {
       listSchoolLevels();
     }
-  }, [selectedSchool]);
+  }, [schoolSlug]);
 
   async function handleAddSubjectLevel({
     subject,
@@ -80,7 +79,11 @@ const AddSubjectLevelForm = ({
 
   return (
     <ListContainer>
-      {levels?.length >= 1 ? (
+      {loading ? (
+        <Spinner />
+      ) : !levels ? (
+        <p>no levels</p>
+      ) : (
         levels?.map((level, index) => (
           <li key={index}>
             <button
@@ -95,24 +98,20 @@ const AddSubjectLevelForm = ({
                   level: level,
                 });
               }}
-              className={`${
-                checkLevelAssigned({
-                  level: level,
-                  subject: subject,
-                  subjectLevels: subjectLevels,
-                })
-                  ? "bg-blue-300 hover:bg-blue-500"
-                  : "hover:bg-gray-300 "
-              } flex w-full justify-between p-2 disabled:cursor-not-allowed`}
+              className={`${checkLevelAssigned({
+                level: level,
+                subject: subject,
+                subjectLevels: subjectLevels,
+              })
+                ? "bg-blue-300 hover:bg-blue-500"
+                : "hover:bg-gray-300 "
+                } flex w-full justify-between p-2 disabled:cursor-not-allowed`}
             >
               {level.name}
             </button>
           </li>
-        ))
-      ) : (
-        <article className="mb-4 rounded bg-gray-100 shadow-inner">
-          <p>This page is empty.</p>
-        </article>
+        )
+        )
       )}
     </ListContainer>
   );
