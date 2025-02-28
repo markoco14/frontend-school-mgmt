@@ -4,7 +4,7 @@ import { subjectLevelAdapter } from "@/src/modules/curriculum/adapters/subjectLe
 import { Level } from "@/src/modules/curriculum/entities/Level";
 import { Subject } from "@/src/modules/curriculum/entities/Subject";
 import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
-import listLevels from "@/src/modules/curriculum/requests/listLevels";
+import listLevels from "@/src/modules/curriculum/levels/requests/listLevels";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
