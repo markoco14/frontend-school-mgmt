@@ -27,6 +27,7 @@ export type AuthUser = {
 
 type UserContextEntity = {
   user: AuthUser | null;
+  signinUser: Function;
   loginUser: Function;
   logout: Function;
   selectedSchool: School | undefined;
@@ -34,6 +35,11 @@ type UserContextEntity = {
   handleDeselectSchool: Function;
 };
 
+type TokenResponse = {
+  accessToken: string;
+  refreshToken: string;
+
+}
 
 
 const UserContext = createContext<UserContextEntity | null>(null);
@@ -56,6 +62,13 @@ export default function UserContextProvider({
     setSelectedSchool(undefined);
     localStorage.removeItem("selectedSchool");
   };
+
+  const signinUser = (response: TokenResponse) => {
+    const decodedUser = jwt_decode<AuthUser>(response.accessToken)
+    setUser(decodedUser);
+    setToken({ accessToken: response.accessToken, refreshToken: response.refreshToken})
+    router.push('/schools')
+  }
 
   const loginUser = async (formData: any) => {
     try {
@@ -161,6 +174,7 @@ export default function UserContextProvider({
     <UserContext.Provider
       value={{
         user: user,
+        signinUser: signinUser,
         loginUser: loginUser,
         logout: logout,
         selectedSchool: selectedSchool,

@@ -1,8 +1,9 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { userAdapter } from "../user-mgmt/adapters/userAdapter";
 import PublicLinks from "./PublicLinks";
 import { useState } from "react";
+import { useUserContext } from "@/src/contexts/UserContext";
+import toast from "react-hot-toast";
 
 type Inputs = {
   firstName: string;
@@ -12,27 +13,28 @@ type Inputs = {
 };
 
 export default function Signup() {
+  const { signinUser } = useUserContext();
   const { reset, register, handleSubmit } = useForm<Inputs>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    setIsLoading(true)
     try {
-      await userAdapter.addUser({
+      setIsLoading(true)
+      const response = await userAdapter.addUser({
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
         password: data.password,
       });
-      toast.success("User added!");
-      setIsLoading(false)
-      reset();
+      signinUser(response)
     } catch (error) {
-      setIsLoading(false)
       if (error instanceof Error) {
         toast.error(error.message)
       } else {
-        toast.error("Failed to add user.")
+        toast.error("Something went wrong when signing up.")
       }
+    } finally {
+      setIsLoading(false)
+      reset();
     }
   };
 

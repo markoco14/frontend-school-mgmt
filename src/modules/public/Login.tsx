@@ -14,16 +14,14 @@ export default function Login() {
   const { reset, register, handleSubmit } = useForm<Inputs>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    setIsLoading(true)
     try {
-      loginUser(data);
-      setIsLoading(false)
-      reset();
-      return;
+      setIsLoading(true)
+      await loginUser(data);
     } catch (error) {
       toast.error("Unable to login. Please check your email or password.");
+    } finally {
       setIsLoading(false)
-      return
+      reset();
     }
   };
 
