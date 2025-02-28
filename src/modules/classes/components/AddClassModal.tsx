@@ -6,9 +6,9 @@ import getSchoolBySlug from "@/src/modules/schools/requests/getSchoolBySlug";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import addClass from "../requests/addClass";
-import { Level } from "../../curriculum/entities/Level";
-import listLevels from "../../curriculum/requests/listLevels";
+import { Level } from "@/src/modules/curriculum/entities/Level";
+import listLevels from "@/src/modules/curriculum/levels/requests/listLevels";
+import addClass from "@/src/modules/classes/requests/addClass";
 
 type Inputs = {
   className: string;
