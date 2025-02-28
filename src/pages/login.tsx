@@ -1,32 +1,36 @@
-import { useUserContext } from "@/src/contexts/UserContext";
+import { AuthUser } from "@/src/contexts/UserContext";
 import GuestLayout from "@/src/modules/core/components/GuestLayout";
-import { ReactElement } from "react";
-import AlreadyLoggedIn from "../modules/public/AlreadyLoggedIn";
+import { ReactElement, useEffect } from "react";
 import Login from "../modules/public/Login";
 import { NextPageWithLayout } from "./_app";
+import { useRouter } from "next/router";
 
+type LoginPageProps = {
+  user: AuthUser | null;
+}
 
-const Home: NextPageWithLayout = () => {
-  const { user } = useUserContext();
+const LoginPage: NextPageWithLayout<LoginPageProps> = ({ user }) => {
+  const router = useRouter();
+  
+    useEffect(() => {
+      if (user) {
+        router.replace("/")
+      }
+    }, [user, router])
 
-  return (
-    <>
-      {!user && (
-        <GuestLayout>
-          <Login />
-        </GuestLayout>
-      )}
-      {user && (
-        <GuestLayout>
-          <AlreadyLoggedIn />
-        </GuestLayout>
-      )}
-    </>
-  );
+  if (!user) {
+    return (
+      <GuestLayout>
+        <Login />
+      </GuestLayout>
+    )
+  }
+
+  return null;
 };
 
-Home.getLayout = function getLayout(page: ReactElement) {
+LoginPage.getLayout = function getLayout(page: ReactElement) {
   return <>{page}</>;
 };
 
-export default Home;
+export default LoginPage;
