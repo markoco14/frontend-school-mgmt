@@ -99,9 +99,9 @@ export default function AddClassModal({ schoolSlug, setClasses }: { schoolSlug: 
 
         <div className="flex flex-col gap-2">
           <label>Level</label>
-          <div className="grid grid-cols-5 gap-2">
+          <div className="flex flex-wrap gap-2">
             {levels?.map((level: Level, index: number) => (
-              <label key={index} className="flex w-full cursor-pointer">
+              <label key={index} className="w-full cursor-pointer">
                 <input
                   type="radio"
                   className="peer sr-only"
