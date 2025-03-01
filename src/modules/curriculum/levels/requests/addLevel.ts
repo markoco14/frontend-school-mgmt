@@ -1,5 +1,5 @@
-import { Level } from "@/src/modules/curriculum/entities/Level";
-import { NewLevel } from "@/src/modules/curriculum/entities/NewLevel";
+import { Level } from "@/src/modules/curriculum/levels/entities/Level";
+import { NewLevel } from "@/src/modules/curriculum/levels/entities/NewLevel";
 import Cookies from "js-cookie";
 
 async function addLevel(newLevel: NewLevel): Promise < Level > {

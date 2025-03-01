@@ -1,4 +1,4 @@
-import { Level } from "@/src/modules/curriculum/entities/Level";
+import { Level } from "@/src/modules/curriculum/levels/entities/Level";
 import ListContainer from "../../core/components/ListContainer";
 
 export default function LevelList({ levels }: { levels: Level[] }) {

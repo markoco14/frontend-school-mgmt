@@ -1,6 +1,6 @@
 import { Spinner } from "@/src/components/ui/spinner";
 import Modal from "@/src/modules/core/components/Modal";
-import { Level } from "@/src/modules/curriculum/entities/Level";
+import { Level } from "@/src/modules/curriculum/levels/entities/Level";
 import listLevels from "@/src/modules/curriculum/levels/requests/listLevels";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";

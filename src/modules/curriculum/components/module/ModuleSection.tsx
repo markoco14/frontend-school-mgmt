@@ -1,9 +1,9 @@
 import { useUserContext } from "@/src/contexts/UserContext";
 import Modal from "@/src/modules/core/components/Modal";
-import { Level } from "@/src/modules/curriculum/entities/Level";
 import { Module } from "@/src/modules/curriculum/entities/Module";
 import { Subject } from "@/src/modules/curriculum/entities/Subject";
 import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
+import { Level } from "@/src/modules/curriculum/levels/entities/Level";
 import { useEffect, useState } from "react";
 import { moduleAdapter } from "../../adapters/moduleAdapter";
 import AddModule from "./AddModule";
@@ -149,11 +149,10 @@ export default function ModuleSection({
               {uniqueSubjects?.map((subject: Subject, index) => (
                 <li
                   key={index}
-                  className={`${
-                    subject.name === currentSubject?.name
+                  className={`${subject.name === currentSubject?.name
                       ? "bg-blue-300 hover:bg-blue-500"
                       : "bg-white hover:bg-gray-300"
-                  } p-2 hover:cursor-pointer`}
+                    } p-2 hover:cursor-pointer`}
                   onClick={() => {
                     // change subject & level when change subject
                     // because different subjects have different levels
@@ -175,11 +174,10 @@ export default function ModuleSection({
               {currentSubjectLevels?.map((level, index) => (
                 <li
                   key={index}
-                  className={`${
-                    level.order === currentLevel?.order
+                  className={`${level.order === currentLevel?.order
                       ? "bg-blue-300 hover:bg-blue-500"
                       : "bg-white hover:bg-gray-300"
-                  } p-2 hover:cursor-pointer`}
+                    } p-2 hover:cursor-pointer`}
                   onClick={() => {
                     setCurrentLevel(level);
                     currentSubject &&
