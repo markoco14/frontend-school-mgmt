@@ -3,7 +3,7 @@ class JwtAdapter {
     payload,
   }: {
     payload: {
-      email: string;
+      username: string;
       password: string;
     };
   }): Promise<any> {
@@ -13,7 +13,7 @@ class JwtAdapter {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: payload.email,
+        username: payload.username,
         password: payload.password,
       }),
     });

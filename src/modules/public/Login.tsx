@@ -5,7 +5,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 type Inputs = {
-  email: string;
+  username: string;
   password: string;
 };
 
@@ -35,7 +35,7 @@ export default function Login() {
           <input
             type="email"
             className="rounded p-2 shadow"
-            {...register("email", { required: true })}
+            {...register("username", { required: true })}
           />
         </div>
         <div className="mb-4 flex flex-col">
@@ -43,6 +43,7 @@ export default function Login() {
           <input
             type="password"
             className="rounded p-2 shadow"
+            autoComplete="current-password"
             {...register("password", { required: true })}
           />
         </div>
