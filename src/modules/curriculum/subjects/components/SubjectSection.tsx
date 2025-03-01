@@ -54,7 +54,7 @@ export default function SubjectSection() {
             className="rounded hover:text-blue-700"
             onClick={() => setIsAddSubject(true)}
           >
-            New Subject
+            New
           </button>
           {/* <AddSubject setSubjects={setSubjects} /> */}
         </div>

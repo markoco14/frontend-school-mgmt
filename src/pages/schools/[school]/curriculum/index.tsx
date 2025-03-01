@@ -33,9 +33,17 @@ const CurriculumPage: NextPageWithLayout<CurriculumPageProps> = ({ user }) => {
       <AdminLayout>
         <div className="h-full w-full bg-white">
           <div className="max-w-[1000px]">
-            <ul className="flex flex-col">
-              <Link href={`/schools/${schoolSlug}/curriculum?tab=levels`}>Levels</Link>
-              <Link href={`/schools/${schoolSlug}/curriculum?tab=subjects`}>Subjects</Link>
+            <ul className="flex gap-4 mb-8">
+              <Link
+                href={`/schools/${schoolSlug}/curriculum?tab=levels`}
+                className={`${(!tab || tab === "levels") && "underline underline-offset-4"}`}>
+                Levels
+              </Link>
+              <Link
+                href={`/schools/${schoolSlug}/curriculum?tab=subjects`}
+                className={`${(!tab || tab === "subjects") && "underline underline-offset-4"}`}>
+                Subjects
+              </Link>
             </ul>
             {!tab || tab == "levels" ? (
               <LevelSection />
