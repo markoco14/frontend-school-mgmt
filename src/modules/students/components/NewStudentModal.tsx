@@ -84,7 +84,7 @@ export default function RegisterNewStudentModal({
     }
 
     getData()
-  }, [])
+  }, [selectedSchool])
 
   return (
     loading ? (

@@ -1,7 +1,7 @@
-import { Level } from "@/src/modules/curriculum/entities/Level";
+import { Module } from "@/src/modules/curriculum/entities/Module";
 import { Subject } from "@/src/modules/curriculum/entities/Subject";
 import { SubjectLevel } from "@/src/modules/curriculum/entities/SubjectLevel";
-import { Module } from "@/src/modules/curriculum/entities/Module";
+import { Level } from "@/src/modules/curriculum/levels/entities/Level";
 import AddModuleForm from "./AddModuleForm";
 
 export default function AddModule({

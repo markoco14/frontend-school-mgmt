@@ -6,9 +6,9 @@ import getSchoolBySlug from "@/src/modules/schools/requests/getSchoolBySlug";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import addClass from "../requests/addClass";
-import { Level } from "../../curriculum/entities/Level";
-import listLevels from "../../curriculum/requests/listLevels";
+import { Level } from "@/src/modules/curriculum/levels/entities/Level";
+import listLevels from "@/src/modules/curriculum/levels/requests/listLevels";
+import addClass from "@/src/modules/classes/requests/addClass";
 
 type Inputs = {
   className: string;
@@ -99,9 +99,9 @@ export default function AddClassModal({ schoolSlug, setClasses }: { schoolSlug: 
 
         <div className="flex flex-col gap-2">
           <label>Level</label>
-          <div className="grid grid-cols-5 gap-2">
+          <div className="flex flex-wrap gap-2">
             {levels?.map((level: Level, index: number) => (
-              <label key={index} className="flex w-full cursor-pointer">
+              <label key={index} className="w-full cursor-pointer">
                 <input
                   type="radio"
                   className="peer sr-only"

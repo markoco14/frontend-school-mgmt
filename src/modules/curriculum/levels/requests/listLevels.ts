@@ -1,4 +1,4 @@
-import { Level } from "@/src/modules/curriculum/entities/Level";
+import { Level } from "@/src/modules/curriculum/levels/entities/Level";
 import Cookie from "js-cookie";
 
 
