@@ -47,7 +47,7 @@ const AddSubjectForm = ({ setSubjects }: { setSubjects: Function }) => {
         />
         {errors.subjectName?.type === "required" && (
           <p role="alert" className="mt-2 text-red-500">
-            Level name is required
+            Subject name is required
           </p>
         )}
       </div>

@@ -3,6 +3,7 @@ import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
 import LevelSection from "@/src/modules/curriculum/levels/components/LevelSection";
+import SubjectSection from "@/src/modules/curriculum/subjects/components/SubjectSection";
 import { NextPageWithLayout } from "@/src/pages/_app";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -39,7 +40,7 @@ const CurriculumPage: NextPageWithLayout<CurriculumPageProps> = ({ user }) => {
             {!tab || tab == "levels" ? (
               <LevelSection />
             ) : (
-              <p>Subjects coming soon...</p>
+              <SubjectSection />
             )}
           </div>
         </div>
