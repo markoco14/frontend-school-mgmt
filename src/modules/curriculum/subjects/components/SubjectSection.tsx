@@ -51,10 +51,10 @@ export default function SubjectSection() {
         <div className="flex justify-between">
           <h2 className="mb-2 text-3xl">Subjects</h2>
           <button
-            className="rounded  underline underline-offset-2 hover:text-blue-700"
+            className="rounded hover:text-blue-700"
             onClick={() => setIsAddSubject(true)}
           >
-            Add subject
+            New Subject
           </button>
           {/* <AddSubject setSubjects={setSubjects} /> */}
         </div>
