@@ -2,7 +2,7 @@ import { AuthUser } from "@/src/contexts/UserContext";
 import AdminLayout from "@/src/modules/core/components/AdminLayout";
 import Layout from "@/src/modules/core/components/Layout";
 import PermissionDenied from "@/src/modules/core/components/PermissionDenied";
-import LevelSection from "@/src/modules/curriculum/components/LevelSection";
+import LevelSection from "@/src/modules/curriculum/levels/components/LevelSection";
 import { NextPageWithLayout } from "@/src/pages/_app";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -33,8 +33,8 @@ const CurriculumPage: NextPageWithLayout<CurriculumPageProps> = ({ user }) => {
         <div className="h-full w-full bg-white">
           <div className="max-w-[1000px]">
             <ul className="flex flex-col">
-            <Link href={`/schools/${schoolSlug}/curriculum?tab=levels`}>Levels</Link>
-            <Link href={`/schools/${schoolSlug}/curriculum?tab=subjects`}>Subjects</Link>
+              <Link href={`/schools/${schoolSlug}/curriculum?tab=levels`}>Levels</Link>
+              <Link href={`/schools/${schoolSlug}/curriculum?tab=subjects`}>Subjects</Link>
             </ul>
             {!tab || tab == "levels" ? (
               <LevelSection />
