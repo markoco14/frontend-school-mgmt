@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 type Inputs = {
   firstName: string;
   lastName: string;
-  email: string;
+  username: string;
   password: string;
 };
 
@@ -22,7 +22,7 @@ export default function Signup() {
       const response = await userAdapter.addUser({
         firstName: data.firstName,
         lastName: data.lastName,
-        email: data.email,
+        username: data.username,
         password: data.password,
       });
       signinUser(response)
@@ -71,7 +71,7 @@ export default function Signup() {
           <label className="mb-2">Email</label>
           <input
             type="email"
-            {...register("email", {
+            {...register("username", {
               required: true,
               minLength: 3,
               maxLength: 50,

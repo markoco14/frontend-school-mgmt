@@ -30,12 +30,12 @@ class UserAdapter {
   public async addUser({
     firstName,
     lastName,
-    email,
+    username,
     password,
   }: {
     firstName: string;
     lastName: string;
-    email: string;
+    username: string;
     password: string;
   }): Promise<User | Error> {
     const response = await fetch(
@@ -48,7 +48,7 @@ class UserAdapter {
         body: JSON.stringify({
           first_name: firstName,
           last_name: lastName,
-          email: email,
+          username: username,
           password: password,
         }),
       },
@@ -58,6 +58,7 @@ class UserAdapter {
       const errorResponse = await response.json();
       throw new Error(errorResponse.message || "Failed to add user.")
     }
+    
     return await response.json();
   }
 
